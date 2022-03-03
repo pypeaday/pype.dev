@@ -24,7 +24,7 @@ def render_youtube(youtube: "Tag") -> "Tag":
 
 
 def is_valid_youtube(youtube: "Tag") -> bool:
-    "checks the src of the image, must be from images.waylonwalker.com and a .youtube"
+    "checks the src of the image, must be from images.nicpayne.com and a .youtube"
     href = youtube.attrs["href"]
     return href.startswith("https://youtu.be")
 
@@ -49,7 +49,7 @@ def swap_youtubes(soup: BeautifulSoup) -> None:
 
 @hook_impl
 def post_render(markata):
-    "Hook to replace youtubes on images.waylonwalker.com with mp4's if they exist"
+    "Hook to replace youtubes on images.nicpayne.com with mp4's if they exist"
     with markata.cache as cache:
         for article in markata.articles:
             key = markata.make_hash(

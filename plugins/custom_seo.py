@@ -1,4 +1,4 @@
-"""Custom HEADER tags for waylonwalker.com"""
+"""Custom HEADER tags for nicpayne.com"""
 from typing import TYPE_CHECKING, List
 
 from bs4 import BeautifulSoup

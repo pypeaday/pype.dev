@@ -50,9 +50,9 @@ def render_mp4(gif: "Tag") -> "Tag":
 
 
 def is_valid_gif(gif: "Tag") -> bool:
-    "checks the src of the image, must be from images.waylonwalker.com and a .gif"
+    "checks the src of the image, must be from images.nicpayne.com and a .gif"
     src = gif.attrs["src"]
-    return src.startswith("https://images.waylonwalker.com") and src.endswith(".gif")
+    return src.startswith("https://images.nicpayne.com") and src.endswith(".gif")
 
 
 def swap_gif(gif: "Tag") -> "Tag":
@@ -72,7 +72,7 @@ def swap_gifs(soup: BeautifulSoup) -> None:
 
 @hook_impl
 def post_render(markata):
-    "Hook to replace gifs on images.waylonwalker.com with mp4's if they exist"
+    "Hook to replace gifs on images.nicpayne.com with mp4's if they exist"
     with markata.cache as cache:
         for article in markata.articles:
             key = markata.make_hash(
