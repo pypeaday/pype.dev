@@ -7,7 +7,11 @@ import subprocess
 
 
 title = sys.argv[1].title()
-args = "".join(sys.argv[1:])
+key = sys.argv[2]
+if key not in ["blog-post", "til"]:
+    print("key must be blog-post or til")
+    sys.exit(1)
+args = "".join(sys.argv[2:])
 tags = []
 
 tagwords = {
@@ -28,7 +32,7 @@ tags = [tagwords[tag] for tag in tagwords if tag in args.lower()]
 
 slug = title.lower().replace(" ", "-").replace("_", "-")
 frontmatter = f"""---
-templateKey: blog-post
+templateKey: {key}
 tags: {tags}
 title: {title}
 date: {datetime.date.today().strftime('%Y-%m-%dT%H:%M:%S')}
