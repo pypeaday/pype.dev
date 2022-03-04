@@ -8,6 +8,7 @@ cover: "/static/stow-target.png"
 
 ---
 
+Check out [stow](/stow) for a brief introduction to `stow`
 
 What if I want to stow a package somewhere else?
 Boom, that's where `-t` comes in...
