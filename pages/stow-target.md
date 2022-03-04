@@ -1,5 +1,5 @@
 ---
-templateKey: blog-post
+templateKey: til
 tags: ['bash']
 title: Stow-Target
 date: 2022-03-04T00:00:00
