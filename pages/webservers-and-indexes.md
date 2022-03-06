@@ -38,6 +38,8 @@ I started looking for a way to dynamically generate an index for a directory of 
 
 Luckily I randomly came across a SO that mentioned a Linux utility called `tree` which does exactly what I wanted!
 
+See my TIL on `tree` [here]('/tree')
+
 So now it goes like this:
 
 * Take notes on X in my tiddlywiki
