@@ -9,7 +9,7 @@ cover: "/static/tree.png"
 ---
 
 I wanted a quick way to generate an `index.html` for a directory of html files that grows by 1 or 2 files a week.
-I don't know any html (the files are exports from my [tiddlywiki]('/tiddly-wiki'))...
+I don't know any html (the files are exports from my [tiddlywiki](/tiddly-wiki))...
 
 `tree` is just the answer.
 
