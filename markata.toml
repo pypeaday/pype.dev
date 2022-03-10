@@ -23,7 +23,6 @@ hooks = [
    "markata.plugins.publish_dev_to_source",
    "plugins.render_template_variables",
    "plugins.codeblocks",
-   "plugins.index",
    "plugins.slug",
    "plugins.one_line_link",
    "plugins.include",
@@ -37,7 +36,7 @@ hooks = [
    'plugins.rss_tag',
    'plugins.auto_publish',
    ]
-disabled_hooks = ["markata.plugins.covers", 'markata.plugins.flat_slug']
+disabled_hooks = ['markata.plugins.flat_slug']
 
 ## Site Config
 url = "https://nicpayne.com"
@@ -61,81 +60,79 @@ twitter_card = "summary_large_image"
 twitter_creator = "@pypeaday"
 twitter_site = "@pypeaday"
 
+[markata.auto_description.long_description]
+len=250
+
 [markata.auto_publish.filters]
 til='templateKey=="til" and date<=today'
 
-[markata.archive]
-archive_template="pages/templates/archive_template.html"
 
-[markata.archive.pages.archive]
+[markata.feeds]
+template="pages/templates/archive_template.html"
+card_template="plugins/feed_card_template.html"
+
+[markata.feeds.archive]
 filter="date<=today and templateKey in ['blog-post', 'til'] and status.lower()=='published'"
 
-[markata.archive.pages.blog]
+[markata.feeds.blog]
 filter="date<=today and templateKey in ['blog-post'] and status.lower()=='published'"
 
-[markata.archive.pages.draft]
+[markata.feeds.draft]
 filter="status=='draft'"
 
-[markata.archive.pages.scheduled]
+[markata.feeds.scheduled]
 filter="date>today"
 
-[markata.archive.pages.today]
+[markata.feeds.today]
 filter="date==today"
 
-[markata.archive.pages.python]
+[markata.feeds.python]
 filter="date<=today and 'python' in tags"
 
-[markata.archive.pages.python-draft]
+[markata.feeds.python-draft]
 filter="date<=today and 'python' in tags and status=='draft'"
 
-[markata.archive.pages.linux]
+[markata.feeds.linux]
 filter="date<=today and 'linux' in tags"
 
-[markata.archive.pages.linux-draft]
+[markata.feeds.linux-draft]
 filter="date<=today and 'linux' in tags and status=='draft'"
 
-[markata.archive.pages.vim]
+[markata.feeds.vim]
 filter="date<=today and 'vim' in tags"
 
-[markata.archive.pages.vim-draft]
+[markata.feeds.vim-draft]
 filter="date<=today and 'vim' in tags and status=='draft'"
 
-[markata.archive.pages.kedro]
+[markata.feeds.kedro]
 filter="date<=today and 'kedro' in tags"
 
-[markata.archive.pages.kedro-draft]
+[markata.feeds.kedro-draft]
 filter="date<=today and 'kedro' in tags and status=='draft'"
 
-[markata.archive.pages.til]
-template="pages/templates/archive_template.html"
+[markata.feeds.til]
+# template="pages/templates/archive_template.html"
 # card_template="pages/templates/gratitude_card.html"
 filter="date<=today and templateKey == 'til'"
 
-[markata.archive.pages.til-vim]
-template="pages/templates/archive_template.html"
-# card_template="pages/templates/gratitude_card.html"
+[markata.feeds.til-vim]
 filter="date<=today and templateKey == 'til' and 'vim' in tags"
 
-[[markata.covers]]
-name='-dev'
-template = "static/cover-template.png"
-font = "./.github/scripts/waterlilly-script.ttf"
-font_color = "rgb(255,255,255)"
+[markata.feeds.all]
+filter="True"
+card_template='<li><a href={{slug}}>{{title}}-{{date}}</a></li>'
+
 
 [[markata.covers]]
 name='-og'
 template = "static/og-template.png"
-font = "./.github/scripts/waterlilly-script.ttf"
+font = "static/JosefinSans-Regular.ttf"
 font_color = "rgb(255,255,255)"
 # text_key = 'long_description'
 text_font = "./static/JosefinSans-Regular.ttf"
 text_font_color = "rgb(200,200,200)"
+resizes=[25, 125, 250, 500]
 
-[[markata.covers]]
-name='-hashnode'
-template = "static/hashnode-template.png"
-font = "./.github/scripts/waterlilly-script.ttf"
-font_color = "rgb(255,255,255)"
 
 [[markata.seo]]
 name = "og:type"
