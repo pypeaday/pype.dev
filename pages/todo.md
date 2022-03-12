@@ -12,4 +12,8 @@ cover: "/static/todo.png"
 
 [] Use `psutil` to make a small system monitoring dashboard with `plotly` and maybe `dash`?
 [] Self hosting security
-[] 
+[] Can I use traefik for internal routing without SSL?
+[] Post on Bitwarden and self-hosting
+[] Little link
+[] Mopidy and snapcast to replace Google Home
+[] Post about Wireguard
