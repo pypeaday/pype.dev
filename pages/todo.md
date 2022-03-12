@@ -11,3 +11,5 @@ cover: "/static/todo.png"
 ## TODOs
 
 [] Use `psutil` to make a small system monitoring dashboard with `plotly` and maybe `dash`?
+[] Self hosting security
+[] 
