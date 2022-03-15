@@ -14,6 +14,7 @@ cover: "/static/todo.png"
 [] Self hosting security
 [] Can I use traefik for internal routing without SSL?
 [] Post on Bitwarden and self-hosting
-[] Little link
+[x] Little link
 [] Mopidy and snapcast to replace Google Home
-[] Post about Wireguard
+[x] Post about Wireguard
+[] `mu` post
