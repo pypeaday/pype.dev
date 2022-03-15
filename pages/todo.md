@@ -17,4 +17,4 @@ cover: "/static/todo.png"
 [x] Little link
 [] Mopidy and snapcast to replace Google Home
 [x] Post about Wireguard
-[] `mu` post
+[x] `mu` post
