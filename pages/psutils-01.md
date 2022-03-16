@@ -50,6 +50,6 @@ System Memory available: 5 GB
 System Memory total: 31 GB
 Hostname: ryzen-3600x
 Usage at / on /dev/nvme1n1p2: 81 GB
-Free at / on /dev/nvme1n1p2: 351GB
-Total at / on /dev/nvme1n1p2: 456GB
+Free at / on /dev/nvme1n1p2: 351 GB
+Total at / on /dev/nvme1n1p2: 456 GB
 ```
