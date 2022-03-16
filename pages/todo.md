@@ -10,11 +10,20 @@ cover: "/static/todo.png"
 
 ## TODOs
 
+[] netdata post - particularly about docker containers
+
 [] Use `psutil` to make a small system monitoring dashboard with `plotly` and maybe `dash`?
+
 [] Self hosting security
+
 [] Can I use traefik for internal routing without SSL?
+
 [] Post on Bitwarden and self-hosting
+
 [x] Little link
+
 [] Mopidy and snapcast to replace Google Home
+
 [x] Post about Wireguard
+
 [x] `mu` post
