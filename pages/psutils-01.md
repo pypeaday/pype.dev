@@ -36,20 +36,20 @@ for part in partitions:
         continue
     disk = psutil.disk_usage(mnt)
     print(f"Usage at {mnt} on {part.device}: {disk.used // (1024 ** 3)} GB")
-    print(f"Free at {mnt} on {part.device}: {disk.used // (1024 ** 3)}GB")
     print(f"Free at {mnt} on {part.device}: {disk.free // (1024 ** 3)}GB")
+    print(f"Total at {mnt} on {part.device}: {disk.total // (1024 ** 3)}GB")
 ```
 
 > Bonus Ipython tip! Save this to a script called my_script.py and in Ipython you can %run -m my_script to run it!
 
 ```bash
-project ↪  v3.8.11 ipython
+project ↪ main v3.8.11 ipython
 ❯ %run -m system-monitor-psutils
-System Memory used: 24 GB
+System Memory used: 25 GB
 System Memory available: 5 GB
 System Memory total: 31 GB
 Hostname: ryzen-3600x
 Usage at / on /dev/nvme1n1p2: 81 GB
-Free at / on /dev/nvme1n1p2: 81GB
 Free at / on /dev/nvme1n1p2: 351GB
+Total at / on /dev/nvme1n1p2: 456GB
 ```
