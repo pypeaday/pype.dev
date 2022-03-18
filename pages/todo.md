@@ -20,6 +20,9 @@ cover: "/static/todo.png"
 `git log branch1..branch2 --oneline`
 `git log --graph branch1..branch2 --oneline`
 `git log --graph branch1..branch2 --oneline --decorate`
+try with `--abrev-commit`
+try setting global config?
+see this for ideas: https://stackoverflow.com/questions/13965391/how-do-i-see-the-commit-differences-between-branches-in-git
 
 [] netdata post - particularly about docker containers
 
