@@ -10,6 +10,10 @@ cover: "/static/todo.png"
 
 ## TODOs
 
+[] git - num commits per author `git shortlog -s -n --all --no-merges`
+
+[] git - `git rebase --onto target feature1 feature2`
+
 [] netdata post - particularly about docker containers
 
 [] Use `psutil` to make a small system monitoring dashboard with `plotly` and maybe `dash`?
