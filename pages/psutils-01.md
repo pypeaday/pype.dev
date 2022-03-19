@@ -1,14 +1,14 @@
 ---
 templateKey: til
 tags: ['python']
-title: Psutils-01
+title: Psutil-01
 date: 2022-03-16T00:00:00
 status: draft
-cover: "/static/psutils-01.png"
+cover: "/static/psutil-01.png"
 
 ---
 
-[Mike Driscoll](https://twitter.com/driscollis) has been posting some awesome posts about `psutils` lately.
+[Mike Driscoll](https://twitter.com/driscollis) has been posting some awesome posts about `psutil` lately.
 I'm interested in making my own system monitoring dashboard now using this library.
 I don't expect it to compete with Netdata or Glances but it'll just be for fun to see how Python can solve this problem!
 
