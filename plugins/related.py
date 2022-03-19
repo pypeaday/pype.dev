@@ -1,7 +1,4 @@
-from typing import Union, List
 from markata.hookspec import hook_impl
-from string import Template
-from pathlib import Path
 from more_itertools import unique_everseen
 
 
@@ -30,7 +27,7 @@ def pre_render(markata):
             )
             article.content = article.content + "\n\n".join(
                 [
-                    "https://nicpayne.com/" + a.metadata["slug"] + "/"
+                    "https://blog.paynepride.com/" + a.metadata["slug"] + "/"
                     for a in related_articles
                 ]
             )
