@@ -10,6 +10,8 @@ cover: "/static/todo.png"
 
 ## TODOs
 
+[] terminal EDA with `skimpy`
+
 [] git - num commits per author `git shortlog -s -n --all --no-merges`
 
 [] git - `git rebase --onto target feature1 feature2`
