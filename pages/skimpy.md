@@ -36,3 +36,10 @@ __Of course you can with magic!__
 
 
 ![Alt Text](/images/skimpy-ipython.png "skimpy-ipython")
+
+
+The above assumes you're looking at a file, like you would in the terminal. 
+`skimpy` works even better in iPython with `from skimpy import skim` then pass any DataFrame to `skim`!
+
+![Alt Text](/images/skimpy-ipython2.png "skimpy-ipython2")
+
