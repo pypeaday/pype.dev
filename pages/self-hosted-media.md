@@ -175,7 +175,7 @@ __Your self-hosting journey is up to you!__
 
 Downloading YouTube videos is a bit of a sore topic... Mainly you don't to hurt creators who rely on YT ad revenue for their livlihood.
 
-Then again, maybe you're a vigellante who knows that YT also monetizes videos for their _own_ gain and that the creators don't see that money either!
+Then again, maybe you're a vigilante who knows that YT also monetizes videos for their _own_ gain and that the creators don't see that money either!
 
 The solution is pretty easy and is 2-fold...
 
