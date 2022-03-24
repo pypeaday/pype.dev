@@ -10,6 +10,8 @@ cover: "/static/todo.png"
 
 ## TODOs
 
+[] git - global gitignore + pyflyby
+
 [] git - practice with git-worktrees and vim plugin for second post
 
 [] python - `pip install commitzen`
