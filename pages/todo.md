@@ -11,7 +11,9 @@ cover: "/static/todo.png"
 ## TODOs
 
 [] git - global gitignore + pyflyby
+[] python - timeit
 
+[] python/homelab  - pytube / you-get
 [] git - practice with git-worktrees and vim plugin for second post
 
 [] python - `pip install commitzen`
