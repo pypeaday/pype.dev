@@ -34,10 +34,13 @@ Now I use `zsh` and there's a great tool out there [oh-my-zsh](https://ohmyz.sh/
 
 I do not use `oh-my-zsh` for theming though and that's simply because of my other choices - I use `kitty` themes since I understood the implementation better.
 Kitty themes though - do not give me a nice prompt.
+
 The default prompt you get with `oh-my-zsh` themes isn't bad though (and you can pick from several default themes)...
 
 ![Alt Text](/images/zsh-oh-my-zsh-prompt.png)
 
+Notice that you get some nice coloring and some default `git` status stuff, mainly the branch you are on.
+There's plugins to show you more and that's all well and good, but again it's not my choice...
 
 If I don't use this then what's my goto?
 
@@ -56,8 +59,13 @@ My starship config is found [here](https://github.com/nicpayne713/dotfiles/blob/
 
 Now I have a beautiful prompt with relevant information that's a dream to look at!
 
-
 ![Alt Text](/images/zsh-starship-prompt.png)
+
+I have configured my starship to show me relevant `git status` options (stashes, untracked files, etc etc.)
+I also have starship show me if I'm in a git repo, what branch I'm on, if I'm in a python project and if so what virtual environment is active.
+I do some work in AWS at work and so I have starship show me if my `aws cli` is configured to the right region for whichever project I'm in!
+
+There's a billion more options and after a few minutes of play it becomes really easy and intuitive to customize colors, icons, etc.
 
 
 
