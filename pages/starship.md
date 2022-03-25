@@ -45,12 +45,14 @@ If I don't use this then what's my goto?
 
 [starship](https://starship.rs/) is a cross-shell prompt with nice default and super easy customizaton!
 
-To get started you pipe a small command to bash (it's always safe to do this, right? ... right?!), then depending on shell toss a one-liner into your rc file.
-
-For zsh it's `eval "$(starship init zsh)"`
+To get started click that link and follow the "Getting Started" button - it's incredibly fast to get up and running with sane defaults.
 
 The default starship config is plenty nice but I got a little tired of emojis in my prompt and wanted to switch to icons instead...
+
+To get started with your own customizaton you add a `starship.toml` file to `~/.config` 
 My starship config is found [here](https://github.com/nicpayne713/dotfiles/blob/main/starship/.config/starship.toml).
+
+>Note you need a font installed patched with nerdfonts - I use JetBrains Mono
 
 Now I have a beautiful prompt with relevant information that's a dream to look at!
 
