@@ -14,8 +14,8 @@ cover: "/static/plotly-and-streamlit.png"
 I use `streamlit` for any EDA I ever have to do at work.
 It's super easy to spin up a small dashboard to filter and view dataframes in, live, without the fallbacks of Jupyter notebooks (kernels dying, memory bloat, a billion "Untitled N.ipynb" files, etc.)
 
-At the highest level, streamlit lets you write a python script and call `streamlit run my_script.py` which will open up a web server with your streamlit stuff which will open up a web server with your streamlit stuff.
-The dashboard refreshes whenver you change the script so you can add capabilities in real time, super fast!
+At the highest level, streamlit lets you write a python script and call `streamlit run my_script.py` which will open up a web server with your streamlit stuff. 
+The dashboard refreshes whenever you change the script so you can add capabilities in real time, super fast!
 
 
 I'll show an example of using `streamlit` and `plotly` to make a live dashboard to monitor system memory usage with `psutil`.
@@ -71,7 +71,7 @@ def refresh_data():
 
 If you ignore my usage of `global` you'll see that I can just `append` to each deque like it was a list.
 
-But then to keep the relevant data in the deque, and to keep the length fixed, I simply `popleft` to remove the oldest ddatapoint!
+But then to keep the relevant data in the deque, and to keep the length fixed, I simply `popleft` to remove the oldest datapoint!
 
 
 ## A trivial dashboard
