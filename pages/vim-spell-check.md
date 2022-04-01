@@ -21,7 +21,7 @@ __Did you know you can spell check in Vim?!__
       <h3>Without...</h3>
       <p>Here is a missspelled word.</p>
 
-      <h3>Without...</h3>
+      <h3>With!</h3>
       <p>Here is a <u>missspelled</u> word.</p>
 
    </body>
