@@ -18,15 +18,27 @@ __Did you know you can spell check in Vim?!__
    </head>
 
    <body>
-      <h2>Without...</h2>
+      <h3>Without...</h3>
       <p>Here is a missspelled word.</p>
 
-      <h2>Without...</h2>
+      <h3>Without...</h3>
       <p>Here is a <u>missspelled</u> word.</p>
 
    </body>
 </html>
 
-What is this magic???
+## What is this magic???
 
 `set: spell_spelllang=en_us`
+
+
+## Custom words?
+
+Sometimes there's things that are words to you but not the default spell checker...
+
+Common example: package names!
+
+`plotly`, `streamlit`, `psutil`, etc etc...
+
+
+You can easily add these to your vim config by hitting `zw` ontop of the word!
