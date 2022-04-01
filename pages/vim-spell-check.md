@@ -29,7 +29,7 @@ __Did you know you can spell check in Vim?!__
 
 ## What is this magic???
 
-`set: spell_spelllang=en_us`
+`set: spell spelllang=en_us`
 
 
 ## Custom words?
