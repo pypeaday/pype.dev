@@ -53,3 +53,5 @@ These are handy ways to manipulate the iterable that I needed for the arrays I p
 
 
 __See my follow-up to this on using Deques with plotly and streamlit to create a quick "dashboard" with live streaming data!__
+
+[follow-up](/plotly-and-streamlit)
