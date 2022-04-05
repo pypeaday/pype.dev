@@ -3,7 +3,7 @@ templateKey: til
 tags: [ 'meta']
 title: Tiddly-Wiki
 date: 2022-03-05T00:00:00
-status: draft
+status: published
 cover: "/static/tiddly-wiki.png"
 
 ---

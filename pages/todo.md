@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['blog']
 title: Todo
 date: 2022-03-12T00:00:00
-status: draft
+status: published
 cover: "/static/todo.png"
 
 ---

@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Pyclean
 date: 2022-03-22T00:00:00
-status: draft
+status: published
 cover: "/static/pyclean.png"
 
 ---

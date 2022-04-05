@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Ipython-Prompt
 date: 2022-04-02T00:00:00
-status: draft
+status: published
 cover: "/static/ipython-prompt.png"
 
 ---

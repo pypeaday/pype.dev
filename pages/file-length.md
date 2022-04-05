@@ -3,7 +3,7 @@ templateKey: til
 tags: []
 title: File-Length
 date: 2022-04-04T00:00:00
-status: draft
+status: published
 cover: "/static/file-length.png"
 
 ---

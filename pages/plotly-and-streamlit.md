@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Plotly-And-Streamlit
 date: 2022-03-31T00:00:00
-status: draft
+status: published
 cover: "/static/plotly-and-streamlit.png"
 
 ---

@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Psutil-01
 date: 2022-03-16T00:00:00
-status: draft
+status: published
 cover: "/static/psutil-01.png"
 
 ---

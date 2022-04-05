@@ -3,7 +3,7 @@ templateKey: til
 tags: ['linux']
 title: Starship
 date: 2022-03-25T00:00:00
-status: draft
+status: published
 cover: "/static/starship.png"
 
 ---
