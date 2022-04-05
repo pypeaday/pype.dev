@@ -1,5 +1,5 @@
 ---
-templateKey: blog-post
+templateKey: til
 tags: ['homelab']
 title: Webservers-And-Indexes
 date: 2022-03-06T00:00:00

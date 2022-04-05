@@ -1,6 +1,6 @@
 ---
-templateKey: blog-post
-tags: ['blog', 'meta']
+templateKey: til
+tags: [ 'meta']
 title: Tiddly-Wiki
 date: 2022-03-05T00:00:00
 status: draft

@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: []
+tags: ['vim']
 title: Vim-Spell-Check
 date: 2022-04-01T00:00:00
 status: draft

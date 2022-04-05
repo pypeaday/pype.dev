@@ -1,6 +1,6 @@
 ---
-templateKey: blog-post
-tags: ['blog']
+templateKey: til
+tags: ['meta', 'homelab']
 title: Wireguard
 date: 2022-03-12T00:00:00
 status: draft

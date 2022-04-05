@@ -1,6 +1,6 @@
 ---
-templateKey: blog-post
-tags: ['python', 'blog', 'homelab']
+templateKey: til
+tags: ['python', 'homelab']
 title: self-hosted-media
 date: 2022-03-24T00:00:00
 status: draft

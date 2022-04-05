@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['blog', 'homelab']
+tags: ['homelab']
 title: Truenas-And-Wireguard
 date: 2022-03-23T00:00:00
 status: draft

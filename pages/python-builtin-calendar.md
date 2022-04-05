@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['til', 'python']
+tags: ['python']
 title: Python-Builtin-Calendar
 date: 2022-03-08T00:00:00
 status: draft
