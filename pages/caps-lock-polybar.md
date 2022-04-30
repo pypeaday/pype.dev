@@ -1,5 +1,5 @@
 ---
-templateKey: til
+templateKey: blog-post
 tags: []
 title: Caps-Lock-Polybar
 date: 2022-04-15T00:00:00

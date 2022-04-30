@@ -3,7 +3,7 @@ templateKey: til
 tags: [til]
 title: Fx-Json
 date: 2022-04-19T00:00:00
-status: draft
+status: published
 cover: "/static/fx-json.png"
 
 ---

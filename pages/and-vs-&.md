@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python', 'python']
 title: And-vs-&
 date: 2022-04-06T00:00:00
-status: draft
+status: published
 cover: "/static/And-vs-ampersand.png"
 
 ---
