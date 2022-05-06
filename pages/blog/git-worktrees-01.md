@@ -1,9 +1,9 @@
 ---
-templateKey: til
+templateKey: blog-post
 tags: ['git']
 title: Git-Worktrees-01
 date: 2022-03-11T00:00:00
-status: published
+status: draft
 cover: "/static/git-worktrees-01.png"
 
 ---

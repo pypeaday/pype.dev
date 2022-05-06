@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'python']
+tags: [ 'python']
 title: Abstract-Base-Class
 date: 2022-03-09T00:00:00
 status: published
