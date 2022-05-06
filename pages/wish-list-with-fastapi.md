@@ -53,13 +53,11 @@ Base = declarative_base()
 
 For my wish list I needed just a simple table:
 
-```markdown
 |   id | person   | item         | link         | purchased   | purchased_by   | date_added          |
 |-----:|:---------|:-------------|:-------------|:------------|:---------------|:--------------------|
 |    1 | pypeaday | A sweet item | www.mystore.store | False        | dad| 2022-05-05 21:55:09 |
 |    2 | pypeaday   | A bitter item| www.bitterstore.com | True       |Mrs. pypeaday |  2022-05-06 06:55:54 |
 
-```
 
 The table is simple enough... A unique key, the person who the wish belongs to, the item (or wish), a link to the item, whether it's been purchased or not and by whom, and the date it was added.
 
