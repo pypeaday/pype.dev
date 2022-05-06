@@ -16,6 +16,8 @@ cover: "/static/todo.png"
 [] python/homelab  - pytube / you-get
 [] git - practice with git-worktrees and vim plugin for second post
 
+[] python - front end for wish-list
+
 [] python - `pip install commitzen`
 
 [x] python - terminal EDA with `skimpy`
@@ -50,5 +52,9 @@ see this for ideas: https://stackoverflow.com/questions/13965391/how-do-i-see-th
 [] homelab - Mopidy and snapcast to replace Google Home
 
 [x] homelab - Post about Wireguard
+
+[] homelab - tdarr
+
+[] terraform notes?
 
 [x] git - `mu` post
