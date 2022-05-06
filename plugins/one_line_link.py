@@ -7,7 +7,7 @@ from markata.hookspec import hook_impl
 import requests
 import twitter
 
-RE_ONE_LINE = re.compile("^https://blog.paynepride.com.com/.*")
+RE_ONE_LINE = re.compile("^https://pype.dev.com/.*")
 RE_TWEET = re.compile("^https://twitter.com/.*")
 
 API = twitter.Api()
