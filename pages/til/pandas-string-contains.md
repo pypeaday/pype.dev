@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'python']
+tags: [ 'python']
 title: Pandas-String-Contains
 date: 2022-05-02T00:00:00
 status: draft
