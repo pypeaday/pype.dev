@@ -1,9 +1,9 @@
 ---
-templateKey: blog-post
-tags: ['blog', 'homelab']
+templateKey: til
+tags: ['homelab']
 title: Traefik-01
 date: 2022-03-06T00:00:00
-status: draft
+status: published
 cover: "/static/traefik-01.png"
 
 ---

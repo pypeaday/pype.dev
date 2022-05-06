@@ -2,12 +2,12 @@ import re
 import textwrap
 
 import background
-import requests
-import twitter
 from bs4 import BeautifulSoup
 from markata.hookspec import hook_impl
+import requests
+import twitter
 
-RE_ONE_LINE = re.compile("^https://nicpayne.com/.*")
+RE_ONE_LINE = re.compile("^https://blog.paynepride.com.com/.*")
 RE_TWEET = re.compile("^https://twitter.com/.*")
 
 API = twitter.Api()

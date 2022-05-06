@@ -1,9 +1,9 @@
 ---
 templateKey: til
-tags: ['bash']
+tags: ['bash', 'linux']
 title: Stow-Target
 date: 2022-03-04T00:00:00
-status: draft
+status: published
 cover: "/static/stow-target.png"
 
 ---

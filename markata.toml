@@ -23,6 +23,7 @@ hooks = [
    "markata.plugins.publish_dev_to_source",
    "plugins.render_template_variables",
    "plugins.codeblocks",
+   "plugins.index",
    "plugins.slug",
    "plugins.one_line_link",
    "plugins.include",
@@ -36,14 +37,14 @@ hooks = [
    'plugins.rss_tag',
    'plugins.auto_publish',
    ]
-disabled_hooks = ['markata.plugins.flat_slug']
+disabled_hooks = ["markata.plugins.covers", 'markata.plugins.flat_slug']
 
 ## Site Config
-url = "https://nicpayne.com"
+url = "https://blog.paynepride.com"
 images_url = "/static/images"  # nothing yet
-title = "Nic Payne's mental data lake"
-description = "I write about how I use python and linux to work with data and make cool new shiz."
-rss_description = "Nic Payne posts"
+title = "Nic's mental data lake"
+description = "I write about how I use python for data-centric work and my homelab journey"
+rss_description = "Pypeaday posts"
 author_name = "Nicholas Payne"
 author_email = "nicpayne713@gmail.com"
 icon = "bitmoji.png"
@@ -60,79 +61,87 @@ twitter_card = "summary_large_image"
 twitter_creator = "@pypeaday"
 twitter_site = "@pypeaday"
 
-[markata.auto_description.long_description]
-len=250
-
 [markata.auto_publish.filters]
 til='templateKey=="til" and date<=today'
 
+[markata.archive]
+archive_template="pages/templates/archive_template.html"
 
-[markata.feeds]
-template="pages/templates/archive_template.html"
-card_template="plugins/feed_card_template.html"
-
-[markata.feeds.archive]
+[markata.archive.pages.archive]
 filter="date<=today and templateKey in ['blog-post', 'til'] and status.lower()=='published'"
 
-[markata.feeds.blog]
+[markata.archive.pages.blog]
 filter="date<=today and templateKey in ['blog-post'] and status.lower()=='published'"
 
-[markata.feeds.draft]
+[markata.archive.pages.draft]
 filter="status=='draft'"
 
-[markata.feeds.scheduled]
+[markata.archive.pages.scheduled]
 filter="date>today"
 
-[markata.feeds.today]
+[markata.archive.pages.today]
 filter="date==today"
 
-[markata.feeds.python]
+[markata.archive.pages.python]
 filter="date<=today and 'python' in tags"
 
-[markata.feeds.python-draft]
+[markata.archive.pages.python-draft]
 filter="date<=today and 'python' in tags and status=='draft'"
 
-[markata.feeds.linux]
+[markata.archive.pages.linux]
 filter="date<=today and 'linux' in tags"
 
-[markata.feeds.linux-draft]
+[markata.archive.pages.linux-draft]
 filter="date<=today and 'linux' in tags and status=='draft'"
 
-[markata.feeds.vim]
+[markata.archive.pages.vim]
 filter="date<=today and 'vim' in tags"
 
-[markata.feeds.vim-draft]
+[markata.archive.pages.vim-draft]
 filter="date<=today and 'vim' in tags and status=='draft'"
 
-[markata.feeds.kedro]
+[markata.archive.pages.kedro]
 filter="date<=today and 'kedro' in tags"
 
-[markata.feeds.kedro-draft]
+[markata.archive.pages.kedro-draft]
 filter="date<=today and 'kedro' in tags and status=='draft'"
 
-[markata.feeds.til]
-# template="pages/templates/archive_template.html"
+[markata.archive.pages.homelab]
+filter="date<=today and 'homelab' in tags"
+
+[markata.archive.pages.homelab-draft]
+filter="date<=today and 'homelab' in tags and status=='draft'"
+
+[markata.archive.pages.til]
+template="pages/templates/archive_template.html"
 # card_template="pages/templates/gratitude_card.html"
 filter="date<=today and templateKey == 'til'"
 
-[markata.feeds.til-vim]
+[markata.archive.pages.til-vim]
+template="pages/templates/archive_template.html"
+# card_template="pages/templates/gratitude_card.html"
 filter="date<=today and templateKey == 'til' and 'vim' in tags"
 
-[markata.feeds.all]
-filter="True"
-card_template='<li><a href={{slug}}>{{title}}-{{date}}</a></li>'
-
+[[markata.covers]]
+name='-dev'
+template = "static/cover-template.png"
+font = "./.github/scripts/waterlilly-script.ttf"
+font_color = "rgb(255,255,255)"
 
 [[markata.covers]]
 name='-og'
 template = "static/og-template.png"
-font = "static/JosefinSans-Regular.ttf"
+font = "./.github/scripts/waterlilly-script.ttf"
 font_color = "rgb(255,255,255)"
 # text_key = 'long_description'
 text_font = "./static/JosefinSans-Regular.ttf"
 text_font_color = "rgb(200,200,200)"
-resizes=[25, 125, 250, 500]
 
+[[markata.covers]]
+name='-hashnode'
+template = "static/hashnode-template.png"
+font = "./.github/scripts/waterlilly-script.ttf"
+font_color = "rgb(255,255,255)"
 
 [[markata.seo]]
 name = "og:type"

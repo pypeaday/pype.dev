@@ -1,9 +1,9 @@
 ---
 templateKey: til
-tags: []
+tags: ['linux']
 title: Tree
 date: 2022-03-06T00:00:00
-status: draft
+status: published
 cover: "/static/tree.png"
 
 ---
