@@ -3,7 +3,7 @@ templateKey: til
 tags: ['homelab']
 title: Cloudflare-Proxy-Kills-Gh-Dns
 date: 2022-05-07T00:00:00
-status: draft
+status: published
 cover: "/static/cloudflare-proxy-kills-gh-dns.png"
 
 ---
