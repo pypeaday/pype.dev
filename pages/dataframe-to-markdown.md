@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Dataframe-To-Markdown
 date: 2022-05-07T00:00:00
-status: draft
+status: published
 cover: "/static/dataframe-to-markdown.png"
 
 ---
