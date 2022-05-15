@@ -13,6 +13,9 @@ cover: "/static/todo.png"
 [] git - global gitignore + pyflyby
 [] python - timeit
 
+[] python - fastapi form data TIL published
+[] python - fastapi form data blog-post draft
+
 [] python/homelab  - pytube / you-get
 [] git - practice with git-worktrees and vim plugin for second post
 
