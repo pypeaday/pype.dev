@@ -46,13 +46,24 @@ I have the media array on Jellyfin box setup as NFS which was really easy with Z
 
 0. THE FREAKING NAS -> just import zfs array and configure SMB?
 
-1. Nextcloud users and connections.. might be able to just copy the data folder? not sure about the database... try spinning it up in the sandbox vm and see if stuff is there
-2. *arr suite, media profiles and connections to transmission... nothing major
+1.~~ Nextcloud users and connections.. might be able to just copy the data folder? not sure about the database... try spinning it up in the sandbox vm and see if stuff is there ~~
+2.~~ *arr suite, media profiles and connections to transmission... nothing major~~
 3. transmission - should be deploy and go
 4. ombi and jackett should also just work after some config again
-5. traefik should just work
-6. try to bring up pi-hole from the vm that's already running
-7. heimdall will hopefully just be copying the data folder from the existind docker one
-8. booksonic can be reconfigured easily
-9. portainer... hopefully just copying data folder over?
+5. ~~traefik should just work~~
+6. ~~try to bring up pi-hole from the vm that's already running~~
+7. ~~heimdall will hopefully just be copying the data folder from the existind docker one'~~
+8.~~ booksonic can be reconfigured easily~~
+9. ~~portainer... hopefully just copying data folder over?~~
 10. littlelink, small-group-notes, and blog (at home) will need manually re-deployed once Ubuntu is installed bare-metal
+
+## BIG BIG BIG TODOS
+1. Sanoid/syncoid! Get snapshots going and backups configured with on prem TrueNAS
+2. Wireguard setup on DA.
+3. network share on printer for paperless
+4. update peperless in ansible-nas
+5. ~~booksonic not seeing audiobooks/podcasts~~
+
+1. need a smb user to map nas/documents to the printer for paperless
+2. still need to figure out paperless provisioning... how do I make that super user? Or do I just deploy it as a stack in portainer?
+3. wireguard setup now on kps phone, desktop, server (and backup truenas?), and dad's pi
