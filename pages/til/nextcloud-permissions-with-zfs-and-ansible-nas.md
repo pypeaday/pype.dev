@@ -2,7 +2,7 @@
 date: 2022-05-19 13:55:20
 templateKey: til
 title: Nextcloud permissions with ZFS and Ansible-NAS
-status: draft
+status: published
 tags:
   - homelab
   - zfs
