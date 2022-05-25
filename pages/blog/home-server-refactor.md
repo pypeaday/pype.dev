@@ -68,6 +68,6 @@ I have the media array on Jellyfin box setup as NFS which was really easy with Z
 1. need a smb user to map nas/documents to the printer for paperless
 3. wireguard setup now on kps phone, desktop, server (and backup truenas?), and dad's pi
 4. verify lan services work
-5. Tdar so Jellyfin can work better
+5. ~~Tdar so Jellyfin can work better~~
 
 
