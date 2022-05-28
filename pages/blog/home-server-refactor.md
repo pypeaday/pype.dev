@@ -62,8 +62,8 @@ I have the media array on Jellyfin box setup as NFS which was really easy with Z
 2. Wireguard setup on DA.
 3. network share on printer for paperless
 ~~4. update peperless in ansible-nas~~
-4. Just deploy paperless manually... monitor/manage with portainer
-5. ~~booksonic not seeing audiobooks/podcasts~~
+4. ~~Just deploy paperless manually... monitor/manage with portainer~~
+5. booksonic not seeing audiobooks/podcasts
 
 1. need a smb user to map nas/documents to the printer for paperless
 3. wireguard setup now on kps phone, desktop, server (and backup truenas?), and dad's pi
@@ -72,5 +72,7 @@ I have the media array on Jellyfin box setup as NFS which was really easy with Z
 
 Snapshot business might be cause of all the docker containers and docker using
 ZFS backend... take everything down and try removing
+
+1. file browser - currently I just one-clicked in portainer, I want to make a stack with my own config file which I'll rip from techno tip and then add my traefik lables too
 
 
