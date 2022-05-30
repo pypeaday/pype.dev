@@ -77,6 +77,7 @@ ZFS backend... take everything down and try removing
 
 Forget filebrowser - going to just use Nextcloud for how it's supposed to be used.
 3. Need to organize those files in nextcloud
+## CHECK THIS ->  ran as 'cp' utility in tmux window, no progress bars or anything. it's in ansible-nas session -> window 3
 Olivet bible stuff going to /tmp/olivet/ -> will move this to nextcloud, ideally by the app via appimage so that the db updates and I don't have to run that occ script
 I wnat to organize "home" still in nextcloud 
 
