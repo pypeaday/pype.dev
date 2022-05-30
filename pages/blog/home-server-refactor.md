@@ -75,4 +75,14 @@ ZFS backend... take everything down and try removing
 
 1. file browser - currently I just one-clicked in portainer, I want to make a stack with my own config file which I'll rip from techno tip and then add my traefik lables too
 
+Forget filebrowser - going to just use Nextcloud for how it's supposed to be used.
+3. Need to organize those files in nextcloud
+Olivet bible stuff going to /tmp/olivet/ -> will move this to nextcloud, ideally by the app via appimage so that the db updates and I don't have to run that occ script
+I wnat to organize "home" still in nextcloud 
 
+setup Sanoid
+
+
+clean up bitwarden 
+learn nextcloud sharing -> maybe just give a link to grandma?
+rest of todos -> document db and sanoid + zfs.rent
