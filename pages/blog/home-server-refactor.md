@@ -87,3 +87,8 @@ setup Sanoid
 clean up bitwarden 
 learn nextcloud sharing -> maybe just give a link to grandma?
 rest of todos -> document db and sanoid + zfs.rent
+
+Check on mom's will
+
+
+do media thing for church - split vocals on mp3/4
