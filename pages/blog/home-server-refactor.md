@@ -89,6 +89,10 @@ learn nextcloud sharing -> maybe just give a link to grandma?
 rest of todos -> document db and sanoid + zfs.rent
 
 Check on mom's will
-
-
 do media thing for church - split vocals on mp3/4
+
+permission-data playbook changes everything to ansible-nas:ansible-nas but then samba task will re-permission some stuff to root:users... this looks fine
+I had to add `group` to the samba config in my playbook to get user auth to work with samba
+still not working from printer...
+I think what I want is to setup 2 scan options - single docs right to paperless, or combined scans to dump, then manually split and send to paperless
+
