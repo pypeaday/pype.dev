@@ -93,6 +93,8 @@ do media thing for church - split vocals on mp3/4
 
 permission-data playbook changes everything to ansible-nas:ansible-nas but then samba task will re-permission some stuff to root:users... this looks fine
 I had to add `group` to the samba config in my playbook to get user auth to work with samba
+This isn't fully working... it works from cli but my python process can't write to a folder in dump after 777.... need to learn more?
+aSo I can make a file after adding the ansible-nas group to config, but I still cannot make a directory on the smb mount...
 still not working from printer...
 I think what I want is to setup 2 scan options - single docs right to paperless, or combined scans to dump, then manually split and send to paperless
 
