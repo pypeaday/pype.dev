@@ -75,4 +75,29 @@ ZFS backend... take everything down and try removing
 
 1. file browser - currently I just one-clicked in portainer, I want to make a stack with my own config file which I'll rip from techno tip and then add my traefik lables too
 
+Forget filebrowser - going to just use Nextcloud for how it's supposed to be used.
+3. Need to organize those files in nextcloud
+## CHECK THIS ->  ran as 'cp' utility in tmux window, no progress bars or anything. it's in ansible-nas session -> window 3
+Olivet bible stuff going to /tmp/olivet/ -> will move this to nextcloud, ideally by the app via appimage so that the db updates and I don't have to run that occ script
+I wnat to organize "home" still in nextcloud 
+
+setup Sanoid
+
+
+clean up bitwarden 
+learn nextcloud sharing -> maybe just give a link to grandma?
+rest of todos -> document db and sanoid + zfs.rent
+
+Check on mom's will
+do media thing for church - split vocals on mp3/4
+
+permission-data playbook changes everything to ansible-nas:ansible-nas but then samba task will re-permission some stuff to root:users... this looks fine
+I had to add `group` to the samba config in my playbook to get user auth to work with samba
+This isn't fully working... it works from cli but my python process can't write to a folder in dump after 777.... need to learn more?
+So I can make a file after adding the ansible-nas group to config, but I still cannot make a directory on the smb mount...
+
+ADDING `inherit permission = yes` under `[global]` in the smb.conf worked!
+
+still not working from printer...
+I think what I want is to setup 2 scan options - single docs right to paperless, or combined scans to dump, then manually split and send to paperless
 
