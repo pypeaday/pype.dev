@@ -2,13 +2,15 @@
 templateKey: til
 tags: ['homelab']
 title: Xrdp-Authentication-Required-To-Create-Managed-Color-Device
-date: 2022-05-18T00:00:00
-status: draft
+date: 2022-07-18T00:00:00
+status: published
 cover: "/static/xrdp-authentication-required-to-create-managed-color-device.png"
 
 ---
 
-I just need to RDP into an Ubuntu box via Remmina and everytime I login I have to authenticate to create a color managed device... which I don't even know what that is!
+I just need to RDP into an Ubuntu box via Remmina and everytime I login I have
+to authenticate to create a color managed device... which I don't even know
+what that is!
 
 
 To fix it?
