@@ -17,7 +17,7 @@ your own.  Edit this page in `pages/index.md`.
 Here are some pages to help get you started. Feel free to delete them and and
 make this site your own.
 
-{% for post in markata.map('post', sort='date', filter='published==True and date<=today and "meta" in post.get("tags", [])', reverse=False) %}
+{% for post in markata.map('post', sort='date', filter='post.get("published", False)==True and date<=today and "meta" in post.get("tags", [])', reverse=False) %}
 !!! note "[{{ post['title'] }}]({{ post['slug'] }})"
     {{post['description']}}... _[read more]({{ post['slug'] }})_
 {% endfor %}

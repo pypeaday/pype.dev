@@ -13,7 +13,7 @@ tags:
 
 Setting up the ipython extension is completely optional, and not
 required, but there for pure convenience.
-{% for post in markata.map('post', sort='date', filter='published==True and date<=today and "meta" in post.get("tags", [])', reverse=False) %}
+{% for post in markata.map('post', sort='date', filter='post.get("published", False)==True and date<=today and "meta" in post.get("tags", [])', reverse=False) %}
 !!! note "## [{{ post['title'] }}]({{ post['slug'] }})"
     {{post['description']}}
 {% endfor %}
