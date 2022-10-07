@@ -2,6 +2,7 @@
 date: 2022-05-17 14:03:27
 templateKey: til
 title: Filepath Completion in Neovim
+published: True
 tags:
   - vim
 
