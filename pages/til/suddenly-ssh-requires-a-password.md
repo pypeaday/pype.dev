@@ -2,7 +2,7 @@
 date: 2022-10-07 11:14:37
 templateKey: til
 title: Suddenly SSH requires a password
-status: draft
+published: False
 tags:
   - linux
   - cli

@@ -2,7 +2,7 @@
 date: 2022-10-06 19:58:01
 templateKey: til
 title: Quick setup of ZFS encrytped datasets with sane permissions
-status: published
+published: True
 tags:
   - zfs
   - homelab

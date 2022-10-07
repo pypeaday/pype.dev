@@ -2,7 +2,7 @@
 date: 2022-08-27 13:43:22
 templateKey: blog-post
 title: Benchmark your disks with fio
-status: published
+published: True
 tags:
   - python
   - zfs

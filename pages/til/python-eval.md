@@ -3,7 +3,7 @@ templateKey: til
 tags: []
 title: Python-Eval
 date: 2022-05-12T00:00:00
-status: draft
+published: False
 cover: "/static/python-eval.png"
 
 ---

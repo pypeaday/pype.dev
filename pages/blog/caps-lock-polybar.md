@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['linux']
 title: Caps-Lock-Polybar
 date: 2022-04-15T00:00:00
-status: draft
+published: False
 cover: "/static/caps-lock-polybar.png"
 
 ---

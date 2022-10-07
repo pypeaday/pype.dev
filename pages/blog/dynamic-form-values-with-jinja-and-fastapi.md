@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['python']
 title: Dynamic-Form-Values-With-Jinja-And-Fastapi
 date: 2022-05-15T00:00:00
-status: draft
+published: False
 cover: "/static/dynamic-form-values-with-jinja-and-fastapi.png"
 
 ---

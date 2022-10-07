@@ -2,7 +2,7 @@
 date: 2022-06-23 09:35:31
 templateKey: til
 title: cheat on your man
-status: published
+published: True
 tags:
   - linux
   - cli

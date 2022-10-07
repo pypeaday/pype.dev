@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['meta', 'homelab']
 title: Wireguard
 date: 2022-03-12T00:00:00
-status: published
+published: True
 cover: "/static/wireguard.png"
 
 ---

@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Deques
 date: 2022-03-31T00:00:00
-status: published
+published: True
 cover: "/static/deques.png"
 
 ---

@@ -2,7 +2,7 @@
 date: 2022-05-24 07:15:55
 templateKey: til
 title: One click to dockerized app from Portainer!
-status: draft
+published: False
 tags:
   - homelab
   - homelab

@@ -2,7 +2,7 @@
 date: 2022-09-15 10:27:58
 templateKey: til
 title: Destroying Tmux sessions with fzf
-status: published
+published: True
 tags:
   - cli
   - bash

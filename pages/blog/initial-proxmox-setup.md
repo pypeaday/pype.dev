@@ -2,7 +2,7 @@
 date: 2022-05-23 06:19:13
 templateKey: blog-post
 title: Initial Proxmox Setup
-status: draft
+published: False
 tags:
   - homelab
   - linux

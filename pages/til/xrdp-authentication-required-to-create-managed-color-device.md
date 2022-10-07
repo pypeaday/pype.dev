@@ -3,7 +3,7 @@ templateKey: til
 tags: ['homelab']
 title: Xrdp-Authentication-Required-To-Create-Managed-Color-Device
 date: 2022-07-18T00:00:00
-status: published
+published: True
 cover: "/static/xrdp-authentication-required-to-create-managed-color-device.png"
 
 ---

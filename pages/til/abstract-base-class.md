@@ -3,7 +3,7 @@ templateKey: til
 tags: [ 'python']
 title: Abstract-Base-Class
 date: 2022-03-09T00:00:00
-status: published
+published: True
 cover: "/static/abstract-base-class.png"
 
 ---

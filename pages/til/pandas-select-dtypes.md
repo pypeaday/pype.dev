@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Pandas-Select-Dtypes
 date: 2022-03-05T00:00:00
-status: published
+published: True
 cover: "/static/pandas-select-dtypes.png"
 
 ---

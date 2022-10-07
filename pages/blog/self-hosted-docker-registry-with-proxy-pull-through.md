@@ -2,7 +2,7 @@
 date: 2022-07-06 06:44:35
 templateKey: blog-post
 title: Self-hosted Docker registry with proxy pull through
-status: draft
+published: False
 tags:
   - homelab
   - zfs

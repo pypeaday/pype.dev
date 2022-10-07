@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['blog']
 title: Home-Server-Refactor
 date: 2022-04-10T00:00:00
-status: draft
+published: False
 cover: "/static/home-server-refactor.png"
 
 ---

@@ -2,7 +2,7 @@
 date: 2022-05-19 21:17:42
 templateKey: blog-post
 title: How I use Nextcloud for safe central storage
-status: draft
+published: False
 tags:
   - homelab
   - zfs

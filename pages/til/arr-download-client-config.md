@@ -2,7 +2,7 @@
 date: 2022-05-28 13:29:28
 templateKey: til
 title: arr client config
-status: published
+published: True
 tags:
   - homelab
 

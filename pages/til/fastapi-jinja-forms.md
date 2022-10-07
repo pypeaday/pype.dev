@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Forms with FastAPI and Jinja
 date: 2022-05-15T00:00:00
-status: draft
+published: False
 cover: "/static/forms-with-fast-api-and-jinja.png"
 
 ---

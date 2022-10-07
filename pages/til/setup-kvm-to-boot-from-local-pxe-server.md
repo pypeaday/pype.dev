@@ -2,7 +2,7 @@
 date: 2022-07-06 12:30:50
 templateKey: til
 title: Setup KVM to boot from local PXE server
-status: draft
+published: False
 tags:
   - homelab
   - linux

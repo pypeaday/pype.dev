@@ -2,7 +2,7 @@
 date: 2022-05-19 06:05:23
 templateKey: til
 title: See ZFS snapshot disk usage
-status: draft
+published: False
 tags:
   - zfs
   - homelab

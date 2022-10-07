@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['python', 'homelab']
 title: self-hosted-media
 date: 2022-03-24T00:00:00
-status: published
+published: True
 cover: "/static/self-hosted-media.png"
 
 ---

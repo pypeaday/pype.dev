@@ -3,7 +3,7 @@ templateKey: til
 tags: ['til']
 title: Htop
 date: 2022-04-24T00:00:00
-status: published
+published: True
 cover: "/static/htop.png"
 
 ---

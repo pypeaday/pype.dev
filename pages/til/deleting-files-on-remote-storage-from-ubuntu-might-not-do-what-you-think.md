@@ -2,7 +2,7 @@
 date: 2022-05-19 05:51:50
 templateKey: til
 title: Deleting files on remote storage from Ubuntu might not do what you think
-status: draft
+published: False
 tags:
   - linux
   - cli

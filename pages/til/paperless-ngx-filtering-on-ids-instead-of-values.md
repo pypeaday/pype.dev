@@ -2,7 +2,7 @@
 date: 2022-08-09 08:28:51
 templateKey: til
 title: Paperless-NGX filtering on IDs instead of values
-status: published
+published: True
 tags:
   - homelab
 

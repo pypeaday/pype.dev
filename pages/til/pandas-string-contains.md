@@ -3,7 +3,7 @@ templateKey: til
 tags: [ 'python']
 title: Pandas-String-Contains
 date: 2022-05-02T00:00:00
-status: draft
+published: False
 cover: "/static/pandas-string-contains.png"
 
 ---

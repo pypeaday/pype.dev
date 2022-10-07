@@ -2,7 +2,7 @@
 date: 2022-05-26 21:33:55
 templateKey: til
 title: Add space to your LVM on Ubuntu
-status: published
+published: True
 tags:
   - homelab
   - linux

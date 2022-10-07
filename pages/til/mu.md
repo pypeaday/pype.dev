@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python', 'git']
 title: Mu
 date: 2022-03-15T00:00:00
-status: published
+published: True
 cover: "/static/mu.png"
 
 ---

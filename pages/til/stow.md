@@ -3,7 +3,7 @@ templateKey: til
 tags: ['bash', 'linux']
 title: Stow
 date: 2022-03-04T00:00:00
-status: published
+published: True
 cover: "/static/stow.png"
 
 ---

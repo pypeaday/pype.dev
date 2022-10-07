@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['linux']
 title: Polybar-01
 date: 2022-04-01T00:00:00
-status: published
+published: True
 cover: "/static/polybar-01.png"
 
 ---

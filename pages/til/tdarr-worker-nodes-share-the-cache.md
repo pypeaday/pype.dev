@@ -2,7 +2,7 @@
 date: 2022-05-25 06:36:59
 templateKey: til
 title: Tdarr worker nodes share the cache!
-status: draft
+published: False
 tags:
   - homelab
   - homelab

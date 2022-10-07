@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['python']
 title: Plotly-And-Streamlit
 date: 2022-03-31T00:00:00
-status: published
+published: True
 cover: "/static/plotly-and-streamlit.png"
 
 ---

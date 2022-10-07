@@ -3,7 +3,7 @@ templateKey: til
 tags: ['git']
 title: Git ammend to a commit 
 date: 2022-03-04T00:00:00
-status: published
+published: True
 cover: "/static/git-ammend-no-edit.png"
 
 ---

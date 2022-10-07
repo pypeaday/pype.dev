@@ -2,7 +2,7 @@
 date: 2022-07-31 07:38:43
 templateKey: til
 title: Mounting exFAT USB in Linux
-status: published
+published: True
 tags:
   - linux
   - homelab

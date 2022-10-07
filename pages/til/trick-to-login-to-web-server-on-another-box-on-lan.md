@@ -2,7 +2,7 @@
 date: 2022-09-12 18:48:45
 templateKey: til
 title: Trick to login to web server on another box on lan
-status: draft
+published: False
 tags:
   - homelab
   - cli

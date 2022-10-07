@@ -2,7 +2,7 @@
 date: 2022-06-25 07:20:41
 templateKey: blog-post
 title: kvm-network-interface-via-nat-ubuntu-20
-status: published
+published: True
 tags:
   - homelab
   - linux

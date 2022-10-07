@@ -2,7 +2,7 @@
 date: 2022-06-04 06:12:33
 templateKey: til
 title: Add colored indicators to your dataframes html representation
-status: published
+published: True
 tags:
   - python
   - data

@@ -2,7 +2,7 @@
 date: 2022-08-23 06:56:15
 templateKey: til
 title: Playing with mdformat
-status: draft
+published: False
 tags:
   - python
   - vim

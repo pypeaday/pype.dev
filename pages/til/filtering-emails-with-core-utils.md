@@ -2,7 +2,7 @@
 date: 2022-05-30 06:09:27
 templateKey: til
 title: Filtering emails with core utils
-status: draft
+published: False
 tags:
   - linux
   - cli

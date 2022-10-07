@@ -3,7 +3,7 @@ templateKey: til
 tags: ['vim']
 title: Vim-Auto-Space
 date: 2022-03-04T00:00:00
-status: published
+published: True
 cover: "/static/vim-auto-space.png"
 
 ---

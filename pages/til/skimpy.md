@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Skimpy
 date: 2022-03-23T00:00:00
-status: published
+published: True
 cover: "/static/skimpy.png"
 
 ---

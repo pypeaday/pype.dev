@@ -2,7 +2,7 @@
 date: 2022-05-22 13:23:17
 templateKey: til
 title: Netplan change from Focal to Jammy
-status: published
+published: True
 tags:
   - homelab
   - linux

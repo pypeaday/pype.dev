@@ -2,7 +2,7 @@
 date: 2022-05-23 09:40:59
 templateKey: til
 title: Local DNS with Pi-hole
-status: draft
+published: False
 tags:
   - homelab
   - homelab

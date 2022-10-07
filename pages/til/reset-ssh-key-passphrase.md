@@ -2,7 +2,7 @@
 date: 2022-06-13 06:55:32
 templateKey: til
 title: Reset SSH key passphrase
-status: published
+published: True
 tags:
   - homelab
   - cli

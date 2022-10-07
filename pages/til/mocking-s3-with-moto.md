@@ -3,7 +3,7 @@ templateKey: til
 tags: []
 title: Mocking-S3-With-Moto
 date: 2022-05-12T00:00:00
-status: draft
+published: False
 cover: "/static/mocking-s3-with-moto.png"
 
 ---

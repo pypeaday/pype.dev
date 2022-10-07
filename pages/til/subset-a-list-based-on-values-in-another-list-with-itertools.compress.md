@@ -2,7 +2,7 @@
 date: 2022-05-19 14:22:58
 templateKey: til
 title: Subset a list based on values in another list with itertools.compress
-status: draft
+published: False
 tags:
   - python
   - python

@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['homelab']
 title: Terraform-01
 date: 2022-04-15T00:00:00
-status: draft
+published: False
 cover: "/static/terraform-01.png"
 
 ---

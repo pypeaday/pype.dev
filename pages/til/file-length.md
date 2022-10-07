@@ -3,7 +3,7 @@ templateKey: til
 tags: ["linux"]
 title: File-Length
 date: 2022-04-04T00:00:00
-status: published
+published: True
 cover: "/static/file-length.png"
 
 ---

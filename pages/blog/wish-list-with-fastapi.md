@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['python', 'blog']
 title: Wish-List-With-Fastapi
 date: 2022-05-06T00:00:00
-status: published
+published: True
 cover: "/static/wish-list-with-fastapi.png"
 
 ---

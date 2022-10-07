@@ -3,7 +3,7 @@ templateKey: til
 tags: ['homelab', 'til']
 title: Adblock-Coverage
 date: 2022-03-07T00:00:00
-status: published
+published: True
 cover: "/static/adblock-coverage.png"
 
 ---

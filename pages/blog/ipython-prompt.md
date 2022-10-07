@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['python']
 title: Ipython-Prompt
 date: 2022-04-02T00:00:00
-status: published
+published: True
 cover: "/static/ipython-prompt.png"
 
 ---

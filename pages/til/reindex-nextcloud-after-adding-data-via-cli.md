@@ -2,7 +2,7 @@
 date: 2022-05-29 15:34:33
 templateKey: til
 title: Reindex Nextcloud After Adding Data via CLI
-status: published
+published: True
 tags:
   - homelab
   - linux

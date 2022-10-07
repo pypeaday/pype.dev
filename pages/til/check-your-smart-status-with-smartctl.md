@@ -2,7 +2,7 @@
 date: 2022-08-29 06:30:27
 templateKey: til
 title: Check your SMART status with smartctl
-status: published
+published: True
 tags:
   - homelab
   - linux

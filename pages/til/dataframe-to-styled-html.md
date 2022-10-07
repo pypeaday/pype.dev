@@ -3,7 +3,7 @@ templateKey: til
 tags: ['python']
 title: Dataframe-To-Styled-Html
 date: 2022-05-07T00:00:00
-status: draft
+published: False
 cover: "/static/dataframe-to-styled-html.png"
 
 ---

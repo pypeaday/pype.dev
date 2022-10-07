@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['til', 'python']
 title: Pipx
 date: 2022-04-22T00:00:00
-status: published
+published: True
 cover: "/static/pipx.png"
 
 ---

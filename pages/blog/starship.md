@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['linux']
 title: Starship
 date: 2022-03-25T00:00:00
-status: published
+published: True
 cover: "/static/starship.png"
 
 ---

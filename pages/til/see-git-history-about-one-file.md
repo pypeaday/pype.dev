@@ -2,7 +2,7 @@
 date: 2022-05-19 06:43:32
 templateKey: til
 title: See git history about one file
-status: draft
+published: False
 tags:
   - cli
   - vim
