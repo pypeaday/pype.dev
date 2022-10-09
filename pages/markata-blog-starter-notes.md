@@ -12,3 +12,4 @@ tags:
 1. How do I use my own template? Doesn't seem to render - key issues or something?
 2. How to change what template to use with `markata new post`?
 3. Find problem posts missing keys
+4. `hatch run tui` I found myself expecting thsi to clean markata cache... probably worth noting?
