@@ -57,7 +57,7 @@ markdown gets written after the frontmatter
 
 The last variable exposed is an instance of `markata.Markata` called `markata`.
 This allows you to reference all of your other posts in very interesting ways.
-such as getting the latest post -> [{{ markata.map('title', sort='date', filter='published==True and date<=today')[0] }}](/{{ markata.map('slug', sort='date', filter='post.get("published", False)==True and date<=today')[0] }})
+such as getting the latest post -> [{{ markata.map('title', sort='date', filter='post.get("published",False)==True and date<=today')[0] }}](/{{ markata.map('slug', sort='date', filter='post.get("published", False)==True and date<=today')[0] }})
 
 You can also map over posts to get more.
 
