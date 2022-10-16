@@ -2,9 +2,10 @@
 date: 2022-09-23 06:10:28
 templateKey: blog-post
 title: Abraham and Melchizedek
-status: draft
+published: True
 tags:
     - bible-project
+    - faith
 ---
 
 [link to study](https://bibleproject.com/bible-studies/abraham-and-melchizedek/)

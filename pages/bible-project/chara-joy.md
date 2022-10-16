@@ -2,9 +2,10 @@
 date: 2022-10-07 06:46:48
 templateKey: blog-post
 title: Chara-Joy
-status: draft
+published: True
 tags:
     - bible-project
+    - faith
 ---
 
 [link](https://bibleprojectz.com/bible-studies/chara-joy/)

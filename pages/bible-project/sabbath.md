@@ -5,6 +5,7 @@ title: Sabbath
 published: True
 tags:
     - bible-project
+    - faith
 ---
 
 [Link to study](https://bibleproject.com/bible-studies/sabbath/)

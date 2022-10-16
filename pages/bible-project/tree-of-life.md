@@ -2,9 +2,10 @@
 date: 2022-09-21 06:21:19
 templateKey: blog-post
 title: Tree of Life
-status: published
+published: True
 tags:
     - bible-project
+    - faith
 ---
 
 # Video

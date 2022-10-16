@@ -2,9 +2,10 @@
 date: 2022-09-18 06:38:32
 templateKey: blog-post
 title: Shalom and Peace
-status: published
+published: True
 tags:
   - bible-project
+  - faith
 
 ---
 

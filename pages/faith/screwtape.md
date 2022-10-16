@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['books']
+tags: ['books', 'faith']
 title: Screwtape
 date: 2022-08-22T00:00:00
 status: draft
