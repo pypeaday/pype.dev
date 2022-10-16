@@ -1,4 +1,4 @@
--He'll give Himself, nothing I'll bring--
+---
 date: 2022-08-29 06:30:27
 templateKey: til
 title: Check your SMART status with smartctl
