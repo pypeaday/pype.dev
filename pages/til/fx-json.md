@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: [til]
+tags: [til, tech]
 title: Fx-Json
 date: 2022-04-19T00:00:00
 published: True

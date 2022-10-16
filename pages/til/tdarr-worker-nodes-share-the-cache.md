@@ -5,7 +5,7 @@ title: Tdarr worker nodes share the cache!
 published: False
 tags:
   - homelab
-  - homelab
+  - tech
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['til']
+tags: ['til', 'tech']
 title: Htop
 date: 2022-04-24T00:00:00
 published: True

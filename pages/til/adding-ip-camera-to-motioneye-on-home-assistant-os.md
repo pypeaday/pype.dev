@@ -5,7 +5,7 @@ title: Adding IP Camera to motionEye on Home Assistant OS
 published: False
 tags:
   - homelab
-  - homelab
+  - tech
 
 ---
 

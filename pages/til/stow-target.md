@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['bash', 'linux']
+tags: ['bash', 'linux', 'tech']
 title: Stow-Target
 date: 2022-03-04T00:00:00
 published: True

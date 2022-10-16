@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['git']
+tags: ['git', 'tech']
 title: Git-Worktrees-01
 date: 2022-03-11T00:00:00
 published: False

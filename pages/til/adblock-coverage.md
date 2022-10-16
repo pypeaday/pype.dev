@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['homelab', 'til']
+tags: ['homelab', 'til', 'tech']
 title: Adblock-Coverage
 date: 2022-03-07T00:00:00
 published: True

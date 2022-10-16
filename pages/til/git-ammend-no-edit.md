@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['git']
+tags: ['git', 'tech']
 title: Git ammend to a commit 
 date: 2022-03-04T00:00:00
 published: True

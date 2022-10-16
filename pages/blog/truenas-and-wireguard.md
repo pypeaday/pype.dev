@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['homelab']
+tags: ['homelab', 'tech']
 title: Truenas-And-Wireguard
 date: 2022-03-23T00:00:00
 published: True

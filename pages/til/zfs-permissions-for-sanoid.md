@@ -6,6 +6,7 @@ published: False
 tags:
   - zfs
   - homelab
+  - tech
 
 ---
 

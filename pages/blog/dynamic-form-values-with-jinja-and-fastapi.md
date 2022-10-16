@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python']
+tags: ['python', 'tech']
 title: Dynamic-Form-Values-With-Jinja-And-Fastapi
 date: 2022-05-15T00:00:00
 published: False

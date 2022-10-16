@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python']
+tags: ['python', 'tech']
 title: Pyclean
 date: 2022-03-22T00:00:00
 published: True

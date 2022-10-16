@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python']
+tags: ['python', 'tech']
 title: And-vs-&
 date: 2022-04-06T00:00:00
 published: True

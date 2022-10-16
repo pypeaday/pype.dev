@@ -5,6 +5,7 @@ title: Initial Proxmox Setup
 published: False
 tags:
   - homelab
+  - tech
   - linux
 
 ---

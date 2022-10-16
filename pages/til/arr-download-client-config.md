@@ -5,6 +5,7 @@ title: arr client config
 published: True
 tags:
   - homelab
+  - tech
 
 ---
 

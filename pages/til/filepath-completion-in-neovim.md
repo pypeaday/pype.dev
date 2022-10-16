@@ -5,6 +5,7 @@ title: Filepath Completion in Neovim
 published: True
 tags:
   - vim
+  - tech
 
 ---
 

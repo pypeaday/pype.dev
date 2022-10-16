@@ -6,6 +6,7 @@ published: False
 tags:
   - linux
   - cli
+  - tech
 
 ---
 

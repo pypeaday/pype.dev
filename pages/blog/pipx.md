@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['til', 'python']
+tags: ['til', 'python', 'tech']
 title: Pipx
 date: 2022-04-22T00:00:00
 published: True

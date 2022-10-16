@@ -6,7 +6,7 @@ published: True
 tags:
   - zfs
   - homelab
-
+  - tech
 ---
 
 Assuming you have a pool called `tank`...

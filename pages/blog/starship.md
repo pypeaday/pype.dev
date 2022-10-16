@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['linux']
+tags: ['linux', 'tech']
 title: Starship
 date: 2022-03-25T00:00:00
 published: True

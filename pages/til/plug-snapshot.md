@@ -5,8 +5,7 @@ published: True
 title: Plug Snapshot!
 tags:
   - vim
-  - vim
-  - vim
+  - tech
 
 ---
 

@@ -6,6 +6,7 @@ published: True
 tags:
   - python
   - zfs
+  - tech
 
 ---
 

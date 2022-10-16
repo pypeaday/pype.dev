@@ -6,6 +6,7 @@ published: False
 tags:
   - python
   - vim
+  - tech
 
 ---
 ```python

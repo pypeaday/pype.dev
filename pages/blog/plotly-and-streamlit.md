@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python']
+tags: ['python', 'tech']
 title: Plotly-And-Streamlit
 date: 2022-03-31T00:00:00
 published: True

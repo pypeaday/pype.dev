@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['linux']
+tags: ['linux', 'tech']
 title: Polybar-01
 date: 2022-04-01T00:00:00
 published: True

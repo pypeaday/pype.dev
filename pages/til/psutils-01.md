@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python']
+tags: ['python', 'tech']
 title: Psutil-01
 date: 2022-03-16T00:00:00
 published: True

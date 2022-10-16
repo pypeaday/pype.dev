@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['blog']
+tags: ['blog', 'tech']
 title: Home-Server-Refactor
 date: 2022-04-10T00:00:00
 published: False

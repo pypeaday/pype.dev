@@ -6,6 +6,7 @@ published: True
 tags:
   - homelab
   - webdev
+  - tech
 
 ---
 

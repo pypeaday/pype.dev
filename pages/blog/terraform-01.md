@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['homelab']
+tags: ['homelab', 'tech']
 title: Terraform-01
 date: 2022-04-15T00:00:00
 published: False

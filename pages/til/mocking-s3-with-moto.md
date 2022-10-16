@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: []
+tags: [tech]
 title: Mocking-S3-With-Moto
 date: 2022-05-12T00:00:00
 published: False

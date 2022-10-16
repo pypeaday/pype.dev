@@ -5,7 +5,7 @@ title: Subset a list based on values in another list with itertools.compress
 published: False
 tags:
   - python
-  - python
+  - tech
 
 ---
 

@@ -9,6 +9,7 @@ tags:
   - cli
   - bash
   - homelab
+  - tech
 
 ---
 

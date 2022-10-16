@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python']
+tags: ['python', 'tech']
 title: Ipython-Prompt
 date: 2022-04-02T00:00:00
 published: True

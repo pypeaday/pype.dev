@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python', 'homelab']
+tags: ['python', 'homelab', 'tech']
 title: self-hosted-media
 date: 2022-03-24T00:00:00
 published: True

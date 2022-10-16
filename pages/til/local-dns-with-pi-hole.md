@@ -5,7 +5,7 @@ title: Local DNS with Pi-hole
 published: False
 tags:
   - homelab
-  - homelab
+  - tech
 
 ---
 

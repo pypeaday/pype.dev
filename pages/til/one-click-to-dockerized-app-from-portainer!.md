@@ -5,7 +5,7 @@ title: One click to dockerized app from Portainer!
 published: False
 tags:
   - homelab
-  - homelab
+  - tech
 
 ---
 

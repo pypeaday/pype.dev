@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['vim']
+tags: ['vim', 'tech']
 title: Vim-Auto-Space
 date: 2022-03-04T00:00:00
 published: True

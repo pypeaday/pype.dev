@@ -5,6 +5,7 @@ title: Paperless-NGX filtering on IDs instead of values
 published: True
 tags:
   - homelab
+  - tech
 
 ---
 

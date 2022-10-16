@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['homelab']
+tags: ['homelab', 'tech']
 title: Traefik-01
 date: 2022-03-06T00:00:00
 published: True

@@ -1,6 +1,6 @@
 ---
 templateKey: blog-post
-tags: ['python', 'blog']
+tags: ['python', 'blog', 'tech']
 title: Wish-List-With-Fastapi
 date: 2022-05-06T00:00:00
 published: True
