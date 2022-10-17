@@ -111,7 +111,25 @@ not toilsome.
     cultivate the ground from which he was taken. 24So He drove the man out;
     and at the east of the garden of Eden He stationed the cherubim and the
     flaming sword which turned every direction to guard the way to the tree of
-    life. aloud. 
+    life.
+
+Humans are templted to believe that God is witholding desirableble information
+they are templted to _be like God_. They are templted to believe that they
+would be right to knowing good and evil (ironic since they know it's bad to eat
+of the Tree of Knowledge anyways)
+
+They acted by listening to the serpent, and to themselves... essentially they
+chose to not listen and adhere to Yahweh. This choice represents stark and
+obvious rebellion. Yahweh, I think, sees that his creation are tempted to go
+their own way, and for their own protection exiles them from the Garden.
+
+It seems like lies haven't changed; ultimately we are still tempted to define
+good and evil/bad for ourselves. I take action by defining wicked things as
+good - made obvious by the fact that I choose to sin often, choose to not
+listen to Yahweh. Actively listening to myself is exhausting. I think there's a
+lot to discussing "God's rest", but a high and almost trivial level, I am
+simply less tired when my life is more in step with God's definitions of good
+and bad
 
 !!! note "3"
 
