@@ -11,4 +11,6 @@ tags:
 ---
 
 
-`zfs allow -u dumbledore create,destroy,mount,mountpoint,receive,send,rollback,compression,snapshot,hold tank`
+`zfs allow -u user clone,load-key,create,destroy,mount,mountpoint,receive,send,rollback,compression,snapshot,hold tank`
+
+> load-key only needed if using encrypted datasets
