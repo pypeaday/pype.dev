@@ -135,9 +135,8 @@ and bad
 
     God wants to restore humanity to ultimate rest, so he chooses the
     Israelites to reenact his seventh-day rest so they can share it with
-    others. Of all the ways he invites them to practice rest 
-
-    which practice are you least familiar with today?
+    others. Of all the ways he invites them to practice rest which practice are
+    you least familiar with today?
 
 !!! scripture "Exodus 20:8-11"
 
@@ -342,7 +341,6 @@ and bad
     him. 55For the sons of Israel are My servants; they are My servants whom I
     brought out from the land of Egypt. I am the Lord your God.
 
-    
 
 !!! note "5"
 
