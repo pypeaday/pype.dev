@@ -3,8 +3,8 @@ templateKey: blog-post
 tags: ['books', 'faith']
 title: Screwtape
 date: 2022-08-22T00:00:00
-status: draft
 cover: "/static/screwtape.png"
+published: true
 
 ---
 
@@ -54,5 +54,26 @@ pg 23. "...while tens of thousands who do not go so far as that will nevertheles
 
 > This reminds me of the young Tarkan in Narnia: The Last Battle, who Aslan ascribes all his good deeds done to Tash as done to himself - effectively saying the Tarkan's loyalty to the wrong god is honored by Aslan? Definitely want to know more about Lewis' thoughts there and here in Screwtape
 
+
+## Chapter 6
+
+pg 25. "There is nothing like suspense and anxiety for barricading a human's mind against the Enemy."
+
+!!! note ""
+
+    Screwtape's point in the beinning of the chapter confuses me... He instructs
+    Wormwood to keep the man thinking that the things he is anxious about, the
+    things themselves, are his trials/cross to bear, rather than the anxiety
+    itself. So from the Christian perspective, Lewis seems to be saying that the
+    real-time, present, acute anxiety and suspense in the man's heart regarding the
+    war is the actual trial and cross... not the things the man is anxious about. I
+    don't know what to do with this but it _feels_ convicting to me. Growing up I
+    often had the thought that nothing could be wrong because "I have Jesus", and I
+    would look at my circumstances as things to bear - for me the biggest one was
+    singleness. So would Lewis say my outlook on my singleness as the thing to
+    bear, rather than the anxiety about being single, was the enemy twisting my
+    convictions to be inward rather than God-ward? It clearly looks like my
+    convictions were inward, but I'm not sure I understand how seeing the anxiety
+    itself as my "cross to bare" is any more Biblical...
 
 
