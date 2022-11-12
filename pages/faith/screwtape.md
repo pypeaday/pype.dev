@@ -77,3 +77,7 @@ pg 25. "There is nothing like suspense and anxiety for barricading a human's min
     itself as my "cross to bare" is any more Biblical...
 
 
+## Chapter 7
+
+page 31-32. "If once we can produce our perfect work -- the Materialist Magician, the man, not using, but veritably worshipping, what he vaguely called 'Froces' while denying the existence of 'spirits' -- then the end of the war will be in sight."
+
