@@ -76,10 +76,12 @@ makes prizes of humans who have given their lives for causes He think bad on
 the monstrously sophistical ground that the humans thought them good and were
 following the best they knew"
 
-> This reminds me of the young Tarkan in Narnia: The Last Battle, who Aslan
-> ascribes all his good deeds done to Tash as done to himself - effectively
-> saying the Tarkan's loyalty to the wrong god is honored by Aslan? Definitely
-> want to know more about Lewis' thoughts there and here in Screwtape
+!!! warning ""
+
+    This reminds me of the young Tarkan in Narnia: The Last Battle, who Aslan
+    ascribes all his good deeds done to Tash as done to himself - effectively
+    saying the Tarkan's loyalty to the wrong god is honored by Aslan? Definitely
+    want to know more about Lewis' thoughts there and here in Screwtape
 
 
 ## Chapter 6
@@ -87,7 +89,7 @@ following the best they knew"
 pg 25. "There is nothing like suspense and anxiety for barricading a human's
 mind against the Enemy."
 
-!!! note ""
+!!! warning ""
 
     Screwtape's point in the beinning of the chapter confuses me... He instructs
     Wormwood to keep the man thinking that the things he is anxious about, the
@@ -107,6 +109,14 @@ mind against the Enemy."
 
 ## Chapter 7
 
+page 32. "The fact that 'devils' are predominately _comic_ figures in the
+modern imagination will help you"
+
+> It's funny because I bet most people, myself included, reading this book (at
+> least the first time) have a red-devil type figure in mind for Screwtape or
+> Wormwood
+
+
 page 31-32. "If once we can produce our perfect work -- the Materialist
 Magician, the man, not using, but veritably worshipping, what he vaguely called
 'Froces' while denying the existence of 'spirits' -- then the end of the war
@@ -117,7 +127,9 @@ will be in sight."
 > non-physical "thing" but not in any real sense so it looks, to me, similar to
 > what Screwtape longs for in his letter to Wormwood.
 
-page 32. "All extremes, except extreme deviotion to the Enemy, are to be encouraged... Other ages, of which the present is one, are unbalanced and prone to faction, and it is our business to inflame them"
+page 32. "All extremes, except extreme deviotion to the Enemy, are to be
+encouraged... Other ages, of which the present is one, are unbalanced and prone
+to faction, and it is our business to inflame them"
 
 > Using Christianity to justify political positions or judgement seems right
 > here. Extreme devotion to our God I don't think should offend people as often
@@ -127,3 +139,11 @@ page 32. "All extremes, except extreme deviotion to the Enemy, are to be encoura
 > offensive. I think I see people hold to something like Christian Nationalism,
 > and the offensive nature of it justifies the position because "we were always
 > going to be persecured for loving Jesus"
+
+!!! danger "page 34"
+
+    Let him begin by treating the Patriotism or the Pacifism as a part of his
+    religion. Then let him, under then influence of partisan spirit, come to
+    regard it as the most import part...
+
+
