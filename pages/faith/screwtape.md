@@ -144,6 +144,83 @@ to faction, and it is our business to inflame them"
 
     Let him begin by treating the Patriotism or the Pacifism as a part of his
     religion. Then let him, under then influence of partisan spirit, come to
-    regard it as the most import part...
+    regard it as the most important part...
 
+## Chapter 8
+
+!!! success "page 39"
+
+    For He cannot ravish. He can only woo.
+
+!!! note "page 40"
+
+    He wants them to learn to walk and must therefore take away His hand; and
+    if only the will to walk is really there He is pleased even with their
+    stumbles
+
+## Chapter 9
+
+page 43. "In the first place I have always found that the trough periods of the
+human undulation provide excellen opportunity for all sensual tempations,
+particularly those of sex... The attack has a much better chance of success
+when the man's whole innter world is drab and cold and empty."
+
+> I feel this observation in my own life deeply - in my 'troughs' I'm drawn to
+> pleasurable things in a very unpleasurable way
+
+!!! success "page 44"
+
+    Never forget that when we are dealing with any pleasure in its healthy and
+    normal and satisfying form, we are, in a sense, on the Enemy's ground.
+
+!!! danger "jargon not wisdom"
+
+    Of course there is no conceivable way of getting by reason from the
+    proposition 'I am losing interest in this' to the proposition 'This is
+    false'/ But, as I said before, it is jargon, not reason, you must rely on.
+
+## Chapter 10
+
+page 49. "Did he commit himself deeply? I don't mean the words. There is a
+subtle play of looks and tons and laughs by which a mortal can imply that he is
+of the same party as those to whom he is speaking"
+
+> I resonate with the temptation Scretape is basically instructing Wormwood to
+> employ - two-facedness/double-life. In hs/college in particular I would 'play
+> the part' to fit in to a particular crowd. I'd rarely confess Christianity
+> early on, would never deny it explicitly, but would act and talk in a
+> way/about things to imply that I was not necessarily non-Christian, but
+> instead nothing to ask about.
+
+> Chapter 10 in overall convicting as it just drives home the point I noted
+> just now.... that I'm very prone to 'acting' in order to fit into a community
+
+## Chatper 11
+
+page 55. "The real use of Joke or Humour is in quite a different direction, and
+it is specially promising among the English who take their 'sense of humour' so
+seriously that a deficiency in this sense is almost the only deficiency at
+which they feel shame. Humour is for them the all-consoling and (mark this) the
+all-excusing, grace of life"
+
+!!! danger "all-excusing grace of life"
+
+    Humour is for them the all-consoling and (mark this) the all-excusing,
+    grace of life
+
+> Basically I understand Lewis to be saying here that men (or the English in
+> particular) take great pride in having a sense of humor - so much so that
+> humor becomes an excuse to laugh at anything. When anything is worth laughing
+> at, then I think it's very hard to prioritize things above others - becuase
+> if everything is a joke, is anything really worthy of more than a joke?
+
+!!! warning "Flippancy"
+
+    I didn't understand flippancy as first because I've always kind of equated
+    it with "quick". However, it's more of a "quickness" paired with a total
+    lack of respect/awareness for/of X. 
+
+!!! warning "churches"
+
+    Are there areas in the church where we are flippant (specifically with humor I guess?)
 
