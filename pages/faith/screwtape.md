@@ -224,3 +224,47 @@ all-excusing, grace of life"
 
     Are there areas in the church where we are flippant (specifically with humor I guess?)
 
+## Chapter 12
+
+!!! danger "page 57-58"
+
+    As long as he retains externally the habits of a Christian he can still be
+    made to think of himself as one who has adopted a few new friends and
+    amusements but whose spiritual state is much the same as it was six weeks
+    ago.
+
+page 58. [The dim uneasiness about `backsliding` Screwtape describes in the
+chapter] increases the patient's reluctance to think about the Enemy.
+
+> This is too real for me - in seasons of rebellion, and honestly anytime I
+> fall away from "Christian habits" I notice that I am actually reluctant to
+> pray or meditate. Often the only thing that (or the initial thing in
+> appearance) that brings me back is my kids and praying with them or singing
+> Doxology. A choice I wouldnt' make alone, but make for their sake - perhaps
+> this is God's grace poured out on me
+
+!!! danger "page 58"
+
+    They hate every idea that suggests Him, just as men in financial
+    embarrassment hate the very sight of a pass-book.
+
+## Chapter 13
+
+Particularly a challenging chapter. It's interesting to think about pleasurable
+things, for their own sake and not enjoyed outside the boundaires set for
+pleasure by God, are harmful to our enemy's tactics. I do not know if I enjoy
+things for their own sake enough or rightly.... 
+
+!!! warning ""
+
+    Do my tech hobbies make me more human or less by distracting me from holier
+    things...
+
+## Chapter 14
+
+!!! warning "page 69"
+
+    All virtues are less formidable to us once the man is aware that he has
+    them, but this is specially true of humility.
+
+
