@@ -267,4 +267,45 @@ things for their own sake enough or rightly....
     All virtues are less formidable to us once the man is aware that he has
     them, but this is specially true of humility.
 
+## Chapter 16
+
+!!! note "page 81"
+
+    In the first place the parochial organisation [Church] should always be
+    attacked, because, being a _unity of place and not of likings_, it brings
+    people of different classes and psychology together in the kind of unity
+    the Enemy desires
+
+!!! danger "page 82-83"
+
+    In order to spare the laity all 'difficulties' he has deserted both the
+    lectionary and the appointed psalms and now, without noticing it, revoles
+    endlessly round the little treadmill of his fifteen favourite psalms and
+    twenty favorite lessons.
+
+## Chapter 17
+
+> Gluttony of Delicacy, not gluttony of Excess
+
+!!! danger "page 88"
+
+    You see? Because what she wants is smaller and less costly than what has
+    been set before her, she never recognises as gluttony her determination to
+    get what she wants, however troublesome it may be to others
+
+
+## Chapter 18
+
+Screwtape's lack of understanding,and arrogant questioning, of the Enemy's
+_love_ is a hilarious commentary on humans who stand staunchly opposed to
+Yahweh. Academic peers of mine, with such amazing pride, speaking aginst the
+Biblical narrative because _it doesn't make sense_... Lewis makes a good point
+through Screwtape "Members of His faction have frequently admitted that if ever
+we [demons] came to understand what He means by love, the war would be over and
+we should re-enter Heaven". I think Lewis' point dovetails with the idea that
+Jesus is actually very compelling and the rubbish about him being offensive is
+a replay of the Gospels - where the rich and elite are the ones offended, not
+the people he calls to the kingdom. Jesus' love doesn't make sense to those who
+have everything they think they need... His love is for those who know they are
+lowly
 
