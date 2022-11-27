@@ -157,7 +157,15 @@ Jesus is saying that _all the prophets from the beginning of the Scriptures to
 the end_... All the prophets from A-Z so to speak
 
 
+!!! note "Scriptures"
 
+    "Books" as we know it, bound papers with writing on it, called a 'codex'
+    wasn't a thing until a couple hundred years post-Jesus... so when the
+    authors say "The Scriptures" we need to keep in mind that Jews had the
+    scriptures in their minds and hearts, not on paper (save for a couple very
+    expensive scrolls). So the structure of the scriptures is also apart of the
+    Jewish being... This interaction with the Scriptures is _very very very
+    different than how we interact with the Bible_
 
 
 
