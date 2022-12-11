@@ -25,6 +25,14 @@ tags:
     {{post['description']}}... _[read more]({{ post['slug'] }})_
 {% endfor %}
 
+## Recent posts
+
+{% for post in markata.map('post', sort='date', filter='post.get("published", False)==True and date<=today', reverse=True)[:4] %}
+!!! note "[{{ post['title'] }}]({{ post['slug'] }})"
+
+    {{post['description']}}... _[read more]({{ post['slug'] }})_
+{% endfor %}
+
 ## Feeds
 
 TODO: The clickable part of these a tags is TINY - need to talk with Waylon about why
