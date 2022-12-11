@@ -167,6 +167,26 @@ the end_... All the prophets from A-Z so to speak
     Jewish being... This interaction with the Scriptures is _very very very
     different than how we interact with the Bible_
 
+!!! note "4QMMT"
 
+    "The scrolls of Moses, the words of the prophets, and of David."
+
+!!! note "Philo of Alexandria"
+
+    The laws and the oracles given by inspiration through the prophets and the
+    Psalms, and the other scrolls whereby knowledge and piety are increased and
+    completed...
+
+    - De Vita Contemplatetiva, 25
+
+### Melito of Sardis
+
+- Early 200s 
+- One of the earliest Christians to talk about the books/scrolls of Christian scriptures
+- Summarizes _Christian ordering_ of the Hebrew Bible with some logic
+    * Foundation narrative of the Pentateuch
+    * History
+    * Poetry
+    * Prophets then point forward to the coming Messiah, Jesus, and the NT writings
 
 
