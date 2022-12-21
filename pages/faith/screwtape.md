@@ -309,3 +309,14 @@ the people he calls to the kingdom. Jesus' love doesn't make sense to those who
 have everything they think they need... His love is for those who know they are
 lowly
 
+## Chapter 19
+
+> TODO: Go through and make notes
+
+## Chapter 20
+
+> TODO: Go through and make notes
+
+## Chapter 21
+
+> TODO: Go through and make notes
