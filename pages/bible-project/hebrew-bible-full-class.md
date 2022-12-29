@@ -189,4 +189,42 @@ the end_... All the prophets from A-Z so to speak
     * Poetry
     * Prophets then point forward to the coming Messiah, Jesus, and the NT writings
 
+## Session 4 - Seams between Texts in the Dead Sea Scrolls
 
+Around 100-200 AD there was a split in the Jewish community over things like
+how the Temple and sacrifices were to be run, etc. A group got kicked out, so
+they grabbed some scrolls and went to start what we'd think of as a Monastic
+community. Qumran community is where they went, and the scrolls this group
+managed are called the Dead Sea Scrolls.
+
+Out of DSS we have some of the oldest biblical scrolls, they have their own
+writings and liturgies since they were all priests basically too.
+
+The scrolls were hidden in caves before the Romans marched on Qumran. They were
+found in the 1940s by a bunch of shepherds. A few showed up online for sale and
+that's how we found out about their exitence.... These scrolls give us
+pre-Christian Jewish Bible nerds...
+
+Qumran community didn't know about Jesus - they thought the Messiah would be a
+man called _The Teacher of Righteousness_
+
+### Scroll-making
+
+The DSS preserved for us, not only ancient biblical texts, but also the method
+by which scrolls were created. They were well-preserved papyrus that was
+stiched together - literal stitches. We also have obvious additions from Qumran
+community as well as notes from priests and corrections from missed
+transcribing.
+
+### Our Bible
+
+The DSS scrolls, being the oldest stitched together set of scrolls, teach us
+how scrolls and collections of ancient holy texts were put together. We need to
+keep this in mind when we think about where our Christian Bible came from
+
+The beginning and ending of our books might/are filled with hyperlinks that
+call a reader's mind back to other stories. It's the way of linking context and
+stories to one another before the writings are in a codex
+
+> Hyperlinks - language/syntax that remind a reader of antoher scroll - help us
+> understand the structure of the Hebrew Bible
