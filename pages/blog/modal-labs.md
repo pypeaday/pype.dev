@@ -82,3 +82,23 @@ modal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sa
 ❯ modal app stop ap-lzy1AAuVy7POFkUcDKRxpQ
 
 ```
+
+# Git warning!
+
+I ran `modal deploy ...` after comitting some stuff I wanted to try BUT I had
+changes in my file I didn't want to deploy... some git safety would be nice for
+deployment!
+
+> git stash && modal deploy .. && git stash pop
+
+Question for Modal team - in my modal sandbox repo at commit: 
+```
+aab6162 (HEAD -> main) HEAD@{1}: commit: print base version of my own image to prove it to me
+ 1 file changed, 2 insertions(+)
+
+```
+
+An environment variable, `BASE_VERSION` that I expect to be in my base image
+was not available to the python function in my Modal app... hopefully the log
+is still
+[here](https://modal.com/logs/ap-qYjE45dciqgT3C3CpNp3RL?functionId=fu-rOt31ShRE1W1CQfuf02fsq&taskId=ta-dm8BfiblvFLwVIQyt75YC2&inputId=in-n64klEFrLtbcm2BiykJEvW) 
