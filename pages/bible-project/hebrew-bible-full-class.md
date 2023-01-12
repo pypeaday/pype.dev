@@ -228,3 +228,19 @@ stories to one another before the writings are in a codex
 
 > Hyperlinks - language/syntax that remind a reader of antoher scroll - help us
 > understand the structure of the Hebrew Bible
+
+!!! note "A favorite quote from Tim"
+
+    So, you can see I'm interested in a historical question of like the
+    collection [Hebrew Bible] was produced by a group of people. What did they
+    mean by it? And we can actually know a lot about what they meant and locate
+    them and read it the way they wanted us to read it, and pick up what
+    they're saying. And, lo and behold, you know, I hope to convince you
+    that—and this is all pre-Christian—what's happening here and what this all
+    points to and means, fits hand in glove with how Jesus and Paul and the
+    apostles talk about these texts. 
+    So that's different from saying nobody
+    knew what these texts meant. The events of Jesus happen, and then we go
+    reread it, and it has a whole new meaning that no one has ever imagined. It
+    seems to me what actually happened in history was a little more interesting
+    and complicated than that.  [17:30-18:21]
