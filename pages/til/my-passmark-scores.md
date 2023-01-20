@@ -10,6 +10,12 @@ tags:
 
 ---
 
+!!! note "Babyblue v2"
+
+    Ryzen 5700x + 32 GB 3200 CL16 RAM
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=503041456656"><img src="https://www.passmark.com/baselines/V10/images/503041456656.png" alt="PassMark Rating" border="0" /></a>
+
 !!! note "Venus "
 
     Ryzen 3200G + 16GB 3600 CL16 RAM
@@ -19,7 +25,7 @@ tags:
 !!! note "Hogwarts"
 
     Dual Xeon X5650 @2.67GHz | 90 GB 1883 DDR3 ECC RAM
-    
+
     <a href="https://www.passmark.com/baselines/V10/display.php?id=502361259420"><img src="https://www.passmark.com/baselines/V10/images/502361259420.png" height=120px alt="PassMark Rating" border="0" /></a>
 
 
