@@ -4,15 +4,13 @@ templateKey: blog-post
 title: Hebrew Bible Full Class
 published: True
 tags:
-    - bible-project
-    - faith
+  - bible-project
+  - faith
 series: hebrew-bible
-
 ---
 
 [Class link](https://bibleproject.com/classroom-alpha/education-videos/session-1-what-earth-hebrew-bible/)
 [Classroom notes (Must be on home network)](http://paynepride.com:8010/documents/162)
-
 
 # 01 The Shape of the Hebrew Bible
 
@@ -26,13 +24,13 @@ lady said something that might be helpful for ministry - "Maybe that thing that
 I saw as 'you don't love me' is 'I don't know how to love you'"
 
 !!! note "how to love"
-    
+
     Maybe that thing that I saw as 'you don't love me' is 'I don't know how to love you'
 
 !!! danger "Christian coping strategy for the Olt Testament"
 
     1. Hero-example model
-        * Stories get isolated and distilled down into a simple moral model, where the hero is just the hero. 
+        * Stories get isolated and distilled down into a simple moral model, where the hero is just the hero.
         * Veggie-Tales is uber-guilty of this nonsense
         * There's something correct about this - but the oversimplification usually comes out of a massive re-writting of the stories, then anyone raised on those versions of the story is scaldalized when they read it for real
 
@@ -65,11 +63,11 @@ A result of asking the wrong questions is the common story of people's faith bei
     scholars, or used occasionally as a change from the New Testament, or
     kept in a box in case it should be needed some day? Or is the Old Testa-
     ment an essential part of the Christian Bible, with continuing validity along-
-    side the New Testament? — 
+    side the New Testament? —
 
 ## Session 2: How Jesus and the Apostle ReadTheir Bibles
 
-The Bible most often refers to itself as *the Writings*
+The Bible most often refers to itself as _the Writings_
 
 !!! note "Road to Emmaus"
 
@@ -78,7 +76,7 @@ The Bible most often refers to itself as *the Writings*
     Writings point to an annointed king who will suffer death for the sake of
     redemption. He's recognized by them once their eyes are opened then he vanishes
 
-__Weird stuff__
+**Weird stuff**
 
 ### Paul and Timothy
 
@@ -98,8 +96,8 @@ Paul assumes when writing to Timothy that he, and probably believers in general,
 
 The question of "What are the Scriptures?" is covered in the next session
 
-__To answer the question 'How do we read the HB?' we have to ask the question
-'Whose book is the HB?'__
+**To answer the question 'How do we read the HB?' we have to ask the question
+'Whose book is the HB?'**
 
 ## Session 3: Shape of the Scriptures
 
@@ -117,7 +115,7 @@ THe phrase `Hebrew Bible` is a modern term that is a bit more neutral.
     heart to believe all that the prophets have spoken! 26 Was it not necessary
     that the Christ should suffer these things and enter into his glory?”
     27 And beginning with Moses and all the Prophets, he interpreted to them in
-    all the Scriptures the things concerning himself.  
+    all the Scriptures the things concerning himself.
 
 > Moses and the Prophets
 
@@ -132,7 +130,7 @@ Jweish reference to the books in our OT, in the Hebrew Bible, but the arangement
     3. K - Ketuvim
 
     | **Torah** | **Pentateuch** |
-    | --- | --- | 
+    | --- | --- |
     | Genesis - Exodus - Leviticus - Numbers Deuteronomy | Genesis - Exodus - Leviticus - Numbers - Deuteronomy |
     | **Nevi'im - The Prophets** | **History** |
     | *Former Prophets* <br/> Joshua - Judges - Samueal - Kings | Joshua - Judges - Ruth <br/> 1-2 Samuel - 1-2 Kings <br/> 1-2 Chronicles <br/> Ezra - Nehemiah - Ester |
@@ -147,7 +145,7 @@ Jweish reference to the books in our OT, in the Hebrew Bible, but the arangement
     of all the prophets, shed from the foundation of the world, may be charged
     against this generation, 51 from the blood of Abel to the blood of
     Zechariah, who perished between the altar and the sanctuary. Yes, I tell
-    you, it will be required of this generation. 
+    you, it will be required of this generation.
 
 > Blood of Abel to the blood of Zechariah...
 
@@ -155,7 +153,6 @@ Why would Jesus pick these two events? Abel is murdered on page 4, Zechariah is
 murdered in the last part of Chronicles, which in the TaNaK is significant...
 Jesus is saying that _all the prophets from the beginning of the Scriptures to
 the end_... All the prophets from A-Z so to speak
-
 
 !!! note "Scriptures"
 
@@ -181,13 +178,13 @@ the end_... All the prophets from A-Z so to speak
 
 ### Melito of Sardis
 
-- Early 200s 
+- Early 200s
 - One of the earliest Christians to talk about the books/scrolls of Christian scriptures
 - Summarizes _Christian ordering_ of the Hebrew Bible with some logic
-    * Foundation narrative of the Pentateuch
-    * History
-    * Poetry
-    * Prophets then point forward to the coming Messiah, Jesus, and the NT writings
+  - Foundation narrative of the Pentateuch
+  - History
+  - Poetry
+  - Prophets then point forward to the coming Messiah, Jesus, and the NT writings
 
 ## Session 4 - Seams between Texts in the Dead Sea Scrolls
 
@@ -238,7 +235,7 @@ stories to one another before the writings are in a codex
     they're saying. And, lo and behold, you know, I hope to convince you
     that—and this is all pre-Christian—what's happening here and what this all
     points to and means, fits hand in glove with how Jesus and Paul and the
-    apostles talk about these texts. 
+    apostles talk about these texts.
     So that's different from saying nobody
     knew what these texts meant. The events of Jesus happen, and then we go
     reread it, and it has a whole new meaning that no one has ever imagined. It
