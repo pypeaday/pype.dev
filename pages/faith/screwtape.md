@@ -1,11 +1,10 @@
 ---
 templateKey: blog-post
-tags: ['books', 'faith']
+tags: ["books", "faith"]
 title: Screwtape
 date: 2022-08-22T00:00:00
 cover: "/static/screwtape.png"
 published: true
-
 ---
 
 # Chapters
@@ -25,7 +24,7 @@ think of doctrines as primarily 'true' or 'false', but as 'academic' or
 ## Chapter 3
 
 pg 11. Keeping the patient's mind focused on the 'inner life' so his actions do
-not ever reflect his conversion 
+not ever reflect his conversion
 
 pg 12. Creating an imaginary person for whom to pray... "In time, you may get
 the cleavage so wide that no thought or feeling from his prayers for the
@@ -42,7 +41,7 @@ the assumption" -> This point is particularly convicting to me
 
 pg 15. Convincing the patient that scheduled prayer is wrong and that he must
 create a _mood_ within himself for real prayer reminds me of high school youth
-groups talking about "praying in the spirit" and  silly conversation "combating
+groups talking about "praying in the spirit" and silly conversation "combating
 salvation by works" ideas like scheduled prayer times.
 
 pg 16. "they constantly forget, what you must always remember, that they are
@@ -83,7 +82,6 @@ following the best they knew"
     saying the Tarkan's loyalty to the wrong god is honored by Aslan? Definitely
     want to know more about Lewis' thoughts there and here in Screwtape
 
-
 ## Chapter 6
 
 pg 25. "There is nothing like suspense and anxiety for barricading a human's
@@ -106,7 +104,6 @@ mind against the Enemy."
     convictions were inward, but I'm not sure I understand how seeing the anxiety
     itself as my "cross to bare" is any more Biblical...
 
-
 ## Chapter 7
 
 page 32. "The fact that 'devils' are predominately _comic_ figures in the
@@ -115,7 +112,6 @@ modern imagination will help you"
 > It's funny because I bet most people, myself included, reading this book (at
 > least the first time) have a red-devil type figure in mind for Screwtape or
 > Wormwood
-
 
 page 31-32. "If once we can produce our perfect work -- the Materialist
 Magician, the man, not using, but veritably worshipping, what he vaguely called
@@ -218,7 +214,7 @@ all-excusing, grace of life"
 
     I didn't understand flippancy as first because I've always kind of equated
     it with "quick". However, it's more of a "quickness" paired with a total
-    lack of respect/awareness for/of X. 
+    lack of respect/awareness for/of X.
 
 !!! warning "churches"
 
@@ -253,7 +249,7 @@ chapter] increases the patient's reluctance to think about the Enemy.
 Particularly a challenging chapter. It's interesting to think about pleasurable
 things, for their own sake and not enjoyed outside the boundaires set for
 pleasure by God, are harmful to our enemy's tactics. I do not know if I enjoy
-things for their own sake enough or rightly.... 
+things for their own sake enough or rightly....
 
 !!! warning ""
 
@@ -293,7 +289,6 @@ things for their own sake enough or rightly....
     been set before her, she never recognises as gluttony her determination to
     get what she wants, however troublesome it may be to others
 
-
 ## Chapter 18
 
 Screwtape's lack of understanding,and arrogant questioning, of the Enemy's
@@ -320,3 +315,88 @@ lowly
 ## Chapter 21
 
 > TODO: Go through and make notes
+
+## Chatper 22
+
+> TODO: Go through and make notes
+
+## Chatper 23
+
+> TODO: Go through and make notes
+
+## Chatper 24
+
+page 130 - It's always the novice who exaggerates...
+
+> I think about Summit in particular, where I got to meet a lot of big names in
+> apologetics, and I'd talk about them to others like we were friends... The
+> difference between "I know X" and "X knows me" is a thing I kept hidden so I
+> could feel important
+
+## Chatper 25
+
+!!! danger "Christianity And..."
+
+    What we want, if men becomes Christians at all, is to koeep them in the
+    state of mind I call 'Christianity And'. You know - Christianity and the
+    Crisis,Christianity and the New Order, ...
+
+> I don't know... smells more and more like Christian Nationalism is the
+> modern-day `Christinaity And`... So much focus on policy, behavior, order
+> (patriarchy even).... Not a lot about Jesus _in the conversation about
+> Christian Nationalism_ (not that Christians in this mindset don't genuinely
+> love Jesus or talk about him - but I don't hear Jesus often in the
+> conversation, I only hear the politics). But I suppose to be fair there's
+> every chance in the world that I misunderstand the position and people.
+
+!!! danger ""
+
+    But if I do misunderstand... A fairly educated, theologically competent,
+    Biblically literate person... then what do Christian Nationalists expect of
+    people who never heard of Jesus, or already were introduced to Republican
+    Jesus or something... I'm not the cream of the crop, but if I don't
+    properly understand what the position is about then the world, unbelievers
+    I mean, will be even more turned off to the Gospel
+
+Page 139 - "We have trained them to think of the Future as a promised land
+which favoured heroes attain - not as something which everyone reaches at the
+rate of sixety minutes an hour, whatever he does, whoever he is..."
+
+## Chatper 26
+
+!!! danger "_Unselfishness_"
+
+    Note, once again, the admirable work of our Philological Arm in
+    substituting the negative unselfishness for the Enemy's positive Charity
+
+> Big one for me... hard to even process
+
+!!! warning "page 143"
+
+    In discussing any joint action, it becomes obligatory thta A should argue
+    in favour of B's supposed wishes and against his own, while B does the
+    opposite
+
+> Going out to eat, what to do tonight, etc... simple things, not big ones
+> (like how to discipline our kids), is where this is just rampant in my
+> life... I constantly and consciously say in my head "X will make my wife
+> happier even though I don't want to" then after whatever "X" is, turns out
+> she didn't really care or want it _OR_ she's upset because she feels like a
+> nuisance to me... Then the reality is I don't actually know if I saw her as a
+> nuisance in that moment, or if I genuinely wanted to do what she wanted out
+> of love and charity...
+
+!!! warning "page 144"
+
+    He insists on doing 'what the others want'. They insist on doing what he
+    wants. Passions are roused. Soon someone is saying 'Very well then, I won't
+    have any tea at all!', and a real quarrel ensues with bitter resentment on
+    both sides.
+
+> Happens all the freaking time, and at the end of it I'm left with "wtf just happened?"
+
+## Chatper 27
+
+> TODO: Go through and make notes
+
+## Chatper 28
