@@ -81,4 +81,16 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
 
 !!! scripture "James 1:2-11"
 
-    2 Count it all joy, my brothers, when you meet trials of various kinds, 3 for you know that the testing of your faith produces steadfastness. 4 And let steadfastness have its full effect, that you may be perfect and complete, lacking in nothing.  5 If any of you lacks wisdom, let him ask God, who gives generously to all without reproach, and it will be given him. 6 But let him ask in faith, with no doubting, for the one who doubts is like a wave of the sea that is driven and tossed by the wind. 7 For that person must not suppose that he will receive anything from the Lord; 8 he is a double-minded man, unstable in all his ways.  9 Let the lowly brother boast in his exaltation, 10 and the rich in his humiliation, because like a flower of the grass he will pass away. 11 For the sun rises with its scorching heat and withers the grass; its flower falls, and its beauty perishes. So also will the rich man fade away in the midst of his pursuits.
+    2 Count it all joy, my brothers, when you meet trials of various kinds,
+    3 for you know that the testing of your faith produces steadfastness. 4 And
+    let steadfastness have its full effect, that you may be perfect and
+    complete, lacking in nothing.  5 If any of you lacks wisdom, let him ask
+    God, who gives generously to all without reproach, and it will be given
+    him. 6 But let him ask in faith, with no doubting, for the one who doubts
+    is like a wave of the sea that is driven and tossed by the wind. 7 For that
+    person must not suppose that he will receive anything from the Lord; 8 he
+    is a double-minded man, unstable in all his ways.  9 Let the lowly brother
+    boast in his exaltation, 10 and the rich in his humiliation, because like a
+    flower of the grass he will pass away. 11 For the sun rises with its
+    scorching heat and withers the grass; its flower falls, and its beauty
+    perishes. So also will the rich man fade away in the midst of his pursuits.
