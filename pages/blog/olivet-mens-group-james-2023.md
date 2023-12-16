@@ -81,17 +81,17 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
 
 !!! scripture "James 1:2-11"
 
-    2 Count it all joy, my brothers, when you meet trials of various kinds,
-    3 for you know that the testing of your faith produces steadfastness. 4 And
+    2 Count it all joy, my brothers, when you meet trials of various kinds,
+    3 for you know that the testing of your faith produces steadfastness. 4 And
     let steadfastness have its full effect, that you may be perfect and
-    complete, lacking in nothing.  5 If any of you lacks wisdom, let him ask
+    complete, lacking in nothing.  5 If any of you lacks wisdom, let him ask
     God, who gives generously to all without reproach, and it will be given
-    him. 6 But let him ask in faith, with no doubting, for the one who doubts
-    is like a wave of the sea that is driven and tossed by the wind. 7 For that
-    person must not suppose that he will receive anything from the Lord; 8 he
-    is a double-minded man, unstable in all his ways.  9 Let the lowly brother
-    boast in his exaltation, 10 and the rich in his humiliation, because like a
-    flower of the grass he will pass away. 11 For the sun rises with its
+    him. 6 But let him ask in faith, with no doubting, for the one who doubts
+    is like a wave of the sea that is driven and tossed by the wind. 7 For that
+    person must not suppose that he will receive anything from the Lord; 8 he
+    is a double-minded man, unstable in all his ways.  9 Let the lowly brother
+    boast in his exaltation, 10 and the rich in his humiliation, because like a
+    flower of the grass he will pass away. 11 For the sun rises with its
     scorching heat and withers the grass; its flower falls, and its beauty
     perishes. So also will the rich man fade away in the midst of his pursuits.
 
@@ -101,14 +101,14 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
 
 !!! scripture "James 3:13-18"
 
-    13 Who is wise and understanding among you? By his good conduct let him
-    show his works in the meekness of wisdom. 14 But if you have bitter jealousy
+    13 Who is wise and understanding among you? By his good conduct let him
+    show his works in the meekness of wisdom. 14 But if you have bitter jealousy
     and selfish ambition in your hearts, do not boast and be false to the truth.
-    15 This is not the wisdom that comes down from above, but is earthly,
-    unspiritual, demonic. 16 For where jealousy and selfish ambition exist, there
-    will be disorder and every vile practice. 17 But the wisdom from above is first
+    15 This is not the wisdom that comes down from above, but is earthly,
+    unspiritual, demonic. 16 For where jealousy and selfish ambition exist, there
+    will be disorder and every vile practice. 17 But the wisdom from above is first
     pure, then peaceable, gentle, open to reason, full of mercy and good fruits,
-    impartial and sincere. 18 And a harvest of righteousness is sown in peace by
+    impartial and sincere. 18 And a harvest of righteousness is sown in peace by
     those who make peace.
 
     The Holy Bible: English Standard Version (Jas 3:13–18). (2016). Crossway
@@ -118,19 +118,19 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
 
 !!! scripture "James 5:13-20"
 
-    13 Is anyone among you suffering misfortune? He should pray. Is anyone
-    cheerful? He should sing praise. 14 Is anyone among you sick? He should
+    13 Is anyone among you suffering misfortune? He should pray. Is anyone
+    cheerful? He should sing praise. 14 Is anyone among you sick? He should
     summon the elders of the church and they should pray over him, anointing
-    him with olive oil in the name of the Lord. 15 And the prayer of faith will
+    him with olive oil in the name of the Lord. 15 And the prayer of faith will
     save the one who is sick, and the Lord will raise him up, and if he has
-    committed sins ⌊he will be forgiven⌋. 16 Therefore confess your sins to one
+    committed sins ⌊he will be forgiven⌋. 16 Therefore confess your sins to one
     another, and pray for one another, so that you may be healed. The effective
-    prayer of a righteous person accomplishes much. 17 Elijah was a human being
+    prayer of a righteous person accomplishes much. 17 Elijah was a human being
     with the same nature as us, and ⌊he prayed fervently⌋ for it not to rain,
-    and it did not rain on the land for three years and six months. 18 And he
+    and it did not rain on the land for three years and six months. 18 And he
     prayed again, and the sky gave rain and the earth produced its fruit.
-    19 My brothers, if anyone among you should wander away from the truth and
-    someone turns him back, 20 he should know that the one who turns a sinner
+    19 My brothers, if anyone among you should wander away from the truth and
+    someone turns him back, 20 he should know that the one who turns a sinner
     back from the error of his way will save that person’s soul from death, and
     will cover over a great number of sins.
 
@@ -185,7 +185,7 @@ forcing themselves to pray will change Yahweh's will.
 
 !!! scripture "Psalm 23:5"
 
-    5 You prepare before me a table
+    5 You prepare before me a table
     in the presence of my oppressors.
     You anoint my head with oil;
     my cup is overflowing.
@@ -194,34 +194,34 @@ forcing themselves to pray will change Yahweh's will.
 
     17 Elijah the Tishbite from Tishbe of Gilead said to Ahab, “⌊As Yahweh
     lives⌋, the God of Israel before whom I stand, there shall surely not be
-    dew nor rain these years ⌊except by my command⌋.” 2 Then the word of Yahweh
-    came to him, saying, 3 “Go from this place and turn to the east; you must
-    hide yourself in the Wadi Kerith ⌊which faces the Jordan⌋. 4 It shall be
+    dew nor rain these years ⌊except by my command⌋.” 2 Then the word of Yahweh
+    came to him, saying, 3 “Go from this place and turn to the east; you must
+    hide yourself in the Wadi Kerith ⌊which faces the Jordan⌋. 4 It shall be
     that you shall drink from the wadi, and I have commanded the crows to
-    sustain you there.” 5 So he went and did according to the word of Yahweh.
-    He went and stayed in the Wadi Kerith ⌊which faces the Jordan⌋. 6 The crows
+    sustain you there.” 5 So he went and did according to the word of Yahweh.
+    He went and stayed in the Wadi Kerith ⌊which faces the Jordan⌋. 6 The crows
     were bringing bread and meat in the morning for him and bread and meat in
-    the evening, and he drank from the wadi. 7 It happened ⌊after a while⌋ that
+    the evening, and he drank from the wadi. 7 It happened ⌊after a while⌋ that
     the wadi dried up, because there was no rain in the land.
 
-    8 Then the
-    word of Yahweh came to him, saying, 9 “Get up and go to Zarephath which
+    8 Then the
+    word of Yahweh came to him, saying, 9 “Get up and go to Zarephath which
     belongs to Sidon and stay there. Look, I have commanded a woman there, a
-    widow, to sustain you.” 10 So he arose and went to Zarephath and came to
+    widow, to sustain you.” 10 So he arose and went to Zarephath and came to
     the gate of the city. There was a widow woman gathering wood, so he called
     to her, and he said, “Please bring a little water for me in a vessel so
-    that I can drink.” 11 She went to fetch it, and he called to her and said,
-    “Please bring me a morsel of bread in your hand.” 12 She said, “⌊As Yahweh
+    that I can drink.” 11 She went to fetch it, and he called to her and said,
+    “Please bring me a morsel of bread in your hand.” 12 She said, “⌊As Yahweh
     your God lives⌋, surely I do not have a cake, ⌊but only a handful of flour⌋
     in the jar and a little olive oil in the jug. Here I am gathering a few
     pieces of wood, and I will go and prepare it for me and my son, that we
-    might eat it and die.” 13 Elijah said to her, “Don’t be afraid. Go and do
+    might eat it and die.” 13 Elijah said to her, “Don’t be afraid. Go and do
     according to your word; only make for me a small bread cake from it first,
     and bring it out to me. Make it for yourself and for your son afterward.
-    14 For thus says Yahweh, the God of Israel: ‘The jar of flour will not be
+    14 For thus says Yahweh, the God of Israel: ‘The jar of flour will not be
     emptied and the jug of olive oil will not run out until the day Yahweh
-    gives rain on the surface of the earth.’ ” 15 So she went and did according
+    gives rain on the surface of the earth.’ ” 15 So she went and did according
     to the word of Elijah; then both she and he ate with her household for many
-    days. 16 The jar of flour was not emptied and the jug of olive oil did not
+    days. 16 The jar of flour was not emptied and the jug of olive oil did not
     run out, according to the word of Yahweh which he spoke by the hand of
     Elijah.
