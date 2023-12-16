@@ -94,3 +94,42 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
     flower of the grass he will pass away. 11 For the sun rises with its
     scorching heat and withers the grass; its flower falls, and its beauty
     perishes. So also will the rich man fade away in the midst of his pursuits.
+
+## July 15
+
+> Missed several meetings due to unfortunate travel circumstances
+
+!!! scripture "James 3:13-18"
+
+    13 Who is wise and understanding among you? By his good conduct let him
+    show his works in the meekness of wisdom. 14 But if you have bitter jealousy
+    and selfish ambition in your hearts, do not boast and be false to the truth.
+    15 This is not the wisdom that comes down from above, but is earthly,
+    unspiritual, demonic. 16 For where jealousy and selfish ambition exist, there
+    will be disorder and every vile practice. 17 But the wisdom from above is first
+    pure, then peaceable, gentle, open to reason, full of mercy and good fruits,
+    impartial and sincere. 18 And a harvest of righteousness is sown in peace by
+    those who make peace.
+
+    The Holy Bible: English Standard Version (Jas 3:13–18). (2016). Crossway
+    Bibles.
+
+## December 16
+
+!!! scripture "James 5:13-20"
+
+    13 Is anyone among you suffering misfortune? He should pray. Is anyone
+    cheerful? He should sing praise. 14 Is anyone among you sick? He should
+    summon the elders of the church and they should pray over him, anointing
+    him with olive oil in the name of the Lord. 15 And the prayer of faith will
+    save the one who is sick, and the Lord will raise him up, and if he has
+    committed sins ⌊he will be forgiven⌋. 16 Therefore confess your sins to one
+    another, and pray for one another, so that you may be healed. The effective
+    prayer of a righteous person accomplishes much. 17 Elijah was a human being
+    with the same nature as us, and ⌊he prayed fervently⌋ for it not to rain,
+    and it did not rain on the land for three years and six months. 18 And he
+    prayed again, and the sky gave rain and the earth produced its fruit.
+    19 My brothers, if anyone among you should wander away from the truth and
+    someone turns him back, 20 he should know that the one who turns a sinner
+    back from the error of his way will save that person’s soul from death, and
+    will cover over a great number of sins.
