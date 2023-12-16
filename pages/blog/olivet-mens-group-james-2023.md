@@ -133,3 +133,95 @@ Dispersion: διασπορά - same word used by Peter to describe Jesus-followe
     someone turns him back, 20 he should know that the one who turns a sinner
     back from the error of his way will save that person’s soul from death, and
     will cover over a great number of sins.
+
+### When to pray
+
+1. All circumstances of life
+2. Sickness
+3. Confession
+4. Working out the will of God
+5. Retrieving wandering souls
+
+James ends his letter with prayer because it's an exhortation of the Disapora
+and a life of faith must revolve around prayer
+
+For myself I think I pray in all circumstances, sickness, confession all ok. I
+do not pray for long periods of time, and don't feel very disiplined, but
+whenever anything happens, by the Lord's grace I am quick to turn my
+attention to Jesus, and hopefully turn the attention of my wife/kids to Jesus
+as well. Example: a person collapsed at the water park we went to this last
+weekend, Athalia and I were close-ish to that happening, so I told her we
+needed to stop what we were doing and pray that Jesus would intervene.
+
+I confess sin to Jesus but I'm not sure what that **should** look like. I've
+taken a Brother Lawrence approach to try and quickly confess and move on,
+accepting grace, but I struggle with intentional sinning in this area... What
+is prayer if I knew what I was doing was wrong?
+
+I am not more inclined to pray for suffering, but I think that's because I've
+very consciously been trying to pray in good circumstances more often because
+when we only pray in suffering that turns prayer into a Santa's wish list
+situation I think... yes we need the Lord in suffering, but we display our need
+for him NOT only in suffering, and if that is true then it begs the question,
+to me anyways, of whether or not the need is truly there
+
+### JC Ryle's quote
+
+I disagree with the dude's quote about the requirement of prayer, but only
+because the message is given in a direction that makes prayer look like
+something I have to do to get/keep/maintain my salvation... Yahweh changes his
+children's hearts and orients them towards him through prayer - if someone
+doesn't then I think that just means Yahweh has not worked or has not chosen
+them, but them calling themselves a Christian is irrelevant, and no amount of
+forcing themselves to pray will change Yahweh's will.
+
+!!! scripture "Isaiah 1:6"
+
+    From the sole of the foot and up to the head
+    there is no health in it;
+    bruise and sore and bleeding wound have not been cleansed,
+    and they have not been bound up
+    and not softened with the oil.
+
+!!! scripture "Psalm 23:5"
+
+    5 You prepare before me a table
+    in the presence of my oppressors.
+    You anoint my head with oil;
+    my cup is overflowing.
+
+!!! scripture "1 Kings 17:1-16"
+
+    17 Elijah the Tishbite from Tishbe of Gilead said to Ahab, “⌊As Yahweh
+    lives⌋, the God of Israel before whom I stand, there shall surely not be
+    dew nor rain these years ⌊except by my command⌋.” 2 Then the word of Yahweh
+    came to him, saying, 3 “Go from this place and turn to the east; you must
+    hide yourself in the Wadi Kerith ⌊which faces the Jordan⌋. 4 It shall be
+    that you shall drink from the wadi, and I have commanded the crows to
+    sustain you there.” 5 So he went and did according to the word of Yahweh.
+    He went and stayed in the Wadi Kerith ⌊which faces the Jordan⌋. 6 The crows
+    were bringing bread and meat in the morning for him and bread and meat in
+    the evening, and he drank from the wadi. 7 It happened ⌊after a while⌋ that
+    the wadi dried up, because there was no rain in the land.
+
+    8 Then the
+    word of Yahweh came to him, saying, 9 “Get up and go to Zarephath which
+    belongs to Sidon and stay there. Look, I have commanded a woman there, a
+    widow, to sustain you.” 10 So he arose and went to Zarephath and came to
+    the gate of the city. There was a widow woman gathering wood, so he called
+    to her, and he said, “Please bring a little water for me in a vessel so
+    that I can drink.” 11 She went to fetch it, and he called to her and said,
+    “Please bring me a morsel of bread in your hand.” 12 She said, “⌊As Yahweh
+    your God lives⌋, surely I do not have a cake, ⌊but only a handful of flour⌋
+    in the jar and a little olive oil in the jug. Here I am gathering a few
+    pieces of wood, and I will go and prepare it for me and my son, that we
+    might eat it and die.” 13 Elijah said to her, “Don’t be afraid. Go and do
+    according to your word; only make for me a small bread cake from it first,
+    and bring it out to me. Make it for yourself and for your son afterward.
+    14 For thus says Yahweh, the God of Israel: ‘The jar of flour will not be
+    emptied and the jug of olive oil will not run out until the day Yahweh
+    gives rain on the surface of the earth.’ ” 15 So she went and did according
+    to the word of Elijah; then both she and he ate with her household for many
+    days. 16 The jar of flour was not emptied and the jug of olive oil did not
+    run out, according to the word of Yahweh which he spoke by the hand of
+    Elijah.
