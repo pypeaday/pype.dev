@@ -31,6 +31,7 @@ Reflect
    It's challenging also becauset the dragon is powerful, and humans are not
    (without its power or the power of Jesus) so if we stand against it without
    the Lord, what hope do we have of victory?
+
 2. What are some of the ways that Jesus confronted the “dragon” in his ministry?
 
    - calming the sea
