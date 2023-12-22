@@ -1,21 +1,18 @@
 ---
 date: 2022-09-01 1:00:00
-title: <a href="https://pype.dev/"><img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="50px" height="50px"></a>  Welcome to my mental data lake!
+title: <a href="https://pype.dev/"><img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" alt="pype.dev" width="50px" height="50px"></a>  Welcome to my mental data lake!
 # Don't put this page in a feed
 published: False
 tags:
   - homepage
   - meta
-
 ---
 
-
 !!! index-welcome ""
-    
+
     I write about things I find find interesting in tech and theology
 
     Let's connect: 🌱  My [littlelink](https://pypeaday.github.io/littlelink/) is the place to find the places to find me 🤓
-
 
 ## Some of my favorite pages
 
@@ -23,6 +20,7 @@ tags:
 !!! note "[{{ post['title'] }}]({{ post['slug'] }})"
 
     {{post['description']}}... _[read more]({{ post['slug'] }})_
+
 {% endfor %}
 
 ## Recent posts
@@ -31,6 +29,7 @@ tags:
 !!! note "[{{ post['title'] }}]({{ post['slug'] }})"
 
     {{post['description']}}... _[read more]({{ post['slug'] }})_
+
 {% endfor %}
 
 ## Feeds
