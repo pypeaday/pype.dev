@@ -34,8 +34,10 @@ pg 13-14. "Let him assume that she knows how annoying it is and does it to
 annoy - if you know your job he will not notice the immense improbability of
 the assumption" -> This point is particularly convicting to me
 
-> The last point about encouraging the patient to interpret the mother's every
-> move in an over-sensitive fashion is actually very relatable for me
+!!! background-thought ""
+
+    The last point about encouraging the patient to interpret the mother's every
+    move in an over-sensitive fashion is actually very relatable for me
 
 ## Chapter 4
 
@@ -52,8 +54,10 @@ self-control.
 pg. 16. "Keep them watching their own minds and trying to produce _feelings_
 there by the action of their own wills"
 
-> I totally remember feeling like I needed to want to pray in order for my
-> prayers to matter
+!!! background-thought ""
+
+    I totally remember feeling like I needed to want to pray in order for my
+    prayers to matter
 
 pg 17. "When they say they re praying for forgiveness, let them be trying to
 feel forgiven"
@@ -62,8 +66,10 @@ pg 18. "But whatever the nature of the composite object, you must keep him
 praying to _it_ - to the thing that he has made, not to the Person who has made
 him"
 
-> Lewis talking actual idolatry with meaningful consequences... not the "money
-> is my idol" take most pastors preach
+!!! background-thought ""
+
+    Lewis talking actual idolatry with meaningful consequences... not the "money
+    is my idol" take most pastors preach
 
 ## Chapter 5
 
@@ -75,7 +81,7 @@ makes prizes of humans who have given their lives for causes He think bad on
 the monstrously sophistical ground that the humans thought them good and were
 following the best they knew"
 
-!!! warning ""
+!!! warning "WARNING TITLE"
 
     This reminds me of the young Tarkan in Narnia: The Last Battle, who Aslan
     ascribes all his good deeds done to Tash as done to himself - effectively
@@ -109,32 +115,38 @@ mind against the Enemy."
 page 32. "The fact that 'devils' are predominately _comic_ figures in the
 modern imagination will help you"
 
-> It's funny because I bet most people, myself included, reading this book (at
-> least the first time) have a red-devil type figure in mind for Screwtape or
-> Wormwood
+!!! background-thought ""
+
+    I think It's funny because I bet most people, myself included, reading this book (at
+    least the first time) have a red-devil type figure in mind for Screwtape or
+    Wormwood
 
 page 31-32. "If once we can produce our perfect work -- the Materialist
 Magician, the man, not using, but veritably worshipping, what he vaguely called
 'Froces' while denying the existence of 'spirits' -- then the end of the war
 will be in sight."
 
-> I hear some non-Christian friends say things like "I'm spiritual so I
-> appreciate your prayers". In a sense they believe in some kind of
-> non-physical "thing" but not in any real sense so it looks, to me, similar to
-> what Screwtape longs for in his letter to Wormwood.
+!!! background-thought ""
+
+  I hear some non-Christian friends say things like "I'm spiritual so I
+  appreciate your prayers". In a sense they believe in some kind of
+  non-physical "thing" but not in any real sense so it looks, to me, similar to
+  what Screwtape longs for in his letter to Wormwood.
 
 page 32. "All extremes, except extreme deviotion to the Enemy, are to be
 encouraged... Other ages, of which the present is one, are unbalanced and prone
 to faction, and it is our business to inflame them"
 
-> Using Christianity to justify political positions or judgement seems right
-> here. Extreme devotion to our God I don't think should offend people as often
-> or to the degree that many Christians think is right... People flocked to
-> Jesus, only the religious elite and politically powerful hated him. When
-> Christianity is mixed with anything other than itself, that's when it becomes
-> offensive. I think I see people hold to something like Christian Nationalism,
-> and the offensive nature of it justifies the position because "we were always
-> going to be persecured for loving Jesus"
+!!! background-thought ""
+
+    Using Christianity to justify political positions or judgement seems right
+    here. Extreme devotion to our God I don't think should offend people as often
+    or to the degree that many Christians think is right... People flocked to
+    Jesus, only the religious elite and politically powerful hated him. When
+    Christianity is mixed with anything other than itself, that's when it becomes
+    offensive. I think I see people hold to something like Christian Nationalism,
+    and the offensive nature of it justifies the position because "we were always
+    going to be persecured for loving Jesus"
 
 !!! danger "page 34"
 
@@ -161,8 +173,10 @@ human undulation provide excellen opportunity for all sensual tempations,
 particularly those of sex... The attack has a much better chance of success
 when the man's whole innter world is drab and cold and empty."
 
-> I feel this observation in my own life deeply - in my 'troughs' I'm drawn to
-> pleasurable things in a very unpleasurable way
+!!! background-thought ""
+
+    I feel this observation in my own life deeply - in my 'troughs' I'm drawn to
+    pleasurable things in a very unpleasurable way
 
 !!! success "page 44"
 
@@ -181,15 +195,17 @@ page 49. "Did he commit himself deeply? I don't mean the words. There is a
 subtle play of looks and tons and laughs by which a mortal can imply that he is
 of the same party as those to whom he is speaking"
 
-> I resonate with the temptation Scretape is basically instructing Wormwood to
-> employ - two-facedness/double-life. In hs/college in particular I would 'play
-> the part' to fit in to a particular crowd. I'd rarely confess Christianity
-> early on, would never deny it explicitly, but would act and talk in a
-> way/about things to imply that I was not necessarily non-Christian, but
-> instead nothing to ask about.
+!!! background-thought ""
 
-> Chapter 10 in overall convicting as it just drives home the point I noted
-> just now.... that I'm very prone to 'acting' in order to fit into a community
+    I resonate with the temptation Scretape is basically instructing Wormwood to
+    employ - two-facedness/double-life. In hs/college in particular I would 'play
+    the part' to fit in to a particular crowd. I'd rarely confess Christianity
+    early on, would never deny it explicitly, but would act and talk in a
+    way/about things to imply that I was not necessarily non-Christian, but
+    instead nothing to ask about.
+
+    Chapter 10 in overall convicting as it just drives home the point I noted
+    just now.... that I'm very prone to 'acting' in order to fit into a community
 
 ## Chatper 11
 
@@ -204,11 +220,13 @@ all-excusing, grace of life"
     Humour is for them the all-consoling and (mark this) the all-excusing,
     grace of life
 
-> Basically I understand Lewis to be saying here that men (or the English in
-> particular) take great pride in having a sense of humor - so much so that
-> humor becomes an excuse to laugh at anything. When anything is worth laughing
-> at, then I think it's very hard to prioritize things above others - becuase
-> if everything is a joke, is anything really worthy of more than a joke?
+!!! background-thought ""
+
+    Basically I understand Lewis to be saying here that men (or the English in
+    particular) take great pride in having a sense of humor - so much so that
+    humor becomes an excuse to laugh at anything. When anything is worth laughing
+    at, then I think it's very hard to prioritize things above others - becuase
+    if everything is a joke, is anything really worthy of more than a joke?
 
 !!! warning "Flippancy"
 
@@ -232,12 +250,14 @@ all-excusing, grace of life"
 page 58. [The dim uneasiness about `backsliding` Screwtape describes in the
 chapter] increases the patient's reluctance to think about the Enemy.
 
-> This is too real for me - in seasons of rebellion, and honestly anytime I
-> fall away from "Christian habits" I notice that I am actually reluctant to
-> pray or meditate. Often the only thing that (or the initial thing in
-> appearance) that brings me back is my kids and praying with them or singing
-> Doxology. A choice I wouldnt' make alone, but make for their sake - perhaps
-> this is God's grace poured out on me
+!!! background-thought ""
+
+    This is too real for me - in seasons of rebellion, and honestly anytime I
+    fall away from "Christian habits" I notice that I am actually reluctant to
+    pray or meditate. Often the only thing that (or the initial thing in
+    appearance) that brings me back is my kids and praying with them or singing
+    Doxology. A choice I wouldnt' make alone, but make for their sake - perhaps
+    this is God's grace poured out on me
 
 !!! danger "page 58"
 
@@ -281,7 +301,9 @@ things for their own sake enough or rightly....
 
 ## Chapter 17
 
-> Gluttony of Delicacy, not gluttony of Excess
+!!! background-thought ""
+
+    Gluttony of Delicacy, not gluttony of Excess
 
 !!! danger "page 88"
 
@@ -328,10 +350,12 @@ lowly
 
 page 130 - It's always the novice who exaggerates...
 
-> I think about Summit in particular, where I got to meet a lot of big names in
-> apologetics, and I'd talk about them to others like we were friends... The
-> difference between "I know X" and "X knows me" is a thing I kept hidden so I
-> could feel important
+!!! background-thought ""
+
+    I think about Summit in particular, where I got to meet a lot of big names in
+    apologetics, and I'd talk about them to others like we were friends... The
+    difference between "I know X" and "X knows me" is a thing I kept hidden so I
+    could feel important
 
 ## Chatper 25
 
@@ -341,13 +365,15 @@ page 130 - It's always the novice who exaggerates...
     state of mind I call 'Christianity And'. You know - Christianity and the
     Crisis,Christianity and the New Order, ...
 
-> I don't know... smells more and more like Christian Nationalism is the
-> modern-day `Christinaity And`... So much focus on policy, behavior, order
-> (patriarchy even).... Not a lot about Jesus _in the conversation about
-> Christian Nationalism_ (not that Christians in this mindset don't genuinely
-> love Jesus or talk about him - but I don't hear Jesus often in the
-> conversation, I only hear the politics). But I suppose to be fair there's
-> every chance in the world that I misunderstand the position and people.
+!!! background-thought ""
+
+    I don't know... smells more and more like Christian Nationalism is the
+    modern-day `Christinaity And`... So much focus on policy, behavior, order
+    (patriarchy even).... Not a lot about Jesus _in the conversation about
+    Christian Nationalism_ (not that Christians in this mindset don't genuinely
+    love Jesus or talk about him - but I don't hear Jesus often in the
+    conversation, I only hear the politics). But I suppose to be fair there's
+    every chance in the world that I misunderstand the position and people.
 
 !!! danger ""
 
@@ -377,14 +403,16 @@ rate of sixety minutes an hour, whatever he does, whoever he is..."
     in favour of B's supposed wishes and against his own, while B does the
     opposite
 
-> Going out to eat, what to do tonight, etc... simple things, not big ones
-> (like how to discipline our kids), is where this is just rampant in my
-> life... I constantly and consciously say in my head "X will make my wife
-> happier even though I don't want to" then after whatever "X" is, turns out
-> she didn't really care or want it _OR_ she's upset because she feels like a
-> nuisance to me... Then the reality is I don't actually know if I saw her as a
-> nuisance in that moment, or if I genuinely wanted to do what she wanted out
-> of love and charity...
+!!! background-thought ""
+
+    Going out to eat, what to do tonight, etc... simple things, not big ones
+    (like how to discipline our kids), is where this is just rampant in my
+    life... I constantly and consciously say in my head "X will make my wife
+    happier even though I don't want to" then after whatever "X" is, turns out
+    she didn't really care or want it _OR_ she's upset because she feels like a
+    nuisance to me... Then the reality is I don't actually know if I saw her as a
+    nuisance in that moment, or if I genuinely wanted to do what she wanted out
+    of love and charity...
 
 !!! warning "page 144"
 
