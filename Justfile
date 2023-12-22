@@ -10,7 +10,7 @@ clean-build:
     hatch run clean-build
 clean-tui:
     hatch run clean-tui
-clean-serve:
-    hatch run clearn-serve
 build-serve:
     hatch run build-serve
+fresh:
+    hatch run clean-serve
