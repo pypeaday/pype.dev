@@ -8,6 +8,11 @@ tags:
   - meta
 ---
 
+<head>
+    <meta name="generator" content="HTML Tidy for HTML5 for Linux version 5.2.0" />
+    <title>Welcome!</title>
+</head>
+
 !!! index-welcome ""
 
     I write about things I find find interesting in tech and theology
