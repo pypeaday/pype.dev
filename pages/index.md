@@ -1,6 +1,6 @@
 ---
 date: 2022-09-01 1:00:00
-title: <a href="https://pype.dev/"><img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" alt="pype.dev" width="50px" height="50px"></a>  Welcome to my mental data lake!
+title: Welcome to my mental data lake!
 # Don't put this page in a feed
 published: False
 tags:
