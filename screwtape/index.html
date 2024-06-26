@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta content="HTML Tidy for HTML5 for Linux version 5.2.0" name="generator"/>
+<title>Screwtape</title>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&amp;display=swap" rel="stylesheet"/>
+<script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+
+    function detectColorSchemeOnLoad() {
+      if (localStorage.getItem("theme")) {
+        if (localStorage.getItem("theme") == "dark") {
+          setTheme("dark");
+        } else if (localStorage.getItem("theme") == "light") {
+          setTheme("light");
+        }
+      } else if (!window.matchMedia) {
+        setTheme("light");
+        return false;
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setTheme("dark");
+      } else {
+        setTheme("light");
+      }
+    }
+    detectColorSchemeOnLoad();
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const toggleSwitch = document.querySelector(
+          '#theme-switch input[type="checkbox"]',
+        );
+        function switchTheme(e) {
+          if (e.target.checked) {
+            localStorage.setItem("theme", "dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+            toggleSwitch.checked = true;
+          } else {
+            localStorage.setItem("theme", "light");
+            document.documentElement.setAttribute("data-theme", "light");
+            toggleSwitch.checked = false;
+          }
+        }
+        toggleSwitch.addEventListener("change", switchTheme, false);
+        if (document.documentElement.getAttribute("data-theme") == "dark") {
+          toggleSwitch.checked = true;
+        }
+      },
+      false,
+    );
+  </script>
+<style>
+    :root {
+      --color-bg: #f5f5f5;
+      /* Light gray background color */
+      --color-bg-code: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      /* Dark text color */
+      --color-link: #007acc;
+      /* Standard link color */
+      --color-accent: #4caf50;
+      /* Green accent color */
+      --overlay-brightness: 0.9;
+      /* Slightly brighter overlay */
+      --body-width: 800px;
+      --base-font-size: 16px;
+      /* Base font size */
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #1f2022;
+      /* Dark background color */
+      --color-bg-code: #1f2022;
+      --color-bg-secondary: #21252d;
+      /* Slightly darker background for code */
+      --color-text: #c0e5c0;
+      /* Light text color */
+      --color-link: #64a1dd;
+      /* Light link color */
+      --color-accent: #b7e3b7;
+      --overlay-brightness: 0.85;
+      --body-width: 800px;
+    }
+
+    [data-theme="light"] {
+      --color-bg: #ffffff;
+      /* White background color */
+      --color-bg-code: #f5f5f5;
+      /* Light gray background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      --color-link: #007acc;
+      --color-accent: #4caf50;
+      --overlay-brightness: 0.95;
+      /* Slightly brighter overlay for light theme */
+    }
+
+    html {
+      font-family: "Nunito", monospace;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--base-font-size);
+    }
+
+    a {
+      color: var(--color-link);
+    }
+
+    body {
+      background: rgba(14, 28 34 0.7);
+      display: flex;
+      flex-direction: column;
+      font-size: var(--base-font-size);
+      justify-content: space-between;
+      line-height: 1.6;
+      /* Adjusted line height for better readability */
+      margin: 5rem auto;
+      max-width: var(--body-width);
+      min-height: 100vh;
+      padding: 0 0.5rem;
+    }
+
+    /* Add these styles for admonitions */
+    .admonition {
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      width: 80%;
+      /* Set the fixed width to 80% of the viewport width */
+      max-width: 600px;
+      /* Set a maximum width if needed */
+    }
+
+    .admonition-title {
+      font-size: 1.2rem;
+    }
+
+    .admonition.scripture,
+    .admonition.index-welcome,
+    .admonition.background-thought {
+      padding: 0.5rem;
+      border-left: 3px solid #555;
+      opacity: 0.8;
+    }
+
+    .admonition.background-thought .admonition-title {
+      background-color: var(--color-bg);
+      padding: 0.3rem;
+      border-bottom: none;
+      font-size: 1.2rem;
+    }
+
+    .admonition.background-thought p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .admonition.scripture {
+      background-color: #ffffff0a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.index-welcome {
+      background-color: #1f2022;
+      color: #64a1dd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.note {
+      color: #fff;
+      background-color: #32506b;
+      border: 1px solid #27405a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.warning {
+      color: #333;
+      background-color: #f5c266;
+      border: 1px solid #e3aa40;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.danger {
+      color: #fff;
+      background-color: #d05a4e;
+      border: 1px solid #b94036;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.success {
+      color: #333;
+      background-color: #6fbf8e;
+      border: 1px solid #5fa27a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      background: var(--color-bg-secondary);
+      padding: 1rem 0;
+      /* align-items: flex-end; Remove or comment out this line */
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    nav ul li {
+      margin: 0 0.4rem;
+    }
+
+    nav ul li a {
+      text-align: center;
+      color: gainsboro;
+      text-decoration: none;
+      padding: 0.5rem !important;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      align-items: flex-end;
+      font-size: 1rem;
+      /* Adjusted font size for navigation links */
+    }
+
+    nav ul li a:focus-visible,
+    nav ul li:hover a {
+      color: #3d9e9e;
+    }
+
+    ul.archive-tags {
+      display: flex;
+      justify-content: center;
+      list-style-type: none;
+      color: gainsboro;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    ul.archive-tags li {
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li a {
+      display: block;
+      text-decoration: none;
+      color: #fafafa;
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li:hover a,
+    ul.archive-tags li a:focus-visible {
+      color: #3d9e9e;
+    }
+
+    table {
+      margin: 0px auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: block;
+      max-width: -moz-fit-content;
+      max-width: fit-content;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 1rem;
+      /* Adjusted font size for tables */
+    }
+
+    table thead th {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      text-align: left;
+      font-size: 1rem;
+      /* Adjusted font size for table header */
+    }
+
+    table tbody td {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      font-size: 1rem;
+      /* Adjusted font size for table cells */
+    }
+
+    tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #of1413;
+    }
+
+    .theme-switch {
+      z-index: 10;
+      display: inline-block;
+      height: 34px;
+      position: relative;
+      width: 60px;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 1rem;
+      margin-left: auto;
+      position: fixed;
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .theme-switch input {
+      display: none;
+    }
+
+    .slider {
+      background-color: #ccc;
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      background-color: #fff;
+      bottom: 4px;
+      content: "";
+      height: 26px;
+      left: 4px;
+      position: absolute;
+      transition: 0.4s;
+      width: 26px;
+    }
+
+    input:checked+.slider {
+      background-color: #343434;
+    }
+
+    input:checked+.slider:before {
+      background-color: #848484;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    img {
+      max-width: 1080px;
+      max-height: 500px;
+      margin: 0 auto;
+    }
+
+    .title {
+      background: var(--color-bg-secondary);
+      margin-bottom: 0rem;
+      margin-top: 0rem;
+      text-align: center;
+      font-size: 2rem;
+      /* Adjusted font size for title */
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg-secondary);
+      margin: 0 calc((100% - var(--body-width)) / 10);
+      /* Adjust the factor (1/5) as needed */
+    }
+
+    .prevnext {
+      justify-self: flex-end;
+      flex: 1;
+    }
+
+    .prev,
+    .next {
+      align-self: flex-end;
+    }
+
+    .heading-permalink {
+      color: rgba(0, 0, 0, 0);
+      font-size: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #5651b7;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #392e3d;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #5651b7;
+      border-radius: 0.25rem;
+      background: rgb(112, 107, 208);
+      background: linear-gradient(180deg,
+          rgba(112, 107, 208, 1) 0%,
+          rgba(86, 81, 183, 1) 100%);
+      border: 1px solid rgba(86, 81, 183, 0.5);
+    }
+
+    blockquote {
+      font-family: "Courier New", Courier, monospace;
+      /* Use a monospace font for a code-like appearance */
+      font-size: 1.2rem;
+      color: var(--color-link);
+      border-left: 5px solid var(--color-accent);
+      padding-left: 1.5rem;
+      /* Increased padding for better indentation */
+      margin: 1rem;
+      background: var(--color-bg);
+      filter: brightness(var(--overlay-brightness));
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    /* Style for regular code blocks */
+    pre {
+      background-color: #2d2d2d;
+      /* Change this to your preferred background color */
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 1rem;
+    }
+
+    /* Style for code blocks within p tags */
+    p code {
+      background-color: #363636;
+      /* Change this to your preferred background color */
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 0.9rem;
+      /* Adjust the font size as needed */
+    }
+
+    /* Optional: Apply different colors to different token types */
+    p code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Add additional token type styling as needed */
+
+    /* Style line numbers (optional) */
+    .line-numbers {
+      color: #848484;
+      /* Change the line number color */
+    }
+
+    /* Style the language label (optional) */
+    .language-label {
+      background-color: #1f2022;
+      /* Change the background color */
+      color: #64a1dd;
+      /* Change the text color */
+      padding: 0.2rem 0.5rem;
+      /* Add padding for better aesthetics */
+      font-size: 0.8rem;
+      /* Adjust the font size as needed */
+      border-radius: 0.3rem;
+      /* Add rounded corners */
+    }
+
+    /* Add a color scheme for syntax-like highlighting */
+    code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Apply different colors to different token types */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #5c6370;
+    }
+
+    .token.punctuation {
+      color: #abb2bf;
+    }
+
+    .token.namespace {
+      opacity: 0.7;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #e06c75;
+    }
+
+    .token.boolean,
+    .token.number {
+      color: #d19a66;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #98c379;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #56b6c2;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #c678dd;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #61afef;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #c678dd;
+    }
+
+    .token.important,
+    .token.bold {
+      font-weight: bold;
+    }
+
+    .token.italic {
+      font-style: italic;
+    }
+
+    .token.entity {
+      cursor: help;
+    }
+  </style>
+<link href="/manifest.json" rel="manifest"/></head>
+<body>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/tech/">Tech Archive</a></li>
+<li><a href="/faith/">Faith Archive</a></li>
+</ul>
+</nav>
+<div>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"></div>
+</label>
+</div>
+<section class="title">
+<h1 id="title">Screwtape</h1>
+</section>
+<main><h1 id="chapters">Chapters<a alt="id" class="heading-permalink" href="#chapters" title="link to #chapters"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Below are just quick notes or quotes from each chapter as a reminder of what to
+go back to chat about. This isn't intended to be in-depth by any stretch.</p>
+<h2 id="chapter-1">Chapter 1<a alt="id" class="heading-permalink" href="#chapter-1" title="link to #chapter-1"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>"Your man has been accustomed, ever since he was a boy, to have a dozen
+incompatible philosophies dancing about together inside his head. He doesn't
+think of doctrines as primarily 'true' or 'false', but as 'academic' or
+'practical', 'outworn' or 'contemporary', 'conventional' or 'ruthless'"</p>
+<h2 id="chapter-2">Chapter 2<a alt="id" class="heading-permalink" href="#chapter-2" title="link to #chapter-2"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<h2 id="chapter-3">Chapter 3<a alt="id" class="heading-permalink" href="#chapter-3" title="link to #chapter-3"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>pg 11. Keeping the patient's mind focused on the 'inner life' so his actions do
+not ever reflect his conversion</p>
+<p>pg 12. Creating an imaginary person for whom to pray... "In time, you may get
+the cleavage so wide that no thought or feeling from his prayers for the
+imagined mother will ever flow over into his treatment of the real one"</p>
+<p>pg 13-14. "Let him assume that she knows how annoying it is and does it to
+annoy - if you know your job he will not notice the immense improbability of
+the assumption" -&gt; This point is particularly convicting to me</p>
+<div class="admonition background-thought">
+<p>The last point about encouraging the patient to interpret the mother's every
+move in an over-sensitive fashion is actually very relatable for me</p>
+</div>
+<h2 id="chapter-4">Chapter 4<a alt="id" class="heading-permalink" href="#chapter-4" title="link to #chapter-4"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>pg 15. Convincing the patient that scheduled prayer is wrong and that he must
+create a <em>mood</em> within himself for real prayer reminds me of high school youth
+groups talking about "praying in the spirit" and silly conversation "combating
+salvation by works" ideas like scheduled prayer times.</p>
+<p>pg 16. "they constantly forget, what you must always remember, that they are
+animals and that whatever their bodies do affects their souls" 👈 feels a lot
+like Genesis 3, and humans are never more human than when we exercise
+self-control.</p>
+<p>pg. 16. "Keep them watching their own minds and trying to produce <em>feelings</em>
+there by the action of their own wills"</p>
+<div class="admonition background-thought">
+<p>I totally remember feeling like I needed to want to pray in order for my
+prayers to matter</p>
+</div>
+<p>pg 17. "When they say they re praying for forgiveness, let them be trying to
+feel forgiven"</p>
+<p>pg 18. "But whatever the nature of the composite object, you must keep him
+praying to <em>it</em> - to the thing that he has made, not to the Person who has made
+him"</p>
+<div class="admonition background-thought">
+<p>Lewis talking actual idolatry with meaningful consequences... not the "money
+is my idol" take most pastors preach</p>
+</div>
+<h2 id="chapter-5">Chapter 5<a alt="id" class="heading-permalink" href="#chapter-5" title="link to #chapter-5"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>pg 23. "...while tens of thousands who do not go so far as that will
+nevertheless have their attention diverted from themselves to values and causes
+which they believe to be higher than the self. I know that the Enemy
+disapproves many of these causes. But that is where He is so unfair. He often
+makes prizes of humans who have given their lives for causes He think bad on
+the monstrously sophistical ground that the humans thought them good and were
+following the best they knew"</p>
+<div class="admonition warning">
+<p class="admonition-title">WARNING TITLE</p>
+<p>This reminds me of the young Tarkan in Narnia: The Last Battle, who Aslan
+ascribes all his good deeds done to Tash as done to himself - effectively
+saying the Tarkan's loyalty to the wrong god is honored by Aslan? Definitely
+want to know more about Lewis' thoughts there and here in Screwtape</p>
+</div>
+<h2 id="chapter-6">Chapter 6<a alt="id" class="heading-permalink" href="#chapter-6" title="link to #chapter-6"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>pg 25. "There is nothing like suspense and anxiety for barricading a human's
+mind against the Enemy."</p>
+<div class="admonition warning">
+<p>Screwtape's point in the beinning of the chapter confuses me... He instructs
+Wormwood to keep the man thinking that the things he is anxious about, the
+things themselves, are his trials/cross to bear, rather than the anxiety
+itself. So from the Christian perspective, Lewis seems to be saying that the
+real-time, present, acute anxiety and suspense in the man's heart regarding the
+war is the actual trial and cross... not the things the man is anxious about. I
+don't know what to do with this but it <em>feels</em> convicting to me. Growing up I
+often had the thought that nothing could be wrong because "I have Jesus", and I
+would look at my circumstances as things to bear - for me the biggest one was
+singleness. So would Lewis say my outlook on my singleness as the thing to
+bear, rather than the anxiety about being single, was the enemy twisting my
+convictions to be inward rather than God-ward? It clearly looks like my
+convictions were inward, but I'm not sure I understand how seeing the anxiety
+itself as my "cross to bare" is any more Biblical...</p>
+</div>
+<h2 id="chapter-7">Chapter 7<a alt="id" class="heading-permalink" href="#chapter-7" title="link to #chapter-7"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>page 32. "The fact that 'devils' are predominately <em>comic</em> figures in the
+modern imagination will help you"</p>
+<div class="admonition background-thought">
+<p>I think It's funny because I bet most people, myself included, reading this book (at
+least the first time) have a red-devil type figure in mind for Screwtape or
+Wormwood</p>
+</div>
+<p>page 31-32. "If once we can produce our perfect work -- the Materialist
+Magician, the man, not using, but veritably worshipping, what he vaguely called
+'Froces' while denying the existence of 'spirits' -- then the end of the war
+will be in sight."</p>
+<div class="admonition background-thought"></div>
+<p>I hear some non-Christian friends say things like "I'm spiritual so I
+  appreciate your prayers". In a sense they believe in some kind of
+  non-physical "thing" but not in any real sense so it looks, to me, similar to
+  what Screwtape longs for in his letter to Wormwood.</p>
+<p>page 32. "All extremes, except extreme deviotion to the Enemy, are to be
+encouraged... Other ages, of which the present is one, are unbalanced and prone
+to faction, and it is our business to inflame them"</p>
+<div class="admonition background-thought">
+<p>Using Christianity to justify political positions or judgement seems right
+here. Extreme devotion to our God I don't think should offend people as often
+or to the degree that many Christians think is right... People flocked to
+Jesus, only the religious elite and politically powerful hated him. When
+Christianity is mixed with anything other than itself, that's when it becomes
+offensive. I think I see people hold to something like Christian Nationalism,
+and the offensive nature of it justifies the position because "we were always
+going to be persecured for loving Jesus"</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">page 34</p>
+<p>Let him begin by treating the Patriotism or the Pacifism as a part of his
+religion. Then let him, under then influence of partisan spirit, come to
+regard it as the most important part...</p>
+</div>
+<h2 id="chapter-8">Chapter 8<a alt="id" class="heading-permalink" href="#chapter-8" title="link to #chapter-8"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition success">
+<p class="admonition-title">page 39</p>
+<p>For He cannot ravish. He can only woo.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">page 40</p>
+<p>He wants them to learn to walk and must therefore take away His hand; and
+if only the will to walk is really there He is pleased even with their
+stumbles</p>
+</div>
+<h2 id="chapter-9">Chapter 9<a alt="id" class="heading-permalink" href="#chapter-9" title="link to #chapter-9"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>page 43. "In the first place I have always found that the trough periods of the
+human undulation provide excellen opportunity for all sensual tempations,
+particularly those of sex... The attack has a much better chance of success
+when the man's whole innter world is drab and cold and empty."</p>
+<div class="admonition background-thought">
+<p>I feel this observation in my own life deeply - in my 'troughs' I'm drawn to
+pleasurable things in a very unpleasurable way</p>
+</div>
+<div class="admonition success">
+<p class="admonition-title">page 44</p>
+<p>Never forget that when we are dealing with any pleasure in its healthy and
+normal and satisfying form, we are, in a sense, on the Enemy's ground.</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">jargon not wisdom</p>
+<p>Of course there is no conceivable way of getting by reason from the
+proposition 'I am losing interest in this' to the proposition 'This is
+false'/ But, as I said before, it is jargon, not reason, you must rely on.</p>
+</div>
+<h2 id="chapter-10">Chapter 10<a alt="id" class="heading-permalink" href="#chapter-10" title="link to #chapter-10"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>page 49. "Did he commit himself deeply? I don't mean the words. There is a
+subtle play of looks and tons and laughs by which a mortal can imply that he is
+of the same party as those to whom he is speaking"</p>
+<div class="admonition background-thought">
+<p>I resonate with the temptation Scretape is basically instructing Wormwood to
+employ - two-facedness/double-life. In hs/college in particular I would 'play
+the part' to fit in to a particular crowd. I'd rarely confess Christianity
+early on, would never deny it explicitly, but would act and talk in a
+way/about things to imply that I was not necessarily non-Christian, but
+instead nothing to ask about.</p>
+<p>Chapter 10 in overall convicting as it just drives home the point I noted
+just now.... that I'm very prone to 'acting' in order to fit into a community</p>
+</div>
+<h2 id="chatper-11">Chatper 11<a alt="id" class="heading-permalink" href="#chatper-11" title="link to #chatper-11"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>page 55. "The real use of Joke or Humour is in quite a different direction, and
+it is specially promising among the English who take their 'sense of humour' so
+seriously that a deficiency in this sense is almost the only deficiency at
+which they feel shame. Humour is for them the all-consoling and (mark this) the
+all-excusing, grace of life"</p>
+<div class="admonition danger">
+<p class="admonition-title">all-excusing grace of life</p>
+<p>Humour is for them the all-consoling and (mark this) the all-excusing,
+grace of life</p>
+</div>
+<div class="admonition background-thought">
+<p>Basically I understand Lewis to be saying here that men (or the English in
+particular) take great pride in having a sense of humor - so much so that
+humor becomes an excuse to laugh at anything. When anything is worth laughing
+at, then I think it's very hard to prioritize things above others - becuase
+if everything is a joke, is anything really worthy of more than a joke?</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Flippancy</p>
+<p>I didn't understand flippancy as first because I've always kind of equated
+it with "quick". However, it's more of a "quickness" paired with a total
+lack of respect/awareness for/of X.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">churches</p>
+<p>Are there areas in the church where we are flippant (specifically with humor I guess?)</p>
+</div>
+<h2 id="chapter-12">Chapter 12<a alt="id" class="heading-permalink" href="#chapter-12" title="link to #chapter-12"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition danger">
+<p class="admonition-title">page 57-58</p>
+<p>As long as he retains externally the habits of a Christian he can still be
+made to think of himself as one who has adopted a few new friends and
+amusements but whose spiritual state is much the same as it was six weeks
+ago.</p>
+</div>
+<p>page 58. [The dim uneasiness about <code>backsliding</code> Screwtape describes in the
+chapter] increases the patient's reluctance to think about the Enemy.</p>
+<div class="admonition background-thought">
+<p>This is too real for me - in seasons of rebellion, and honestly anytime I
+fall away from "Christian habits" I notice that I am actually reluctant to
+pray or meditate. Often the only thing that (or the initial thing in
+appearance) that brings me back is my kids and praying with them or singing
+Doxology. A choice I wouldnt' make alone, but make for their sake - perhaps
+this is God's grace poured out on me</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">page 58</p>
+<p>They hate every idea that suggests Him, just as men in financial
+embarrassment hate the very sight of a pass-book.</p>
+</div>
+<h2 id="chapter-13">Chapter 13<a alt="id" class="heading-permalink" href="#chapter-13" title="link to #chapter-13"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Particularly a challenging chapter. It's interesting to think about pleasurable
+things, for their own sake and not enjoyed outside the boundaires set for
+pleasure by God, are harmful to our enemy's tactics. I do not know if I enjoy
+things for their own sake enough or rightly....</p>
+<div class="admonition warning">
+<p>Do my tech hobbies make me more human or less by distracting me from holier
+things...</p>
+</div>
+<h2 id="chapter-14">Chapter 14<a alt="id" class="heading-permalink" href="#chapter-14" title="link to #chapter-14"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">page 69</p>
+<p>All virtues are less formidable to us once the man is aware that he has
+them, but this is specially true of humility.</p>
+</div>
+<h2 id="chapter-16">Chapter 16<a alt="id" class="heading-permalink" href="#chapter-16" title="link to #chapter-16"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition note">
+<p class="admonition-title">page 81</p>
+<p>In the first place the parochial organisation [Church] should always be
+attacked, because, being a <em>unity of place and not of likings</em>, it brings
+people of different classes and psychology together in the kind of unity
+the Enemy desires</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">page 82-83</p>
+<p>In order to spare the laity all 'difficulties' he has deserted both the
+lectionary and the appointed psalms and now, without noticing it, revoles
+endlessly round the little treadmill of his fifteen favourite psalms and
+twenty favorite lessons.</p>
+</div>
+<h2 id="chapter-17">Chapter 17<a alt="id" class="heading-permalink" href="#chapter-17" title="link to #chapter-17"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition background-thought">
+<p>Gluttony of Delicacy, not gluttony of Excess</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">page 88</p>
+<p>You see? Because what she wants is smaller and less costly than what has
+been set before her, she never recognises as gluttony her determination to
+get what she wants, however troublesome it may be to others</p>
+</div>
+<h2 id="chapter-18">Chapter 18<a alt="id" class="heading-permalink" href="#chapter-18" title="link to #chapter-18"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Screwtape's lack of understanding,and arrogant questioning, of the Enemy's
+<em>love</em> is a hilarious commentary on humans who stand staunchly opposed to
+Yahweh. Academic peers of mine, with such amazing pride, speaking aginst the
+Biblical narrative because <em>it doesn't make sense</em>... Lewis makes a good point
+through Screwtape "Members of His faction have frequently admitted that if ever
+we [demons] came to understand what He means by love, the war would be over and
+we should re-enter Heaven". I think Lewis' point dovetails with the idea that
+Jesus is actually very compelling and the rubbish about him being offensive is
+a replay of the Gospels - where the rich and elite are the ones offended, not
+the people he calls to the kingdom. Jesus' love doesn't make sense to those who
+have everything they think they need... His love is for those who know they are
+lowly</p>
+<h2 id="chapter-19">Chapter 19<a alt="id" class="heading-permalink" href="#chapter-19" title="link to #chapter-19"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chapter-20">Chapter 20<a alt="id" class="heading-permalink" href="#chapter-20" title="link to #chapter-20"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chapter-21">Chapter 21<a alt="id" class="heading-permalink" href="#chapter-21" title="link to #chapter-21"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chatper-22">Chatper 22<a alt="id" class="heading-permalink" href="#chatper-22" title="link to #chatper-22"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chatper-23">Chatper 23<a alt="id" class="heading-permalink" href="#chatper-23" title="link to #chatper-23"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chatper-24">Chatper 24<a alt="id" class="heading-permalink" href="#chatper-24" title="link to #chatper-24"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>page 130 - It's always the novice who exaggerates...</p>
+<div class="admonition background-thought">
+<p>I think about Summit in particular, where I got to meet a lot of big names in
+apologetics, and I'd talk about them to others like we were friends... The
+difference between "I know X" and "X knows me" is a thing I kept hidden so I
+could feel important</p>
+</div>
+<h2 id="chatper-25">Chatper 25<a alt="id" class="heading-permalink" href="#chatper-25" title="link to #chatper-25"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition danger">
+<p class="admonition-title">Christianity And...</p>
+<p>What we want, if men becomes Christians at all, is to koeep them in the
+state of mind I call 'Christianity And'. You know - Christianity and the
+Crisis,Christianity and the New Order, ...</p>
+</div>
+<div class="admonition background-thought">
+<p>I don't know... smells more and more like Christian Nationalism is the
+modern-day <code>Christinaity And</code>... So much focus on policy, behavior, order
+(patriarchy even).... Not a lot about Jesus <em>in the conversation about
+Christian Nationalism</em> (not that Christians in this mindset don't genuinely
+love Jesus or talk about him - but I don't hear Jesus often in the
+conversation, I only hear the politics). But I suppose to be fair there's
+every chance in the world that I misunderstand the position and people.</p>
+</div>
+<div class="admonition danger">
+<p>But if I do misunderstand... A fairly educated, theologically competent,
+Biblically literate person... then what do Christian Nationalists expect of
+people who never heard of Jesus, or already were introduced to Republican
+Jesus or something... I'm not the cream of the crop, but if I don't
+properly understand what the position is about then the world, unbelievers
+I mean, will be even more turned off to the Gospel</p>
+</div>
+<p>Page 139 - "We have trained them to think of the Future as a promised land
+which favoured heroes attain - not as something which everyone reaches at the
+rate of sixety minutes an hour, whatever he does, whoever he is..."</p>
+<h2 id="chatper-26">Chatper 26<a alt="id" class="heading-permalink" href="#chatper-26" title="link to #chatper-26"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="admonition danger">
+<p class="admonition-title"><em>Unselfishness</em></p>
+<p>Note, once again, the admirable work of our Philological Arm in
+substituting the negative unselfishness for the Enemy's positive Charity</p>
+</div>
+<blockquote>
+<p>Big one for me... hard to even process</p>
+</blockquote>
+<div class="admonition warning">
+<p class="admonition-title">page 143</p>
+<p>In discussing any joint action, it becomes obligatory thta A should argue
+in favour of B's supposed wishes and against his own, while B does the
+opposite</p>
+</div>
+<div class="admonition background-thought">
+<p>Going out to eat, what to do tonight, etc... simple things, not big ones
+(like how to discipline our kids), is where this is just rampant in my
+life... I constantly and consciously say in my head "X will make my wife
+happier even though I don't want to" then after whatever "X" is, turns out
+she didn't really care or want it <em>OR</em> she's upset because she feels like a
+nuisance to me... Then the reality is I don't actually know if I saw her as a
+nuisance in that moment, or if I genuinely wanted to do what she wanted out
+of love and charity...</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">page 144</p>
+<p>He insists on doing 'what the others want'. They insist on doing what he
+wants. Passions are roused. Soon someone is saying 'Very well then, I won't
+have any tea at all!', and a real quarrel ensues with bitter resentment on
+both sides.</p>
+</div>
+<blockquote>
+<p>Happens all the freaking time, and at the end of it I'm left with "wtf just happened?"</p>
+</blockquote>
+<h2 id="chatper-27">Chatper 27<a alt="id" class="heading-permalink" href="#chatper-27" title="link to #chatper-27"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<blockquote>
+<p>TODO: Go through and make notes</p>
+</blockquote>
+<h2 id="chatper-28">Chatper 28<a alt="id" class="heading-permalink" href="#chatper-28" title="link to #chatper-28"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<div class="prevnext">
+<style type="text/css">
+
+    :root {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+<a class="prev" href="/benchmark-your-disks-with-fio">
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"> </path>
+</svg>
+<div class="prevnext-text">
+<p class="prevnext-subtitle">prev</p>
+<p class="prevnext-title">Benchmark your disks with fio</p>
+</div>
+</a>
+<a class="next" href="/paperless-ngx-filtering-on-ids-instead-of-values">
+<div class="prevnext-text">
+<p class="prevnext-subtitle">next</p>
+<p class="prevnext-title">Paperless-NGX filtering on IDs instead of values</p>
+</div>
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</a>
+</div></main>
+</body>
+</html>
