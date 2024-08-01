@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta content="HTML Tidy for HTML5 for Linux version 5.2.0" name="generator"/>
+<title>Sabbath</title>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&amp;display=swap" rel="stylesheet"/>
+<script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+
+    function detectColorSchemeOnLoad() {
+      if (localStorage.getItem("theme")) {
+        if (localStorage.getItem("theme") == "dark") {
+          setTheme("dark");
+        } else if (localStorage.getItem("theme") == "light") {
+          setTheme("light");
+        }
+      } else if (!window.matchMedia) {
+        setTheme("light");
+        return false;
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setTheme("dark");
+      } else {
+        setTheme("light");
+      }
+    }
+    detectColorSchemeOnLoad();
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const toggleSwitch = document.querySelector(
+          '#theme-switch input[type="checkbox"]',
+        );
+        function switchTheme(e) {
+          if (e.target.checked) {
+            localStorage.setItem("theme", "dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+            toggleSwitch.checked = true;
+          } else {
+            localStorage.setItem("theme", "light");
+            document.documentElement.setAttribute("data-theme", "light");
+            toggleSwitch.checked = false;
+          }
+        }
+        toggleSwitch.addEventListener("change", switchTheme, false);
+        if (document.documentElement.getAttribute("data-theme") == "dark") {
+          toggleSwitch.checked = true;
+        }
+      },
+      false,
+    );
+  </script>
+<style>
+    :root {
+      --color-bg: #f5f5f5;
+      /* Light gray background color */
+      --color-bg-code: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      /* Dark text color */
+      --color-link: #007acc;
+      /* Standard link color */
+      --color-accent: #4caf50;
+      /* Green accent color */
+      --overlay-brightness: 0.9;
+      /* Slightly brighter overlay */
+      --body-width: 800px;
+      --base-font-size: 16px;
+      /* Base font size */
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #1f2022;
+      /* Dark background color */
+      --color-bg-code: #1f2022;
+      --color-bg-secondary: #21252d;
+      /* Slightly darker background for code */
+      --color-text: #c0e5c0;
+      /* Light text color */
+      --color-link: #64a1dd;
+      /* Light link color */
+      --color-accent: #b7e3b7;
+      --overlay-brightness: 0.85;
+      --body-width: 800px;
+    }
+
+    [data-theme="light"] {
+      --color-bg: #ffffff;
+      /* White background color */
+      --color-bg-code: #f5f5f5;
+      /* Light gray background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      --color-link: #007acc;
+      --color-accent: #4caf50;
+      --overlay-brightness: 0.95;
+      /* Slightly brighter overlay for light theme */
+    }
+
+    html {
+      font-family: "Nunito", monospace;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--base-font-size);
+    }
+
+    a {
+      color: var(--color-link);
+    }
+
+    body {
+      background: rgba(14, 28 34 0.7);
+      display: flex;
+      flex-direction: column;
+      font-size: var(--base-font-size);
+      justify-content: space-between;
+      line-height: 1.6;
+      /* Adjusted line height for better readability */
+      margin: 5rem auto;
+      max-width: var(--body-width);
+      min-height: 100vh;
+      padding: 0 0.5rem;
+    }
+
+    /* Add these styles for admonitions */
+    .admonition {
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      width: 80%;
+      /* Set the fixed width to 80% of the viewport width */
+      max-width: 600px;
+      /* Set a maximum width if needed */
+    }
+
+    .admonition-title {
+      font-size: 1.2rem;
+    }
+
+    .admonition.scripture,
+    .admonition.index-welcome,
+    .admonition.background-thought {
+      padding: 0.5rem;
+      border-left: 3px solid #555;
+      opacity: 0.8;
+    }
+
+    .admonition.background-thought .admonition-title {
+      background-color: var(--color-bg);
+      padding: 0.3rem;
+      border-bottom: none;
+      font-size: 1.2rem;
+    }
+
+    .admonition.background-thought p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .admonition.scripture {
+      background-color: #ffffff0a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.index-welcome {
+      background-color: #1f2022;
+      color: #64a1dd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.note {
+      color: #fff;
+      background-color: #32506b;
+      border: 1px solid #27405a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.warning {
+      color: #333;
+      background-color: #f5c266;
+      border: 1px solid #e3aa40;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.danger {
+      color: #fff;
+      background-color: #d05a4e;
+      border: 1px solid #b94036;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.success {
+      color: #333;
+      background-color: #6fbf8e;
+      border: 1px solid #5fa27a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      background: var(--color-bg-secondary);
+      padding: 1rem 0;
+      /* align-items: flex-end; Remove or comment out this line */
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    nav ul li {
+      margin: 0 0.4rem;
+    }
+
+    nav ul li a {
+      text-align: center;
+      color: gainsboro;
+      text-decoration: none;
+      padding: 0.5rem !important;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      align-items: flex-end;
+      font-size: 1rem;
+      /* Adjusted font size for navigation links */
+    }
+
+    nav ul li a:focus-visible,
+    nav ul li:hover a {
+      color: #3d9e9e;
+    }
+
+    ul.archive-tags {
+      display: flex;
+      justify-content: center;
+      list-style-type: none;
+      color: gainsboro;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    ul.archive-tags li {
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li a {
+      display: block;
+      text-decoration: none;
+      color: #fafafa;
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li:hover a,
+    ul.archive-tags li a:focus-visible {
+      color: #3d9e9e;
+    }
+
+    table {
+      margin: 0px auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: block;
+      max-width: -moz-fit-content;
+      max-width: fit-content;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 1rem;
+      /* Adjusted font size for tables */
+    }
+
+    table thead th {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      text-align: left;
+      font-size: 1rem;
+      /* Adjusted font size for table header */
+    }
+
+    table tbody td {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      font-size: 1rem;
+      /* Adjusted font size for table cells */
+    }
+
+    tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #of1413;
+    }
+
+    .theme-switch {
+      z-index: 10;
+      display: inline-block;
+      height: 34px;
+      position: relative;
+      width: 60px;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 1rem;
+      margin-left: auto;
+      position: fixed;
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .theme-switch input {
+      display: none;
+    }
+
+    .slider {
+      background-color: #ccc;
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      background-color: #fff;
+      bottom: 4px;
+      content: "";
+      height: 26px;
+      left: 4px;
+      position: absolute;
+      transition: 0.4s;
+      width: 26px;
+    }
+
+    input:checked+.slider {
+      background-color: #343434;
+    }
+
+    input:checked+.slider:before {
+      background-color: #848484;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    img {
+      max-width: 1080px;
+      max-height: 500px;
+      margin: 0 auto;
+    }
+
+    .title {
+      background: var(--color-bg-secondary);
+      margin-bottom: 0rem;
+      margin-top: 0rem;
+      text-align: center;
+      font-size: 2rem;
+      /* Adjusted font size for title */
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg-secondary);
+      margin: 0 calc((100% - var(--body-width)) / 10);
+      /* Adjust the factor (1/5) as needed */
+    }
+
+    .prevnext {
+      justify-self: flex-end;
+      flex: 1;
+    }
+
+    .prev,
+    .next {
+      align-self: flex-end;
+    }
+
+    .heading-permalink {
+      color: rgba(0, 0, 0, 0);
+      font-size: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #5651b7;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #392e3d;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #5651b7;
+      border-radius: 0.25rem;
+      background: rgb(112, 107, 208);
+      background: linear-gradient(180deg,
+          rgba(112, 107, 208, 1) 0%,
+          rgba(86, 81, 183, 1) 100%);
+      border: 1px solid rgba(86, 81, 183, 0.5);
+    }
+
+    blockquote {
+      font-family: "Courier New", Courier, monospace;
+      /* Use a monospace font for a code-like appearance */
+      font-size: 1.2rem;
+      color: var(--color-link);
+      border-left: 5px solid var(--color-accent);
+      padding-left: 1.5rem;
+      /* Increased padding for better indentation */
+      margin: 1rem;
+      background: var(--color-bg);
+      filter: brightness(var(--overlay-brightness));
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    /* Style for regular code blocks */
+    pre {
+      background-color: #2d2d2d;
+      /* Change this to your preferred background color */
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 1rem;
+    }
+
+    /* Style for code blocks within p tags */
+    p code {
+      background-color: #363636;
+      /* Change this to your preferred background color */
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 0.9rem;
+      /* Adjust the font size as needed */
+    }
+
+    /* Optional: Apply different colors to different token types */
+    p code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Add additional token type styling as needed */
+
+    /* Style line numbers (optional) */
+    .line-numbers {
+      color: #848484;
+      /* Change the line number color */
+    }
+
+    /* Style the language label (optional) */
+    .language-label {
+      background-color: #1f2022;
+      /* Change the background color */
+      color: #64a1dd;
+      /* Change the text color */
+      padding: 0.2rem 0.5rem;
+      /* Add padding for better aesthetics */
+      font-size: 0.8rem;
+      /* Adjust the font size as needed */
+      border-radius: 0.3rem;
+      /* Add rounded corners */
+    }
+
+    /* Add a color scheme for syntax-like highlighting */
+    code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Apply different colors to different token types */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #5c6370;
+    }
+
+    .token.punctuation {
+      color: #abb2bf;
+    }
+
+    .token.namespace {
+      opacity: 0.7;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #e06c75;
+    }
+
+    .token.boolean,
+    .token.number {
+      color: #d19a66;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #98c379;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #56b6c2;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #c678dd;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #61afef;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #c678dd;
+    }
+
+    .token.important,
+    .token.bold {
+      font-weight: bold;
+    }
+
+    .token.italic {
+      font-style: italic;
+    }
+
+    .token.entity {
+      cursor: help;
+    }
+  </style>
+<link href="/manifest.json" rel="manifest"/></head>
+<body>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/tech/">Tech Archive</a></li>
+<li><a href="/faith/">Faith Archive</a></li>
+</ul>
+</nav>
+<div>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"></div>
+</label>
+</div>
+<section class="title">
+<h1 id="title">Sabbath</h1>
+</section>
+<main><p><a href="https://bibleproject.com/bible-studies/sabbath/">Link to study</a></p>
+<h1 id="creation">Creation<a alt="id" class="heading-permalink" href="#creation" title="link to #creation"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Brougt to completion on the seventh day in Genesis 1. It is the only day that
+does not end with 'there evening and there was morning, the Nth day'</p>
+<p>Humans were meant to rest with God in his creation forever, but in their
+rebllion they are sentenced to work as slaves to the land. The rest of the
+hsitory of God's people consists of them looking for God's rest, but
+consistently falling back into slavery/(fallen) work.</p>
+<h2 id="sabbath">Sabbath<a alt="id" class="heading-permalink" href="#sabbath" title="link to #sabbath"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Celebated every week on the 7th day. The idea is to live in the eternal rest that God offered in creation.</p>
+<h2 id="jubilee">Jubilee<a alt="id" class="heading-permalink" href="#jubilee" title="link to #jubilee"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Every 7 * 7 years is the Ultimate Sabbath - the land is reset (or was supposed
+to be), everything was returned to the original owner, debt does not persist -
+everything resets so everyone can rest.</p>
+<h1 id="jesus">Jesus<a alt="id" class="heading-permalink" href="#jesus" title="link to #jesus"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Jesus calls himself the Lord of the Sabbath. He claimed to bring the ultimate
+rest of God. Jesus was crucified at a specific time - on Good Friday, and he
+rose again on the following Sunday... which is the first day of the next week
+<em>or</em> the 8th day... the first day of a new age, a new rest, God's ultimate
+sabbath that is symbolized in the 7th day of creation.</p>
+<h1 id="questions">Questions<a alt="id" class="heading-permalink" href="#questions" title="link to #questions"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<div class="admonition note">
+<p class="admonition-title">1</p>
+<p>How does the author of Genesis conclude each of the seven days of creation?
+Consider the seventh day of creation as an ultimate rest day. What do you
+think it would be like to always live in that rest with God?</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Genesis 1:5,8,13,19,23,31; 2:1-3 5</p>
+<p>5God called the light day, and the darkness He called night. And there was
+evening and there was morning, one day.</p>
+<p>8God called the expanse heaven. And there was evening and there was
+morning, a second day.</p>
+<p>13There was evening and there was morning, a third day.</p>
+<p>19There was evening and there was morning, a fourth day.</p>
+<p>23There was evening and there was morning, a fifth day.</p>
+<p>31God saw all that He had made, and behold, it was very good. And there was
+evening and there was morning, the sixth day.</p>
+<p>The Creation of Man and Woman</p>
+<p>1Thus the heavens and the earth were completed, and all their hosts. 2By
+the seventh day God completed His work which He had done, and He rested on
+the seventh day from all His work which He had done. 3Then God blessed the
+seventh day and sanctified it, because in it He rested from all His work
+which God had created and made.</p>
+</div>
+<p>I imagine it would've looked a lot like enjoying the creation... I work at
+things I love, and that can be restful to me - I find purpose and order in my
+hobbies and so I bet life would be like that. The work woudl be productive but
+not toilsome.</p>
+<div class="admonition note">
+<p class="admonition-title">2</p>
+<p>Read Genesis 3:1-7 and 3:21-24 What were the humans tempted to believe
+about God and themselves? How did they act on these beliefs, and how did
+this choice exile them from the place of rest? How do you think lies about
+God and ourselves prevent us from resting with God today?</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Genesis 3:1-7,21-24</p>
+<p>The Fall of Man</p>
+<p>1Now the serpent was more crafty than any beast of the field which the Lord
+God had made. And he said to the woman, “Indeed, has God said, ‘You shall
+not eat from any tree of the garden’?” 2The woman said to the serpent,
+“From the fruit of the trees of the garden we may eat; 3but from the fruit
+of the tree which is in the middle of the garden, God has said, ‘You shall
+not eat from it or touch it, or you will die.’ ” 4The serpent said to the
+woman, “You surely will not die! 5For God knows that in the day you eat
+from it your eyes will be opened, and you will be like God, knowing good
+and evil.” 6When the woman saw that the tree was good for food, and that it
+was a delight to the eyes, and that the tree was desirable to make one
+wise, she took from its fruit and ate; and she gave also to her husband
+with her, and he ate. 7Then the eyes of both of them were opened, and they
+knew that they were naked; and they sewed fig leaves together and made
+themselves loin coverings. </p>
+<p>21The Lord God made garments of skin for Adam
+and his wife, and clothed them. 22Then the Lord God said, “Behold, the man
+has become like one of Us, knowing good and evil; and now, he might stretch
+out his hand, and take also from the tree of life, and eat, and live
+forever”— 23therefore the Lord God sent him out from the garden of Eden, to
+cultivate the ground from which he was taken. 24So He drove the man out;
+and at the east of the garden of Eden He stationed the cherubim and the
+flaming sword which turned every direction to guard the way to the tree of
+life.</p>
+</div>
+<p>Humans are templted to believe that God is witholding desirableble information
+they are templted to <em>be like God</em>. They are templted to believe that they
+would be right to knowing good and evil (ironic since they know it's bad to eat
+of the Tree of Knowledge anyways)</p>
+<p>They acted by listening to the serpent, and to themselves... essentially they
+chose to not listen and adhere to Yahweh. This choice represents stark and
+obvious rebellion. Yahweh, I think, sees that his creation are tempted to go
+their own way, and for their own protection exiles them from the Garden.</p>
+<p>It seems like lies haven't changed; ultimately we are still tempted to define
+good and evil/bad for ourselves. I take action by defining wicked things as
+good - made obvious by the fact that I choose to sin often, choose to not
+listen to Yahweh. Actively listening to myself is exhausting. I think there's a
+lot to discussing "God's rest", but a high and almost trivial level, I am
+simply less tired when my life is more in step with God's definitions of good
+and bad</p>
+<div class="admonition note">
+<p class="admonition-title">3</p>
+<p>God wants to restore humanity to ultimate rest, so he chooses the
+Israelites to reenact his seventh-day rest so they can share it with
+others. Of all the ways he invites them to practice rest which practice are
+you least familiar with today?</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Exodus 20:8-11</p>
+<p>8“Remember the sabbath day, to keep it holy. 9Six days you shall labor and
+do all your work, 10but the seventh day is a sabbath of the Lord your God;
+in it you shall not do any work, you or your son or your daughter, your
+male or your female servant or your cattle or your sojourner who stays with
+you. 11For in six days the Lord made the heavens and the earth, the sea and
+all that is in them, and rested on the seventh day; therefore the Lord
+blessed the sabbath day and made it holy.</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Leviticus 23:1-3; 25:8-13</p>
+<p>Laws of Religious Festivals</p>
+<p>1The Lord spoke again to Moses, saying, 2“Speak to the sons of Israel and
+say to them, ‘The Lord’s appointed times which you shall proclaim as holy
+convocations—My appointed times are these:</p>
+<p>3‘For six days work may be done, but on the seventh day there is a sabbath
+of complete rest, a holy convocation. You shall not do any work; it is a
+sabbath to the Lord in all your dwellings.</p>
+<p>8‘You are also to count off seven sabbaths of years for yourself, seven
+times seven years, so that you have the time of the seven sabbaths of
+years, namely, forty-nine years. 9You shall then sound a ram’s horn abroad
+on the tenth day of the seventh month; on the day of atonement you shall
+sound a horn all through your land. 10You shall thus consecrate the
+fiftieth year and proclaim a release through the land to all its
+inhabitants. It shall be a jubilee for you, and each of you shall return to
+his own property, and each of you shall return to his family. 11You shall
+have the fiftieth year as a jubilee; you shall not sow, nor reap its
+aftergrowth, nor gather in from its untrimmed vines. 12For it is a jubilee;
+it shall be holy to you. You shall eat its crops out of the field.</p>
+<p>13‘On this year of jubilee each of you shall return to his own property.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">4</p>
+<p>Jesus comes to restore us to God’s eternal rest! How does Jesus launch his
+public ministry? Read Luke 4:14-21, noting that the year of favor refers to
+the ultimate Jubilee—Israel’s super-charged Sabbath </p>
+<p>What do you observe?</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Luke 4:14-21</p>
+<p>Jesus’ Public Ministry</p>
+<p>14And Jesus returned to Galilee in the power of the Spirit, and news about
+Him spread through all the surrounding district. 15And He began teaching in
+their synagogues and was praised by all.</p>
+<p>16And He came to Nazareth, where He had been brought up; and as was His
+custom, He entered the synagogue on the Sabbath, and stood up to read.
+17And the book of the prophet Isaiah was handed to Him. And He opened the
+book and found the place where it was written,</p>
+<p>18“The Spirit of the Lord is upon Me,</p>
+<p>Because He anointed Me to preach the gospel to the poor.</p>
+<p>He has sent Me to proclaim release to the captives,</p>
+<p>And recovery of sight to the blind,</p>
+<p>To set free those who are oppressed,</p>
+<p>19To proclaim the favorable year of the Lord.”</p>
+<p>20And He closed the book, gave it back to the attendant and sat down; and
+the eyes of all in the synagogue were fixed on Him. 21And He began to say
+to them, “Today this Scripture has been fulfilled in your hearing.”</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Leviticus 25</p>
+<p>The Sabbatic Year and Year of Jubilee</p>
+<p>1The Lord then spoke to Moses at Mount Sinai, saying, 2“Speak to the sons
+of Israel and say to them, ‘When you come into the land which I shall give
+you, then the land shall have a sabbath to the Lord. 3Six years you shall
+sow your field, and six years you shall prune your vineyard and gather in
+its crop, 4but during the seventh year the land shall have a sabbath rest,
+a sabbath to the Lord; you shall not sow your field nor prune your
+vineyard. 5Your harvest’s aftergrowth you shall not reap, and your grapes
+of untrimmed vines you shall not gather; the land shall have a sabbatical
+year. 6All of you shall have the sabbath products of the land for food;
+yourself, and your male and female slaves, and your hired man and your
+foreign resident, those who live as aliens with you. 7Even your cattle and
+the animals that are in your land shall have all its crops to eat.</p>
+<p>8‘You are also to count off seven sabbaths of years for yourself, seven
+times seven years, so that you have the time of the seven sabbaths of
+years, namely, forty-nine years. 9You shall then sound a ram’s horn abroad
+on the tenth day of the seventh month; on the day of atonement you shall
+sound a horn all through your land. 10You shall thus consecrate the
+fiftieth year and proclaim a release through the land to all its
+inhabitants. It shall be a jubilee for you, and each of you shall return to
+his own property, and each of you shall return to his family. 11You shall
+have the fiftieth year as a jubilee; you shall not sow, nor reap its
+aftergrowth, nor gather in from its untrimmed vines. 12For it is a jubilee;
+it shall be holy to you. You shall eat its crops out of the field.</p>
+<p>13‘On this year of jubilee each of you shall return to his own property.
+14If you make a sale, moreover, to your friend or buy from your friend’s
+hand, you shall not wrong one another. 15Corresponding to the number of
+years after the jubilee, you shall buy from your friend; he is to sell to
+you according to the number of years of crops. 16In proportion to the
+extent of the years you shall increase its price, and in proportion to the
+fewness of the years you shall diminish its price, for it is a number of
+crops he is selling to you. 17So you shall not wrong one another, but you
+shall fear your God; for I am the Lord your God.</p>
+<p>18‘You shall thus observe My statutes and keep My judgments, so as to carry
+them out, that you may live securely on the land. 19Then the land will
+yield its produce, so that you can eat your fill and live securely on it.
+20But if you say, “What are we going to eat on the seventh year if we do
+not sow or gather in our crops?” 21then I will so order My blessing for you
+in the sixth year that it will bring forth the crop for three years. 22When
+you are sowing the eighth year, you can still eat old things from the crop,
+eating the old until the ninth year when its crop comes in.</p>
+<p>The Law of Redemption</p>
+<p>23‘The land, moreover, shall not be sold permanently, for the land is Mine;
+for you are but aliens and sojourners with Me. 24Thus for every piece of
+your property, you are to provide for the redemption of the land.</p>
+<p>25‘If a fellow countryman of yours becomes so poor he has to sell part of
+his property, then his nearest kinsman is to come and buy back what his
+relative has sold. 26Or in case a man has no kinsman, but so recovers his
+means as to find sufficient for its redemption, 27then he shall calculate
+the years since its sale and refund the balance to the man to whom he sold
+it, and so return to his property. 28But if he has not found sufficient
+means to get it back for himself, then what he has sold shall remain in the
+hands of its purchaser until the year of jubilee; but at the jubilee it
+shall revert, that he may return to his property.</p>
+<p>29‘Likewise, if a man sells a dwelling house in a walled city, then his
+redemption right remains valid until a full year from its sale; his right
+of redemption lasts a full year. 30But if it is not bought back for him
+within the space of a full year, then the house that is in the walled city
+passes permanently to its purchaser throughout his generations; it does not
+revert in the jubilee. 31The houses of the villages, however, which have no
+surrounding wall shall be considered as open fields; they have redemption
+rights and revert in the jubilee. 32As for cities of the Levites, the
+Levites have a permanent right of redemption for the houses of the cities
+which are their possession. 33What, therefore, belongs to the Levites may
+be redeemed and a house sale in the city of this possession reverts in the
+jubilee, for the houses of the cities of the Levites are their possession
+among the sons of Israel. 34But pasture fields of their cities shall not be
+sold, for that is their perpetual possession.</p>
+<p>Of Poor Countrymen</p>
+<p>35‘Now in case a countryman of yours becomes poor and his means with regard
+to you falter, then you are to sustain him, like a stranger or a sojourner,
+that he may live with you. 36Do not take usurious interest from him, but
+revere your God, that your countryman may live with you. 37You shall not
+give him your silver at interest, nor your food for gain. 38I am the Lord
+your God, who brought you out of the land of Egypt to give you the land of
+Canaan and to be your God.</p>
+<p>39‘If a countryman of yours becomes so poor with regard to you that he
+sells himself to you, you shall not subject him to a slave’s service. 40He
+shall be with you as a hired man, as if he were a sojourner; he shall serve
+with you until the year of jubilee. 41He shall then go out from you, he and
+his sons with him, and shall go back to his family, that he may return to
+the property of his forefathers. 42For they are My servants whom I brought
+out from the land of Egypt; they are not to be sold in a slave sale. 43You
+shall not rule over him with severity, but are to revere your God. 44As for
+your male and female slaves whom you may have—you may acquire male and
+female slaves from the pagan nations that are around you. 45Then, too, it
+is out of the sons of the sojourners who live as aliens among you that you
+may gain acquisition, and out of their families who are with you, whom they
+will have produced in your land; they also may become your possession.
+46You may even bequeath them to your sons after you, to receive as a
+possession; you can use them as permanent slaves. But in respect to your
+countrymen, the sons of Israel, you shall not rule with severity over one
+another.</p>
+<p>Of Redeeming a Poor Man</p>
+<p>47‘Now if the means of a stranger or of a sojourner with you becomes
+sufficient, and a countryman of yours becomes so poor with regard to him as
+to sell himself to a stranger who is sojourning with you, or to the
+descendants of a stranger’s family, 48then he shall have redemption right
+after he has been sold. One of his brothers may redeem him, 49or his uncle,
+or his uncle’s son, may redeem him, or one of his blood relatives from his
+family may redeem him; or if he prospers, he may redeem himself. 50He then
+with his purchaser shall calculate from the year when he sold himself to
+him up to the year of jubilee; and the price of his sale shall correspond
+to the number of years. It is like the days of a hired man that he shall be
+with him. 51If there are still many years, he shall refund part of his
+purchase price in proportion to them for his own redemption; 52and if few
+years remain until the year of jubilee, he shall so calculate with him. In
+proportion to his years he is to refund the amount for his redemption.
+53Like a man hired year by year he shall be with him; he shall not rule
+over him with severity in your sight. 54Even if he is not redeemed by these
+means, he shall still go out in the year of jubilee, he and his sons with
+him. 55For the sons of Israel are My servants; they are My servants whom I
+brought out from the land of Egypt. I am the Lord your God.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">5</p>
+<p>What is one specific way Jesus invites us to receive and practice true rest</p>
+</div>
+<div class="admonition scripture">
+<p class="admonition-title">Matthew 11:28-29</p>
+<p>28“Come to Me, all who are weary and heavy-laden, and I will give you rest.
+29Take My yoke upon you and learn from Me, for I am gentle and humble in
+heart, and you will find rest for your souls.</p>
+</div>
+<div class="prevnext">
+<style type="text/css">
+
+    :root {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+<a class="prev" href="/use-the-right-lspsage-you-dope">
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"> </path>
+</svg>
+<div class="prevnext-text">
+<p class="prevnext-subtitle">prev</p>
+<p class="prevnext-title">Use the right lspsage, you dope!</p>
+</div>
+</a>
+<a class="next" href="/dont-forget-to-load-xmp">
+<div class="prevnext-text">
+<p class="prevnext-subtitle">next</p>
+<p class="prevnext-title">Don't forget to load XMP!</p>
+</div>
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</a>
+</div></main>
+</body>
+</html>
