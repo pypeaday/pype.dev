@@ -1,7 +1,7 @@
 ---
 date: 2024-10-12 05:40:11
 templateKey: blog-post
-title: Reflection: Wisdom in Relationships
+title: Reflection - Wisdom in Relationships
 published: True
 tags:
     - bible-project
