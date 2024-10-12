@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta content="HTML Tidy for HTML5 for Linux version 5.2.0" name="generator"/>
+<title>Dataframe-To-Markdown</title>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&amp;display=swap" rel="stylesheet"/>
+<script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+
+    function detectColorSchemeOnLoad() {
+      if (localStorage.getItem("theme")) {
+        if (localStorage.getItem("theme") == "dark") {
+          setTheme("dark");
+        } else if (localStorage.getItem("theme") == "light") {
+          setTheme("light");
+        }
+      } else if (!window.matchMedia) {
+        setTheme("light");
+        return false;
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setTheme("dark");
+      } else {
+        setTheme("light");
+      }
+    }
+    detectColorSchemeOnLoad();
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const toggleSwitch = document.querySelector(
+          '#theme-switch input[type="checkbox"]',
+        );
+        function switchTheme(e) {
+          if (e.target.checked) {
+            localStorage.setItem("theme", "dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+            toggleSwitch.checked = true;
+          } else {
+            localStorage.setItem("theme", "light");
+            document.documentElement.setAttribute("data-theme", "light");
+            toggleSwitch.checked = false;
+          }
+        }
+        toggleSwitch.addEventListener("change", switchTheme, false);
+        if (document.documentElement.getAttribute("data-theme") == "dark") {
+          toggleSwitch.checked = true;
+        }
+      },
+      false,
+    );
+  </script>
+<style>
+    :root {
+      --color-bg: #f5f5f5;
+      /* Light gray background color */
+      --color-bg-code: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      /* Dark text color */
+      --color-link: #007acc;
+      /* Standard link color */
+      --color-accent: #4caf50;
+      /* Green accent color */
+      --overlay-brightness: 0.9;
+      /* Slightly brighter overlay */
+      --body-width: 800px;
+      --base-font-size: 16px;
+      /* Base font size */
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #1f2022;
+      /* Dark background color */
+      --color-bg-code: #1f2022;
+      --color-bg-secondary: #21252d;
+      /* Slightly darker background for code */
+      --color-text: #c0e5c0;
+      /* Light text color */
+      --color-link: #64a1dd;
+      /* Light link color */
+      --color-accent: #b7e3b7;
+      --overlay-brightness: 0.85;
+      --body-width: 800px;
+    }
+
+    [data-theme="light"] {
+      --color-bg: #ffffff;
+      /* White background color */
+      --color-bg-code: #f5f5f5;
+      /* Light gray background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      --color-link: #007acc;
+      --color-accent: #4caf50;
+      --overlay-brightness: 0.95;
+      /* Slightly brighter overlay for light theme */
+    }
+
+    html {
+      font-family: "Nunito", monospace;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--base-font-size);
+    }
+
+    a {
+      color: var(--color-link);
+    }
+
+    body {
+      background: rgba(14, 28 34 0.7);
+      display: flex;
+      flex-direction: column;
+      font-size: var(--base-font-size);
+      justify-content: space-between;
+      line-height: 1.6;
+      /* Adjusted line height for better readability */
+      margin: 5rem auto;
+      max-width: var(--body-width);
+      min-height: 100vh;
+      padding: 0 0.5rem;
+    }
+
+    /* Add these styles for admonitions */
+    .admonition {
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      width: 80%;
+      /* Set the fixed width to 80% of the viewport width */
+      max-width: 600px;
+      /* Set a maximum width if needed */
+    }
+
+    .admonition-title {
+      font-size: 1.2rem;
+    }
+
+    .admonition.scripture,
+    .admonition.index-welcome,
+    .admonition.background-thought {
+      padding: 0.5rem;
+      border-left: 3px solid #555;
+      opacity: 0.8;
+    }
+
+    .admonition.background-thought .admonition-title {
+      background-color: var(--color-bg);
+      padding: 0.3rem;
+      border-bottom: none;
+      font-size: 1.2rem;
+    }
+
+    .admonition.background-thought p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .admonition.scripture {
+      background-color: #ffffff0a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.index-welcome {
+      background-color: #1f2022;
+      color: #64a1dd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.note {
+      color: #fff;
+      background-color: #32506b;
+      border: 1px solid #27405a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.warning {
+      color: #333;
+      background-color: #f5c266;
+      border: 1px solid #e3aa40;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.danger {
+      color: #fff;
+      background-color: #d05a4e;
+      border: 1px solid #b94036;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.success {
+      color: #333;
+      background-color: #6fbf8e;
+      border: 1px solid #5fa27a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      background: var(--color-bg-secondary);
+      padding: 1rem 0;
+      /* align-items: flex-end; Remove or comment out this line */
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    nav ul li {
+      margin: 0 0.4rem;
+    }
+
+    nav ul li a {
+      text-align: center;
+      color: gainsboro;
+      text-decoration: none;
+      padding: 0.5rem !important;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      align-items: flex-end;
+      font-size: 1rem;
+      /* Adjusted font size for navigation links */
+    }
+
+    nav ul li a:focus-visible,
+    nav ul li:hover a {
+      color: #3d9e9e;
+    }
+
+    ul.archive-tags {
+      display: flex;
+      justify-content: center;
+      list-style-type: none;
+      color: gainsboro;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    ul.archive-tags li {
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li a {
+      display: block;
+      text-decoration: none;
+      color: #fafafa;
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li:hover a,
+    ul.archive-tags li a:focus-visible {
+      color: #3d9e9e;
+    }
+
+    table {
+      margin: 0px auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: block;
+      max-width: -moz-fit-content;
+      max-width: fit-content;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 1rem;
+      /* Adjusted font size for tables */
+    }
+
+    table thead th {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      text-align: left;
+      font-size: 1rem;
+      /* Adjusted font size for table header */
+    }
+
+    table tbody td {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      font-size: 1rem;
+      /* Adjusted font size for table cells */
+    }
+
+    tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #of1413;
+    }
+
+    .theme-switch {
+      z-index: 10;
+      display: inline-block;
+      height: 34px;
+      position: relative;
+      width: 60px;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 1rem;
+      margin-left: auto;
+      position: fixed;
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .theme-switch input {
+      display: none;
+    }
+
+    .slider {
+      background-color: #ccc;
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      background-color: #fff;
+      bottom: 4px;
+      content: "";
+      height: 26px;
+      left: 4px;
+      position: absolute;
+      transition: 0.4s;
+      width: 26px;
+    }
+
+    input:checked+.slider {
+      background-color: #343434;
+    }
+
+    input:checked+.slider:before {
+      background-color: #848484;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    img {
+      max-width: 1080px;
+      max-height: 500px;
+      margin: 0 auto;
+    }
+
+    .title {
+      background: var(--color-bg-secondary);
+      margin-bottom: 0rem;
+      margin-top: 0rem;
+      text-align: center;
+      font-size: 2rem;
+      /* Adjusted font size for title */
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg-secondary);
+      margin: 0 calc((100% - var(--body-width)) / 10);
+      /* Adjust the factor (1/5) as needed */
+    }
+
+    .prevnext {
+      justify-self: flex-end;
+      flex: 1;
+    }
+
+    .prev,
+    .next {
+      align-self: flex-end;
+    }
+
+    .heading-permalink {
+      color: rgba(0, 0, 0, 0);
+      font-size: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #5651b7;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #392e3d;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #5651b7;
+      border-radius: 0.25rem;
+      background: rgb(112, 107, 208);
+      background: linear-gradient(180deg,
+          rgba(112, 107, 208, 1) 0%,
+          rgba(86, 81, 183, 1) 100%);
+      border: 1px solid rgba(86, 81, 183, 0.5);
+    }
+
+    blockquote {
+      font-family: "Courier New", Courier, monospace;
+      /* Use a monospace font for a code-like appearance */
+      font-size: 1.2rem;
+      color: var(--color-link);
+      border-left: 5px solid var(--color-accent);
+      padding-left: 1.5rem;
+      /* Increased padding for better indentation */
+      margin: 1rem;
+      background: var(--color-bg);
+      filter: brightness(var(--overlay-brightness));
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    /* Style for regular code blocks */
+    pre {
+      background-color: #2d2d2d;
+      /* Change this to your preferred background color */
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 1rem;
+    }
+
+    /* Style for code blocks within p tags */
+    p code {
+      background-color: #363636;
+      /* Change this to your preferred background color */
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 0.9rem;
+      /* Adjust the font size as needed */
+    }
+
+    /* Optional: Apply different colors to different token types */
+    p code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Add additional token type styling as needed */
+
+    /* Style line numbers (optional) */
+    .line-numbers {
+      color: #848484;
+      /* Change the line number color */
+    }
+
+    /* Style the language label (optional) */
+    .language-label {
+      background-color: #1f2022;
+      /* Change the background color */
+      color: #64a1dd;
+      /* Change the text color */
+      padding: 0.2rem 0.5rem;
+      /* Add padding for better aesthetics */
+      font-size: 0.8rem;
+      /* Adjust the font size as needed */
+      border-radius: 0.3rem;
+      /* Add rounded corners */
+    }
+
+    /* Add a color scheme for syntax-like highlighting */
+    code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Apply different colors to different token types */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #5c6370;
+    }
+
+    .token.punctuation {
+      color: #abb2bf;
+    }
+
+    .token.namespace {
+      opacity: 0.7;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #e06c75;
+    }
+
+    .token.boolean,
+    .token.number {
+      color: #d19a66;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #98c379;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #56b6c2;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #c678dd;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #61afef;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #c678dd;
+    }
+
+    .token.important,
+    .token.bold {
+      font-weight: bold;
+    }
+
+    .token.italic {
+      font-style: italic;
+    }
+
+    .token.entity {
+      cursor: help;
+    }
+  </style>
+<link href="/manifest.json" rel="manifest"/></head>
+<body>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/tech/">Tech Archive</a></li>
+<li><a href="/faith/">Faith Archive</a></li>
+</ul>
+</nav>
+<div>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"></div>
+</label>
+</div>
+<section class="title">
+<h1 id="title">Dataframe-To-Markdown</h1>
+</section>
+<main><h1 id="pandas">Pandas<a alt="id" class="heading-permalink" href="#pandas" title="link to #pandas"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p><code>pandas.DataFrame</code>s are pretty sweet data structures in Python.</p>
+<p>I do a lot of work with tabular data and one thing I have incorporated into some of that work is automatic data summary reports by throwing the first few, or several relevant, rows of a dataframe at a point in a pipeline into a markdown file.</p>
+<p>Pandas has a method on DataFrames that makes this 100% trivial!</p>
+<h1 id="the-method">The Method<a alt="id" class="heading-permalink" href="#the-method" title="link to #the-method"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Say we have a dataframe, <code>df</code>... then it's literally just: <code>df.to_markdown()</code></p>
+<div class="highlight"><pre><span></span><code><span class="err">❯</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+
+          <span class="n">Unnamed</span><span class="p">:</span> <span class="mi">0</span>   <span class="n">mpg</span>  <span class="n">cyl</span>   <span class="n">disp</span>   <span class="n">hp</span>  <span class="n">drat</span>     <span class="n">wt</span>   <span class="n">qsec</span>  <span class="n">vs</span>  <span class="n">am</span>  <span class="n">gear</span>  <span class="n">carb</span>
+<span class="mi">0</span>          <span class="n">Mazda</span> <span class="n">RX4</span>  <span class="mf">21.0</span>    <span class="mi">6</span>  <span class="mf">160.0</span>  <span class="mi">110</span>  <span class="mf">3.90</span>  <span class="mf">2.620</span>  <span class="mf">16.46</span>   <span class="mi">0</span>   <span class="mi">1</span>     <span class="mi">4</span>     <span class="mi">4</span>
+<span class="mi">1</span>      <span class="n">Mazda</span> <span class="n">RX4</span> <span class="n">Wag</span>  <span class="mf">21.0</span>    <span class="mi">6</span>  <span class="mf">160.0</span>  <span class="mi">110</span>  <span class="mf">3.90</span>  <span class="mf">2.875</span>  <span class="mf">17.02</span>   <span class="mi">0</span>   <span class="mi">1</span>     <span class="mi">4</span>     <span class="mi">4</span>
+<span class="mi">2</span>         <span class="n">Datsun</span> <span class="mi">710</span>  <span class="mf">22.8</span>    <span class="mi">4</span>  <span class="mf">108.0</span>   <span class="mi">93</span>  <span class="mf">3.85</span>  <span class="mf">2.320</span>  <span class="mf">18.61</span>   <span class="mi">1</span>   <span class="mi">1</span>     <span class="mi">4</span>     <span class="mi">1</span>
+<span class="mi">3</span>     <span class="n">Hornet</span> <span class="mi">4</span> <span class="n">Drive</span>  <span class="mf">21.4</span>    <span class="mi">6</span>  <span class="mf">258.0</span>  <span class="mi">110</span>  <span class="mf">3.08</span>  <span class="mf">3.215</span>  <span class="mf">19.44</span>   <span class="mi">1</span>   <span class="mi">0</span>     <span class="mi">3</span>     <span class="mi">1</span>
+<span class="mi">4</span>  <span class="n">Hornet</span> <span class="n">Sportabout</span>  <span class="mf">18.7</span>    <span class="mi">8</span>  <span class="mf">360.0</span>  <span class="mi">175</span>  <span class="mf">3.15</span>  <span class="mf">3.440</span>  <span class="mf">17.02</span>   <span class="mi">0</span>   <span class="mi">0</span>     <span class="mi">3</span>     <span class="mi">2</span>
+</code></pre></div>
+<p>In ipython I can call the method and get a markdown table back as a string</p>
+<div class="highlight"><pre><span></span><code><span class="n">mental</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">lake</span> <span class="err"></span>  <span class="n">new</span><span class="o">-</span><span class="n">posts</span> <span class="n">via</span> <span class="mf">3.8.11</span><span class="p">(</span><span class="n">mental</span><span class="o">-</span><span class="n">data</span><span class="o">-</span><span class="n">lake</span><span class="p">)</span> <span class="n">ipython</span>
+<span class="err">❯</span> <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span>
+<span class="s1">'|    | Unnamed: 0        |   mpg |   cyl |   disp |   hp |   drat |    wt |   qsec |   vs |   am |   gear |   carb |</span><span class="se">\n</span><span class="s1">|---:|:------------------|------:|------:|-------:|-----:|-------:|------:|-------:|-----:|-----:|-------:|-------:|</span><span class="se">\n</span><span class="s1">|  0 | Mazda RX4         |  21   |     6 |    160 |  110 |   3.9  | 2.62  |  16.46 |    0 |    1 |      4 |      4 |</span><span class="se">\n</span><span class="s1">|  1 | Mazda RX4 Wag     |  21   |     6 |    160 |  110 |   3.9  | 2.875 |  17.02 |    0 |    1 |      4 |      4 |</span><span class="se">\n</span><span class="s1">|  2 | Datsun 710        |  22.8 |     4 |    108 |   93 |   3.85 | 2.32  |  18.61 |    1 |    1 |      4 |      1 |</span><span class="se">\n</span><span class="s1">|  3 | Hornet 4 Drive    |  21.4 |     6 |    258 |  110 |   3.08 | 3.215 |  19.44 |    1 |    0 |      3 |      1 |</span><span class="se">\n</span><span class="s1">|  4 | Hornet Sportabout |  18.7 |     8 |    360 |  175 |   3.15 | 3.44  |  17.02 |    0 |    0 |      3 |      2 |'</span>
+</code></pre></div>
+<p>You can drop that string into a markdown file and using any reader that supports the rendering you'll have a nicely formated table of example data in whatever report you're making!</p>
+<h1 id="bonus-method">Bonus method<a alt="id" class="heading-permalink" href="#bonus-method" title="link to #bonus-method"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Just like markdown, you can export a dataframe to html with <code>df.to_html()</code> and use that if it's more appropriate for your use case:</p>
+<div class="highlight"><pre><span></span><code>'&lt;table border="1" class="dataframe"&gt;\n  &lt;thead&gt;\n    &lt;tr style="text-align: right;"&gt;\n      &lt;th&gt;&lt;/th&gt;\n      &lt;th&gt;Unnamed: 0&lt;/th&gt;\n      &lt;th&gt;mpg&lt;/th&gt;\n      &lt;th&gt;cyl&lt;/th&gt;\n      &lt;th&gt;disp&lt;/th&gt;\n      &lt;th&gt;hp&lt;/th&gt;\n      &lt;th&gt;drat&lt;/th&gt;\n      &lt;th&gt;wt&lt;/th&gt;\n      &lt;th&gt;qsec&lt;/th&gt;\n      &lt;th&gt;vs&lt;/th&gt;\n      &lt;th&gt;am&lt;/th&gt;\n      &lt;th&gt;gear&lt;/th&gt;\n      &lt;th&gt;carb&lt;/th&gt;\n    &lt;/tr&gt;\n  &lt;/thead&gt;\n  &lt;tbody&gt;\n    &lt;tr&gt;\n      &lt;th&gt;0&lt;/th&gt;\n      &lt;td&gt;Mazda RX4&lt;/td&gt;\n      &lt;td&gt;21.0&lt;/td&gt;\n      &lt;td&gt;6&lt;/td&gt;\n      &lt;td&gt;160.0&lt;/td&gt;\n      &lt;td&gt;110&lt;/td&gt;\n      &lt;td&gt;3.90&lt;/td&gt;\n      &lt;td&gt;2.620&lt;/td&gt;\n      &lt;td&gt;16.46&lt;/td&gt;\n      &lt;td&gt;0&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;1&lt;/th&gt;\n      &lt;td&gt;Mazda RX4 Wag&lt;/td&gt;\n      &lt;td&gt;21.0&lt;/td&gt;\n      &lt;td&gt;6&lt;/td&gt;\n      &lt;td&gt;160.0&lt;/td&gt;\n      &lt;td&gt;110&lt;/td&gt;\n      &lt;td&gt;3.90&lt;/td&gt;\n      &lt;td&gt;2.875&lt;/td&gt;\n      &lt;td&gt;17.02&lt;/td&gt;\n      &lt;td&gt;0&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;2&lt;/th&gt;\n      &lt;td&gt;Datsun 710&lt;/td&gt;\n      &lt;td&gt;22.8&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n      &lt;td&gt;108.0&lt;/td&gt;\n      &lt;td&gt;93&lt;/td&gt;\n      &lt;td&gt;3.85&lt;/td&gt;\n      &lt;td&gt;2.320&lt;/td&gt;\n      &lt;td&gt;18.61&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n      &lt;td&gt;4&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;3&lt;/th&gt;\n      &lt;td&gt;Hornet 4 Drive&lt;/td&gt;\n      &lt;td&gt;21.4&lt;/td&gt;\n      &lt;td&gt;6&lt;/td&gt;\n      &lt;td&gt;258.0&lt;/td&gt;\n      &lt;td&gt;110&lt;/td&gt;\n      &lt;td&gt;3.08&lt;/td&gt;\n      &lt;td&gt;3.215&lt;/td&gt;\n      &lt;td&gt;19.44&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n      &lt;td&gt;0&lt;/td&gt;\n      &lt;td&gt;3&lt;/td&gt;\n      &lt;td&gt;1&lt;/td&gt;\n    &lt;/tr&gt;\n    &lt;tr&gt;\n      &lt;th&gt;4&lt;/th&gt;\n      &lt;td&gt;Hornet Sportabout&lt;/td&gt;\n      &lt;td&gt;18.7&lt;/td&gt;\n      &lt;td&gt;8&lt;/td&gt;\n      &lt;td&gt;360.0&lt;/td&gt;\n      &lt;td&gt;175&lt;/td&gt;\n      &lt;td&gt;3.15&lt;/td&gt;\n      &lt;td&gt;3.440&lt;/td&gt;\n      &lt;td&gt;17.02&lt;/td&gt;\n      &lt;td&gt;0&lt;/td&gt;\n      &lt;td&gt;0&lt;/td&gt;\n      &lt;td&gt;3&lt;/td&gt;\n      &lt;td&gt;2&lt;/td&gt;\n    &lt;/tr&gt;\n  &lt;/tbody&gt;\n&lt;/table&gt;'
+</code></pre></div>
+<p>My blog will render that html into a nice table! (After removing new line characters)</p>
+<table border="1" class="dataframe"> <thead> <tr style="text-align: right;"> <th>Unnamed: 0</th> <th>mpg</th> <th>cyl</th> <th>disp</th> <th>hp</th> <th>drat</th> <th>wt</th> <th>qsec</th> <th>vs</th> <th>am</th> <th>gear</th> <th>carb</th> </tr> </thead> <tbody> <tr> <td>Mazda RX4</td> <td>21.0</td> <td>6</td> <td>160.0</td> <td>110</td> <td>3.90</td> <td>2.620</td> <td>16.46</td> <td>0</td> <td>1</td> <td>4</td> <td>4</td> </tr> <tr> <td>Mazda RX4 Wag</td> <td>21.0</td> <td>6</td> <td>160.0</td> <td>110</td> <td>3.90</td> <td>2.875</td> <td>17.02</td> <td>0</td> <td>1</td> <td>4</td> <td>4</td> </tr> <tr> <td>Datsun 710</td> <td>22.8</td> <td>4</td> <td>108.0</td> <td>93</td> <td>3.85</td> <td>2.320</td> <td>18.61</td> <td>1</td> <td>1</td> <td>4</td> <td>1</td> </tr> <tr> <td>Hornet 4 Drive</td> <td>21.4</td> <td>6</td> <td>258.0</td> <td>110</td> <td>3.08</td> <td>3.215</td> <td>19.44</td> <td>1</td> <td>0</td> <td>3</td> <td>1</td> </tr> <tr> <td>Hornet Sportabout</td> <td>18.7</td> <td>8</td> <td>360.0</td> <td>175</td> <td>3.15</td> <td>3.440</td> <td>17.02</td> <td>0</td> <td>0</td> <td>3</td> <td>2</td> </tr> </tbody></table>
+<div class="prevnext">
+<style type="text/css">
+
+    :root {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+<a class="prev" href="/plug-snapshot-to-save-your-life">
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"> </path>
+</svg>
+<div class="prevnext-text">
+<p class="prevnext-subtitle">prev</p>
+<p class="prevnext-title">Plug-Snapshot-To-Save-Your-Life</p>
+</div>
+</a>
+<a class="next" href="/wish-list-with-fastapi">
+<div class="prevnext-text">
+<p class="prevnext-subtitle">next</p>
+<p class="prevnext-title">Wish-List-With-Fastapi</p>
+</div>
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</a>
+</div></main>
+</body>
+</html>

@@ -1,0 +1,223 @@
+---
+article_html: "<div class=\"admonition note\">\n<p class=\"admonition-title\">Babyblue
+  v2</p>\n<p>Ryzen 5700x + 32 GB 3200 CL16 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=503041456656\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/503041456656.png\" alt=\"PassMark
+  Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition note\">\n<p class=\"admonition-title\">Venus
+  </p>\n<p>Ryzen 3200G + 16GB 3600 CL16 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502360857958\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502360857958.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Hogwarts</p>\n<p>Dual Xeon X5650 @2.67GHz
+  | 90 GB 1883 DDR3 ECC RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502361259420\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502361259420.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Server 2 ... Change the name</p>\n<p>Ryzen
+  5700G + 128GB 3200 CL18 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502361424410\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502361424410.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Server 2 with XMP enabled and undervolted
+  from 1.35 to 1.2</p>\n<p>Ryzen 5700G + 128GB 3200 CL18 RAM</p>\n<p>Undervolted to
+  1.2V (from 1.35)\nXMP enabled</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502363064921\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502363064921.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class='prevnext'>\n\n
+  \   <style type='text/css'>\n\n    :root {\n      --prevnext-color-text: #d8ebe6;\n
+  \     --prevnext-color-angle: #83dcc8cc;\n      --prevnext-subtitle-brightness:
+  3;\n    }\n    [data-theme=\"light\"] {\n      --prevnext-color-text: #1f2022;\n
+  \     --prevnext-color-angle: #ffeb00;\n      --prevnext-subtitle-brightness: 3;\n
+  \   }\n    [data-theme=\"dark\"] {\n      --prevnext-color-text: #d8ebe6;\n      --prevnext-color-angle:
+  #83dcc8cc;\n      --prevnext-subtitle-brightness: 3;\n    }\n    .prevnext {\n      display:
+  flex;\n      flex-direction: row;\n      justify-content: space-around;\n      align-items:
+  flex-start;\n    }\n    .prevnext a {\n      display: flex;\n      align-items:
+  center;\n      width: 100%;\n      text-decoration: none;\n    }\n    a.next {\n
+  \     justify-content: flex-end;\n    }\n    .prevnext a:hover {\n      background:
+  #00000006;\n    }\n    .prevnext-subtitle {\n      color: var(--prevnext-color-text);\n
+  \     filter: brightness(var(--prevnext-subtitle-brightness));\n      font-size:
+  .8rem;\n    }\n    .prevnext-title {\n      color: var(--prevnext-color-text);\n
+  \     font-size: 1rem;\n    }\n    .prevnext-text {\n      max-width: 30vw;\n    }\n
+  \   </style>\n\n    <a class='prev' href='/dont-forget-to-load-xmp'>\n\n\n        <svg
+  width=\"50px\" height=\"50px\" viewbox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n
+  \           <path d=\"M13.5 8.25L9.75 12L13.5 15.75\" stroke=\"var(--prevnext-color-angle)\"
+  stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> </path>\n
+  \       </svg>\n        <div class='prevnext-text'>\n            <p class='prevnext-subtitle'>prev</p>\n
+  \           <p class='prevnext-title'>Don't forget to load XMP!</p>\n        </div>\n
+  \   </a>\n\n    <a class='next' href='/chara-joy'>\n\n        <div class='prevnext-text'>\n
+  \           <p class='prevnext-subtitle'>next</p>\n            <p class='prevnext-title'>Chara-Joy</p>\n
+  \       </div>\n        <svg width=\"50px\" height=\"50px\" viewbox=\"0 0 24 24\"
+  fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <path d=\"M10.5
+  15.75L14.25 12L10.5 8.25\" stroke=\"var(--prevnext-color-angle)\" stroke-width=\"1.5\"
+  stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n        </svg>\n    </a>\n
+  \ </div>"
+cover: ''
+date: 2022-10-08
+datetime: 2022-10-08 00:00:00+00:00
+description: '! ! ! ! !'
+edit_link: https://github.com/edit/main/pages/til/my-passmark-scores.md
+html: "<div class=\"admonition note\">\n<p class=\"admonition-title\">Babyblue v2</p>\n<p>Ryzen
+  5700x + 32 GB 3200 CL16 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=503041456656\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/503041456656.png\" alt=\"PassMark
+  Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition note\">\n<p class=\"admonition-title\">Venus
+  </p>\n<p>Ryzen 3200G + 16GB 3600 CL16 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502360857958\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502360857958.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Hogwarts</p>\n<p>Dual Xeon X5650 @2.67GHz
+  | 90 GB 1883 DDR3 ECC RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502361259420\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502361259420.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Server 2 ... Change the name</p>\n<p>Ryzen
+  5700G + 128GB 3200 CL18 RAM</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502361424410\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502361424410.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class=\"admonition
+  note\">\n<p class=\"admonition-title\">Server 2 with XMP enabled and undervolted
+  from 1.35 to 1.2</p>\n<p>Ryzen 5700G + 128GB 3200 CL18 RAM</p>\n<p>Undervolted to
+  1.2V (from 1.35)\nXMP enabled</p>\n<p><a href=\"https://www.passmark.com/baselines/V10/display.php?id=502363064921\"><img
+  src=\"https://www.passmark.com/baselines/V10/images/502363064921.png\" height=120px
+  alt=\"PassMark Rating\" border=\"0\" /></a></p>\n</div>\n<div class='prevnext'>\n\n
+  \   <style type='text/css'>\n\n    :root {\n      --prevnext-color-text: #d8ebe6;\n
+  \     --prevnext-color-angle: #83dcc8cc;\n      --prevnext-subtitle-brightness:
+  3;\n    }\n    [data-theme=\"light\"] {\n      --prevnext-color-text: #1f2022;\n
+  \     --prevnext-color-angle: #ffeb00;\n      --prevnext-subtitle-brightness: 3;\n
+  \   }\n    [data-theme=\"dark\"] {\n      --prevnext-color-text: #d8ebe6;\n      --prevnext-color-angle:
+  #83dcc8cc;\n      --prevnext-subtitle-brightness: 3;\n    }\n    .prevnext {\n      display:
+  flex;\n      flex-direction: row;\n      justify-content: space-around;\n      align-items:
+  flex-start;\n    }\n    .prevnext a {\n      display: flex;\n      align-items:
+  center;\n      width: 100%;\n      text-decoration: none;\n    }\n    a.next {\n
+  \     justify-content: flex-end;\n    }\n    .prevnext a:hover {\n      background:
+  #00000006;\n    }\n    .prevnext-subtitle {\n      color: var(--prevnext-color-text);\n
+  \     filter: brightness(var(--prevnext-subtitle-brightness));\n      font-size:
+  .8rem;\n    }\n    .prevnext-title {\n      color: var(--prevnext-color-text);\n
+  \     font-size: 1rem;\n    }\n    .prevnext-text {\n      max-width: 30vw;\n    }\n
+  \   </style>\n\n    <a class='prev' href='/dont-forget-to-load-xmp'>\n\n\n        <svg
+  width=\"50px\" height=\"50px\" viewbox=\"0 0 24 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n
+  \           <path d=\"M13.5 8.25L9.75 12L13.5 15.75\" stroke=\"var(--prevnext-color-angle)\"
+  stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"> </path>\n
+  \       </svg>\n        <div class='prevnext-text'>\n            <p class='prevnext-subtitle'>prev</p>\n
+  \           <p class='prevnext-title'>Don't forget to load XMP!</p>\n        </div>\n
+  \   </a>\n\n    <a class='next' href='/chara-joy'>\n\n        <div class='prevnext-text'>\n
+  \           <p class='prevnext-subtitle'>next</p>\n            <p class='prevnext-title'>Chara-Joy</p>\n
+  \       </div>\n        <svg width=\"50px\" height=\"50px\" viewbox=\"0 0 24 24\"
+  fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">\n            <path d=\"M10.5
+  15.75L14.25 12L10.5 8.25\" stroke=\"var(--prevnext-color-angle)\" stroke-width=\"1.5\"
+  stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n        </svg>\n    </a>\n
+  \ </div>"
+jinja: false
+long_description: '! ! ! ! !'
+now: 2024-10-12 11:09:11.872261
+path: pages/til/my-passmark-scores.md
+published: true
+slug: my-passmark-scores
+super_description: '! ! ! ! !'
+tags:
+- homelab
+- linux
+- tech
+templateKey: til
+title: My PassMark Scores
+today: 2024-10-12
+---
+
+!!! note "Babyblue v2"
+
+    Ryzen 5700x + 32 GB 3200 CL16 RAM
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=503041456656"><img src="https://www.passmark.com/baselines/V10/images/503041456656.png" alt="PassMark Rating" border="0" /></a>
+
+!!! note "Venus "
+
+    Ryzen 3200G + 16GB 3600 CL16 RAM
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=502360857958"><img src="https://www.passmark.com/baselines/V10/images/502360857958.png" height=120px alt="PassMark Rating" border="0" /></a>
+
+!!! note "Hogwarts"
+
+    Dual Xeon X5650 @2.67GHz | 90 GB 1883 DDR3 ECC RAM
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=502361259420"><img src="https://www.passmark.com/baselines/V10/images/502361259420.png" height=120px alt="PassMark Rating" border="0" /></a>
+
+
+!!! note "Server 2 ... Change the name"
+
+    Ryzen 5700G + 128GB 3200 CL18 RAM
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=502361424410"><img src="https://www.passmark.com/baselines/V10/images/502361424410.png" height=120px alt="PassMark Rating" border="0" /></a>
+
+!!! note "Server 2 with XMP enabled and undervolted from 1.35 to 1.2"
+
+    Ryzen 5700G + 128GB 3200 CL18 RAM
+
+    Undervolted to 1.2V (from 1.35)
+    XMP enabled
+
+    <a href="https://www.passmark.com/baselines/V10/display.php?id=502363064921"><img src="https://www.passmark.com/baselines/V10/images/502363064921.png" height=120px alt="PassMark Rating" border="0" /></a>
+<div class='prevnext'>
+
+    <style type='text/css'>
+
+    :root {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+    
+    <a class='prev' href='/dont-forget-to-load-xmp'>
+    
+
+        <svg width="50px" height="50px" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"> </path>
+        </svg>
+        <div class='prevnext-text'>
+            <p class='prevnext-subtitle'>prev</p>
+            <p class='prevnext-title'>Don't forget to load XMP!</p>
+        </div>
+    </a>
+    
+    <a class='next' href='/chara-joy'>
+    
+        <div class='prevnext-text'>
+            <p class='prevnext-subtitle'>next</p>
+            <p class='prevnext-title'>Chara-Joy</p>
+        </div>
+        <svg width="50px" height="50px" viewbox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+    </a>
+  </div>

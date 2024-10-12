@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta content="HTML Tidy for HTML5 for Linux version 5.2.0" name="generator"/>
+<title>Deques</title>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&amp;display=swap" rel="stylesheet"/>
+<script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+
+    function detectColorSchemeOnLoad() {
+      if (localStorage.getItem("theme")) {
+        if (localStorage.getItem("theme") == "dark") {
+          setTheme("dark");
+        } else if (localStorage.getItem("theme") == "light") {
+          setTheme("light");
+        }
+      } else if (!window.matchMedia) {
+        setTheme("light");
+        return false;
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setTheme("dark");
+      } else {
+        setTheme("light");
+      }
+    }
+    detectColorSchemeOnLoad();
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        const toggleSwitch = document.querySelector(
+          '#theme-switch input[type="checkbox"]',
+        );
+        function switchTheme(e) {
+          if (e.target.checked) {
+            localStorage.setItem("theme", "dark");
+            document.documentElement.setAttribute("data-theme", "dark");
+            toggleSwitch.checked = true;
+          } else {
+            localStorage.setItem("theme", "light");
+            document.documentElement.setAttribute("data-theme", "light");
+            toggleSwitch.checked = false;
+          }
+        }
+        toggleSwitch.addEventListener("change", switchTheme, false);
+        if (document.documentElement.getAttribute("data-theme") == "dark") {
+          toggleSwitch.checked = true;
+        }
+      },
+      false,
+    );
+  </script>
+<style>
+    :root {
+      --color-bg: #f5f5f5;
+      /* Light gray background color */
+      --color-bg-code: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      /* Dark text color */
+      --color-link: #007acc;
+      /* Standard link color */
+      --color-accent: #4caf50;
+      /* Green accent color */
+      --overlay-brightness: 0.9;
+      /* Slightly brighter overlay */
+      --body-width: 800px;
+      --base-font-size: 16px;
+      /* Base font size */
+    }
+
+    [data-theme="dark"] {
+      --color-bg: #1f2022;
+      /* Dark background color */
+      --color-bg-code: #1f2022;
+      --color-bg-secondary: #21252d;
+      /* Slightly darker background for code */
+      --color-text: #c0e5c0;
+      /* Light text color */
+      --color-link: #64a1dd;
+      /* Light link color */
+      --color-accent: #b7e3b7;
+      --overlay-brightness: 0.85;
+      --body-width: 800px;
+    }
+
+    [data-theme="light"] {
+      --color-bg: #ffffff;
+      /* White background color */
+      --color-bg-code: #f5f5f5;
+      /* Light gray background for code */
+      --color-bg-secondary: #f0f0f0;
+      /* Slightly darker background for code */
+      --color-text: #333;
+      --color-link: #007acc;
+      --color-accent: #4caf50;
+      --overlay-brightness: 0.95;
+      /* Slightly brighter overlay for light theme */
+    }
+
+    html {
+      font-family: "Nunito", monospace;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-size: var(--base-font-size);
+    }
+
+    a {
+      color: var(--color-link);
+    }
+
+    body {
+      background: rgba(14, 28 34 0.7);
+      display: flex;
+      flex-direction: column;
+      font-size: var(--base-font-size);
+      justify-content: space-between;
+      line-height: 1.6;
+      /* Adjusted line height for better readability */
+      margin: 5rem auto;
+      max-width: var(--body-width);
+      min-height: 100vh;
+      padding: 0 0.5rem;
+    }
+
+    /* Add these styles for admonitions */
+    .admonition {
+      padding: 1rem;
+      margin: 1rem auto;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      font-size: 1rem;
+      width: 80%;
+      /* Set the fixed width to 80% of the viewport width */
+      max-width: 600px;
+      /* Set a maximum width if needed */
+    }
+
+    .admonition-title {
+      font-size: 1.2rem;
+    }
+
+    .admonition.scripture,
+    .admonition.index-welcome,
+    .admonition.background-thought {
+      padding: 0.5rem;
+      border-left: 3px solid #555;
+      opacity: 0.8;
+    }
+
+    .admonition.background-thought .admonition-title {
+      background-color: var(--color-bg);
+      padding: 0.3rem;
+      border-bottom: none;
+      font-size: 1.2rem;
+    }
+
+    .admonition.background-thought p {
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .admonition.scripture {
+      background-color: #ffffff0a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.index-welcome {
+      background-color: #1f2022;
+      color: #64a1dd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.note {
+      color: #fff;
+      background-color: #32506b;
+      border: 1px solid #27405a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.warning {
+      color: #333;
+      background-color: #f5c266;
+      border: 1px solid #e3aa40;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.danger {
+      color: #fff;
+      background-color: #d05a4e;
+      border: 1px solid #b94036;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .admonition.success {
+      color: #333;
+      background-color: #6fbf8e;
+      border: 1px solid #5fa27a;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav {
+      background: var(--color-bg-secondary);
+      padding: 1rem 0;
+      /* align-items: flex-end; Remove or comment out this line */
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    nav ul {
+      list-style-type: none;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    nav ul li {
+      margin: 0 0.4rem;
+    }
+
+    nav ul li a {
+      text-align: center;
+      color: gainsboro;
+      text-decoration: none;
+      padding: 0.5rem !important;
+      margin-left: 0.1rem;
+      margin-right: 0.1rem;
+      align-items: flex-end;
+      font-size: 1rem;
+      /* Adjusted font size for navigation links */
+    }
+
+    nav ul li a:focus-visible,
+    nav ul li:hover a {
+      color: #3d9e9e;
+    }
+
+    ul.archive-tags {
+      display: flex;
+      justify-content: center;
+      list-style-type: none;
+      color: gainsboro;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 2rem;
+      width: 100%;
+    }
+
+    ul.archive-tags li {
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li a {
+      display: block;
+      text-decoration: none;
+      color: #fafafa;
+      padding: 0.2rem 1rem;
+    }
+
+    ul.archive-tags li:hover a,
+    ul.archive-tags li a:focus-visible {
+      color: #3d9e9e;
+    }
+
+    table {
+      margin: 0px auto;
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: block;
+      max-width: -moz-fit-content;
+      max-width: fit-content;
+      overflow-x: auto;
+      white-space: nowrap;
+      font-size: 1rem;
+      /* Adjusted font size for tables */
+    }
+
+    table thead th {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      text-align: left;
+      font-size: 1rem;
+      /* Adjusted font size for table header */
+    }
+
+    table tbody td {
+      border: solid 1px var(--color-text);
+      padding: 10px;
+      font-size: 1rem;
+      /* Adjusted font size for table cells */
+    }
+
+    tr {
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:hover {
+      background-color: #of1413;
+    }
+
+    .theme-switch {
+      z-index: 10;
+      display: inline-block;
+      height: 34px;
+      position: relative;
+      width: 60px;
+      display: flex;
+      justify-content: flex-end;
+      margin-right: 1rem;
+      margin-left: auto;
+      position: fixed;
+      right: 1rem;
+      top: 1rem;
+    }
+
+    .theme-switch input {
+      display: none;
+    }
+
+    .slider {
+      background-color: #ccc;
+      bottom: 0;
+      cursor: pointer;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      transition: 0.4s;
+    }
+
+    .slider:before {
+      background-color: #fff;
+      bottom: 4px;
+      content: "";
+      height: 26px;
+      left: 4px;
+      position: absolute;
+      transition: 0.4s;
+      width: 26px;
+    }
+
+    input:checked+.slider {
+      background-color: #343434;
+    }
+
+    input:checked+.slider:before {
+      background-color: #848484;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(26px);
+    }
+
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+
+    img {
+      max-width: 1080px;
+      max-height: 500px;
+      margin: 0 auto;
+    }
+
+    .title {
+      background: var(--color-bg-secondary);
+      margin-bottom: 0rem;
+      margin-top: 0rem;
+      text-align: center;
+      font-size: 2rem;
+      /* Adjusted font size for title */
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg-secondary);
+      margin: 0 calc((100% - var(--body-width)) / 10);
+      /* Adjust the factor (1/5) as needed */
+    }
+
+    .prevnext {
+      justify-self: flex-end;
+      flex: 1;
+    }
+
+    .prev,
+    .next {
+      align-self: flex-end;
+    }
+
+    .heading-permalink {
+      color: rgba(0, 0, 0, 0);
+      font-size: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #5651b7;
+    }
+
+    body::-webkit-scrollbar-track {
+      background: #392e3d;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background-color: #5651b7;
+      border-radius: 0.25rem;
+      background: rgb(112, 107, 208);
+      background: linear-gradient(180deg,
+          rgba(112, 107, 208, 1) 0%,
+          rgba(86, 81, 183, 1) 100%);
+      border: 1px solid rgba(86, 81, 183, 0.5);
+    }
+
+    blockquote {
+      font-family: "Courier New", Courier, monospace;
+      /* Use a monospace font for a code-like appearance */
+      font-size: 1.2rem;
+      color: var(--color-link);
+      border-left: 5px solid var(--color-accent);
+      padding-left: 1.5rem;
+      /* Increased padding for better indentation */
+      margin: 1rem;
+      background: var(--color-bg);
+      filter: brightness(var(--overlay-brightness));
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    blockquote p {
+      margin: 0;
+    }
+
+    /* Style for regular code blocks */
+    pre {
+      background-color: #2d2d2d;
+      /* Change this to your preferred background color */
+      padding: 1rem;
+      overflow-x: auto;
+    }
+
+    code {
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 1rem;
+    }
+
+    /* Style for code blocks within p tags */
+    p code {
+      background-color: #363636;
+      /* Change this to your preferred background color */
+      padding: 0.5rem;
+      border-radius: 0.3rem;
+      font-family: "Courier New", monospace;
+      color: #eefbfe;
+      font-size: 0.9rem;
+      /* Adjust the font size as needed */
+    }
+
+    /* Optional: Apply different colors to different token types */
+    p code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Add additional token type styling as needed */
+
+    /* Style line numbers (optional) */
+    .line-numbers {
+      color: #848484;
+      /* Change the line number color */
+    }
+
+    /* Style the language label (optional) */
+    .language-label {
+      background-color: #1f2022;
+      /* Change the background color */
+      color: #64a1dd;
+      /* Change the text color */
+      padding: 0.2rem 0.5rem;
+      /* Add padding for better aesthetics */
+      font-size: 0.8rem;
+      /* Adjust the font size as needed */
+      border-radius: 0.3rem;
+      /* Add rounded corners */
+    }
+
+    /* Add a color scheme for syntax-like highlighting */
+    code[class*="language-"] {
+      color: #abb2bf;
+    }
+
+    /* Apply different colors to different token types */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #5c6370;
+    }
+
+    .token.punctuation {
+      color: #abb2bf;
+    }
+
+    .token.namespace {
+      opacity: 0.7;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #e06c75;
+    }
+
+    .token.boolean,
+    .token.number {
+      color: #d19a66;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #98c379;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #56b6c2;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #c678dd;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #61afef;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #c678dd;
+    }
+
+    .token.important,
+    .token.bold {
+      font-weight: bold;
+    }
+
+    .token.italic {
+      font-style: italic;
+    }
+
+    .token.entity {
+      cursor: help;
+    }
+  </style>
+<link href="/manifest.json" rel="manifest"/></head>
+<body>
+<nav>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/tech/">Tech Archive</a></li>
+<li><a href="/faith/">Faith Archive</a></li>
+</ul>
+</nav>
+<div>
+<label class="theme-switch" for="checkbox-theme" id="theme-switch" title="light/dark mode toggle">
+<input id="checkbox-theme" type="checkbox"/>
+<div class="slider round"></div>
+</label>
+</div>
+<section class="title">
+<h1 id="title">Deques</h1>
+</section>
+<main><p>I am working on a project to create a small system monitoring dashboard using the python <code>psutil</code> library.</p>
+<p>The repo is <a href="https://github.com/nicpayne713/not-netdata">here</a> (if you want actual system monitoring please use <a href="https://www.netdata.cloud/">netdata</a>).</p>
+<p>I'm using <code>streamlit</code> and <code>plotly</code> for the webserver, design, and plotting at the moment.</p>
+<h2 id="my-use-case">My Use Case<a alt="id" class="heading-permalink" href="#my-use-case" title="link to #my-use-case"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>I needed a way to refresh my plotly charts with a fixed window of time so that I'm able to just see relevant recent data instead of cramming all data for all time into one plot that's 500 pixels wide...</p>
+<p>Checking the length of arrays or lists every time I get a new piece of data feels kind of dumb and I thought "python must have a way to do this"...</p>
+<blockquote>
+<p>"This" meaning, update values in a fixed length array without reallocating memory or recreating a copy of the list</p>
+</blockquote>
+<h2 id="deques">Deques<a alt="id" class="heading-permalink" href="#deques" title="link to #deques"><span class="visually-hidden"></span><svg aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Enter the <code>deque</code>. 
+It means "double ended queue" and is in general an <code>Iterable</code> that you can append values to either side or pop values from either side.</p>
+<p>The init signature is straightforward enough and I'm sure there's more to them than I know yet but here's how I use it...</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="n">my_deque</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+</code></pre></div>
+<p>This gives us <code>my_deque</code>, created from an iterable, with several familiar methods like <code>index</code>, <code>extend</code>, <code>append</code>, etc.
+However there's some new ones too such as <code>appendleft</code> and <code>popleft</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">my_deque</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="s1">'a'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">my_dequqe</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">deque</span><span class="p">([</span><span class="s1">'a'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="n">my_deque</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="s1">'a'</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">my_deque</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">deque</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+</code></pre></div>
+<p>These are handy ways to manipulate the iterable that I needed for the arrays I plot with plotly!</p>
+<p><strong>See my follow-up to this on using Deques with plotly and streamlit to create a quick "dashboard" with live streaming data!</strong></p>
+<p><a href="/plotly-and-streamlit">follow-up</a></p>
+<div class="prevnext">
+<style type="text/css">
+
+    :root {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="light"] {
+      --prevnext-color-text: #1f2022;
+      --prevnext-color-angle: #ffeb00;
+      --prevnext-subtitle-brightness: 3;
+    }
+    [data-theme="dark"] {
+      --prevnext-color-text: #d8ebe6;
+      --prevnext-color-angle: #83dcc8cc;
+      --prevnext-subtitle-brightness: 3;
+    }
+    .prevnext {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+    .prevnext a {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+    }
+    a.next {
+      justify-content: flex-end;
+    }
+    .prevnext a:hover {
+      background: #00000006;
+    }
+    .prevnext-subtitle {
+      color: var(--prevnext-color-text);
+      filter: brightness(var(--prevnext-subtitle-brightness));
+      font-size: .8rem;
+    }
+    .prevnext-title {
+      color: var(--prevnext-color-text);
+      font-size: 1rem;
+    }
+    .prevnext-text {
+      max-width: 30vw;
+    }
+    </style>
+<a class="prev" href="/plotly-and-streamlit">
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M13.5 8.25L9.75 12L13.5 15.75" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"> </path>
+</svg>
+<div class="prevnext-text">
+<p class="prevnext-subtitle">prev</p>
+<p class="prevnext-title">Plotly-And-Streamlit</p>
+</div>
+</a>
+<a class="next" href="/starship">
+<div class="prevnext-text">
+<p class="prevnext-subtitle">next</p>
+<p class="prevnext-title">Starship</p>
+</div>
+<svg fill="none" height="50px" viewbox="0 0 24 24" width="50px" xmlns="http://www.w3.org/2000/svg">
+<path d="M10.5 15.75L14.25 12L10.5 8.25" stroke="var(--prevnext-color-angle)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"></path>
+</svg>
+</a>
+</div></main>
+</body>
+</html>
