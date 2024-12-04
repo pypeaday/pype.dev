@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content="Marmite" />
+    
+<meta property="og:title" content="Home-Server-Refactor">
+
+<meta property="og:description" content="
+My current homelab setup is not great but it works...
+Proxmox on PowerEdge R610
+I boot off an SD ca...">
+
+
+<meta property="og:url" content="https://pype.dev/home-server-refactor.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pype.dev">
+
+<meta property="article:published_time" content=" 2022-04-10T00:00:00+00:00">
+
+
+<meta property="article:author" content="https://pype.dev/author-nicpayne.html">
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://pype.dev/home-server-refactor.html"
+    },
+    "url": "https://pype.dev/home-server-refactor.html",
+    "headline": "Home-Server-Refactor",
+    "description": "My current homelab setup is not great but it works...
+Proxmox on PowerEdge R610
+I boot off an SD card and have 1 SSD and 5 HDDs configured a...",
+    
+    "author": {
+        "@type": "Person",
+        "name": "Nicholas Payne",
+        "url": "https://pype.dev/author-nicpayne.html",
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Pype.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://pype.dev/"
+        }
+    },
+    "datePublished": "2022-04-10T00:00:00+00:00"
+}
+</script>
+
+
+    <title>Home-Server-Refactor | Pype.dev</title>
+    <link rel="stylesheet" type="text/css" href="./static/pico.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/marmite.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/colorschemes/nord.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/custom.css">
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css" id="highlightjs-theme" />
+
+
+
+    <link rel="alternate" type="application/rss+xml" title="index" href="index.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: tech" href="tag-tech.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homelab" href="tag-homelab.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: linux" href="tag-linux.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bema" href="tag-bema.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: python" href="tag-python.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cli" href="tag-cli.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: faith" href="tag-faith.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bible-project" href="tag-bible-project.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vim" href="tag-vim.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: zfs" href="tag-zfs.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bash" href="tag-bash.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: til" href="tag-til.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: git" href="tag-git.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: blog" href="tag-blog.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: data" href="tag-data.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: webdev" href="tag-webdev.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: terminal" href="tag-terminal.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homepage" href="tag-homepage.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: infrastructure" href="tag-infrastructure.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: books" href="tag-books.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: olivet" href="tag-olivet.rss">
+    <link rel="alternate" type="application/rss+xml" title="author: nicpayne" href="author-nicpayne.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2024" href="archive-2024.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2023" href="archive-2023.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2022" href="archive-2022.rss">
+    
+
+    
+    <link rel="alternate" type="application/feed+json" title="JSON index" href="index.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: tech" href="tag-tech.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homelab" href="tag-homelab.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: linux" href="tag-linux.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bema" href="tag-bema.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: python" href="tag-python.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cli" href="tag-cli.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: faith" href="tag-faith.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bible-project" href="tag-bible-project.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vim" href="tag-vim.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: zfs" href="tag-zfs.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bash" href="tag-bash.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: til" href="tag-til.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: git" href="tag-git.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: blog" href="tag-blog.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: data" href="tag-data.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: webdev" href="tag-webdev.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: terminal" href="tag-terminal.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homepage" href="tag-homepage.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: infrastructure" href="tag-infrastructure.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: books" href="tag-books.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: olivet" href="tag-olivet.json">
+    <link rel="alternate" type="application/feed+json" title="JSON author: nicpayne" href="author-nicpayne.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2024" href="archive-2024.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2023" href="archive-2023.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2022" href="archive-2022.json">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <div class="container-fluid announcement-wrapper">
+        <div class="announcement"><p>Give us a ☆ on <a href="https://github.com/rochacbruno/marmite">github</a></p>
+</div>
+    </div>
+    
+    <main class="container">
+        
+        <header class="header-content">
+            <nav class="header-nav">
+                <ul class="header-name">
+                    <li>
+                        <hgroup>
+                            <h2><a href="./" class="contrast">Pype.dev</a></h2>
+                             <p>my mental data-lake</p> 
+                        </hgroup>
+                    </li>
+                </ul>
+                <button id="menu-toggle" class="hamburger">&#9776;</button>
+                
+                <ul class="header-menu" id="header-menu">
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./archive.html">Archive</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./tags.html">Tags</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="https://github.com/pypeaday/pype.dev" target="_blank" >Github</a>
+                        
+                    </li>
+                    
+                    <li><span class="theme-toggle secondary" title="dark mode">&#9789;</span></li>
+                    
+                    <li><a href="#" id="search-toggle" class="secondary" title="Search (Ctrl + Shift + F)"> <span class="search-txt">Search</span><span class="search-magnifier"></span></a></li>
+                    
+                    <div class="underline"></div>
+                </ul>
+            </nav>
+            
+            <div class="marmite-background-overlay" id="overlay-close"></div>
+            <div class="marmite-search-bar hidden">
+                <span>Search</span>
+                <button class="marmite-close-button" id="search-close">X</button>
+                <input placeholder="Search" id="marmite-search-input" />
+                <div class="marmite-search-bar-result">
+                    <ul id="marmite-search-bar-result"></ul>
+                </div>
+            </div>
+            
+        </header>
+        
+        <section class="main-content">
+            
+
+
+
+<article>
+
+  
+
+
+<div class="content-title" id="title">
+    <h1>Home-Server-Refactor</h1> 
+    
+
+
+<span class="content-date">
+    <small> Apr 10, 2022 - &#10710; 5 min</small>
+</span>
+
+</div>
+
+  
+  <div class="content-toc">
+    <a href="#" id="toc"></a>
+    <details>
+    <summary>🗒️</summary>
+    <ul>
+<li><a href="#proxmox-on-poweredge-r610">Proxmox on PowerEdge R610</a></li>
+<li><a href="#truenas-on-dedicated-box">TrueNAS on dedicated box</a></li>
+<li><a href="#jellyfin">Jellyfin</a></li>
+<li><a href="#plan-of-attack">Plan of attack...</a></li>
+<ul>
+<li><a href="#configuration">Configuration...</a></li>
+<li><a href="#big-big-big-todos">BIG BIG BIG TODOS</a></li>
+<li><a href="#check-this----ran-as-cp-utility-in-tmux-window-no-progress-bars-or-anything-its-in-ansible-nas-session---window-3">CHECK THIS -&gt;  ran as 'cp' utility in tmux window, no progress bars or anything. it's in ansible-nas session -&gt; window 3</a></li>
+</ul>
+</ul>
+
+    </details>
+  </div>
+  
+
+  <div class="content-html"><!-- Content Injected to every content markdown header -->
+<p>My current homelab setup is not great but it works...</p>
+<h1><a href="#proxmox-on-poweredge-r610" aria-hidden="true" class="anchor" id="proxmox-on-poweredge-r610"></a>Proxmox on PowerEdge R610</h1>
+<p>I boot off an SD card and have 1 SSD and 5 HDDs configured as a JBOD array using a Dell H700 SAS controller.
+I cannot boot from a disk using this controller and I can't get the firmware configured in a way to allow it.
+So I have 1 SSD as a ZFS array that I've been putting my VM images on, and the 5 HDDs are passed through to a TrueNAS VM where I handle all the ZFS stuff there... kind of meta because I then attached those drives to Proxmox as a CIFS share.</p>
+<h1><a href="#truenas-on-dedicated-box" aria-hidden="true" class="anchor" id="truenas-on-dedicated-box"></a>TrueNAS on dedicated box</h1>
+<p>I have an on-prem backup that is just an old desktop running TrueNAS
+I regularly backup the 5 disk RAIDZ2 array from my Proxmox host (managed by a TrueNAS VM) to this backup box</p>
+<p>Currently there is nothing else running on this machine since it's my &quot;backup&quot;</p>
+<h1><a href="#jellyfin" aria-hidden="true" class="anchor" id="jellyfin"></a>Jellyfin</h1>
+<p>I was HWA for Jellyfin, but hardware passthrough on the R610 is finicky or broken so Jellyfin is running on an Ubuntu host.</p>
+<p>I could put UBuntu on the R610 and give up &quot;true virtualization&quot;. Then I'd manage the SMB share myself.
+If I do that then I would get rid of &quot;users&quot; I think, ie. basically forgo least-priviledges since I'm not sure how hard that is to manage.</p>
+<p>On the other hand, direct access to the smb config might make it easier?</p>
+<p>I have the media array on Jellyfin box setup as NFS which was really easy with ZFS... I think SMB would be just as easy.</p>
+<h1><a href="#plan-of-attack" aria-hidden="true" class="anchor" id="plan-of-attack"></a>Plan of attack...</h1>
+<ol>
+<li>Move all vm disks to individual datasets on the NAS</li>
+<li>Backup docker data... not sure how well this will work, maybe just start over?</li>
+<li>Clean up Ansible playbooks on the user side of things - stick with neville vs just using my own name?</li>
+<li>Install Ubuntu 20 or 22 on a 2.5&quot; drive that I'll toss in this SSD enclosure (or a usb thumb stick?)</li>
+<li>Re-deploy everything with ansible-playbook and configure...</li>
+</ol>
+<h2><a href="#configuration" aria-hidden="true" class="anchor" id="configuration"></a>Configuration...</h2>
+<ol start="0">
+<li>THE FREAKING NAS -&gt; just import zfs array and configure SMB?</li>
+</ol>
+<p>1.~~ Nextcloud users and connections.. might be able to just copy the data folder? not sure about the database... try spinning it up in the sandbox vm and see if stuff is there ~~
+2.~~ *arr suite, media profiles and connections to transmission... nothing major~~
+3. transmission - should be deploy and go
+4. ombi and jackett should also just work after some config again
+5. <del>traefik should just work</del>
+6. <del>try to bring up pi-hole from the vm that's already running</del>
+7. <del>heimdall will hopefully just be copying the data folder from the existind docker one'</del>
+8.~~ booksonic can be reconfigured easily~~
+9. <del>portainer... hopefully just copying data folder over?</del>
+10. <del>littlelink</del>, small-group-notes, and blog (at home) will need manually re-deployed once Ubuntu is installed bare-metal</p>
+<h2><a href="#big-big-big-todos" aria-hidden="true" class="anchor" id="big-big-big-todos"></a>BIG BIG BIG TODOS</h2>
+<ol>
+<li>
+<p>Sanoid/syncoid! Get snapshots going and backups configured with on prem TrueNAS</p>
+</li>
+<li>
+<p>Wireguard setup on DA.</p>
+</li>
+<li>
+<p>network share on printer for paperless
+<del>4. update peperless in ansible-nas</del></p>
+</li>
+<li>
+<p><del>Just deploy paperless manually... monitor/manage with portainer</del></p>
+</li>
+<li>
+<p>booksonic not seeing audiobooks/podcasts</p>
+</li>
+<li>
+<p>need a smb user to map nas/documents to the printer for paperless</p>
+</li>
+<li>
+<p>wireguard setup now on kps phone, desktop, server (and backup truenas?), and dad's pi</p>
+</li>
+<li>
+<p><del>verify lan services work</del></p>
+</li>
+<li>
+<p><del>Tdar so Jellyfin can work better</del></p>
+</li>
+</ol>
+<p>Snapshot business might be cause of all the docker containers and docker using
+ZFS backend... take everything down and try removing</p>
+<ol>
+<li>file browser - currently I just one-clicked in portainer, I want to make a stack with my own config file which I'll rip from techno tip and then add my traefik lables too</li>
+</ol>
+<p>Forget filebrowser - going to just use Nextcloud for how it's supposed to be used.
+3. Need to organize those files in nextcloud</p>
+<h2><a href="#check-this----ran-as-cp-utility-in-tmux-window-no-progress-bars-or-anything-its-in-ansible-nas-session---window-3" aria-hidden="true" class="anchor" id="check-this----ran-as-cp-utility-in-tmux-window-no-progress-bars-or-anything-its-in-ansible-nas-session---window-3"></a>CHECK THIS -&gt;  ran as 'cp' utility in tmux window, no progress bars or anything. it's in ansible-nas session -&gt; window 3</h2>
+<p>Olivet bible stuff going to /tmp/olivet/ -&gt; will move this to nextcloud, ideally by the app via appimage so that the db updates and I don't have to run that occ script
+I wnat to organize &quot;home&quot; still in nextcloud</p>
+<p>setup Sanoid</p>
+<p>clean up bitwarden
+learn nextcloud sharing -&gt; maybe just give a link to grandma?
+rest of todos -&gt; document db and sanoid + zfs.rent</p>
+<p>Check on mom's will
+do media thing for church - split vocals on mp3/4</p>
+<p>permission-data playbook changes everything to ansible-nas:ansible-nas but then samba task will re-permission some stuff to root:users... this looks fine
+I had to add <code>group</code> to the samba config in my playbook to get user auth to work with samba
+This isn't fully working... it works from cli but my python process can't write to a folder in dump after 777.... need to learn more?
+So I can make a file after adding the ansible-nas group to config, but I still cannot make a directory on the smb mount...</p>
+<p>ADDING <code>inherit permission = yes</code> under <code>[global]</code> in the smb.conf worked!</p>
+<p>still not working from printer...
+I think what I want is to setup 2 scan options - single docs right to paperless, or combined scans to dump, then manually split and send to paperless</p>
+<!-- Content Injected to every content markdown footer -->
+</div>
+  
+  <footer class="data-tags-footer">
+
+    <div class="content-authors-flex">
+      <div class="content-authors-full">
+        
+<div class="content-authors">
+    <ul>
+        
+            
+            
+            <li>
+                <a href="author-nicpayne.html">
+                    <img src="https://github.com/pypeaday.png" alt="Nicholas Payne" class="avatar">
+                    Nicholas Payne
+                </a>
+            </li>
+            
+        
+    </ul>
+</div>
+
+
+      </div>
+
+      <div class="date-tags-container">
+        <div class="content-date">
+          
+
+
+<span class="content-date">
+    <small> Apr 10, 2022 - &#10710; 5 min</small>
+</span>
+
+        </div>
+
+        <ul class="content-tags">
+          
+          <li><a href="./tag-blog.html">blog</a></li>
+          
+          <li><a href="./tag-tech.html">tech</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+</article>
+
+
+
+
+  
+  
+  
+  
+  <article>
+    Related blog content
+    <ul>
+      
+      
+      <li><a href="./recovering-opnsense.html">Recovering OPNSense</a></li>
+      
+      
+      <li><a href="./wish-list-with-fastapi.html">Wish-List-With-Fastapi</a></li>
+      
+      
+      <li><a href="./tdarr.html">Tdarr</a></li>
+      
+      
+      
+    </ul>
+  </article>
+  
+
+
+
+    <article></article>
+
+
+
+        </section>
+        
+        <footer class="footer-content grid">
+            <div>Powered by <a href="https://github.com/rochacbruno/marmite">Marmite</a> | <small><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY_NC-SA</a></small></div>
+            
+        </footer>
+        
+    </main>
+
+    <script src="./static/marmite.js"></script>
+    <script src="./static/custom.js"></script>
+    
+    <script type="module" src="./static/search.js"></script>
+    
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>
+
+
+
+</body>
+</html>

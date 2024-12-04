@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content="Marmite" />
+    
+<meta property="og:title" content="Samba on Ubuntu 22 needs "inherit permissions" set">
+
+<meta property="og:description" content="
+see samba config on hogwarts
+
+">
+
+
+<meta property="og:url" content="https://pype.dev/samba-on-ubuntu-22-needs-inherit-permissions-set.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pype.dev">
+
+<meta property="article:published_time" content=" 2022-05-31T06:30:42+00:00">
+
+
+<meta property="article:author" content="https://pype.dev/author-nicpayne.html">
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://pype.dev/samba-on-ubuntu-22-needs-inherit-permissions-set.html"
+    },
+    "url": "https://pype.dev/samba-on-ubuntu-22-needs-inherit-permissions-set.html",
+    "headline": "Samba on Ubuntu 22 needs "inherit permissions" set",
+    "description": "see samba config on hogwarts
+
+",
+    
+    "author": {
+        "@type": "Person",
+        "name": "Nicholas Payne",
+        "url": "https://pype.dev/author-nicpayne.html",
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Pype.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://pype.dev/"
+        }
+    },
+    "datePublished": "2022-05-31T06:30:42+00:00"
+}
+</script>
+
+
+    <title>Samba on Ubuntu 22 needs "inherit permissions" set | Pype.dev</title>
+    <link rel="stylesheet" type="text/css" href="./static/pico.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/marmite.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/colorschemes/nord.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/custom.css">
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css" id="highlightjs-theme" />
+
+
+
+    <link rel="alternate" type="application/rss+xml" title="index" href="index.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: tech" href="tag-tech.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homelab" href="tag-homelab.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: linux" href="tag-linux.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bema" href="tag-bema.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: python" href="tag-python.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cli" href="tag-cli.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: faith" href="tag-faith.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bible-project" href="tag-bible-project.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vim" href="tag-vim.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: zfs" href="tag-zfs.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bash" href="tag-bash.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: til" href="tag-til.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: git" href="tag-git.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: blog" href="tag-blog.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: data" href="tag-data.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: webdev" href="tag-webdev.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: terminal" href="tag-terminal.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homepage" href="tag-homepage.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: infrastructure" href="tag-infrastructure.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: books" href="tag-books.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: olivet" href="tag-olivet.rss">
+    <link rel="alternate" type="application/rss+xml" title="author: nicpayne" href="author-nicpayne.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2024" href="archive-2024.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2023" href="archive-2023.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2022" href="archive-2022.rss">
+    
+
+    
+    <link rel="alternate" type="application/feed+json" title="JSON index" href="index.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: tech" href="tag-tech.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homelab" href="tag-homelab.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: linux" href="tag-linux.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bema" href="tag-bema.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: python" href="tag-python.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cli" href="tag-cli.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: faith" href="tag-faith.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bible-project" href="tag-bible-project.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vim" href="tag-vim.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: zfs" href="tag-zfs.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bash" href="tag-bash.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: til" href="tag-til.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: git" href="tag-git.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: blog" href="tag-blog.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: data" href="tag-data.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: webdev" href="tag-webdev.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: terminal" href="tag-terminal.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homepage" href="tag-homepage.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: infrastructure" href="tag-infrastructure.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: books" href="tag-books.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: olivet" href="tag-olivet.json">
+    <link rel="alternate" type="application/feed+json" title="JSON author: nicpayne" href="author-nicpayne.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2024" href="archive-2024.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2023" href="archive-2023.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2022" href="archive-2022.json">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <div class="container-fluid announcement-wrapper">
+        <div class="announcement"><p>Give us a ☆ on <a href="https://github.com/rochacbruno/marmite">github</a></p>
+</div>
+    </div>
+    
+    <main class="container">
+        
+        <header class="header-content">
+            <nav class="header-nav">
+                <ul class="header-name">
+                    <li>
+                        <hgroup>
+                            <h2><a href="./" class="contrast">Pype.dev</a></h2>
+                             <p>my mental data-lake</p> 
+                        </hgroup>
+                    </li>
+                </ul>
+                <button id="menu-toggle" class="hamburger">&#9776;</button>
+                
+                <ul class="header-menu" id="header-menu">
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./archive.html">Archive</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./tags.html">Tags</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="https://github.com/pypeaday/pype.dev" target="_blank" >Github</a>
+                        
+                    </li>
+                    
+                    <li><span class="theme-toggle secondary" title="dark mode">&#9789;</span></li>
+                    
+                    <li><a href="#" id="search-toggle" class="secondary" title="Search (Ctrl + Shift + F)"> <span class="search-txt">Search</span><span class="search-magnifier"></span></a></li>
+                    
+                    <div class="underline"></div>
+                </ul>
+            </nav>
+            
+            <div class="marmite-background-overlay" id="overlay-close"></div>
+            <div class="marmite-search-bar hidden">
+                <span>Search</span>
+                <button class="marmite-close-button" id="search-close">X</button>
+                <input placeholder="Search" id="marmite-search-input" />
+                <div class="marmite-search-bar-result">
+                    <ul id="marmite-search-bar-result"></ul>
+                </div>
+            </div>
+            
+        </header>
+        
+        <section class="main-content">
+            
+
+
+
+<article>
+
+  
+
+
+<div class="content-title" id="title">
+    <h1>Samba on Ubuntu 22 needs "inherit permissions" set</h1> 
+    
+
+
+<span class="content-date">
+    <small> May 31, 2022 - &#10710; 1 min</small>
+</span>
+
+</div>
+
+  
+
+  <div class="content-html"><!-- Content Injected to every content markdown header -->
+<p>see samba config on hogwarts</p>
+<!-- Content Injected to every content markdown footer -->
+</div>
+  
+  <footer class="data-tags-footer">
+
+    <div class="content-authors-flex">
+      <div class="content-authors-full">
+        
+<div class="content-authors">
+    <ul>
+        
+            
+            
+            <li>
+                <a href="author-nicpayne.html">
+                    <img src="https://github.com/pypeaday.png" alt="Nicholas Payne" class="avatar">
+                    Nicholas Payne
+                </a>
+            </li>
+            
+        
+    </ul>
+</div>
+
+
+      </div>
+
+      <div class="date-tags-container">
+        <div class="content-date">
+          
+
+
+<span class="content-date">
+    <small> May 31, 2022 - &#10710; 1 min</small>
+</span>
+
+        </div>
+
+        <ul class="content-tags">
+          
+          <li><a href="./tag-homelab.html">homelab</a></li>
+          
+          <li><a href="./tag-linux.html">linux</a></li>
+          
+          <li><a href="./tag-tech.html">tech</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+</article>
+
+
+
+
+  
+  
+  
+  
+  <article>
+    Related homelab content
+    <ul>
+      
+      
+      <li><a href="./dns-broke-after-reboot-ubuntu-22-04.html">DNS Broke After Reboot - Ubuntu 22.04</a></li>
+      
+      
+      <li><a href="./opnsense-bootstrap-recovery.html">OPNSense Bootstrap Recovery</a></li>
+      
+      
+      <li><a href="./recovering-opnsense.html">Recovering OPNSense</a></li>
+      
+      
+      <li><a href="./docker-remote-add.html">docker-remote-add</a></li>
+      
+      
+      <li><a href="./docker-copy-and-chown.html">Docker copy and chown</a></li>
+      
+    </ul>
+  </article>
+  
+
+
+
+    <article></article>
+
+
+
+        </section>
+        
+        <footer class="footer-content grid">
+            <div>Powered by <a href="https://github.com/rochacbruno/marmite">Marmite</a> | <small><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY_NC-SA</a></small></div>
+            
+        </footer>
+        
+    </main>
+
+    <script src="./static/marmite.js"></script>
+    <script src="./static/custom.js"></script>
+    
+    <script type="module" src="./static/search.js"></script>
+    
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>
+
+
+
+</body>
+</html>
