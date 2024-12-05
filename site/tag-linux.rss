@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Fri, 22 Nov 2024 08:08:40 GMT</pubDate><lastBuildDate>Wed, 04 Dec 2024 18:54:43 GMT</lastBuildDate><generator>marmite</generator><item><title>DNS Broke After Reboot - Ubuntu 22.04</title><link>https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html</guid><pubDate>Fri, 22 Nov 2024 08:08:40 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>
+<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href="https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config">SO Post</a></p>
+<p>sudo mkdir /etc/systemd/resolved.conf.d/
+sudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>
+<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>
+<pre><code>[Resolve]
+DNS=8.8.8.8 1.1.1.1
+</code></pre>
+<p>But I decided to use tailscale</p>
+<pre><code>[Resolve]
+DNS=100.100.100.100
+</code></pre>
+<p>Then restart systemd-resolved</p>
+<p>sudo systemctl restart systemd-resolved</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Restart KDE Plasma</title><link>https://pype.dev/restart-kde-plasma.html</link><author>nicpayne</author><category>linux</category><category>terminal</category><category>tech</category><guid>https://pype.dev/restart-kde-plasma.html</guid><pubDate>Fri, 08 Nov 2024 15:53:52 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>
+<pre><code>
+sudo killall plasmashell
+
+kstart plasmashell
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>docker-remote-add</title><link>https://pype.dev/docker-remote-add.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/docker-remote-add.html</guid><pubDate>Tue, 17 Sep 2024 06:19:00 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Add from url??</p>
+<p>ADD <a href="http://example.com/cars.csv">http://example.com/cars.csv</a> /tmp/cars.csv</p>
+<p>Unpack automatically!? (.tar, .tar.gz, .tgz, .bz2, .tbz2, .txz, .zip)</p>
+<p>ADD myapp.tar.gz /opt/myapp/</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Docker copy and chown</title><link>https://pype.dev/docker-copy-and-chown.html</link><author>nicpayne</author><category>linux</category><category>homelab</category><category>tech</category><guid>https://pype.dev/docker-copy-and-chown.html</guid><pubDate>Tue, 17 Sep 2024 06:18:09 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>COPY --chown=myuser:mygroup source-file target-file</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Interesting IPs between Jellyfin clients and server depending on tailscale and server address</title><link>https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html</guid><pubDate>Fri, 12 Jul 2024 06:24:57 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>When connecting from my phone to jellyfin I'm seeing some interesting patterns.</p>
+<h2><a href="#scenarios" aria-hidden="true" class="anchor" id="scenarios"></a>Scenarios</h2>
+<h3><a href="#tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin" aria-hidden="true" class="anchor" id="tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin"></a>Tailscale IP of phone is listed as local network to jellyfin</h3>
+<p>Wifi: off
+Tailscale: on
+Use exit node: on
+LAN access: on
+Jellyfin: LAN IP</p>
+<p>Jellyfin sees 192.168.1.1, my router address</p>
+<hr />
+<p>Wifi: off
+tailscale: on
+Use exit node: on
+LAN access: on
+Jellyfin: Tailscale magic DNS</p>
+<p>Jellyfin sees the docker bridge network</p>
+<p>Q: This might be because of traefik somehow</p>
+<hr />
+<p>Wifi: off
+tailsacale: on
+Use exit node: on
+LAN access: off
+Jellyfin: LAN IP</p>
+<p>Jellyfin sees the 192.168.1.1</p>
+<p>Q: Why did this work even work?</p>
+<hr />
+<p>Wifi: off
+tailsacale: on
+Use exit node: on
+LAN access: off
+Jellyfin: Tailscale magic DNS</p>
+<p>Jellyfin sees the docker bridge network</p>
+<hr />
+<p>Wifi: off
+tailsacale: on
+Use exit node: off
+LAN access: off
+Jellyfin: LAN IP</p>
+<p>Jellyfin sees the 192.168.1.1</p>
+<p>Q: Why did this work?</p>
+<hr />
+<p>Wifi: off
+tailsacale: on
+Use exit node: off
+LAN access: off
+Jellyfin: Tailscale magic DNS</p>
+<p>Jellyfin sees the docker bridge network</p>
+<hr />
+<p>Wifi: on
+tailsacale: of
+Use exit node: off
+LAN access: off
+Jellyfin: LAN IP (via pihole DNS)</p>
+<p>Jellyfin sees the IP of my phone</p>
+<hr />
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Upgrading your kernel can F you up... whoops</title><link>https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html</guid><pubDate>Wed, 26 Jun 2024 10:21:59 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975">https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975</a> I lost TPU for frigate, this saved me ass</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Fonts in VS C**e</title><link>https://pype.dev/fonts-in-vs-c-e.html</link><author>nicpayne</author><category>linux</category><category>terminal</category><category>tech</category><guid>https://pype.dev/fonts-in-vs-c-e.html</guid><pubDate>Mon, 20 May 2024 06:44:07 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Jet Brains has to be specified 'JetBrainsMono Nerd Font Mono'</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>DHCP Restart to Save Ubuntu 22.04 Server Networking</title><link>https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html</guid><pubDate>Sun, 31 Dec 2023 20:26:50 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn't show up on any networks. A solution that got me back in was a friend restarting the dhcp client for me:</p>
+<pre><code class="language-bash">sudo dhclient -r -v &lt;interface&gt; &amp;&amp; sudo dhclient -v &lt;interface&gt;
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Refresh Nextcloud Groupfolders after messing around on the filesystem</title><link>https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html</guid><pubDate>Sat, 23 Sep 2023 12:45:06 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Exec in as www-data and run ./occ groupfolders:scan folder_id -v (the -v to see what it's doing)</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Convert Word Doc to PDF with Headless Libreoffice</title><link>https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html</link><author>nicpayne</author><category>linux</category><category>cli</category><category>tech</category><guid>https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html</guid><pubDate>Thu, 09 Mar 2023 06:48:38 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I've been using paperless-ngx to manage all my documents, but every once in a while I'll get a <code>.docx</code> file to deal with...</p>
+<p>Turns out Libreoffice has a headless mode a <code>pdf</code> converter built-in!</p>
+<pre><code class="language-Bash">libreoffice --headless --convert-to pdf /path/to/file.docx --outdir /path/to/output/directory
+</code></pre>
+<blockquote>
+<p>Note that <code>--outdir</code> is in fact a directory, not the path to a file</p>
+</blockquote>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>i3-Like keyboard mapping in Pop_OS</title><link>https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html</link><author>nicpayne</author><category>linux</category><category>linux</category><category>tech</category><guid>https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html</guid><pubDate>Thu, 12 Jan 2023 05:51:25 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I was introduced to tiling window managers through i3, which I use heavily on
+one of my machines. I have switched to Pop_OS! at home though, which has a
+tiling window mode but the keybindings are not what I'm used to for i3. I
+wanted to at least navigate workspaces how I'm used to doing (cause I set
+workspace 3 for communication apps, 1 for my terminal, etc...)</p>
+<p>Here's how I set keybindings for:</p>
+<ul>
+<li><code>&lt;Super&gt; + &lt;number&gt;</code> sends me to that numbered workspace</li>
+<li><code>&lt;Shift&gt; + &lt;Super&gt; + &lt;number&gt;</code> moves the window I'm focused on to workspace <code>number</code></li>
+</ul>
+<pre><code class="language-bash">#!/bin/bash
+gsettings set org.gnome.mutter dynamic-workspaces false 
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 8 
+gsettings set org.gnome.shell.keybindings switch-to-application-1 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-2 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-3 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-4 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-5 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-6 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-7 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-8 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-9 [] 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 &quot;['&lt;Super&gt;1']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 &quot;['&lt;Super&gt;2']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 &quot;['&lt;Super&gt;3']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 &quot;['&lt;Super&gt;4']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 &quot;['&lt;Super&gt;5']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 &quot;['&lt;Super&gt;6']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 &quot;['&lt;Super&gt;7']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 &quot;['&lt;Super&gt;8']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 &quot;['&lt;Super&gt;9']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-10 &quot;['&lt;Super&gt;0']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 &quot;['&lt;Super&gt;&lt;Shift&gt;1']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 &quot;['&lt;Super&gt;&lt;Shift&gt;2']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 &quot;['&lt;Super&gt;&lt;Shift&gt;3']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 &quot;['&lt;Super&gt;&lt;Shift&gt;4']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 &quot;['&lt;Super&gt;&lt;Shift&gt;5']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 &quot;['&lt;Super&gt;&lt;Shift&gt;6']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 &quot;['&lt;Super&gt;&lt;Shift&gt;7']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 &quot;['&lt;Super&gt;&lt;Shift&gt;8']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 &quot;['&lt;Super&gt;&lt;Shift&gt;9']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-10 &quot;['&lt;Super&gt;&lt;Shift&gt;0']&quot;
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>i3-Like keyboard mapping in Pop_OS</title><link>https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html</link><author>nicpayne</author><category>linux</category><category>linux</category><category>tech</category><guid>https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html</guid><pubDate>Thu, 12 Jan 2023 05:51:25 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I was introduced to tiling window managers through i3, which I use heavily on
+one of my machines. I have switched to Pop_OS! at home though, which has a
+tiling window mode but the keybindings are not what I'm used to for i3. I
+wanted to at least navigate workspaces how I'm used to doing (cause I set
+workspace 3 for communication apps, 1 for my terminal, etc...)</p>
+<p>Here's how I set keybindings for:</p>
+<ul>
+<li><code>&lt;Super&gt; + &lt;number&gt;</code> sends me to that numbered workspace</li>
+<li><code>&lt;Shift&gt; + &lt;Super&gt; + &lt;number&gt;</code> moves the window I'm focused on to workspace <code>number</code></li>
+</ul>
+<pre><code class="language-bash">#!/bin/bash
+gsettings set org.gnome.mutter dynamic-workspaces false 
+gsettings set org.gnome.desktop.wm.preferences num-workspaces 8 
+gsettings set org.gnome.shell.keybindings switch-to-application-1 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-2 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-3 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-4 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-5 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-6 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-7 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-8 [] 
+gsettings set org.gnome.shell.keybindings switch-to-application-9 [] 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 &quot;['&lt;Super&gt;1']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 &quot;['&lt;Super&gt;2']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 &quot;['&lt;Super&gt;3']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 &quot;['&lt;Super&gt;4']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 &quot;['&lt;Super&gt;5']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 &quot;['&lt;Super&gt;6']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 &quot;['&lt;Super&gt;7']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 &quot;['&lt;Super&gt;8']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 &quot;['&lt;Super&gt;9']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-10 &quot;['&lt;Super&gt;0']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 &quot;['&lt;Super&gt;&lt;Shift&gt;1']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 &quot;['&lt;Super&gt;&lt;Shift&gt;2']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 &quot;['&lt;Super&gt;&lt;Shift&gt;3']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 &quot;['&lt;Super&gt;&lt;Shift&gt;4']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 &quot;['&lt;Super&gt;&lt;Shift&gt;5']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 &quot;['&lt;Super&gt;&lt;Shift&gt;6']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 &quot;['&lt;Super&gt;&lt;Shift&gt;7']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 &quot;['&lt;Super&gt;&lt;Shift&gt;8']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 &quot;['&lt;Super&gt;&lt;Shift&gt;9']&quot; 
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-10 &quot;['&lt;Super&gt;&lt;Shift&gt;0']&quot;
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Use non-standard named ssh keys with github</title><link>https://pype.dev/use-non-standard-named-ssh-keys-with-github.html</link><author>nicpayne</author><category>linux</category><category>cli</category><category>tech</category><guid>https://pype.dev/use-non-standard-named-ssh-keys-with-github.html</guid><pubDate>Tue, 03 Jan 2023 08:34:50 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I was getting <code>(publickey denied)</code> when trying to push to GH using ssh. When I
+tested the connection I saw that a bunch of keys in ``~/.ssh/ were being
+attempted</p>
+<pre><code class="language-console">✗ ssh git@github.com -vv
+
+...
+
+debug1: Will attempt key: /home/nic/.ssh/id_rsa 
+debug1: Will attempt key: /home/nic/.ssh/id_ecdsa 
+debug1: Will attempt key: /home/nic/.ssh/id_ecdsa_sk 
+debug1: Will attempt key: /home/nic/.ssh/id_ed25519 
+debug1: Will attempt key: /home/nic/.ssh/id_ed25519_sk 
+debug1: Will attempt key: /home/nic/.ssh/id_xmss 
+debug1: Will attempt key: /home/nic/.ssh/id_dsa 
+
+...
+
+debug1: No more authentication methods to try.
+git@github.com: Permission denied (publickey).
+
+</code></pre>
+<p>None of those were the key I setup with GH. So I added an entry
+into <code>~/.ssh/config</code>:</p>
+<pre><code class="language-text">Host
+github.com
+User git
+Port 22
+Hostname github.com
+IdentityFile ~/.ssh/my_custom_github_key
+TCPKeepAlive yes
+IdentitiesOnly yes 
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Reminder about ssh-copy-id for SSH and Ansible</title><link>https://pype.dev/reminder-about-ssh-copy-id-for-ssh-and-ansible.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/reminder-about-ssh-copy-id-for-ssh-and-ansible.html</guid><pubDate>Wed, 28 Dec 2022 13:33:07 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><code>ssh-copy-id -i my.key.pub &lt;hostname probably from tailscale&gt;</code>
+this makes sure I can run ansible from my desktop against VMs on my server
+easily if they have tailscale for the hostname - otherwise use the IP</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Nextcloud Docker Upgrade Error</title><link>https://pype.dev/nextcloud-docker-upgrade-error.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/nextcloud-docker-upgrade-error.html</guid><pubDate>Wed, 28 Dec 2022 09:39:27 GMT</pubDate><source url="https://pype.dev">tag-linux</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error">https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error</a></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>

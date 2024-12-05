@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Wed, 06 Nov 2024 00:00:00 GMT</pubDate><lastBuildDate>Wed, 04 Dec 2024 18:54:42 GMT</lastBuildDate><generator>marmite</generator><item><title>Recovering OPNSense</title><link>https://pype.dev/recovering-opnsense.html</link><author>nicpayne</author><category>blog</category><category>homelab</category><guid>https://pype.dev/recovering-opnsense.html</guid><pubDate>Wed, 06 Nov 2024 00:00:00 GMT</pubDate><source url="https://pype.dev">tag-blog</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I woke up to faulty internet and after some troubleshooting it turns out the
+root zfs dataset that OPNSense boots from got corrupted...</p>
+<blockquote>
+<p>PRO-TIP - Auto backup your OPNSense config to Google Drive, git, or
+nextcloud... But if you won't then at least back up your OPNSense config
+somewhere everytime you update it.</p>
+</blockquote>
+<p>It's too much to recount every issue, so here's a bullet list what worked.</p>
+<ol>
+<li>On a fresh drive install OPNSense</li>
+<li>Plug in the old drive through a USB enclosure - now I'm not sure what would
+happen if you plugged it in along with the new drive and then booted up.
+Because both drives will have a zfs pool <code>zroot</code> and the boot dataset is
+automounted at <code>/zroot/ROOT/default</code>. My old <code>zroot</code> pool was <code>SUSPENDED</code> so it
+didn't automount</li>
+<li>Because the old <code>zoot/ROOT/default</code> was corrupted I did this to mount it RO:
+<code>zpool import -d &lt;path to zfs partition - /dev/stuff&gt; -N zroot zrootrecovery</code></li>
+</ol>
+<blockquote>
+<p>-d is the zfs flag to import the pool by disk id, -N it to not mount any of
+the datasets (we need to change mountpoints) and the <code>zroot zrootrecovery</code>
+imports the <code>zroot</code> pool with a new name</p>
+</blockquote>
+<ol start="4">
+<li>Change the mountpoints for all the <code>zrootrecovery</code> datasets to somewhere
+like <code>/mnt/zrootrecovery</code></li>
+<li>Depending on the mount point you set you'll find a <code>config</code> directory around
+<code>/mnt/zrootrecovery/ROOT/default/config</code> - copy the file you want to another
+machine via scp or whatever</li>
+<li>Go to OPNSense webui and recover from that config!</li>
+</ol>
+<p>All in all this process took me around 8 hours but I did run into about ever
+issue under the sun (several bad disks in the mix, a laptop that wouldn't live
+boot into a BSD system, etc.)</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Wish-List-With-Fastapi</title><link>https://pype.dev/wish-list-with-fastapi.html</link><author>nicpayne</author><category>python</category><category>blog</category><category>tech</category><guid>https://pype.dev/wish-list-with-fastapi.html</guid><pubDate>Fri, 06 May 2022 00:00:00 GMT</pubDate><source url="https://pype.dev">tag-blog</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Amazon has crossed the line with me just one too many times now so we are looking to drop them like every other Big Tech provider....</p>
+<p>However, one key feature of Amazon that has been so useful for us is Lists... We can just maintain a list for each of us and then family members can login anytime and check it out...
+This really alleviates any last minute gift idea stress right before a birthday or something.</p>
+<p>So I need a nice gift list service but I don't want to be locked into one company (like a Target registry or something) and I'd like to host it myself</p>
+<p>The internets had a few options but nothing looked/felt like I wanted to I decided to build my own.</p>
+<h1><a href="#the-frontend" aria-hidden="true" class="anchor" id="the-frontend"></a>The Frontend</h1>
+<p><u>I have no idea how to do front end so stay tuned</u></p>
+<h1><a href="#the-backend" aria-hidden="true" class="anchor" id="the-backend"></a>The Backend</h1>
+<p>FastAPI for the win on this one... I followed a few examples online and what I was able to build in just a few minutes is pretty impressive thanks to the design of FastAPI.</p>
+<p>Some key features are:</p>
+<ol>
+<li>Auto doc generation</li>
+<li>Required typing (which makes #1 possible)</li>
+<li>Built-in api testing in the browser</li>
+<li>Easy integration with sqlalchemy</li>
+<li>Development time so short you won't be done with your coffee before having something up and running!</li>
+</ol>
+<h2><a href="#database" aria-hidden="true" class="anchor" id="database"></a>Database</h2>
+<p>Starting with a simple <code>database.py</code> we can create a sqlalchemy session with a base model with about 7 lines of code...</p>
+<pre><code class="language-python">
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
+SQLALCHEMY_DATABASE_URL = &quot;sqlite:///wishes.sqlite3&quot;
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+</code></pre>
+<h2><a href="#model" aria-hidden="true" class="anchor" id="model"></a>Model</h2>
+<p>For my wish list I needed just a simple table:</p>
+<table>
+<thead>
+<tr>
+<th align="right">id</th>
+<th align="left">person</th>
+<th align="left">item</th>
+<th align="left">link</th>
+<th align="left">purchased</th>
+<th align="left">purchased_by</th>
+<th align="left">date_added</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right">1</td>
+<td align="left">pypeaday</td>
+<td align="left">A sweet item</td>
+<td align="left"><a href="http://www.mystore.store">www.mystore.store</a></td>
+<td align="left">False</td>
+<td align="left">dad</td>
+<td align="left">2022-05-05 21:55:09</td>
+</tr>
+<tr>
+<td align="right">2</td>
+<td align="left">pypeaday</td>
+<td align="left">A bitter item</td>
+<td align="left"><a href="http://www.bitterstore.com">www.bitterstore.com</a></td>
+<td align="left">True</td>
+<td align="left">Mrs. pypeaday</td>
+<td align="left">2022-05-06 06:55:54</td>
+</tr>
+</tbody>
+</table>
+<p>The table is simple enough... A unique key, the person who the wish belongs to, the item (or wish), a link to the item, whether it's been purchased or not and by whom, and the date it was added.</p>
+<p>To make this model with sqlalchemy we can make a <code>model.py</code> like so:</p>
+<pre><code class="language-python">from database import Base
+from sqlalchemy.schema import Column
+from sqlalchemy.types import Boolean, Integer, String, Text
+
+
+class Wishes(Base):
+    __tablename__ = &quot;Wishes&quot;
+    id = Column(Integer, primary_key=True, index=True)
+    person = Column(String(20))
+    item = Column(Text())
+    link = Column(Text())
+    purchased = Column(Boolean())
+    purchased_by = Column(String(90))
+    date_added = Column(String(15))
+</code></pre>
+<h2><a href="#schema" aria-hidden="true" class="anchor" id="schema"></a>Schema</h2>
+<p>One of the best things about FastAPI is trivial integration with pydantic.
+We can define a schema to ensure any data posted is not missing anything!</p>
+<p>Make a <code>schema.py</code> with the following:</p>
+<pre><code class="language-python">from pydantic import BaseModel
+import time
+from typing import Optional
+
+
+class wish_schema(BaseModel):
+
+    person: str
+    item: str
+    link: str
+    purchased: bool = False
+    purchased_by: Optional[str] = None
+    date_added: Optional[str] = time.strftime(&quot;%Y-%m-%d %H:%M:%S&quot;, time.localtime())
+
+    class Config:
+        orm_mode = True
+
+
+class patch_schema(BaseModel):
+
+    purchased: bool
+    purchased_by: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+</code></pre>
+<p>I have 2 schemas - one for a <code>wish</code> which you'll see down below is used to validate any <code>post</code> requests.</p>
+<p>To simplify things for me I made another schema, <code>patch_schema</code> which I use for the route that updates the table (ie. marking an existing wish as purchased)</p>
+<h2><a href="#session" aria-hidden="true" class="anchor" id="session"></a>Session</h2>
+<p>One of the last things we need is a Session</p>
+<p>So make a <code>session.py</code>...</p>
+<pre><code class="language-python">from database import SessionLocal, engine
+import model
+
+model.Base.metadata.create_all(bind=engine)
+
+
+def create_get_session():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
+</code></pre>
+<p>Our routes will depend on this <code>create_get_session</code> function that will yield a <code>db</code> object through which we'll udpate our database</p>
+<h1><a href="#ok-just-do-it-already" aria-hidden="true" class="anchor" id="ok-just-do-it-already"></a>Ok just do it already!</h1>
+<p>So our <code>main.py</code> will have a few routes in it...</p>
+<p>What do we want to support?</p>
+<ol>
+<li>Getting all wishes</li>
+<li>Getting a specific wish</li>
+<li>Updating a specific wish</li>
+<li>Deleting a wish</li>
+</ol>
+<p>I think the script is fairly self explanatory but here's a few notes...</p>
+<ol>
+<li>We decorate each function with <code>@app.&lt;method&gt;</code> and define <code>response_model</code> as well as <code>status_code</code></li>
+<li>The functions are defined with <code>async</code> (this was my first exposure to this so I can't go in depth on it yet)</li>
+<li>The functions all take a <code>db</code> which is from <code>session.py</code> and that <code>db</code> depends on the <code>create_get_session</code> function</li>
+<li>If the db is being updtes then we type the object used for the update with the appropriate schema (either <code>wish_schema</code> or <code>patch_schema</code>)</li>
+</ol>
+<p>From there we're in true python-land where you can basically guess the methods on <code>db</code> and you'd probably be right... (like <code>query</code>, <code>upddate</code>, <code>delete</code> etc.)</p>
+<pre><code class="language-python">from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import Session
+from typing import List
+from model import Wishes
+from schema import wish_schema, patch_schema
+from session import create_get_session
+
+app = FastAPI()
+
+
+@app.get(&quot;/&quot;)
+def read_root():
+    return {&quot;message&quot;: &quot;server is up!&quot;}
+
+
+@app.get(&quot;/wishes&quot;, response_model=List[wish_schema], status_code=200)
+async def read_wishes(db: Session = Depends(create_get_session)):
+    wishes = db.query(Wishes).all()
+    return wishes
+
+
+@app.post(&quot;/wishes&quot;, response_model=wish_schema, status_code=201)
+async def add_wish(wish: wish_schema, db: Session = Depends(create_get_session)):
+    new_wish = Wishes(
+        person=wish.person,
+        item=wish.item,
+        link=wish.link,
+        purchased=wish.purchased,
+        purchased_by=wish.purchased_by,
+        date_added=wish.date_added,
+    )
+    db.add(new_wish)
+    db.commit()
+
+    return new_wish
+
+
+@app.get(&quot;/wishes/{id}&quot;, response_model=wish_schema, status_code=200)
+async def get_wish(id: int, db: Session = Depends(create_get_session)):
+    wish = db.query(Wishes).get(id)
+    return wish
+
+
+@app.patch(&quot;/wishes/{id}&quot;, response_model=wish_schema, status_code=200)
+async def update_wish(
+    id: int, patch: patch_schema, db: Session = Depends(create_get_session)
+):
+    db_wish = db.query(Wishes).get(id)
+    db_wish.purchased = patch.purchased
+    db_wish.purchased_by = patch.purchased_by
+    db.commit()
+    db.refresh(db_wish)
+
+    return db_wish
+
+
+@app.delete(&quot;/wishes/{id}&quot;, status_code=200)
+async def delete_wish(id: int, db: Session = Depends(create_get_session)):
+    db_wish = db.query(Wishes).get(id)
+    if not db_wish:
+        raise HTTPException(status_code=&quot;404&quot;, detail=&quot;Wish id does not exist&quot;)
+
+    db.delete(db_wish)
+    db.commit()
+
+    return None
+
+</code></pre>
+<h1><a href="#my-code" aria-hidden="true" class="anchor" id="my-code"></a>My Code</h1>
+<p>You can find my repo <a href="https://github.com/nicpayne713/wish-lists">here</a>.</p>
+<p>I'll plan to update and maintain for as long as I use it</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Tdarr</title><link>https://pype.dev/tdarr.html</link><author>nicpayne</author><category>blog</category><category>homelab</category><category>tech</category><guid>https://pype.dev/tdarr.html</guid><pubDate>Thu, 28 Apr 2022 00:00:00 GMT</pubDate><source url="https://pype.dev">tag-blog</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Home-Server-Refactor</title><link>https://pype.dev/home-server-refactor.html</link><author>nicpayne</author><category>blog</category><category>tech</category><guid>https://pype.dev/home-server-refactor.html</guid><pubDate>Sun, 10 Apr 2022 00:00:00 GMT</pubDate><source url="https://pype.dev">tag-blog</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>My current homelab setup is not great but it works...</p>
+<h1><a href="#proxmox-on-poweredge-r610" aria-hidden="true" class="anchor" id="proxmox-on-poweredge-r610"></a>Proxmox on PowerEdge R610</h1>
+<p>I boot off an SD card and have 1 SSD and 5 HDDs configured as a JBOD array using a Dell H700 SAS controller.
+I cannot boot from a disk using this controller and I can't get the firmware configured in a way to allow it.
+So I have 1 SSD as a ZFS array that I've been putting my VM images on, and the 5 HDDs are passed through to a TrueNAS VM where I handle all the ZFS stuff there... kind of meta because I then attached those drives to Proxmox as a CIFS share.</p>
+<h1><a href="#truenas-on-dedicated-box" aria-hidden="true" class="anchor" id="truenas-on-dedicated-box"></a>TrueNAS on dedicated box</h1>
+<p>I have an on-prem backup that is just an old desktop running TrueNAS
+I regularly backup the 5 disk RAIDZ2 array from my Proxmox host (managed by a TrueNAS VM) to this backup box</p>
+<p>Currently there is nothing else running on this machine since it's my &quot;backup&quot;</p>
+<h1><a href="#jellyfin" aria-hidden="true" class="anchor" id="jellyfin"></a>Jellyfin</h1>
+<p>I was HWA for Jellyfin, but hardware passthrough on the R610 is finicky or broken so Jellyfin is running on an Ubuntu host.</p>
+<p>I could put UBuntu on the R610 and give up &quot;true virtualization&quot;. Then I'd manage the SMB share myself.
+If I do that then I would get rid of &quot;users&quot; I think, ie. basically forgo least-priviledges since I'm not sure how hard that is to manage.</p>
+<p>On the other hand, direct access to the smb config might make it easier?</p>
+<p>I have the media array on Jellyfin box setup as NFS which was really easy with ZFS... I think SMB would be just as easy.</p>
+<h1><a href="#plan-of-attack" aria-hidden="true" class="anchor" id="plan-of-attack"></a>Plan of attack...</h1>
+<ol>
+<li>Move all vm disks to individual datasets on the NAS</li>
+<li>Backup docker data... not sure how well this will work, maybe just start over?</li>
+<li>Clean up Ansible playbooks on the user side of things - stick with neville vs just using my own name?</li>
+<li>Install Ubuntu 20 or 22 on a 2.5&quot; drive that I'll toss in this SSD enclosure (or a usb thumb stick?)</li>
+<li>Re-deploy everything with ansible-playbook and configure...</li>
+</ol>
+<h2><a href="#configuration" aria-hidden="true" class="anchor" id="configuration"></a>Configuration...</h2>
+<ol start="0">
+<li>THE FREAKING NAS -&gt; just import zfs array and configure SMB?</li>
+</ol>
+<p>1.~~ Nextcloud users and connections.. might be able to just copy the data folder? not sure about the database... try spinning it up in the sandbox vm and see if stuff is there ~~
+2.~~ *arr suite, media profiles and connections to transmission... nothing major~~
+3. transmission - should be deploy and go
+4. ombi and jackett should also just work after some config again
+5. <del>traefik should just work</del>
+6. <del>try to bring up pi-hole from the vm that's already running</del>
+7. <del>heimdall will hopefully just be copying the data folder from the existind docker one'</del>
+8.~~ booksonic can be reconfigured easily~~
+9. <del>portainer... hopefully just copying data folder over?</del>
+10. <del>littlelink</del>, small-group-notes, and blog (at home) will need manually re-deployed once Ubuntu is installed bare-metal</p>
+<h2><a href="#big-big-big-todos" aria-hidden="true" class="anchor" id="big-big-big-todos"></a>BIG BIG BIG TODOS</h2>
+<ol>
+<li>
+<p>Sanoid/syncoid! Get snapshots going and backups configured with on prem TrueNAS</p>
+</li>
+<li>
+<p>Wireguard setup on DA.</p>
+</li>
+<li>
+<p>network share on printer for paperless
+<del>4. update peperless in ansible-nas</del></p>
+</li>
+<li>
+<p><del>Just deploy paperless manually... monitor/manage with portainer</del></p>
+</li>
+<li>
+<p>booksonic not seeing audiobooks/podcasts</p>
+</li>
+<li>
+<p>need a smb user to map nas/documents to the printer for paperless</p>
+</li>
+<li>
+<p>wireguard setup now on kps phone, desktop, server (and backup truenas?), and dad's pi</p>
+</li>
+<li>
+<p><del>verify lan services work</del></p>
+</li>
+<li>
+<p><del>Tdar so Jellyfin can work better</del></p>
+</li>
+</ol>
+<p>Snapshot business might be cause of all the docker containers and docker using
+ZFS backend... take everything down and try removing</p>
+<ol>
+<li>file browser - currently I just one-clicked in portainer, I want to make a stack with my own config file which I'll rip from techno tip and then add my traefik lables too</li>
+</ol>
+<p>Forget filebrowser - going to just use Nextcloud for how it's supposed to be used.
+3. Need to organize those files in nextcloud</p>
+<h2><a href="#check-this----ran-as-cp-utility-in-tmux-window-no-progress-bars-or-anything-its-in-ansible-nas-session---window-3" aria-hidden="true" class="anchor" id="check-this----ran-as-cp-utility-in-tmux-window-no-progress-bars-or-anything-its-in-ansible-nas-session---window-3"></a>CHECK THIS -&gt;  ran as 'cp' utility in tmux window, no progress bars or anything. it's in ansible-nas session -&gt; window 3</h2>
+<p>Olivet bible stuff going to /tmp/olivet/ -&gt; will move this to nextcloud, ideally by the app via appimage so that the db updates and I don't have to run that occ script
+I wnat to organize &quot;home&quot; still in nextcloud</p>
+<p>setup Sanoid</p>
+<p>clean up bitwarden
+learn nextcloud sharing -&gt; maybe just give a link to grandma?
+rest of todos -&gt; document db and sanoid + zfs.rent</p>
+<p>Check on mom's will
+do media thing for church - split vocals on mp3/4</p>
+<p>permission-data playbook changes everything to ansible-nas:ansible-nas but then samba task will re-permission some stuff to root:users... this looks fine
+I had to add <code>group</code> to the samba config in my playbook to get user auth to work with samba
+This isn't fully working... it works from cli but my python process can't write to a folder in dump after 777.... need to learn more?
+So I can make a file after adding the ansible-nas group to config, but I still cannot make a directory on the smb mount...</p>
+<p>ADDING <code>inherit permission = yes</code> under <code>[global]</code> in the smb.conf worked!</p>
+<p>still not working from printer...
+I think what I want is to setup 2 scan options - single docs right to paperless, or combined scans to dump, then manually split and send to paperless</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>

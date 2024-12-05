@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content="Marmite" />
+    
+<meta property="og:title" content="Traefik-01">
+
+<meta property="og:description" content="
+Traefik
+If you don't know about traefik and you need a reverse-proxy then you might want to check i...">
+
+
+<meta property="og:url" content="https://pype.dev/traefik-01.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pype.dev">
+
+<meta property="article:published_time" content=" 2022-03-06T00:00:00+00:00">
+
+
+<meta property="article:author" content="https://pype.dev/author-nicpayne.html">
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://pype.dev/traefik-01.html"
+    },
+    "url": "https://pype.dev/traefik-01.html",
+    "headline": "Traefik-01",
+    "description": "Traefik
+If you don't know about traefik and you need a reverse-proxy then you might want to check it out.
+I used to use nginx for my reverse...",
+    
+    "author": {
+        "@type": "Person",
+        "name": "Nicholas Payne",
+        "url": "https://pype.dev/author-nicpayne.html",
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Pype.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://pype.dev/"
+        }
+    },
+    "datePublished": "2022-03-06T00:00:00+00:00"
+}
+</script>
+
+
+    <title>Traefik-01 | Pype.dev</title>
+    <link rel="stylesheet" type="text/css" href="./static/pico.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/marmite.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/colorschemes/nord.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/custom.css">
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css" id="highlightjs-theme" />
+
+
+
+    <link rel="alternate" type="application/rss+xml" title="index" href="index.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: tech" href="tag-tech.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homelab" href="tag-homelab.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: linux" href="tag-linux.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bema" href="tag-bema.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: python" href="tag-python.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cli" href="tag-cli.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: faith" href="tag-faith.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bible-project" href="tag-bible-project.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vim" href="tag-vim.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: zfs" href="tag-zfs.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bash" href="tag-bash.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: til" href="tag-til.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: git" href="tag-git.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: blog" href="tag-blog.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: data" href="tag-data.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: webdev" href="tag-webdev.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: terminal" href="tag-terminal.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homepage" href="tag-homepage.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: infrastructure" href="tag-infrastructure.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: books" href="tag-books.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: olivet" href="tag-olivet.rss">
+    <link rel="alternate" type="application/rss+xml" title="author: nicpayne" href="author-nicpayne.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2024" href="archive-2024.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2023" href="archive-2023.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2022" href="archive-2022.rss">
+    
+
+    
+    <link rel="alternate" type="application/feed+json" title="JSON index" href="index.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: tech" href="tag-tech.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homelab" href="tag-homelab.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: linux" href="tag-linux.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bema" href="tag-bema.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: python" href="tag-python.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cli" href="tag-cli.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: faith" href="tag-faith.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bible-project" href="tag-bible-project.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vim" href="tag-vim.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: zfs" href="tag-zfs.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bash" href="tag-bash.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: til" href="tag-til.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: git" href="tag-git.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: blog" href="tag-blog.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: data" href="tag-data.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: webdev" href="tag-webdev.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: terminal" href="tag-terminal.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homepage" href="tag-homepage.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: infrastructure" href="tag-infrastructure.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: books" href="tag-books.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: olivet" href="tag-olivet.json">
+    <link rel="alternate" type="application/feed+json" title="JSON author: nicpayne" href="author-nicpayne.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2024" href="archive-2024.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2023" href="archive-2023.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2022" href="archive-2022.json">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <div class="container-fluid announcement-wrapper">
+        <div class="announcement"><p>Give us a ☆ on <a href="https://github.com/rochacbruno/marmite">github</a></p>
+</div>
+    </div>
+    
+    <main class="container">
+        
+        <header class="header-content">
+            <nav class="header-nav">
+                <ul class="header-name">
+                    <li>
+                        <hgroup>
+                            <h2><a href="./" class="contrast">Pype.dev</a></h2>
+                             <p>my mental data-lake</p> 
+                        </hgroup>
+                    </li>
+                </ul>
+                <button id="menu-toggle" class="hamburger">&#9776;</button>
+                
+                <ul class="header-menu" id="header-menu">
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./archive.html">Archive</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./tags.html">Tags</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="https://github.com/pypeaday/pype.dev" target="_blank" >Github</a>
+                        
+                    </li>
+                    
+                    <li><span class="theme-toggle secondary" title="dark mode">&#9789;</span></li>
+                    
+                    <li><a href="#" id="search-toggle" class="secondary" title="Search (Ctrl + Shift + F)"> <span class="search-txt">Search</span><span class="search-magnifier"></span></a></li>
+                    
+                    <div class="underline"></div>
+                </ul>
+            </nav>
+            
+            <div class="marmite-background-overlay" id="overlay-close"></div>
+            <div class="marmite-search-bar hidden">
+                <span>Search</span>
+                <button class="marmite-close-button" id="search-close">X</button>
+                <input placeholder="Search" id="marmite-search-input" />
+                <div class="marmite-search-bar-result">
+                    <ul id="marmite-search-bar-result"></ul>
+                </div>
+            </div>
+            
+        </header>
+        
+        <section class="main-content">
+            
+
+
+
+<article>
+
+  
+
+
+<div class="content-title" id="title">
+    <h1>Traefik-01</h1> 
+    
+
+
+<span class="content-date">
+    <small> Mar  6, 2022 - &#10710; 7 min</small>
+</span>
+
+</div>
+
+  
+  <div class="content-toc">
+    <a href="#" id="toc"></a>
+    <details>
+    <summary>🗒️</summary>
+    <ul>
+<li><a href="#traefik">Traefik</a></li>
+<li><a href="#docker">Docker</a></li>
+<li><a href="#ansible-deployment">Ansible deployment</a></li>
+<li><a href="#config">Config</a></li>
+<li><a href="#providersfile">Providers.file</a></li>
+<li><a href="#docker-labels">Docker labels</a></li>
+</ul>
+
+    </details>
+  </div>
+  
+
+  <div class="content-html"><!-- Content Injected to every content markdown header -->
+<h1><a href="#traefik" aria-hidden="true" class="anchor" id="traefik"></a>Traefik</h1>
+<p>If you don't know about <a href="https://doc.traefik.io/traefik/">traefik</a> and you need a reverse-proxy then you might want to check it out.
+I used to use nginx for my reverse proxy but the config was over my head, and once it was working I was afraid to touch it.
+Traefik brings a lot to the table, my main uses are reverse proxy and ip whitelisting, but it's doing even more under the hood that I don't have a full-grasp of yet.</p>
+<p>I like Traefik a lot because once I get some basic config up it's incredibly easy to add services into my homelab whether they run on my primary server or not.
+This will not be exhaustive but I'll outline my simple setup process of traefik and how I add services whether they are in docker or not.</p>
+<h1><a href="#docker" aria-hidden="true" class="anchor" id="docker"></a>Docker</h1>
+<p>In 2022 I'm still a docker fan-boy and I run my traefik instance in a docker container.
+This isn't necessary but I love the portability since my homelab is very dynamic at the moment.
+And even if it wasn't I'd still want to keep traefik in docker because deployment and updating are just so flipping easy</p>
+<p>A simple docker-compose file for traefik might look like this:</p>
+<pre><code class="language-yaml">name: traefik
+image: &quot;traefik:v2.4&quot;
+network_mode: host
+volumes:
+  - &quot;docker-data/traefik/traefik.toml:/etc/traefik/traefik.toml:ro&quot;
+  - &quot;docker-data/traefik/config.yml:/etc/traefik/config.yml:ro&quot;
+  - &quot;docker-data/traefik/letsencrypt:/letsencrypt:rw&quot;
+  - &quot;/var/run/docker.sock:/var/run/docker.sock:ro&quot;  # for auto-discovery
+env: &quot;{{ traefik_environment_variables }}&quot;
+restart_policy: unless-stopped
+memory: &quot;1g&quot;
+</code></pre>
+<h1><a href="#ansible-deployment" aria-hidden="true" class="anchor" id="ansible-deployment"></a>Ansible deployment</h1>
+<p><u>I plan to have more on my homelab and Ansible on this site eventually...</u></p>
+<p>I use Ansible to deploy most of my services at home, including traefik. My main homelab repo is <a href="https://github.com/nicpayne713/ansible-nas">here</a> which is a fork of <a href="https://github.com/davestephens/ansible-nas">Ansible NAS</a>.</p>
+<blockquote>
+<p>If you want my stuff then be sure to go to the <code>user/nic</code> branch on my fork</p>
+</blockquote>
+<p>You can see the ansible stuff for traefik <a href="https://github.com/davestephens/ansible-nas/tree/master/roles/traefik">here</a></p>
+<h1><a href="#config" aria-hidden="true" class="anchor" id="config"></a>Config</h1>
+<p>I use a <code>traefik.toml</code> as the main config and it looks something like this.
+With ansible a lot of this is done through template variables but this is the general idea.
+This config tells traefik what ports to listen and forward on, and gives the names to be referenced by docker labels (down below).</p>
+<p>Traefik also has a handy web ui that with this config you can find on port <code>8080</code>.
+There is a <code>providers</code> section - which is one of the biggest selling points of traefik for me.
+I have a docker provider configured  and a static file.</p>
+<p>The docker provider lets traefik auto-discover new services that I deploy and automatically handle the routing!
+The static file lets me easily add non-dockerized service routing, or routing to dockerized services on another host (I think traefik has an easier way to do this automatically but I don't do it often enough to need that kind of automation).
+Then at the bottom is the SSL cert stuff.
+Using Let's Encrypt is pretty easy and I use Cloudflare as my DNS provider</p>
+<pre><code class="language-toml">
+[entryPoints]
+[entryPoints.web]
+address = &quot;:80&quot;
+
+[entryPoints.web.http.redirections.entryPoint]
+to = &quot;websecure&quot;
+
+[entryPoints.websecure]
+address = &quot;:443&quot;
+
+[entryPoints.websecure.http.tls]
+certResolver = &quot;letsencrypt&quot;
+
+[entryPoints.websecure.http.tls.domains]
+main = &quot;example.com&quot;
+sans = [
+&quot;*.example.com&quot;
+]
+
+[entryPoints.traefik]
+address = &quot;:8080&quot;
+
+[providers]
+providersThrottleDuration = &quot;1s&quot;
+[providers.docker]
+exposedbydefault = false
+[providers.file]
+filename = &quot;/etc/traefik/config.yml&quot;
+
+[api]
+insecure = true
+dashboard = true
+
+[log]
+level = &quot;INFO&quot;
+
+[ping]
+terminatingStatusCode = 0
+
+[certificatesResolvers]
+[certificatesResolvers.letsencrypt]
+[certificatesResolvers.letsencrypt.acme]
+email = &quot;my_email@example.com&quot;
+storage = &quot;/letsencrypt/acme.json&quot;
+caserver = &quot;https://acme-staging-v02.api.letsencrypt.org/directory&quot;  # le staging, not prod
+
+[certificatesResolvers.letsencrypt.acme.dnsChallenge]
+provider = &quot;cloudflare&quot;
+</code></pre>
+<h1><a href="#providersfile" aria-hidden="true" class="anchor" id="providersfile"></a>Providers.file</h1>
+<p>To my knowledge there isn't much to configure on the docker provider side of things until you deploy a service.
+But the provider config file should get a little screen time here.</p>
+<p>The file defines a traefik http router for each service you define, in this case just <code>pihole</code>.</p>
+<p>Here I am adding my pihole instance which is not run inside docker but is inside a VM on another host.
+I want the <code>entryPoints</code> to be set to <code>websecure</code> which is configured above in the http redirects.
+I want some middlewares, <code>addprefix-pihole</code> and <code>default-headers</code>, which I'll explain below.
+I set letsencrypt as the cert certResolver.
+Finally I name the service <code>pihole</code>.</p>
+<p>Then in the <code>services</code> section I configure where pihole is located by just giving the internal IP for traefik to route to.
+Finally I define my middlewares.
+To get to the pihole homepage you need to use the route <code>/admin</code> so I want that added automatically when I go to <code>pihole.example.com</code> so I come to <code>pihole.example.com/admin</code>.
+And I wanted to restrict access to just my internal network and my wireguard network - this is done with the <code>default-whitelist</code>.
+The last thing is to configure a chain of middlewares that I called <code>secured</code> which is just easier for the docker labels later on.</p>
+<p>With this config in play though, traefik will know about the route <code>pihole.example.com</code> and handle the ip whitelisting and load balancing for me.</p>
+<pre><code class="language-yaml">http:
+ #region routers 
+  routers:
+    pihole:
+      entryPoints:
+        - &quot;websecure&quot;
+      rule: &quot;Host(`pihole.example.com`)&quot;
+      middlewares:
+        # - default-headers
+        - addprefix-pihole
+        - default-whitelist
+      tls: 
+        certResolver: letsencrypt
+      service: pihole
+  #region services
+  services:
+    pihole:
+      loadBalancer:
+        servers:
+          - url: &quot;http://192.168.1.3:80&quot;
+        passHostHeader: true
+  #endregion
+  middlewares:
+    addprefix-pihole:
+      addPrefix:
+        prefix: &quot;/admin&quot;
+    https-redirect:
+      redirectScheme:
+        scheme: https
+
+    default-headers:
+      headers:
+        frameDeny: true
+        sslRedirect: true
+        browserXssFilter: true
+        contentTypeNosniff: true
+        forceSTSHeader: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 15552000
+        customFrameOptionsValue: SAMEORIGIN
+
+    default-whitelist:
+      ipWhiteList:
+        sourceRange:
+        - &quot;10.6.0.0/24&quot;  # wg
+        - &quot;192.168.1.0/24&quot;  # lan
+        - &quot;172.17.0.0/16&quot;  # docker
+
+    secured:
+      chain:
+        middlewares:
+        - default-whitelist
+        - default-headers
+</code></pre>
+<h1><a href="#docker-labels" aria-hidden="true" class="anchor" id="docker-labels"></a>Docker labels</h1>
+<p>Now the real magic is with Docker.
+Here is an example docker-compose file for spinning up a <a href="https://jellyfin.org/">jellyfin</a> server that you want to expose to the world, or at least access at home with <code>jellyfin.example.com</code> instead of <code>http://192.168.1.N:8096</code>...</p>
+<p>I left some of the ansible variable stuff in here, but the main part to be concerned with is the <code>labels</code> section...</p>
+<p>We define just a few labels to throw onto this docker container which let's traefik discover it automatically and apply any settings necessary (like my <code>ipWhiteList</code>).</p>
+<ul>
+<li><code>traefik.enable</code> is either True or False.</li>
+<li><code>traefik.http.router.jellyfin.rule</code> defines an http router called jellyfin and sets the url to <code>jellyfin.example.com</code> (if example.com was my <code>ansible_nas_domain</code>)</li>
+<li><code>traefik.http.routers.jellyfin.tls.certresolver</code> is set to letsencrypt since I use LE for my wildcard certs.</li>
+<li><code>traefik.http.routers.jellyfin.tls.domains[0].main</code> will just be <code>example.com</code> -&gt; and this should remind you of the toml file above</li>
+<li><code>traefik.http.routers.jellyfin.tls.domains[0].sans</code> is set to <code>*.example.com</code></li>
+<li><code>traefik.http.services.jellyfin.loadbalancer.server.port</code> is set to jellyfin's default http port of 8096, which tells traefik which port to point to for this service.</li>
+</ul>
+<pre><code class="language-yaml">name: jellyfin
+image: linuxserver/jellyfin
+volumes:
+  - &quot;{{ jellyfin_config_directory }}:/config:rw&quot;
+  - &quot;{{ jellyfin_movies_directory }}:/movies:{{ jellyfin_movies_permissions }}&quot;
+  - &quot;{{ jellyfin_music_directory }}:/music:{{ jellyfin_music_permissions }}&quot;
+  - &quot;{{ jellyfin_photos_directory }}:/photos:{{ jellyfin_photos_permissions }}&quot;
+  - &quot;{{ jellyfin_tv_directory }}:/tv:{{ jellyfin_tv_permissions }}&quot;
+  - &quot;{{ jellyfin_books_directory }}:/books:{{ jellyfin_books_permissions }}&quot;
+  - &quot;{{ jellyfin_audiobooks_directory }}:/audiobooks:{{ jellyfin_audiobooks_permissions }}&quot;
+ports:
+  - &quot;{{ jellyfin_port_http }}:8096&quot;
+  - &quot;{{ jellyfin_port_https }}:8920&quot;
+env:
+  TZ: &quot;{{ ansible_nas_timezone }}&quot;
+  PUID: &quot;{{ jellyfin_user_id }}&quot;
+  PGID: &quot;{{ jellyfin_group_id }}&quot;
+restart_policy: unless-stopped
+memory: 1g
+labels:
+  traefik.enable: &quot;{{ jellyfin_available_externally }}&quot;
+  traefik.http.routers.jellyfin.rule: &quot;Host(`jellyfin.{{ ansible_nas_domain }}`)&quot;
+  traefik.http.routers.jellyfin.tls.certresolver: &quot;letsencrypt&quot;
+  traefik.http.routers.jellyfin.tls.domains[0].main: &quot;{{ ansible_nas_domain }}&quot;
+  traefik.http.routers.jellyfin.tls.domains[0].sans: &quot;*.{{ ansible_nas_domain }}&quot;
+  traefik.http.services.jellyfin.loadbalancer.server.port: &quot;8096&quot;
+</code></pre>
+<p>And just like that traefik will automagically find your jellyfin container and route <code>jellyfin.example.com</code> to it!</p>
+<!-- Content Injected to every content markdown footer -->
+</div>
+  
+  <footer class="data-tags-footer">
+
+    <div class="content-authors-flex">
+      <div class="content-authors-full">
+        
+<div class="content-authors">
+    <ul>
+        
+            
+            
+            <li>
+                <a href="author-nicpayne.html">
+                    <img src="https://github.com/pypeaday.png" alt="Nicholas Payne" class="avatar">
+                    Nicholas Payne
+                </a>
+            </li>
+            
+        
+    </ul>
+</div>
+
+
+      </div>
+
+      <div class="date-tags-container">
+        <div class="content-date">
+          
+
+
+<span class="content-date">
+    <small> Mar  6, 2022 - &#10710; 7 min</small>
+</span>
+
+        </div>
+
+        <ul class="content-tags">
+          
+          <li><a href="./tag-homelab.html">homelab</a></li>
+          
+          <li><a href="./tag-tech.html">tech</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+</article>
+
+
+
+
+  
+  
+  
+  
+  <article>
+    Related homelab content
+    <ul>
+      
+      
+      <li><a href="./dns-broke-after-reboot-ubuntu-22-04.html">DNS Broke After Reboot - Ubuntu 22.04</a></li>
+      
+      
+      <li><a href="./opnsense-bootstrap-recovery.html">OPNSense Bootstrap Recovery</a></li>
+      
+      
+      <li><a href="./recovering-opnsense.html">Recovering OPNSense</a></li>
+      
+      
+      <li><a href="./docker-remote-add.html">docker-remote-add</a></li>
+      
+      
+      <li><a href="./docker-copy-and-chown.html">Docker copy and chown</a></li>
+      
+    </ul>
+  </article>
+  
+
+
+
+    <article></article>
+
+
+
+        </section>
+        
+        <footer class="footer-content grid">
+            <div>Powered by <a href="https://github.com/rochacbruno/marmite">Marmite</a> | <small><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY_NC-SA</a></small></div>
+            
+        </footer>
+        
+    </main>
+
+    <script src="./static/marmite.js"></script>
+    <script src="./static/custom.js"></script>
+    
+    <script type="module" src="./static/search.js"></script>
+    
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>
+
+
+
+</body>
+</html>

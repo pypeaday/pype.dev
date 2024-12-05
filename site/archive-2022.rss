@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Wed, 28 Dec 2022 21:01:52 GMT</pubDate><lastBuildDate>Wed, 04 Dec 2024 18:54:44 GMT</lastBuildDate><generator>marmite</generator><item><title>Modal Labs</title><link>https://pype.dev/modal-labs.html</link><author>nicpayne</author><category>python</category><category>cli</category><category>tech</category><guid>https://pype.dev/modal-labs.html</guid><pubDate>Wed, 28 Dec 2022 21:01:52 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Playing around with Modal Labs</p>
+<p>One of the first things I tried was a regular cron job...</p>
+<pre><code class="language-python">@stub.function(
+    schedule=modal.Period(minutes=59), secret=modal.Secret.from_name(&quot;my-dummy-secret&quot;)
+)
+def say_hi():
+    now = time.ctime()
+    secret = os.environ.get(&quot;dummy-secret&quot;)
+    print(f&quot;Hello {os.environ.get('USER', 'Rodney')} at {now}&quot;)
+    print(f&quot;{secret=}&quot;)
+
+</code></pre>
+<p>This can get deployed with <code>modal deploy --name &lt;app name&gt; &lt;path to .py file with the stub and function defined in it&gt; </code></p>
+<p>This function gets deployed as an app that I conveniently call <code>say_hi</code> (as far
+as I can tell the app name can be anything - as I add functions to this same
+app and deploy with the same name to get a new version)</p>
+<p>Notice that this also is an example of giving access to a secret - defined in the Modal Labs dashboard</p>
+<p>We can take a look at the apps running at <a href="https://modal.com/apps">https://modal.com/apps</a></p>
+<p>I then added another function to experiment with custom container images and
+saw then that Modal will just slap a new version on anything provisioned with
+the same name (intuitive enough for sure) so when I add functions to my .py
+script and run <code>modal deploy --name say_hi myscript.py</code> over and over, the app
+called <code>say_hi</code> in the Modal apps dashboard just gets a new version</p>
+<p>This means I can spin up several instances of functionally the same app but with different names/versions etc...
+Q: Maybe there's gitops or policy stuff builtin to app names then?</p>
+<p>I needed to take down an app I deployed as a duplicate but you don't stop apps
+by name, you stop them by an id... see below</p>
+<pre><code class="language-console">
+modal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)
+✗ modal app stop --help
+
+ Usage: modal app stop [OPTIONS] APP_ID
+
+ Stop an app.
+
+╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ *    app_id      TEXT  [default: None] [required]                                                                                                │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+
+modal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)
+❯ modal app list
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ App ID                    ┃ Description         ┃ State    ┃ Creation time             ┃ Stop time                 ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ ap-lzy1AAuVy7POFkUcDKRxpQ │ print_info          │ deployed │ 2022-12-28 20:59:07-06:00 │                           │
+│ ap-qYjE45dciqgT3C3CpNp3RL │ say_hi              │ deployed │ 2022-12-28 19:49:22-06:00 │                           │
+│ ap-X7FYneUeYV5IKHcyirSb87 │ link-scraper        │ stopped  │ 2022-12-28 15:39:02-06:00 │ 2022-12-28 15:39:04-06:00 │
+│ ap-UOXTUU4uSRx2UZypJOcAsk │ example-get-started │ stopped  │ 2022-12-28 15:17:47-06:00 │ 2022-12-28 15:17:49-06:00 │
+└───────────────────────────┴─────────────────────┴──────────┴───────────────────────────┴───────────────────────────┘
+
+modal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)
+❯ modal app stop ap-lzy1AAuVy7POFkUcDKRxpQ
+
+</code></pre>
+<h1><a href="#git-warning" aria-hidden="true" class="anchor" id="git-warning"></a>Git warning!</h1>
+<p>I ran <code>modal deploy ...</code> after comitting some stuff I wanted to try BUT I had
+changes in my file I didn't want to deploy... some git safety would be nice for
+deployment!</p>
+<blockquote>
+<p>git stash &amp;&amp; modal deploy .. &amp;&amp; git stash pop</p>
+</blockquote>
+<p>Question for Modal team - in my modal sandbox repo at commit:</p>
+<pre><code>aab6162 (HEAD -&gt; main) HEAD@{1}: commit: print base version of my own image to prove it to me
+ 1 file changed, 2 insertions(+)
+
+</code></pre>
+<p>An environment variable, <code>BASE_VERSION</code> that I expect to be in my base image
+was not available to the python function in my Modal app... hopefully the log
+is still
+<a href="https://modal.com/logs/ap-qYjE45dciqgT3C3CpNp3RL?functionId=fu-rOt31ShRE1W1CQfuf02fsq&amp;taskId=ta-dm8BfiblvFLwVIQyt75YC2&amp;inputId=in-n64klEFrLtbcm2BiykJEvW">here</a></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Reminder about ssh-copy-id for SSH and Ansible</title><link>https://pype.dev/reminder-about-ssh-copy-id-for-ssh-and-ansible.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/reminder-about-ssh-copy-id-for-ssh-and-ansible.html</guid><pubDate>Wed, 28 Dec 2022 13:33:07 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><code>ssh-copy-id -i my.key.pub &lt;hostname probably from tailscale&gt;</code>
+this makes sure I can run ansible from my desktop against VMs on my server
+easily if they have tailscale for the hostname - otherwise use the IP</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Nextcloud Docker Upgrade Error</title><link>https://pype.dev/nextcloud-docker-upgrade-error.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/nextcloud-docker-upgrade-error.html</guid><pubDate>Wed, 28 Dec 2022 09:39:27 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error">https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error</a></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Systemd timer for syncoid</title><link>https://pype.dev/systemd-timer-for-syncoid.html</link><author>nicpayne</author><category>zfs</category><category>homelab</category><category>tech</category><guid>https://pype.dev/systemd-timer-for-syncoid.html</guid><pubDate>Wed, 21 Dec 2022 11:38:27 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I have a bash script called <code>syncoid-job</code> which boils down to a barebones -</p>
+<pre><code class="language-bash">#!/bin/bash
+
+syncoid --no-sync-snap --sendoptions=w --no-privilege-elevation $SYNOIC_USER@$SERVER:tank/encrypted/nas tank/encrypted/nas
+</code></pre>
+<p>I want to run this script hourly but as my user (notice the no-privilege-elevation flag)</p>
+<p>First - create a systemd unit file at <code>/etc/systemd/system/syncoid-replication.service</code></p>
+<pre><code class="language-bash">[Unit]
+Description=ZFS Replication With Syncoid
+
+[Service]
+Type=oneshot
+ExecStart=/$HOME/dotfiles/syncoid-job
+User=$USER
+Group=$GROUP
+
+[Install]
+WantedBy=multi-user.target
+
+</code></pre>
+<p>Then we save the unit file, enable the service, and then start it</p>
+<pre><code class="language-console">systemctl enable syncoid-replication.service
+systemctl start syncoid-replication.service
+
+</code></pre>
+<blockquote>
+<p>Note this will run that script... so be ready for syncoid to do its thing</p>
+</blockquote>
+<p>Now for the timer... We create <code>/etc/systemd/system/syncoid-replication.timer</code></p>
+<pre><code class="language-bash">[Unit]
+Description=Run syncoid-replication every hour
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target
+
+</code></pre>
+<p>Hit it with a <code>systemctl enable syncoid-replication.timer</code> and you're in business!</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Adding docker daemon.json broke docker</title><link>https://pype.dev/adding-docker-daemon-json-broke-docker.html</link><author>nicpayne</author><category>linux</category><category>linux</category><category>tech</category><guid>https://pype.dev/adding-docker-daemon-json-broke-docker.html</guid><pubDate>Wed, 21 Dec 2022 10:02:25 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>in /lib/systemd/system/docker.service there is an ExecStart command that got placed there when I setup Docker with Ansible - it threw the -H flag which told the daemon what hosts to setup. But I added the &quot;hosts&quot; key in my daemon.json and it broke - so removing the -H flag from the systemd unit fixed it</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>suda.vim for sudo access to files</title><link>https://pype.dev/suda-vim-for-sudo-access-to-files.html</link><author>nicpayne</author><category>vim</category><category>linux</category><category>tech</category><guid>https://pype.dev/suda-vim-for-sudo-access-to-files.html</guid><pubDate>Wed, 21 Dec 2022 09:45:34 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I regularly need to edit system config files - take /etc/sanoid/sanoid.conf as
+an example... I'll want to play with something but if I don't start Neovim as
+root then I get in trouble making edits I can't save! So
+<a href="https://github.com/lambdalisue/suda.vim">suda.vim</a> gives me
+<code>:SudaWrite</code> which let's me write that buffer with sudo privileges even though
+I'm Neovim is running with my login user!</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Pipe to a pager to preserve console output in SSH session</title><link>https://pype.dev/pipe-to-a-pager-to-preserve-console-output-in-ssh-session.html</link><author>nicpayne</author><category>linux</category><category>cli</category><category>tech</category><guid>https://pype.dev/pipe-to-a-pager-to-preserve-console-output-in-ssh-session.html</guid><pubDate>Sun, 18 Dec 2022 15:04:02 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I'm playing with my ansible playbook in a remote tmux session, and I'm no wiz
+so I don't know the ins and outs, but I can't scroll up to get any console log
+output that's not already visible on my screen. So I'm starting to end my
+commands with <code> | less</code> so I can page through the console output!</p>
+<p><code>ansible-playbook plays.yml -v --tags mytag | less</code></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Cron for Nextcloud in Docker</title><link>https://pype.dev/cron-for-nextcloud-in-docker.html</link><author>nicpayne</author><category>homelab</category><category>homelab</category><category>tech</category><guid>https://pype.dev/cron-for-nextcloud-in-docker.html</guid><pubDate>Tue, 13 Dec 2022 06:43:45 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>AJAX wasn't cutting it, traditional crontab in containers doesn't make much
+sense to me, webcron is recommended but I don't want to register with anything
+outside my LAN... Turns out you can just spin up an identical container with a
+different entrypoint to /cron.sh that does what you need!</p>
+<blockquote>
+<p>Note that this is a task in an Ansible playbook - but the docker-compose is straight forward</p>
+</blockquote>
+<p>So the only thing you need to make sure of is that <em>all</em> the configuration
+options - data volumes, user permissions, etc. are <em>identical</em> between the
+containers running the cron job and the one actually hosting NextCloud. This
+ensures that the container running cron has proper access to the database and
+filesystem - or at least the same access as NextCloud proper.</p>
+<pre><code class="language-yaml">- name: Nextcloud Cron Docker Container
+  docker_container:
+    name: nextcloud-cron
+    image: &quot;{{ nextcloud_image }}&quot;
+    pull: true
+    links:
+      - nextcloud-mysql:mysql
+    entrypoint: /cron.sh
+    volumes:
+      - &quot;{{ nextcloud_data_directory }}/nextcloud:/var/www/html:rw&quot;
+    env:
+      MYSQL_HOST: &quot;mysql&quot;
+      MYSQL_DATABASE: &quot;nextcloud&quot;
+      MYSQL_USER: &quot;{{ nextcloud_sql_user }}&quot;
+      MYSQL_PASSWORD: &quot;{{ nextcloud_sql_password }}&quot;
+      NEXTCLOUD_TRUSTED_DOMAINS: &quot;{{ nextcloud_hostname }}.{{ ansible_nas_domain }}&quot;
+      PUID: &quot;{{ nextcloud_user_id }}&quot;
+      PGID: &quot;{{ nextcloud_group_id }}&quot;
+      TZ: &quot;{{ ansible_nas_timezone }}&quot;
+    restart_policy: unless-stopped
+    memory: &quot;{{ nextcloud_memory }}&quot;
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Call basicConfig to get Python log messages in iPython</title><link>https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html</link><author>nicpayne</author><category>python</category><category>cli</category><category>tech</category><guid>https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html</guid><pubDate>Sat, 10 Dec 2022 14:04:23 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h1><a href="#logging-instead-of-printing" aria-hidden="true" class="anchor" id="logging-instead-of-printing"></a>Logging instead of printing</h1>
+<p>I am trying to adopt <code>logger.debug</code> instead of <code>print</code> but ran into a confusing
+thing in ipython during Advent of Code... I riddled by script with
+<code>logger.debug</code> (yes after setting <code>logging.setLevel('DEBUG')</code>) but in ipython
+none of my log messages showed up!</p>
+<pre><code class="language-python">import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(&quot;DEBUG&quot;)
+
+</code></pre>
+<p>Turns out what I was missing was a call to <code>basicConfig</code></p>
+<pre><code class="language-python">import logging
+
+# forget this and your messages are in the ether! or at least not seen in ipython...
+logging.basicConfig()
+
+logger = logging.getLogger(__name__)
+logger.setLevel(&quot;DEBUG&quot;)
+</code></pre>
+<h1><a href="#bonus" aria-hidden="true" class="anchor" id="bonus"></a>Bonus</h1>
+<p>Want your new messages to show up while iterating on something without killing
+the ipython kernel?</p>
+<pre><code class="language-python">from importlib import reload
+reload(logging) # to make sure you get new log messages you add while developing!
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>New lines in Markdown tables</title><link>https://pype.dev/new-lines-in-markdown-tables.html</link><author>nicpayne</author><category>vim</category><category>webdev</category><category>tech</category><guid>https://pype.dev/new-lines-in-markdown-tables.html</guid><pubDate>Fri, 25 Nov 2022 13:35:05 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I wanted to break down some long lines in a Markdown table cell to make it look
+nicer on my blog but \n didn't do anything for me... turns out <br/> is the
+magic sauce</p>
+<table>
+<thead>
+<tr>
+<th><em>Column 1</em></th>
+<th><em>Column 2</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key</td>
+<td>Doggo ipsum many pats. Borkdrive borking doggo doing me a frighten doggorino, noodle horse heckin. what a nice floof. Pupper borking doggo you are doing me a frighten, much ruin diet.</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><em>Column 1</em></th>
+<th><em>Column 2</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Key</td>
+<td>Doggo ipsum many pats. <br/> Borkdrive borking doggo doing me a frighten doggorino, noodle horse heckin. <br/> what a nice floof. <br/> Pupper borking doggo you are doing me a frighten, much ruin diet.</td>
+</tr>
+<tr>
+<td>---</td>
+<td>---</td>
+</tr>
+</tbody>
+</table>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Description of my proposed vimconf 2022 talk</title><link>https://pype.dev/description-of-my-proposed-vimconf-2022-talk.html</link><author>nicpayne</author><category>linux</category><category>vim</category><category>tech</category><guid>https://pype.dev/description-of-my-proposed-vimconf-2022-talk.html</guid><pubDate>Sat, 12 Nov 2022 19:39:19 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Switching to Vim opened a whole new world to me for interacting with a computer
+and for getting things done. Before I adopted Vim I used GUIs for everything
+because I thought that's how it had to be done... Notes in OneNote, code using
+a GUI editor, different notes in TiddlyWiki, slides for work in PowerPoint,
+slides for church using Logos, etc... Adopting Vim allowed me to disconnect a
+specific tool from the problem that tool is solving - because usually I just
+need to write text (notes, code, slides, etc.). Now, very nearly everything I
+do is from a text-based and git-based workflow... I put all my notes on
+basically anything just in my blog, which is all markdown and deployed to GH
+with Markata on every push (living dangerously pushing to main) - and that's
+all done easily from Vim with nice syntax highlighting, fast response,
+integrated git-plugins, etc.. I keep project-specific task lists just in
+markdown files and I have Vim/tmux shortcuts to quickly add todos for any
+project (todo list is done with markata todoui) and I can get there fast
+because my Vim workflow dovetails with Tmux nicely. Also I can pull that list
+up right from the terminal, which I'm already in because Vim.... Vim also
+pushed me into the cli more - because Vim is so easily extended with cli tools
+and I'm already in the terminal... The builtin functionality also made things
+make more sense - no more right-click, find &quot;refactor all&quot; or &quot;rename symbol&quot;
+(for some stupid reason)... Vim find-replace is so intuitive and if I need it
+extended then I learned what sed was because of Vim. Moving quickly in Vim also
+enables me to do my job incredibly fast because I hop into several projects a
+day in a coaching role - if I was bound by GUIs I'd be waiting forever for
+startup, would lose which GUI instance was which project, etc... Being in the
+terminal also made Tmux a trivial choice - now I have 90 tmux sessions, all
+named appropriately, ready for me to jump back to and all while keeping the
+majority of RAM still free for Chrome. Vim as my IDE also forced me to learn
+way more about Python (I'm a python developer primarily), how LSP works, how to
+configure a development environment, etc... things I took for granted in my GUI
+workflows, or never knew, or worse - thought I knew but deeply misunderstood.
+Now that I understand them better, I can coach my peers more effectively even
+if they are still in a GUI-based ecosystem.</p>
+<p>Basically, (Neo)Vim actually did change my life and I'm really thankful for it
+(maybe that should be the title?)</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Make a series of directories fast!</title><link>https://pype.dev/make-a-series-of-directories-fast.html</link><author>nicpayne</author><category>linux</category><category>cli</category><category>tech</category><guid>https://pype.dev/make-a-series-of-directories-fast.html</guid><pubDate>Thu, 10 Nov 2022 15:27:50 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>mkdir s{1..10} will make directories s1, s2, ... s10 in one command!</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Hebrew Bible Full Class</title><link>https://pype.dev/hebrew-bible-full-class.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/hebrew-bible-full-class.html</guid><pubDate>Sat, 05 Nov 2022 06:27:40 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://bibleproject.com/classroom-alpha/education-videos/session-1-what-earth-hebrew-bible/">Class link</a>
+<a href="http://paynepride.com:8010/documents/162">Classroom notes (Must be on home network)</a></p>
+<h1><a href="#01-the-shape-of-the-hebrew-bible" aria-hidden="true" class="anchor" id="01-the-shape-of-the-hebrew-bible"></a>01 The Shape of the Hebrew Bible</h1>
+<h2><a href="#session-1-what-on-earth-is-the-hebrew-bible" aria-hidden="true" class="anchor" id="session-1-what-on-earth-is-the-hebrew-bible"></a>Session 1: What on Earth is the Hebrew Bible?</h2>
+<p>This class is not so much a survey of the HB, it is Tim's attempt to distil the
+most helpful things for understanding it in a consumable way for laypeople.</p>
+<p>A chunk of this is the other people giving some of their own background. One
+lady said something that might be helpful for ministry - &quot;Maybe that thing that
+I saw as 'you don't love me' is 'I don't know how to love you'&quot;</p>
+<p>!!! note &quot;how to love&quot;</p>
+<pre><code>Maybe that thing that I saw as 'you don't love me' is 'I don't know how to love you'
+</code></pre>
+<p>!!! danger &quot;Christian coping strategy for the Olt Testament&quot;</p>
+<pre><code>1. Hero-example model
+    * Stories get isolated and distilled down into a simple moral model, where the hero is just the hero.
+    * Veggie-Tales is uber-guilty of this nonsense
+    * There's something correct about this - but the oversimplification usually comes out of a massive re-writting of the stories, then anyone raised on those versions of the story is scaldalized when they read it for real
+
+2. Poltical-authority source
+    * Political parties hijacking &quot;The Bible says X about Y&quot; as a means to harvest authority from a book that many people claim is authoritative.
+
+3. Theology answer book model
+    * Treating the Bible like a dictionary of key/value pairs where keys are questions and values are simple answers.
+    * This ignores narrative, and general literacy.
+    * The instinct may be right - the Bible should profoundly shape my view of everything, but it isn't simple
+
+4. Inspirational-heart-warming model
+    * Verse-a-day calendars
+    * Jermiah 29:11
+</code></pre>
+<p>!!! warning &quot;&quot;</p>
+<pre><code>Are we imposing a set of questions that are foreign to what the authors are
+trying to communicate? do we need to set our cultural agendas aside to just
+listen?
+</code></pre>
+<p>A result of asking the wrong questions is the common story of people's faith being dismantled <em>by reading the Bible</em></p>
+<p>!!! note &quot;DL Baker - Two Testaments - One Bible&quot;</p>
+<pre><code>One of the most fundamental questions which has faced theology and the
+Church in every age... is whether or not Christianity also needs an Old
+Testament. Is the Old Testament to be thrown away as obsolete, or pre-
+served as a relic from days of yore, or treasured as a classic and read by
+scholars, or used occasionally as a change from the New Testament, or
+kept in a box in case it should be needed some day? Or is the Old Testa-
+ment an essential part of the Christian Bible, with continuing validity along-
+side the New Testament? —
+</code></pre>
+<h2><a href="#session-2-how-jesus-and-the-apostle-readtheir-bibles" aria-hidden="true" class="anchor" id="session-2-how-jesus-and-the-apostle-readtheir-bibles"></a>Session 2: How Jesus and the Apostle ReadTheir Bibles</h2>
+<p>The Bible most often refers to itself as <em>the Writings</em></p>
+<p>!!! note &quot;Road to Emmaus&quot;</p>
+<pre><code>Jesus confronts a couple guys walking to Emmaus after he is resurrected and
+more or less calls them idiots/fools for not understanding that the
+Writings point to an annointed king who will suffer death for the sake of
+redemption. He's recognized by them once their eyes are opened then he vanishes
+</code></pre>
+<p><strong>Weird stuff</strong></p>
+<h3><a href="#paul-and-timothy" aria-hidden="true" class="anchor" id="paul-and-timothy"></a>Paul and Timothy</h3>
+<p>Paul assumes when writing to Timothy that he, and probably believers in general, are in a community of people who are regularly learning about Yahweh through the Scriptures <em>as a family</em></p>
+<p>!!! scripture &quot;2 Timothy 3:15-16&quot;</p>
+<pre><code>... and that from childhood you ahve known the sacred writings which are
+able to give you the wisdom that leas to salvation through faith which is
+in Christ Jesus. All Scripture is inspired by God and profitable for
+teaching, for reproof, for correction, for training in righteousness
+</code></pre>
+<p>!!! success &quot;&quot;</p>
+<pre><code>For Paul, the `Scriptures` here are our OT, the Hebrew Bible. For Paul, the HB
+is entirely _wisdom literature_ that leads to salvation through Jesus
+</code></pre>
+<p>The question of &quot;What are the Scriptures?&quot; is covered in the next session</p>
+<p><strong>To answer the question 'How do we read the HB?' we have to ask the question
+'Whose book is the HB?'</strong></p>
+<h2><a href="#session-3-shape-of-the-scriptures" aria-hidden="true" class="anchor" id="session-3-shape-of-the-scriptures"></a>Session 3: Shape of the Scriptures</h2>
+<p><code>Old Testament</code> is the Christian term for a set of writings that comprise about
+3/4 of the Christian Bible. The authors themselves though refer to those
+writings as <code>the Scriptures</code>. One time it is called <code>the Old Covenant</code> by Paul
+, but he's talking about Synagogue readings of the Torah portion in synagogues.
+THe phrase <code>Hebrew Bible</code> is a modern term that is a bit more neutral.</p>
+<blockquote>
+<p>So, what is our Bible?</p>
+</blockquote>
+<p>!!! scripture &quot;Luke 24:25-27&quot;</p>
+<pre><code>25 And he said to them, “O foolish ones, and slow of
+heart to believe all that the prophets have spoken! 26 Was it not necessary
+that the Christ should suffer these things and enter into his glory?”
+27 And beginning with Moses and all the Prophets, he interpreted to them in
+all the Scriptures the things concerning himself.
+</code></pre>
+<blockquote>
+<p>Moses and the Prophets</p>
+</blockquote>
+<h3><a href="#tanak" aria-hidden="true" class="anchor" id="tanak"></a>TaNaK</h3>
+<p>Jweish reference to the books in our OT, in the Hebrew Bible, but the arangement is different...</p>
+<p>!!! note &quot;TaNaK&quot;</p>
+<pre><code>1. T = Torah (first 5 books)
+2. N - Nevi'im (Prophets: Joshua - Kings) [Christians often call these the 'historial books']
+3. K - Ketuvim
+
+| **Torah** | **Pentateuch** |
+| --- | --- |
+| Genesis - Exodus - Leviticus - Numbers Deuteronomy | Genesis - Exodus - Leviticus - Numbers - Deuteronomy |
+| **Nevi'im - The Prophets** | **History** |
+| *Former Prophets* &lt;br/&gt; Joshua - Judges - Samueal - Kings | Joshua - Judges - Ruth &lt;br/&gt; 1-2 Samuel - 1-2 Kings &lt;br/&gt; 1-2 Chronicles &lt;br/&gt; Ezra - Nehemiah - Ester |
+| *Later Prophets* &lt;br/&gt; Isaiah - Jeremiah - Ezekiel &lt;br/&gt; Hosea - Joel - Amos - Obadiah - Jonah - Micah - Nahum - Habakkuk - Zephaniah - Haggai - Zechariah - Malachi | **Poetry** &lt;br/&gt; Job - Psalms - Proverbs - Ecclesiastes - Song of Solomon |
+| **Kethuvim - The Writings** | **Prophets** |
+| Psalms - Job - Proverbs &lt;br/&gt; Ruth - Song of Songs - Ecclesiastes - Lamentations - Esther [The Megillot] &lt;br/&gt; Daniel - Ezra - Nehemiah - Chronicles | Isiah - Jeremiah - Lamentations &lt;br/&gt; Ezekiel - Daniel &lt;br/&gt; Hosea - Joel - Amos - Obadiah - Jonah - Micah - Nahum - Habakkuk - Zephaniah - Haggai - Zechariah - Malachi |
+</code></pre>
+<p>!!! scripture &quot;Luke 11:49–51 (ESV) &quot;</p>
+<pre><code>49 Therefore also the Wisdom of God said, ‘I will send them prophets and
+apostles, some of whom they will kill and persecute,’ 50 so that the blood
+of all the prophets, shed from the foundation of the world, may be charged
+against this generation, 51 from the blood of Abel to the blood of
+Zechariah, who perished between the altar and the sanctuary. Yes, I tell
+you, it will be required of this generation.
+</code></pre>
+<blockquote>
+<p>Blood of Abel to the blood of Zechariah...</p>
+</blockquote>
+<p>Why would Jesus pick these two events? Abel is murdered on page 4, Zechariah is
+murdered in the last part of Chronicles, which in the TaNaK is significant...
+Jesus is saying that <em>all the prophets from the beginning of the Scriptures to
+the end</em>... All the prophets from A-Z so to speak</p>
+<p>!!! note &quot;Scriptures&quot;</p>
+<pre><code>&quot;Books&quot; as we know it, bound papers with writing on it, called a 'codex'
+wasn't a thing until a couple hundred years post-Jesus... so when the
+authors say &quot;The Scriptures&quot; we need to keep in mind that Jews had the
+scriptures in their minds and hearts, not on paper (save for a couple very
+expensive scrolls). So the structure of the scriptures is also apart of the
+Jewish being... This interaction with the Scriptures is _very very very
+different than how we interact with the Bible_
+</code></pre>
+<p>!!! note &quot;4QMMT&quot;</p>
+<pre><code>&quot;The scrolls of Moses, the words of the prophets, and of David.&quot;
+</code></pre>
+<p>!!! note &quot;Philo of Alexandria&quot;</p>
+<pre><code>The laws and the oracles given by inspiration through the prophets and the
+Psalms, and the other scrolls whereby knowledge and piety are increased and
+completed...
+
+- De Vita Contemplatetiva, 25
+</code></pre>
+<h3><a href="#melito-of-sardis" aria-hidden="true" class="anchor" id="melito-of-sardis"></a>Melito of Sardis</h3>
+<ul>
+<li>Early 200s</li>
+<li>One of the earliest Christians to talk about the books/scrolls of Christian scriptures</li>
+<li>Summarizes <em>Christian ordering</em> of the Hebrew Bible with some logic
+<ul>
+<li>Foundation narrative of the Pentateuch</li>
+<li>History</li>
+<li>Poetry</li>
+<li>Prophets then point forward to the coming Messiah, Jesus, and the NT writings</li>
+</ul>
+</li>
+</ul>
+<h2><a href="#session-4---seams-between-texts-in-the-dead-sea-scrolls" aria-hidden="true" class="anchor" id="session-4---seams-between-texts-in-the-dead-sea-scrolls"></a>Session 4 - Seams between Texts in the Dead Sea Scrolls</h2>
+<p>Around 100-200 AD there was a split in the Jewish community over things like
+how the Temple and sacrifices were to be run, etc. A group got kicked out, so
+they grabbed some scrolls and went to start what we'd think of as a Monastic
+community. Qumran community is where they went, and the scrolls this group
+managed are called the Dead Sea Scrolls.</p>
+<p>Out of DSS we have some of the oldest biblical scrolls, they have their own
+writings and liturgies since they were all priests basically too.</p>
+<p>The scrolls were hidden in caves before the Romans marched on Qumran. They were
+found in the 1940s by a bunch of shepherds. A few showed up online for sale and
+that's how we found out about their exitence.... These scrolls give us
+pre-Christian Jewish Bible nerds...</p>
+<p>Qumran community didn't know about Jesus - they thought the Messiah would be a
+man called <em>The Teacher of Righteousness</em></p>
+<h3><a href="#scroll-making" aria-hidden="true" class="anchor" id="scroll-making"></a>Scroll-making</h3>
+<p>The DSS preserved for us, not only ancient biblical texts, but also the method
+by which scrolls were created. They were well-preserved papyrus that was
+stiched together - literal stitches. We also have obvious additions from Qumran
+community as well as notes from priests and corrections from missed
+transcribing.</p>
+<h3><a href="#our-bible" aria-hidden="true" class="anchor" id="our-bible"></a>Our Bible</h3>
+<p>The DSS scrolls, being the oldest stitched together set of scrolls, teach us
+how scrolls and collections of ancient holy texts were put together. We need to
+keep this in mind when we think about where our Christian Bible came from</p>
+<p>The beginning and ending of our books might/are filled with hyperlinks that
+call a reader's mind back to other stories. It's the way of linking context and
+stories to one another before the writings are in a codex</p>
+<blockquote>
+<p>Hyperlinks - language/syntax that remind a reader of antoher scroll - help us
+understand the structure of the Hebrew Bible</p>
+</blockquote>
+<p>!!! note &quot;A favorite quote from Tim&quot;</p>
+<pre><code>So, you can see I'm interested in a historical question of like the
+collection [Hebrew Bible] was produced by a group of people. What did they
+mean by it? And we can actually know a lot about what they meant and locate
+them and read it the way they wanted us to read it, and pick up what
+they're saying. And, lo and behold, you know, I hope to convince you
+that—and this is all pre-Christian—what's happening here and what this all
+points to and means, fits hand in glove with how Jesus and Paul and the
+apostles talk about these texts.
+So that's different from saying nobody
+knew what these texts meant. The events of Jesus happen, and then we go
+reread it, and it has a whole new meaning that no one has ever imagined. It
+seems to me what actually happened in history was a little more interesting
+and complicated than that.  [17:30-18:21]
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Case-insensitive search in Vim</title><link>https://pype.dev/case-insensitive-search-in-vim.html</link><author>nicpayne</author><category>vim</category><category>vim</category><category>tech</category><guid>https://pype.dev/case-insensitive-search-in-vim.html</guid><pubDate>Fri, 21 Oct 2022 06:40:21 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>/mysearch\c will match mysearch, MYSEARCH, mYSeArCh...</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Faithful</title><link>https://pype.dev/faithful.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/faithful.html</guid><pubDate>Fri, 21 Oct 2022 06:31:33 GMT</pubDate><source url="https://pype.dev">archive-2022</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://bibleproject.com/bible-studies/faithful/">Link</a></p>
+<h1><a href="#notes" aria-hidden="true" class="anchor" id="notes"></a>Notes</h1>
+<p>!!! Exodusds 34:6</p>
+<pre><code>Compassioante and gracious, slow to anger, overflowing with loyal love and faithfulness
+</code></pre>
+<p>Faithfulness - Emet (can be translated 'Truth')
+Related to &quot;Amen&quot; which is untranslated Hebrew expression meaning &quot;that's truth&quot;</p>
+<h2><a href="#stability" aria-hidden="true" class="anchor" id="stability"></a>Stability</h2>
+<p>Moses has to hold his hands up when Israel faces the Amalekites. Joshua (and another) bring Moses a rock to sit on and hold is hands up so they could be Emet.</p>
+<h2><a href="#people" aria-hidden="true" class="anchor" id="people"></a>People</h2>
+<p>Describs trustiworthiness</p>
+<p>Exodus 18:21 - Moses apoints leaders are to be &quot;Emet&quot;</p>
+<h2><a href="#god-and-promises" aria-hidden="true" class="anchor" id="god-and-promises"></a>God and promises</h2>
+<p>God is a rock - he is faithful, just, and upright</p>
+<p>Hebrew word for trust is He'Emin which is the verb form of Emet</p>
+<p>Abraham considers God Emet, he He'Emin's God and God blesses this by creating Isreal.</p>
+<p>Israel, In Exodus 14:31, He'Emin's God (until they see the gians in Canaan that is)</p>
+<p>1 Kings 1:6 says David walked in Emet with God</p>
+<p>2 Samuel 7:16, God blesses David and says his kingdom will have Emet</p>
+<p>Romans 15:8-9 says Jesus came on behalf of God's faithfulness.</p>
+<h1><a href="#questions" aria-hidden="true" class="anchor" id="questions"></a>Questions</h1>
+<p>!!! note &quot;1&quot;</p>
+<pre><code>The Hebrew word “emet” is translated with words like “faithful,”
+“reliable,” “sure,” “trustworthy,” and “amen.” Read aloud Psalm 36:5-6 ,
+Psalm 19:7 , and Psalm 41:13 and discuss what the psalmists are
+communicating in these passages when they use the word “emet.”
+</code></pre>
+<p>!!! scripture &quot;Psalms 36:5-6&quot;</p>
+<pre><code>5Your lovingkindness, O Lord, extends to the heavens,
+
+Your faithfulness reaches to the skies.
+
+6Your righteousness is like the mountains of God;
+
+Your judgments are like a great deep.
+
+O Lord, You preserve man and beast.
+</code></pre>
+<p>!!! scripture &quot;Psalms 19:7&quot;</p>
+<pre><code>7The law of the Lord is perfect, restoring the soul;
+
+The testimony of the Lord is sure, making wise the simple.
+</code></pre>
+<p>!!! scripture &quot;Psalms 41:13&quot;</p>
+<pre><code>13Blessed be the Lord, the God of Israel,
+
+From everlasting to everlasting.
+
+Amen and Amen.
+</code></pre>
+<p>I think the lesson here is pretty simple - God is faithful, full stop. His
+faithfulness doesn't look necessarily like how we might want... when I was a
+kid I would be upset if my parents didn't respond to me in the way I wanted,
+and my kids will certainly share that disappointment. But I am faithful to my
+children - sometimes the main issue is a child's outlook on a situation or
+worldview. I think that metaphor holds true in relation to humans and Yahweh -
+he sees the whole world, we see a part of it so we cannot understand
+faithfulness fully, in the same way that my children can't understand my
+faithfulness to them fully - even to the point of being upset or thinking that
+<em>I'm not being faithful</em></p>
+<p>!!! note &quot;2&quot;</p>
+<pre><code>God promised the Israelites that he would give them a king of peace that
+would rule forever and ever (e.g. 2 Samuel 7:16). However, Israel’s kingdom
+collapsed and they found themselves without a home or a king. Compare the
+beginning of Psalm 89 (vv. 1-10) with the way it closes (vv. 46-52). What
+do you think it practically looks like to trust God when all seems lost?
+</code></pre>
+<p>!!! scripture &quot;2 Samuel 7:16&quot;</p>
+<pre><code>16Your house and your kingdom shall endure before Me forever; your throne shall be established forever.” ’ ”
+</code></pre>
+<p>!!! scripture &quot;PSALM 89&quot;</p>
+<pre><code>The Lord’s Covenant with David, and Israel’s Afflictions.
+
+A Maskil of Ethan the Ezrahite.
+
+1I will sing of the lovingkindness of the Lord forever;
+
+To all generations I will make known Your faithfulness with my mouth.
+
+2For I have said, “Lovingkindness will be built up forever;
+
+In the heavens You will establish Your faithfulness.”
+
+3“I have made a covenant with My chosen;
+
+I have sworn to David My servant,
+
+4I will establish your seed forever
+
+And build up your throne to all generations.” Selah.
+
+5The heavens will praise Your wonders, O Lord;
+
+Your faithfulness also in the assembly of the holy ones.
+
+6For who in the skies is comparable to the Lord?
+
+Who among the sons of the mighty is like the Lord,
+
+7A God greatly feared in the council of the holy ones,
+
+And awesome above all those who are around Him?
+
+8O Lord God of hosts, who is like You, O mighty Lord?
+
+Your faithfulness also surrounds You.
+
+9You rule the swelling of the sea;
+</code></pre>
+<p>!!! note &quot;3&quot;</p>
+<pre><code>Ultimately, God answers the psalmist’s cries in the person of Jesus. Compare 2 Samuel 7:16
+2 Samuel 7:16
+
+16Your house and your kingdom shall endure before Me forever; your throne shall be established forever.” ’ ”
+
+to Hebrews 1:8-9
+Hebrews 1:8-9
+
+8But of the Son He says,
+
+“Your throne, O God, is forever and ever,
+
+And the righteous scepter is the scepter of His kingdom.
+
+9You have loved righteousness and hated lawlessness;
+
+Therefore God, Your God, has anointed You
+
+With the oil of gladness above Your companions.”
+
+. How does King Jesus embody and fulfill the ancient promises of God (e.g. John 1:14
+John 1:14
+
+The Word Made Flesh
+
+14And the Word became flesh, and dwelt among us, and we saw His glory, glory as of the only begotten from the Father, full of grace and truth.
+
+, Hebrews 3:5-6
+Hebrews 3:5-6
+
+5Now Moses was faithful in all His house as a servant, for a testimony of those things which were to be spoken later; 6but Christ was faithful as a Son over His house—whose house we are, if we hold fast our confidence and the boast of our hope firm until the end.
+
+, and Romans 15:8-9
+Romans 15:8-9
+
+8For I say that Christ has become a servant to the circumcision on behalf of the truth of God to confirm the promises given to the fathers, 9and for the Gentiles to glorify God for His mercy; as it is written,
+
+“Therefore I will give praise to You among the Gentiles,
+
+And I will sing to Your name.”
+
+)?
+</code></pre>
+<p>!!! note &quot;4&quot;</p>
+<pre><code>Read Hebrews 10:22-25
+Hebrews 10:22-25
+
+22let us draw near with a sincere heart in full assurance of faith, having our hearts sprinkled clean from an evil conscience and our bodies washed with pure water. 23Let us hold fast the confession of our hope without wavering, for He who promised is faithful; 24and let us consider how to stimulate one another to love and good deeds, 25not forsaking our own assembling together, as is the habit of some, but encouraging one another; and all the more as you see the day drawing near.
+
+, Hebrews 11
+Hebrews 11
+
+The Triumphs of Faith
+
+1Now faith is the assurance of things hoped for, the conviction of things not seen. 2For by it the men of old gained approval.
+
+3By faith we understand that the worlds were prepared by the word of God, so that what is seen was not made out of things which are visible. 4By faith Abel offered to God a better sacrifice than Cain, through which he obtained the testimony that he was righteous, God testifying about his gifts, and through faith, though he is dead, he still speaks. 5By faith Enoch was taken up so that he would not see death; and he was not found because God took him up; for he obtained the witness that before his being taken up he was pleasing to God. 6And without faith it is impossible to please Him, for he who comes to God must believe that He is and that He is a rewarder of those who seek Him. 7By faith Noah, being warned by God about things not yet seen, in reverence prepared an ark for the salvation of his household, by which he condemned the world, and became an heir of the righteousness which is according to faith.
+
+8By faith Abraham, when he was called, obeyed by going out to a place which he was to receive for an inheritance; and he went out, not knowing where he was going. 9By faith he lived as an alien in the land of promise, as in a foreign land, dwelling in tents with Isaac and Jacob, fellow heirs of the same promise; 10for he was looking for the city which has foundations, whose architect and builder is God. 11By faith even Sarah herself received ability to conceive, even beyond the proper time of life, since she considered Him faithful who had promised. 12Therefore there was born even of one man, and him as good as dead at that, as many descendants as the stars of heaven in number, and innumerable as the sand which is by the seashore.
+
+13All these died in faith, without receiving the promises, but having seen them and having welcomed them from a distance, and having confessed that they were strangers and exiles on the earth. 14For those who say such things make it clear that they are seeking a country of their own. 15And indeed if they had been thinking of that country from which they went out, they would have had opportunity to return. 16But as it is, they desire a better country, that is, a heavenly one. Therefore God is not ashamed to be called their God; for He has prepared a city for them.
+
+17By faith Abraham, when he was tested, offered up Isaac, and he who had received the promises was offering up his only begotten son; 18it was he to whom it was said, “In Isaac your descendants shall be called.” 19He considered that God is able to raise people even from the dead, from which he also received him back as a type. 20By faith Isaac blessed Jacob and Esau, even regarding things to come. 21By faith Jacob, as he was dying, blessed each of the sons of Joseph, and worshiped, leaning on the top of his staff. 22By faith Joseph, when he was dying, made mention of the exodus of the sons of Israel, and gave orders concerning his bones.
+
+23By faith Moses, when he was born, was hidden for three months by his parents, because they saw he was a beautiful child; and they were not afraid of the king’s edict. 24By faith Moses, when he had grown up, refused to be called the son of Pharaoh’s daughter, 25choosing rather to endure ill-treatment with the people of God than to enjoy the passing pleasures of sin, 26considering the reproach of Christ greater riches than the treasures of Egypt; for he was looking to the reward. 27By faith he left Egypt, not fearing the wrath of the king; for he endured, as seeing Him who is unseen. 28By faith he kept the Passover and the sprinkling of the blood, so that he who destroyed the firstborn would not touch them. 29By faith they passed through the Red Sea as though they were passing through dry land; and the Egyptians, when they attempted it, were drowned.
+
+30By faith the walls of Jericho fell down after they had been encircled for seven days. 31By faith Rahab the harlot did not perish along with those who were disobedient, after she had welcomed the spies in peace.
+
+32And what more shall I say? For time will fail me if I tell of Gideon, Barak, Samson, Jephthah, of David and Samuel and the prophets, 33who by faith conquered kingdoms, performed acts of righteousness, obtained promises, shut the mouths of lions, 34quenched the power of fire, escaped the edge of the sword, from weakness were made strong, became mighty in war, put foreign armies to flight. 35Women received back their dead by resurrection; and others were tortured, not accepting their release, so that they might obtain a better resurrection; 36and others experienced mockings and scourgings, yes, also chains and imprisonment. 37They were stoned, they were sawn in two, they were tempted, they were put to death with the sword; they went about in sheepskins, in goatskins, being destitute, afflicted, ill-treated 38(men of whom the world was not worthy), wandering in deserts and mountains and caves and holes in the ground.
+
+39And all these, having gained approval through their faith, did not receive what was promised, 40because God had provided something better for us, so that apart from us they would not be made perfect.
+
+, and Hebrews 12:1-3
+Hebrews 12:1-3
+
+Jesus, the Example
+
+1Therefore, since we have so great a cloud of witnesses surrounding us, let us also lay aside every encumbrance and the sin which so easily entangles us, and let us run with endurance the race that is set before us, 2fixing our eyes on Jesus, the author and perfecter of faith, who for the joy set before Him endured the cross, despising the shame, and has sat down at the right hand of the throne of God.
+
+3For consider Him who has endured such hostility by sinners against Himself, so that you will not grow weary and lose heart.
+
+. After reading these passages, name one example of what it looks like to put our trust in God.
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>

@@ -1,0 +1,94 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-git.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/git-bisect.html",
+      "url": "https://pype.dev/git-bisect.html",
+      "title": "Git-Bisect",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I try to commit a lot, and I also try to write useful tests appropriate for the scope of work I'm focusing on, but sometimes I drop the ball...</p>\n<p>Whether by laziness, ignorance, or accepted tech debt I don't always code perfectly and recently I was dozens of commits into a new feature before realizing I broke something along the way that none of my tests caught...</p>\n<p>Before today I would've manually reviewed every commit to see if something obvious slipped by me (talk about a time suck 😩)</p>\n<p><u>There must be a better way</u></p>\n<h1><a href=\"#bisect\" aria-hidden=\"true\" class=\"anchor\" id=\"bisect\"></a>Bisect?</h1>\n<p><code>git bisect</code> is the magic sauce for this exact problem...</p>\n<p>You essentially create a range of commits to consider and let <code>git bisect</code> guide you through them in a manner akin to Newton's method for finding the root of a continuous function.</p>\n<h1><a href=\"#how-to-do-it\" aria-hidden=\"true\" class=\"anchor\" id=\"how-to-do-it\"></a>How to do it?</h1>\n<p>Start with <code>git bisect start</code> and then choose the first <code>good</code> commit (ie. a commit you know the bug isn't present in)</p>\n<pre><code class=\"language-bash\">\nsandbox   bisect-post   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect start\n\nsandbox   bisect-post (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect good 655332b\nbisect-post  HEAD         main         ORIG_HEAD\n5b31e1e  -- [HEAD]    add successful print (52 seconds ago)\n308247b  -- [HEAD^]   init another loop (77 seconds ago)\n4555c59  -- [HEAD^^]  introduce bug (2 minutes ago)\n9cf6d55  -- [HEAD~3]  add successful loop (3 minutes ago)\nbcb41c3  -- [HEAD~4]  change x to 10 (4 minutes ago)\n3c34aac  -- [HEAD~5]  init x to 1 (4 minutes ago)\n12e53bd  -- [HEAD~6]  print cwd (4 minutes ago)\n655332b  -- [HEAD~7]  add example.py (10 minutes ago)  # &lt;- I want to start at this commit\n59e0048  -- [HEAD~8]  gitignore (23 hours ago)\nfb9e1fb  -- [HEAD~9]  add reqs (23 hours ago)\n\n</code></pre>\n<pre><code class=\"language-bash\">\nsandbox   bisect-post (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect bad 5b31e1e\nbisect-post                                                ORIG_HEAD\nHEAD                                                       refs/bisect/good-655332b6c384934c2c00c3d4aba3011ccc1e5b57\nmain\n5b31e1e  -- [HEAD]    add successful print (5 minutes ago)  # &lt;- I start here with the &quot;bad&quot; commit\n308247b  -- [HEAD^]   init another loop (6 minutes ago)\n4555c59  -- [HEAD^^]  introduce bug (6 minutes ago)\n9cf6d55  -- [HEAD~3]  add successful loop (7 minutes ago)\nbcb41c3  -- [HEAD~4]  change x to 10 (8 minutes ago)\n3c34aac  -- [HEAD~5]  init x to 1 (9 minutes ago)\n12e53bd  -- [HEAD~6]  print cwd (9 minutes ago)\n655332b  -- [HEAD~7]  add example.py (14 minutes ago)\n59e0048  -- [HEAD~8]  gitignore (23 hours ago)\nfb9e1fb  -- [HEAD~9]  add reqs (23 hours ago)\n\n</code></pre>\n<p>After starting bisect with a &quot;good&quot; start commit and a &quot;bad&quot; ending commit we can let git to it's thing!</p>\n<p>Git checksout a commit somewhere about halfway between the good and bad commit so you can see if your bug is there or not.</p>\n<pre><code class=\"language-bash\">\nsandbox   bisect-post (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect bad 5b31e1e\nBisecting: 3 revisions left to test after this (roughly 2 steps)\n[bcb41c3854e343eade85353683f2c1c4ddde4e04] change x to 10\n\nsandbox   HEAD (bcb41c38) (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯\n</code></pre>\n<p>In my example here I have a python script with some loops and print statements - they aren't really relevant, I just wanted an easy to follow git history.</p>\n<p>So I check to see if the bug is present or not either by running/writing tests or replicating the bug somehow.</p>\n<p>In this session commit <code>bcb41c38</code> is actually just fine, so I do <code>git bisect good</code></p>\n<pre><code class=\"language-bash\">\nsandbox   HEAD (bcb41c38) (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect good\nBisecting: 1 revision left to test after this (roughly 1 step)\n[4555c5979268dff6c475365fdc5ce1d4a12bd820] introduce bug\n\n</code></pre>\n<p>And we see that git moves on to checkout another commit...</p>\n<p>In this case the next commit is the one where I introduced a bug</p>\n<p><code>git bisect bad</code> then gives me:</p>\n<pre><code class=\"language-bash\">\nsandbox   HEAD (4555c597) (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect bad\nBisecting: 0 revisions left to test after this (roughly 0 steps)\n[9cf6d55301560c51e2f55404d0d80b1f1e22a33d] add successful loop\n</code></pre>\n<p>At <code>4555c597</code> the script works as expected so one more <code>git bisect good</code> yields...</p>\n<pre><code class=\"language-bash\">sandbox   HEAD (9cf6d553) (BISECTING)   ×1 via   v3.8.11(sandbox)  on  (us-east-1)\n❯ git bisect good\n4555c5979268dff6c475365fdc5ce1d4a12bd820 is the first bad commit\ncommit 4555c5979268dff6c475365fdc5ce1d4a12bd820\nAuthor: ########################### \nDate:   Tue May 3 09:00:00 2022 -0500\n\n    introduce bug\n\n example.py | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n\n\n</code></pre>\n<h1><a href=\"#what-happened\" aria-hidden=\"true\" class=\"anchor\" id=\"what-happened\"></a>What happened?</h1>\n<p>Git sliced up a range of commits based on me saying of the next one was good or bad and localized the commit that introduced a bug into my workflow!</p>\n<p>I didn't have to manually review commits, click through logs, etc... I just let git checkout relevant commits and I ran whatever was appropriate for reproducing the bug to learn when it was comitted!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-03T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "git",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/mu.html",
+      "url": "https://pype.dev/mu.html",
+      "title": "Mu",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>If you work with a template for several projects then you might sometimes need to do the same action across all repos.\nA good example of this is updating a package in <code>requirements.txt</code> in every project, or refactoring a common module.\nIf you have several repos to do this across then it can be time consuming... enter <code>mu-repo</code></p>\n<h2><a href=\"#mu\" aria-hidden=\"true\" class=\"anchor\" id=\"mu\"></a>Mu</h2>\n<p><a href=\"https://fabioz.github.io/mu-repo/\">mu-repo</a> is an awesome cli tool for working with multiple git repositories at the same time.\nThere are several things you can do:</p>\n<ol>\n<li><code>mu status</code> will give you the <code>git status</code> of every registered repo (see below)</li>\n<li><code>mu sh</code> will let you execute system level commands in every repo</li>\n<li><code>mu stash</code> will stash all changes across all registered repos</li>\n<li>There's literally a ton more but these are some handy ones</li>\n</ol>\n<h2><a href=\"#registration\" aria-hidden=\"true\" class=\"anchor\" id=\"registration\"></a>Registration</h2>\n<p><code>mu</code> tracks its own <code>groups</code>, and there is a default group when no particular one is active.\nIt's as simple as <code>mu register proj1 prog2 ...</code> to get repos registered</p>\n<pre><code class=\"language-bash\">\n❯ mu register proj1 proj2\nRepository: proj1 registered\nRepository: proj2 registered\n\n❯ mu status\n\n  proj1 : git status\n    On branch main\n\n    No commits yet\n\n    Untracked files:\n    (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)\n    requirements.txt\n\n    nothing added to commit but untracked files present (use &quot;git add&quot; to track)\n\n  proj2 : git status\n    On branch main\n\n    No commits yet\n\n    Changes to be committed:\n    (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)\n    new file:   requirements.txt\n\n\n</code></pre>\n<h2><a href=\"#working-with-mu\" aria-hidden=\"true\" class=\"anchor\" id=\"working-with-mu\"></a>Working with mu</h2>\n<p>As you can see above I have two projects each with a <code>requirements.txt</code> added but not committed yet.\nUsing <code>mu</code> I can stage this change across both repos at once.</p>\n<pre><code class=\"language-bash\">\n❯ mu add requirements.txt\n\n  proj1 : git add requirements.txt\n\n  proj2 : git add requirements.txt\n</code></pre>\n<p>Then as you might imagine, I can make the commit in each repo</p>\n<pre><code class=\"language-bash\">\n❯ mu commit -m &quot;Add requirements.txts&quot;\n\n  proj1 : git commit -m Add requirements.txts\n    [main (root-commit) 18376d7] Add requirements.txts\n    1 file changed, 1 insertion(+)\n    create mode 100644 requirements.txt\n\n  proj2 : git commit -m Add requirements.txts\n    [main (root-commit) 18376d7] Add requirements.txts\n    1 file changed, 1 insertion(+)\n    create mode 100644 requirements.txt\n</code></pre>\n<h2><a href=\"#mu-groups\" aria-hidden=\"true\" class=\"anchor\" id=\"mu-groups\"></a>mu groups</h2>\n<p>The other thing I got a lot of use out of recently was <code>mu</code>'s groups.\nAt work I have about 40 repos cloned that are all based on the same kedro pipeline template.\nSome of these projects have been deprecated.\nI also have several more repos that are not kedro template - custom libraries or something.\n<code>group</code> let me utilize <code>mu</code> across different groups of repos.</p>\n<p>Say <code>proj2</code> is a deprecated project that I don't need to worry about making changes to anymore.\nI don't just have to unregister it, instead I can make a group called &quot;active&quot; and register <code>proj1</code> in that group</p>\n<pre><code class=\"language-bash\">\n❯ mu group add active --empty\n\n~/personal\n❯ mu group add deprecated --empty\n\n~/personal\n❯ mu group\n  active\n* deprecated\n\n</code></pre>\n<p>The <code>*</code> tells me which group is active.\nThe <code>--empty</code> flag tells <code>mu</code> to not add all registered repos to that group.\nIf I don't want to use any groups then <code>mu group reset</code> will go back to the default group with all registered repos.</p>\n<p>With groups I can register only the repos that I want to be working across in their own group and not worry about affecting other repos with my batch changes!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-03-15T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "git",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/git-worktrees-01.html",
+      "url": "https://pype.dev/git-worktrees-01.html",
+      "title": "Git-Worktrees-01",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#git\" aria-hidden=\"true\" class=\"anchor\" id=\"git\"></a>Git</h2>\n<p>Hopefully if you write code you are using git, if not go learn the basics of <code>commit</code>, <code>pull</code>, <code>push</code>, and <code>pull request</code>/<code>merge request</code> like... right now.</p>\n<p>Assuming you are at least familiar with git then you probably work the same way I have since I've been using it.</p>\n<ol>\n<li>clone or initialize a repo</li>\n<li>checkout a branch, <code>git checkout -b my-feature</code></li>\n<li>work on <code>my-feature</code> and when ready open a PR into <code>main</code></li>\n<li><code>git pull main</code> then <code>git checkout -b another-feature</code></li>\n<li>etc...</li>\n</ol>\n<p>What if you need to switch between branches for some reason? Often I'm jumping into projects with my co-workers left and right, and I'll have changes that I'm either working on or exploring for them.\nWhen it's time to switch branches I think there's more elegant ways than this but I've always done this:</p>\n<ol>\n<li><code>stash</code> the current changes</li>\n<li>checkout out the relevant branch</li>\n<li>helped out</li>\n<li>re-checkout my original branch</li>\n<li><code>pop</code> the <code>stash</code></li>\n</ol>\n<p>Now, that's not awful but I think <code>worktrees</code> will make this nicer for a few reasons!</p>\n<h2><a href=\"#worktrees\" aria-hidden=\"true\" class=\"anchor\" id=\"worktrees\"></a>Worktrees</h2>\n<p>Worktrees are linked branches that have their own directories somewhere on your computer.\nTo checkout a branch you don't have to worry about stashing any changes, you just <code>cd</code> into the directory of that branch.</p>\n<blockquote>\n<p>The branch can be literally anywhere - it doesn't have to be in the repo folder</p>\n</blockquote>\n<h2><a href=\"#use-case\" aria-hidden=\"true\" class=\"anchor\" id=\"use-case\"></a>Use Case</h2>\n<p>I've seen ThePrimeagean argue for worktrees for several reasons, see a YT video <a href=\"https://www.youtube.com/watch?v=2uEqYw-N8uE\">here</a></p>\n<p>I'm entirely in Python at the moment, or working with projects that dont' have that kind of requirement (ie. this website).\nMy reason for wanting worktrees is 3 fold.</p>\n<h3><a href=\"#files-that-could-have-been-gitignored-but-aint\" aria-hidden=\"true\" class=\"anchor\" id=\"files-that-could-have-been-gitignored-but-aint\"></a>Files that could have been gitignored but ain't</h3>\n<p>I have a <code>.envrc</code> I put in every project, but it's not gitignored for reasons that aren't relevant right now...\nIf I switch branches I'll stash everything I have at the time, including my .envrc, but then if I forget to pop the stash and I move on and come back then my environment isn't active and I have to go find the stash, pop it, cd out, and then back in and honestly.... that sucks.\nWorktrees will let me have the .envrc in every branch, and if I checkout or switch to a new one, my personal branch is unaffected.</p>\n<h3><a href=\"#symlinks\" aria-hidden=\"true\" class=\"anchor\" id=\"symlinks\"></a>Symlinks</h3>\n<p>In my team's <a href=\"https://kedro.readthedocs.io/en/stable/01_introduction/01_introduction.html\">Kedro</a> workflow we keep a specific directory, the <code>conf</code> directory at a different spot than the Kedro team has in their templates (the why is outside the scope here).\nThe way I preserve every kedro utility for my own benefit is to symlink our <code>conf</code> to where the Kedro template expects it to be.\nBut then everytime I stash changes I lose that symlink so I either just don't have it for the time being or I recreate it which is a hassle\nWorktrees will let me have that present and persistent on all my branches at once.</p>\n<h3><a href=\"#foo\" aria-hidden=\"true\" class=\"anchor\" id=\"foo\"></a>Foo</h3>\n<p>Because why not!? This workflow feels future-proof, and if my toolset changes down the line then having this worktree centric workflow might be helpful and I'm just prepping for that possibility!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-03-11T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "git",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/git-ammend-to-a-commit.html",
+      "url": "https://pype.dev/git-ammend-to-a-commit.html",
+      "title": "Git ammend to a commit",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>After carefully staging only lines related to a specific change and comitting I suddenly realized I missed one... darn, what do I do?</p>\n<p>Old me would have soft reset my branch to the previous commit and redone all my careful staging... what a PIA...</p>\n<p>New me (credit: ThePrimeagen)...</p>\n<pre><code class=\"language-bash\"># stage other changes I missed\ngit commit --amend --no-edit\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-03-04T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "git",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}
