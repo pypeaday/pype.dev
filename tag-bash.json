@@ -1,0 +1,121 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-bash.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/append-string-to-list-of-files-with-xarg.html",
+      "url": "https://pype.dev/append-string-to-list-of-files-with-xarg.html",
+      "title": "Append string to list of files with xarg",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>❯ find . -name &quot;requirements.in&quot; -print0 | xargs -0 sh -c 'for arg in &quot;$@&quot;; do echo &quot;awscli&quot; &gt;&gt;&quot;$arg&quot;; done'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-09-21T11:26:02-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "bash"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/destroying-tmux-sessions-with-fzf.html",
+      "url": "https://pype.dev/destroying-tmux-sessions-with-fzf.html",
+      "title": "Destroying Tmux sessions with fzf",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I use Tmux and Vim for most of my workflow, but I end up with a lot of dangling\ntmux sessions that dont' really need to persist... but killing them one at a\ntime is a pain so I wrote a little script-kitty nonsense to pipe multiple\nchoices from fzf into <code>tmux kill-session</code></p>\n<p>I defined a little function in my <code>.zshrc</code></p>\n<pre><code class=\"language-bash\">destroy() { \n    tmux list-sessions -F '#{session_name}' | fzf -m | xargs -d $'\\n' sh -c 'echo &quot;killing $0&quot;; tmux kill-session -t &quot;$0&quot;; for arg;do echo &quot;killing $arg&quot;;tmux kill-session -t &quot;$arg&quot;; done'\n}\nbindkey -s '^d' 'destroy \\n'\n</code></pre>\n<p><code>tmux list-sessions -F '#{session_name}' </code> prints all my active tmux sessions to the console with the format of just their name</p>\n<pre><code class=\"language-bash\">pype.dev   main   ×1 via   v3.8.11(pype.dev)  on  (us-east-1) proxy\n❯ tmux list-sessions -F '#{session_name}'\nsession-01\nsession-02\nsession-03\n...\n</code></pre>\n<p>Pipe that to <code>fzf -m</code> to allow multiple choices to be made using tab</p>\n<p>Then the nasty bit in <code>xargs</code>... I echo <code>killing @0</code> and <code>killing $arg</code> because the <code>sh -c</code> passes the first tmux session name to <code>@0</code> (it's just what bash does) and then the rest get handled in the for loop.</p>\n<p>Basically then I get an fzf list to choose multiple tmux sessions to destroy to clean up some RAM!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-09-15T10:27:58-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "bash",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/remove-zfs-dataset-specific-snapshots.html",
+      "url": "https://pype.dev/remove-zfs-dataset-specific-snapshots.html",
+      "title": "Remove ZFS Dataset Specific Snapshots",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I started my homelab journey being super naive about ZFS and how to manage the\nfilesystem... that bit me in the butt when transfering a ton of files out of\nfolders and into datasets because ZFS is copy on write so I was essentially\nduplicating my storage until I got a hair smarter about removing files after\nthey're moved (rsync --remove-source-file ftw). But I had a ton of snapshots of\nchild datasets with a ton of data that I just never will need, so I learned\n<code>zfs list -H -o name -t snapshot tank/dataset1/dataset2</code> will list just the\nsnapshots for dataset2 and if you pipe that into <code>xargs -n1 zfs destroy</code> then\nyou have a way to clear out some snapshots you don't need!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T05:49:16-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "cli",
+        "bash",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/stow-target.html",
+      "url": "https://pype.dev/stow-target.html",
+      "title": "Stow-Target",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Check out <a href=\"stow.html\">stow</a> for a brief introduction to <code>stow</code></p>\n<p>What if I want to stow a package somewhere else?\nBoom, that's where <code>-t</code> comes in...</p>\n<p>Maybe I don't like having my <code>dotfiles</code> repo at <code>$HOME</code> and instead I want it in <code>~/git</code> or <code>~/personal</code> just to stay organized...\nWell then I could have the same workflow except the <code>stow</code> command looks like this:</p>\n<pre><code class=\"language-bash\">stow zsh -t ~/\n#or\nstow zsh -t $HOME\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-03-04T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bash",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/stow.html",
+      "url": "https://pype.dev/stow.html",
+      "title": "Stow",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Stow is a great tool for managing dotfiles. My usage looks like cloning my dotfiles to my home directory, setting some environment variables via a script, then stowing relevant packages and boom my config is good to go...</p>\n<pre><code class=\"language-bash\">cd ~\ngit clone &lt;my dotfiles repo&gt;\ncd dotfiles\n# env variable stuff ignored here\nstow zsh  # This will symlink my .zshrc file which is in ~/dotfiles/zsh to ~/.zshrc\n</code></pre>\n<p>By default stow will stow packages up one directory from the root directory.\nIn this example the root directory is <code>~/dotfiles</code> and the package is <code>zsh</code>.\nSo the files in the <code>zsh</code> package will symlinked into <code>~/</code>.</p>\n<p><code>stow</code> makes it easy to share dotfiles across machines, or safely experiment with config changes while always being protected by <code>git</code> since your dotfiles are in a git repo!\n...They are in a git repo... right?</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-03-04T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bash",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}
