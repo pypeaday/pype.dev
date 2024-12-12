@@ -16,7 +16,7 @@ I am moving a hefty amount of data to a new ZFS pool due to some corruption and 
 I've used `rsync` for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.
 
 ## TLDR
-
+TLDR: 
 `rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/`
 
 ## Explanation
