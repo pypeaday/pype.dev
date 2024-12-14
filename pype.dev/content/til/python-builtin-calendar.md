@@ -16,8 +16,7 @@ I recently learned of an awesome builtin called `calendar`  that has way more th
 I only needed it because I was too lazy to hard code the 7 weekdays into my module but it turns out there's a lot of useful things like `calendar.isleap()`!
 
 
-![Alt text](/media/builtin-calendar.png "calendar")
-
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/builtin-calendar.png" alt="builtin" title="Python's builtin calendar" />
 ## Future use
 
 I'm not exactly sure what will come my way where `calendar` will be super relevant but like anything, I'm just glad to know it exists for when the time arises!

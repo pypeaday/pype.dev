@@ -155,4 +155,5 @@ if __name__ == "__main__":
 
 You can save this as `my_dash.py` and run with `streamlit run my_dash.py` and should see something like the following!
 
-![Alt Text](/media/plotly-streamlit.gif "plotly-streamlit-gif")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/plotly-streamlit.gif" alt="plotly" title="Plotly in Streamlit" />
+

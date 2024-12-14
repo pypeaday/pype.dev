@@ -15,7 +15,7 @@ tags:
 I recently have been having significant home server issues, and that's not the point of this - today I learned what `D` state is when looking at htop.
 
 
-![Alt Text](/media/d-htop.png "htop-d")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png" alt="htop-d" title="htop with D state" />
 
 Apparently this means "uninterruptable sleep" and it's a dev's nightmare... 
 

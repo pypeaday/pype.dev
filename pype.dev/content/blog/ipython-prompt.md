@@ -25,16 +25,17 @@ I won't write about that here but you can find my `rich` config [here](https://g
 
 My zsh prompt looks a little something like this:
 
-![Alt Text](/media/zsh-starship-prompt.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/zsh-starship-prompt.png" alt="starship" title="A starship prompt" />
+
 
 And after my ipython customiztion it currently (subject to much change but this is as of my dotfiles commit #d22088f6be81a58b5f7dfb73b7a4088cbdd9fece on `main`).
 
-![Alt Text](/media/ipython-prompt.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/ipython-prompt.png" alt="ipython" title="A starship inspired ipython prompt" />
 
 Now in ipython I have an indicator of my working directory, git branch, python environment, and a note that I'm in `ipython` and not `zsh`.
 I also configured my prompt to warn me if I'm _not_ in a git directory!
 
-![Alt Text](/media/ipython-prompt-no-git.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/ipython-prompt-no-git.png" alt="ipython-ng" title="A starship inspired ipython prompt without git" />
 
 All in all the customization isn't too bad with just 2 specific files.
 

@@ -81,4 +81,4 @@ This really threw me for a loop today but is just another reminder that if you h
 
 Give her the 'ol reboot and now if I check `wg` I should see some traffic on my wireguard tunnel!
 
-![Alt text](/media/truenas-wireguard.png "truenas-wireguard")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/truenas-wireguard.png" alt="TrueNAS Wireguard" title="TrueNAS and Wireguard" />

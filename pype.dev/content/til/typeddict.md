@@ -36,7 +36,7 @@ my_dict["key_2"].pop()
 With the above script you'll get an annoying warning about using `pop` on `key_2`.
 
 
-![Alt text](/media/typed-dict-warning.png "dict-warning")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/typed-dict-warning.png" alt="typeddict" title="Warning in TypedDict" />
 
 
 ## The Solution
@@ -59,7 +59,7 @@ my_typed_dict: MyDict = {
 my_typed_dict["key_2"].pop()
 ```
 
-![Alt text](/media/typed-dict.png "typeddict")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/typed-dict.png" alt="typeddict" title="A TypedDict" />
 
 > I was able to import TypedDict from typing, mypy_extensions, and typing_extensions
 

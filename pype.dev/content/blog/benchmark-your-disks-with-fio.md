@@ -31,7 +31,8 @@ Here is a random screenshot of my glances homepage at time of writing - The
 only major load on my server is some `ffmpeg` transcoding (about 60% CPU
 utilization)...
 
-![Alt Text](/media/glances-iowait.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png" alt="glances" title="glances with iowait" />
+
 
 As you can see... there's a lot of issues and _I don't even know what they mean_.
 

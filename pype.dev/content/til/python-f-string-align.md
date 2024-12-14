@@ -42,6 +42,4 @@ for varable, score in zip(variables, scores):
 ```
 
 
-
-
-![Alt text](/media/py-print-align.png "python print")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/py-print-align.png" alt="pyprintalign" title="Align f-string printing" />

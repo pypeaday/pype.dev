@@ -19,11 +19,13 @@ The default sh/bash/zsh prompts are... to put it lightly... garbage... I can't s
 
 Here's the default `sh` prompt...
 
-![Alt Text](/media/sh-prompt.png)
+
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/sh-prompt.png" alt="sh" title="A default sh prompt" />
+
 
 Then switching to `zsh` you get something marginally better (plus tab completion!)
 
-![Alt Text](/media/zsh-prompt.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/zsh-prompt.png" alt="zsh" title="A default zsh prompt" />
 
 But this still is super gross... there's nothing to indicate file types and no status information readily available (ie. `git status` etc.)
 
@@ -37,7 +39,7 @@ Kitty themes though - do not give me a nice prompt.
 
 The default prompt you get with `oh-my-zsh` themes isn't bad though (and you can pick from several default themes)...
 
-![Alt Text](/media/zsh-oh-my-zsh-prompt.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/zsh-oh-my-zsh-prompt.png" alt="omz" title="A default oh-my-zsh prompt" />
 
 Notice that you get some nice coloring and some default `git` status stuff, mainly the branch you are on.
 There's plugins to show you more and that's all well and good, but again it's not my choice...
@@ -59,7 +61,7 @@ My starship config is found [here](https://github.com/nicpayne713/dotfiles/blob/
 
 Now I have a beautiful prompt with relevant information that's a dream to look at!
 
-![Alt Text](/media/zsh-starship-prompt.png)
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/zsh-starship-prompt.png" alt="starship" title="A starship prompt" />
 
 I have configured my starship to show me relevant `git status` options (stashes, untracked files, etc etc.)
 I also have starship show me if I'm in a git repo, what branch I'm on, if I'm in a python project and if so what virtual environment is active.

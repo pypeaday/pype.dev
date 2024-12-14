@@ -26,4 +26,5 @@ df = pd.read_csv("cars.csv")
 df.info(memory_usage="deep")
 ```
 
-![Alt text](/media/df-memory-usage.png "DF memory")
+
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/df-memory-usage.png" alt="DataFrame Memory Usage" title="DataFrame Memory Usage" />

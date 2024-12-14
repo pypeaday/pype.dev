@@ -37,7 +37,7 @@ TypeError: Can't instantiate abstract class MyFamily with abstract methods get_d
 
 ```
 
-![Alt text](/media/py-abc-meta.png "abcmeta")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/py-abc-meta.png" alt="abcmetadata" title="ABC Metadata" />
 
 In order for me to extend `Family` I have to implement the method `get_dad`
 

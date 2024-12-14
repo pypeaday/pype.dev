@@ -46,11 +46,11 @@ Setting static IP on Ubuntu 20.04
             addresses: [8.8.4.4, 8.8.8.8]
     ```
 
+
+
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/tiddlywiki-example.png" alt="tiddlywiki" title="A TiddlyWiki Example" />
+
 ```
-
-
-![Alt text](/media/tiddlywiki-example.png "A Tiddler")
-
 The `#` create a numbered list, `//` creates an italicized heading, and `!` creates headings similar to Markdown's `#`. The differences aren't too bad to keep in mind and what renders out is totally depenent on the tidlywiki itself. 
 My template has a nice nord feel to it, feel free to download from my github and try it out!
 

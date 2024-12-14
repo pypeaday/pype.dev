@@ -23,7 +23,7 @@ __yes!__
 
 First thing to do is `pip install skimpy` and then it's as easy to get some summary stats with `skimpy <data>`
 
-![Alt Text](/media/skimpy-zsh.png "skimpy-zsh")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
 
 This is super nice for seeing missing values in particular as well as the distribution shape of the data.
 
@@ -35,10 +35,10 @@ So... can I see this table quickly without breaking my iPython workflow?
 __Of course you can with magic!__
 
 
-![Alt Text](/media/skimpy-ipython.png "skimpy-ipython")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/skimpy-ipython.png" alt="Skimpy iPython" title="A fancy data summary in iPython" />
 
 
 The above assumes you're looking at a file, like you would in the terminal. 
 `skimpy` works even better in iPython with `from skimpy import skim` then pass any DataFrame to `skim`!
 
-![Alt Text](/media/skimpy-ipython2.png "skimpy-ipython2")
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/skimpy-ipython2.png" alt="Skimpy iPython2" title="A fancy data summary in iPython" />

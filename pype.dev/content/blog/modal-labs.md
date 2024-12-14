@@ -102,3 +102,14 @@ An environment variable, `BASE_VERSION` that I expect to be in my base image
 was not available to the python function in my Modal app... hopefully the log
 is still
 [here](https://modal.com/logs/ap-qYjE45dciqgT3C3CpNp3RL?functionId=fu-rOt31ShRE1W1CQfuf02fsq&taskId=ta-dm8BfiblvFLwVIQyt75YC2&inputId=in-n64klEFrLtbcm2BiykJEvW) 
+
+
+## GitHub Actions
+
+I think it'd be easy to deploy from GH actions... just need an API Key...
+
+# Deployment
+
+Without gitops it's already ahrd to manage my versions... need to get that built in either to github or locally sooooon
+
+Nomad?? :D
