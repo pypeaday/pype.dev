@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Sun, 15 Dec 2024 15:41:36 GMT</pubDate><lastBuildDate>Sun, 15 Dec 2024 21:45:48 GMT</lastBuildDate><generator>marmite</generator><image><url>https://pype.dev/media/og-02.png</url><title></title><link></link></image><item><title>Add a healthcheck to your FastAPI app</title><link>https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html</link><author>nicpayne</author><category>python</category><category>homelab</category><category>tech</category><guid>https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html</guid><pubDate>Sun, 15 Dec 2024 15:41:36 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I'm building a few FastAPI apps to throw in docker and run on my homelab... I wanted to add healthchecks and here's a simple way to do it</p>
+<p>Make sure to install <code>curl</code> in the dockerfile (near the top for effeciency)</p>
+<pre><code># Install curl with minimal dependencies
+RUN apt-get update &amp;&amp; \
+    apt-get install -y --no-install-recommends curl &amp;&amp; \
+    apt-get clean &amp;&amp; \
+    rm -rf /var/lib/apt/lists/*
+
+</code></pre>
+<p>Then I recommend making compose files even for single image deployments</p>
+<pre><code>services:
+  app:
+    build: .
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    environment:
+      - PYTHONPATH=/app
+      - DOCKER_ENV=true
+      - UV_VIRTUALENV=/opt/app-env
+    user: &quot;1000:1000&quot;
+    restart: unless-stopped
+    healthcheck:
+      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:8000/health&quot;]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+</code></pre>
+<p>Then finally you'll need a <code>/health</code> endpoint</p>
+<pre><code class="language-python">
+@app.get(&quot;/health&quot;, response_class=HTMLResponse)
+async def health_check():
+    &quot;&quot;&quot;
+    A health check endpoint that returns a status message.
+    &quot;&quot;&quot;
+    return &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Service is healthy&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>statically.io to help me out</title><link>https://pype.dev/statically-io-to-help-me-out.html</link><author>nicpayne</author><category>infrastructure</category><category>tech</category><category>tech</category><guid>https://pype.dev/statically-io-to-help-me-out.html</guid><pubDate>Sat, 14 Dec 2024 13:35:31 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p><a href="https://statically.io">statically.io</a> offers a CDN that I'm going to try to lean into for images in my blog. My hope is that the builds get and stay fast, and that page loads are fast too.</p>
+<p>Example:</p>
+<pre><code class="language-html">
+&lt;img src=&quot;https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png&quot; alt=&quot;Skimpy ZSH&quot; title=&quot;A fancy data summary in the shell&quot; /&gt;
+</code></pre>
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Jellyfin container updates for HWE + AMD</title><link>https://pype.dev/jellyfin-container-updates-for-hwe-amd.html</link><author>nicpayne</author><category>containers</category><category>linux</category><category>tech</category><guid>https://pype.dev/jellyfin-container-updates-for-hwe-amd.html</guid><pubDate>Sat, 14 Dec 2024 11:27:15 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>
+<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>
+<p>Thankfully someone posted <a href="https://forum.jellyfin.org/t-jellyfin-amd-docker">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>
+<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>
+<blockquote>
+<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>
+</blockquote>
+<pre><code>
+apt update &amp;&amp; apt install -y curl gpg
+
+mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg
+
+cat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources
+
+Types: deb
+
+URIs: https://repo.radeon.com/rocm/apt/latest
+
+Suites: ubuntu
+
+Components: main
+
+Architectures: amd64
+
+Signed-By: /etc/apt/keyrings/rocm.gpg
+
+EOF
+
+apt update &amp;&amp; apt install -y rocm-opencl-runtime
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>The Flood Story - Types and Baptism</title><link>https://pype.dev/the-flood-story-types-and-baptism.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/the-flood-story-types-and-baptism.html</guid><pubDate>Sat, 14 Dec 2024 06:06:38 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h1><a href="#the-flood-story-and-jesus" aria-hidden="true" class="anchor" id="the-flood-story-and-jesus"></a>The Flood Story and Jesus</h1>
+<p>Jesus brings up the Flood story from Genesis just one time (in the recorded teachings we have).</p>
+<p>First to set the scene, Jesus and his disciples are visiting the temple, and the disiples are kind of &quot;ooo-ing&quot; and &quot;aaah-ing&quot; when Jesus tells them about about the coming destruction...</p>
+<pre><code>Matthew 24:1–2 (ESV):  24 Jesus left the temple and was going away, when his
+disciples came to point out to him the buildings of the temple. 2 But he
+answered them, “You see all these, do you not? Truly, I say to you, there will
+not be left here one stone upon another that will not be thrown down.”  
+
+The Holy Bible: English Standard Version (Mt 24:1–2). (2016). Crossway Bibles.
+
+</code></pre>
+<pre><code>Matthew 24:37–39 (ESV): 37 For as were the days of Noah, so will be the coming
+of the Son of Man. 38 For as in those days before the flood they were eating
+and drinking, marrying and giving in marriage, until the day when Noah entered
+the ark, 39 and they were unaware until the flood came and swept them all away,
+so will be the coming of the Son of Man. 
+
+The Holy Bible: English Standard Version (Mt 24:37–39). (2016). Crossway Bibles.
+</code></pre>
+<p>At one point in Jesus' description of the destruction of the temple in
+Jerusalem, he brings up the Son of Man and Noah...</p>
+<p>Jesus says that the &quot;coming of the Son of Man&quot; will be like when Noah built the
+ark, and no one understood until the flood (κατακλυσμός | kataklysmos) came and
+took them away.</p>
+<p>In Jesus' mind the flood narrative gives him imagery and vocabulary to talk
+about when God allows foreign powers to come and bring judgement... This isn't
+an interpretation of the flood narrative, but it clues us into the idea that
+the Hebrew bible is full of imagery, like a quilt, that follows a (or several)
+pattern(s).</p>
+<pre><code>Jesus understood the flood story as a pattern - a theological category to talk
+about God overthrowing the corrupt power systems of our world - Tim Mackie
+</code></pre>
+<blockquote>
+<p>I think sometimes we look at the flood and think God is so bad for taking out
+all of humanity, but we miss the point... God is RESTORING humanity by
+removing corruption... that's eventually the story we're invited into via
+faith in Jesus</p>
+</blockquote>
+<h2><a href="#types" aria-hidden="true" class="anchor" id="types"></a>Types</h2>
+<p>A <code>type</code> is a category of prophecy, and an <code>antitype</code> is the revelation of the type.</p>
+<p>Essentially - a <code>type</code> is a pattern, and the <code>antytype</code> is the revelation of
+the meaning of the pattern - and without understanding the preceding types (in
+this case, the flood) then the antitype cannot be understood (in this case
+baptism)</p>
+<blockquote>
+<p>a trivial example of how a type, or a pattern, can be noticed and even build
+anticipation is to think 2, 4, 6, 8... what comes next? 10, and we all know
+that immediately. Types in general, and types in the Bible are no different,
+albeit not so simple...</p>
+</blockquote>
+<h2><a href="#flood-and-baptism" aria-hidden="true" class="anchor" id="flood-and-baptism"></a>Flood and Baptism</h2>
+<p>Brace yourself...</p>
+<pre><code>1 Peter 3:18–22 (ESV): 18 For Christ also suffered once for sins, the righteous
+for the unrighteous, that he might bring us to God, being put to death in the
+flesh but made alive in the spirit, 19 in which he went and proclaimed to the
+spirits in prison, 20 because they formerly did not obey, when God’s patience
+waited in the days of Noah, while the ark was being prepared, in which a few,
+that is, eight persons, were brought safely through water. 21 Baptism, which
+corresponds to this, now saves you, not as a removal of dirt from the body but
+as an appeal to God for a good conscience, through the resurrection of Jesus
+Christ, 22 who has gone into heaven and is at the right hand of God, with
+angels, authorities, and powers having been subjected to him.  
+
+The Holy Bible: English Standard Version (1 Pe 3:18–22). (2016). Crossway
+Bibles.
+</code></pre>
+<p>Notice verse 21 - &quot;Baptism, which <u>corresponds</u> to this&quot;</p>
+<p>Corresponds is the word ἀντίτυπος (antitupos) in Greek, which means &quot;anti-type&quot;
+This means clearly that the <code>type</code>, or <em>a</em> type, for baptism, is the flood
+narrative... or that baptism is the antitype for the flood</p>
+<p>What does this mean for baptism?</p>
+<pre><code>21 Baptism, which
+corresponds to this, now saves you, not as a removal of dirt from the body but
+as an appeal to God for a good conscience, through the resurrection of Jesus
+Christ, 22 who has gone into heaven and is at the right hand of God, with
+angels, authorities, and powers having been subjected to him
+</code></pre>
+<p>Through baptism, we experience with Jesus, resurrection and rule of the angels,
+authorities, and power of the world...</p>
+<h2><a href="#take-away" aria-hidden="true" class="anchor" id="take-away"></a>Take Away</h2>
+<p>For the disciples listening... are they arguing about when the flood happened?
+or if it was a global or local flood?</p>
+<p>No... they are listening to Jesus unpack patterns in the Bible and they hear
+him invite them, through a story they know very well, into rule and reign with
+him</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>The Flood Story - Quilt Analogy</title><link>https://pype.dev/the-flood-story-quilt-analogy.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/the-flood-story-quilt-analogy.html</guid><pubDate>Sat, 14 Dec 2024 05:43:43 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h1><a href="#the-flood-story-in-the-hebrew-bible" aria-hidden="true" class="anchor" id="the-flood-story-in-the-hebrew-bible"></a>The Flood Story in the Hebrew Bible</h1>
+<p>I'm slowly making my way through some Bible Project classes online because Tim
+Mackie is a fantastic teacher and BP has done be a <em>great</em> service by opening
+my eyes to the reality of the Biblical narrative and what it means for my life
+of faith in Jesus.</p>
+<p>The second session is filled with great points and 10 minutes in I had to jot
+this one down...</p>
+<h2><a href="#a-quilt-as-history" aria-hidden="true" class="anchor" id="a-quilt-as-history"></a>A Quilt as History</h2>
+<p>Imagine your grandmother's grandmother made a quilt, and passed it down the
+family tree. In a sense, that quilt contains history that would pre-date you
+but would absolutely have meaning to you... However, you might look for meaning
+that was never intended to be present.</p>
+<p>The pieces of the quilt have their own history - there will be material that
+might've been part of a dress, or curtains, or bedsheets, or anything else
+someone in the family tree found interesting and meaningful for the story they
+are telling with their quilt.</p>
+<p>The question of what each of the pieces mean on their own, or in where they
+come from is interesting perhaps, but it's not the same question as asking what
+those pieces mean now that they have been curated into the family quilt... The
+creator(s) of the quilt may repurpose those pieces entirely, and it wouldn't be
+&quot;right&quot; for you or me to be upset that one piece of the quilt came from an
+article of clothing or cloth associated with something we might not like - the
+author (your grandma) <u>repurposed</u> it for that very reason, to change the
+meaning and communicate something to you, perhaps something totally different
+than what that cloth might've meant before it was added to the quilt.</p>
+<h2><a href="#creation-as-a-quilt" aria-hidden="true" class="anchor" id="creation-as-a-quilt"></a>Creation as a Quilt</h2>
+<p>The quilt is a curated piece of pieces of fabric - and to bring the metaphor
+home very abruptly, so is the Hebrew Bible... the authors of the Hebrew
+scripture absolutely repurposed stories and images that were present in their
+time and before, but not to make something that is a cheap copy, but to
+communicate the story of the <em>actual</em> God of gods, ruling over the world.</p>
+<p>For example - the very beginning of the creationa ccount in Genesis 1 has the
+spirit of God hovering over the waters. Without getting into more details than
+a short write-up warrants, the waters in ancient thought represent chaos. Not
+only that, but there is an older creation account called the Enuma Elish where
+their savior god, Marduk, fights the chaos waters (Tiamat) and conquers her
+eventually... The thing about the Hebrew narrative is that Yahweh doesn't have
+to fight the waters... he subdues with his words because he isn't in tension
+with creation, or even with chaos, all things obey him and the chaos waters
+that other gods had to fight and die over are no different. So the meaning of
+the waters is somewhat consistent across lots of cultures, but Hebrews took the
+stories and in essence made them &quot;more true&quot;, but at the very least made them
+relevant to the story they are/were communicating about the God of gods and
+Lord of love - that he is the creator of all things and invites us to partner
+with him (as his image-bearers).</p>
+<h2><a href="#calm-down" aria-hidden="true" class="anchor" id="calm-down"></a>Calm Down</h2>
+<p>A lot of Christians get upset or skiddish when other stories and cultures get
+brought up - as if the Bible had to fall from heaven in their favorite English
+translation... but in my opinion that is the silliest and cheapest view of the
+Word of God... he chose people out of foreign lands to make an inheritence for
+himself, his people, and those people tell his story using images that they
+know.</p>
+<p>It's important for us to answer interesting questions but not lose sight of
+what's important... The Enuma Elish is an interesting piece, and there's
+parallels with the Hebrew bible, but the Hebrew creation account clearly
+communicates that Yahweh doesn't have to labor and fight for order, he speaks
+order into chaos. That lesson is wholly different from other creation
+narratives, but is it derivative of them...</p>
+<p>That used to bother me, but understanding that the authors of the Bible,
+carried forth by the guidance of God's spirit, curated these stories and
+narratives for God's people to communicate the truest Truths about him and his
+love for people help me understand the reality of God partnering with humanity</p>
+<ul>
+<li>which starts in the Garden and is how Revelation ends</li>
+</ul>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>rsync like a pro</title><link>https://pype.dev/rsync-like-a-pro.html</link><author>nicpayne</author><category>linux</category><category>terminal</category><category>tech</category><guid>https://pype.dev/rsync-like-a-pro.html</guid><pubDate>Wed, 11 Dec 2024 10:52:23 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>
+<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>
+<h2><a href="#tldr" aria-hidden="true" class="anchor" id="tldr"></a>TLDR</h2>
+<p>TLDR:
+<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>
+<h2><a href="#explanation" aria-hidden="true" class="anchor" id="explanation"></a>Explanation</h2>
+<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).
+--chmod=Da+s: Ensures the setgid bit is applied to directories.
+--info=progress2: Provides detailed progress information, including overall data transfer stats.
+--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).
+--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).
+/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>D and uninterruptable sleep</title><link>https://pype.dev/d-and-uninterruptable-sleep.html</link><author>nicpayne</author><category>linux</category><category>zfs</category><category>tech</category><guid>https://pype.dev/d-and-uninterruptable-sleep.html</guid><pubDate>Wed, 11 Dec 2024 10:48:10 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h2><a href="#htop" aria-hidden="true" class="anchor" id="htop"></a>Htop</h2>
+<p>I recently have been having significant home server issues, and that's not the point of this - today I learned what <code>D</code> state is when looking at htop.</p>
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png" alt="htop-d" title="htop with D state" />
+<p>Apparently this means &quot;uninterruptable sleep&quot; and it's a dev's nightmare...</p>
+<h3><a href="#context" aria-hidden="true" class="anchor" id="context"></a>Context</h3>
+<p>The issue I was having was that some <code>zfs rollback</code> commands were hung - for hours... I wasn't sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.</p>
+<p>Turns out I still don't know what locked the disks up but I learned why <code>&lt;C&gt;-c</code> did <u>nothing</u>...
+the more you know</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Advent 2024 - Peace</title><link>https://pype.dev/advent-2024-peace.html</link><author>nicpayne</author><category>faith</category><guid>https://pype.dev/advent-2024-peace.html</guid><pubDate>Fri, 06 Dec 2024 15:26:15 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h2><a href="#scripture" aria-hidden="true" class="anchor" id="scripture"></a>Scripture</h2>
+<p>Luke 2:14 (ESV): 14 “Glory to God in the highest, and on earth peace among those with whom he is pleased!”</p>
+<h2><a href="#edification" aria-hidden="true" class="anchor" id="edification"></a>Edification</h2>
+<p>There is a word we probably know - Shalom. It's the Hebrew word we translate often as &quot;peace&quot;. But when I hear &quot;peace&quot; I often think about being calm - and that oversimplifies Shalom... I think a more appropriate understanding is &quot;things are as they are supposed to be&quot;.</p>
+<p>In the Garden, we see Shalom - the Lord partnering with humanity to steward the earth, to make things as they were supposed to be...</p>
+<p>You all know we messed that up, Shalom was broken and humanity was exiled.</p>
+<p>But we have a Great Healer.</p>
+<p>Jesus is Lord of all, King of Heaven and Earth, Ruler of your lives and mine, and he is the Prince of Peace</p>
+<p>Things in our lives are probably not often as they are supposed to be... We get sick, worry about bills, experience tragedy, and weather the storms of life. But there is hope - confident expectation - that peace already has been, and will continue to be, restored to those whom Jesus chooses, the ones with whom he is pleased.</p>
+<p>John records a lot before telling us about the cross, and I won't recount that in this short edification. But he recalls a hopeful word from the Lord -</p>
+<p>John 16:33 (LEB): 33 I [Jesus] have said these things to you so that in me you may have peace. In the world you have affliction, but have courage! I have conquered the world.”</p>
+<p>This season, and this week of Advent, I pray God presses the reality, and the hope for, peace, the expectation of Shalom, deeper into my heart. I pray the Spirit guides us all to bring the will of God to earth as it is in Heaven</p>
+<p>Finally I pray we may all be given, and accept, the conviction of Paul -</p>
+<p>Romans 8:18 For I consider that the sufferings of this present time are not worthy to be compared with the glory that is to be revealed to us.” Our present trials are not on an equal scale with the glory of heaven</p>
+<p>May the rest, the peace, the Shalom that Jesus gives to his followers be with you all. Amen.</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>hostnamectl to easily change hostname</title><link>https://pype.dev/hostnamectl-to-easily-change-hostname.html</link><author>nicpayne</author><category>linux</category><category>terminal</category><category>tech</category><guid>https://pype.dev/hostnamectl-to-easily-change-hostname.html</guid><pubDate>Fri, 06 Dec 2024 07:25:59 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>
+<pre><code class="language-bash">
+❯ hostnamectl --help
+hostnamectl [OPTIONS...] COMMAND ...
+
+Query or change system hostname.
+
+Commands:
+  status                 Show current hostname settings
+  hostname [NAME]        Get/set system hostname
+  icon-name [NAME]       Get/set icon name for host
+  chassis [NAME]         Get/set chassis type for host
+  deployment [NAME]      Get/set deployment environment for host
+  location [NAME]        Get/set location for host
+
+Options:
+  -h --help              Show this help
+     --version           Show package version
+     --no-ask-password   Do not prompt for password
+  -H --host=[USER@]HOST  Operate on remote host
+  -M --machine=CONTAINER Operate on local container
+     --transient         Only set transient hostname
+     --static            Only set static hostname
+     --pretty            Only set pretty hostname
+     --json=pretty|short|off
+                         Generate JSON output
+
+See the hostnamectl(1) man page for details.
+</code></pre>
+<p>I learned there's transient and static hostnames, so that's cool...</p>
+<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>
+<p>pretty sweet tool</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>How To Survive The Flood</title><link>https://pype.dev/how-to-survive-the-flood.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/how-to-survive-the-flood.html</guid><pubDate>Wed, 04 Dec 2024 05:52:44 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>There a lot of flood stories throughout the history of the world, and the Bible
+is no different in this regard. God warns Noah of a de-creation event, whereby
+he'll start over with humanity via Noah and his family. Noah survives the flood
+by abiding in Yahweh and staying close to the One who loves him.</p>
+<blockquote>
+<p>Note this reflection doesn't address <em>AT ALL</em> if the flood narrative is a
+&quot;real&quot; historical event, whether it's a global or local event, or anything
+like that - regardless of those points the Biblical authors used this type of
+imagery of chaos waters to communicate themes of judgement and wrath.</p>
+</blockquote>
+<p>Jesus, in the Sermon on the Mount with the 2 houses, calls back to the images
+of the chaos waters (the winds and the rains). His instruction is that the wise
+man who built his house on the rock will survive, but the foolish man builds
+his house on the sand and the winds and the rains destroyed it.</p>
+<p>Somewhat obviously this is metaphorical for basing your life on wisdom or
+folly. The wisdom is Jesus' teaching which is all based on Yahweh's love for
+humanity and his desire to partner with humanity for the good of the whole
+earth.</p>
+<p>The simple take-away is for us to survive the winds and the rain, and to say it
+more fully - to survive de-creation and destruction, we must live our lives in
+a way that revolves around Jesus, the perfect human. He calls us to a greater
+humanity, an unbroken humanity, which is unachievable apart from him (just look
+around if you doubt this truth).</p>
+<p>It's important to notice though that abiding in the Lord, basing your life on
+the rock, doesn't spare you from the wind and the rain. Trials come, life gets
+hard, shit hits the fan. The last few weeks for me haven't been my favorite and
+I've certainly experienced turmoil in my life but frankly Jesus makes those
+things bearable... in a way I can't put enough words to I'll just be reminded of
+Paul in Romans 8...</p>
+<pre><code class="language-Romans">worthy to be compared with the glory that is to be revealed to us.” Our present
+trials are not on an equal scale with the glory of heaven ```
+
+By God's grace he's molded my heart to be nearly incapable of separating the
+Love God has for me from any trial I face - it's not a magic answer or silver
+bullet to fixing those problems, and it doesn't make them go away, but I know
+the sufferings here aren't even worth comparing to the glory of the Lord. Amen.
+
+&lt;!-- Content Injected to every content markdown footer --&gt;
+
+[github]: https://github.com/rochacbruno/marmite
+</code></pre>
+]]></content:encoded></item><item><title>Welcome to Marmite</title><link>https://pype.dev/welcome.html</link><author>nicpayne</author><guid>https://pype.dev/welcome.html</guid><pubDate>Wed, 04 Dec 2024 00:00:00 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>This is your first post!</p>
+<h2><a href="#edit-this-content" aria-hidden="true" class="anchor" id="edit-this-content"></a>Edit this content</h2>
+<p>edit on <code>content/{date}-welcome.md</code></p>
+<h2><a href="#add-more-content" aria-hidden="true" class="anchor" id="add-more-content"></a>Add more content</h2>
+<p>create new markdown files in the <code>content</code> folder</p>
+<p>use <code>marmite --new</code> to create new content</p>
+<h2><a href="#customize-your-site" aria-hidden="true" class="anchor" id="customize-your-site"></a>Customize your site</h2>
+<p>edit <code>marmite.yaml</code> to change site settings</p>
+<p>edit the files starting with <code>_</code> in the <code>content</code> folder to change the layout</p>
+<p>or edit the templates to create a custom layout</p>
+<h2><a href="#deploy-your-site" aria-hidden="true" class="anchor" id="deploy-your-site"></a>Deploy your site</h2>
+<p>read more on <a href="https://rochacbruno.github.io/marmite">marmite documentation</a></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Stylus for custom webpage themes</title><link>https://pype.dev/stylus-for-custom-webpage-themes.html</link><author>nicpayne</author><category>tech</category><guid>https://pype.dev/stylus-for-custom-webpage-themes.html</guid><pubDate>Wed, 27 Nov 2024 06:07:39 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>the Logos web app is DISGUSTINGY bright/white - enough to actually ruin your morning...</p>
+<p>Thankfully there's an extension called <a href="https://addons.mozilla.org/en-US/firefox/addon/styl-us/">stylus</a> and some kind folks in the Logos community created a nice dark theme <a href="https://userstyles.world/style/18547/logos-web-app-dark-mode">here</a>. You simply install the extension, then go to the userstyles link &lt;-- and click <code>install</code>. It only changes themes for the sites configured - in this case <a href="app-logos-com.html">app.logos.com</a></p>
+<h1><a href="#todo-image" aria-hidden="true" class="anchor" id="todo-image"></a>TODO: image</h1>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>The Two Houses</title><link>https://pype.dev/the-two-houses.html</link><author>nicpayne</author><category>bible-project</category><category>faith</category><guid>https://pype.dev/the-two-houses.html</guid><pubDate>Wed, 27 Nov 2024 05:40:24 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<h2><a href="#context" aria-hidden="true" class="anchor" id="context"></a>Context</h2>
+<pre><code>24 “Everyone then who hears these words of mine and does them will be like a wise man who built his house on the rock. 25 And the rain fell, and the floods came, and the winds blew and beat on that house, but it did not fall, because it had been founded on the rock. 26 And everyone who hears these words of mine and does not do them will be like a foolish man who built his house on the sand. 27 And the rain fell, and the floods came, and the winds blew and beat against that house, and it fell, and great was the fall of it.
+
+The Holy Bible: English Standard Version (Mt 7:24–27). (2016). Crossway Bibles.
+</code></pre>
+<h2><a href="#reflection" aria-hidden="true" class="anchor" id="reflection"></a>Reflection</h2>
+<p>From the visual commentary Tim calls out a few things:</p>
+<ol>
+<li>
+<p><code>the rock</code> is supposed to first call us back to earlier in the sermon when Jesus calls his people &quot;the light of the world&quot; and says &quot;a city on a hill [mountain] cannot be hidden&quot; (Matthew 5:14). The hill [ὄρος | oros] means &quot;mountain&quot; and is a hyperlink to OT teaching of God's people living in the ideal Jerusalem on Mt. Zion. Lots of Hebrew imagery here.</p>
+</li>
+<li>
+<p>The rain and floods are a callback to the Chaos Waters of the OT (and general ANE thinking). It's a reference to the destructive nature that we humans have unleashed on the world - but the wise man who listens to Jesus lives a life with some amount of protection from those hardships - and ultimate protection from God handing us over to Chaos (destruction).</p>
+</li>
+</ol>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>DNS Broke After Reboot - Ubuntu 22.04</title><link>https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html</link><author>nicpayne</author><category>homelab</category><category>linux</category><category>tech</category><guid>https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html</guid><pubDate>Fri, 22 Nov 2024 08:08:40 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>
+<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href="https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config">SO Post</a></p>
+<p>sudo mkdir /etc/systemd/resolved.conf.d/
+sudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>
+<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>
+<pre><code>[Resolve]
+DNS=8.8.8.8 1.1.1.1
+</code></pre>
+<p>But I decided to use tailscale</p>
+<pre><code>[Resolve]
+DNS=100.100.100.100
+</code></pre>
+<p>Then restart systemd-resolved</p>
+<p>sudo systemctl restart systemd-resolved</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Restart KDE Plasma</title><link>https://pype.dev/restart-kde-plasma.html</link><author>nicpayne</author><category>linux</category><category>terminal</category><category>tech</category><guid>https://pype.dev/restart-kde-plasma.html</guid><pubDate>Fri, 08 Nov 2024 15:53:52 GMT</pubDate><source url="https://pype.dev">author-nicpayne</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>
+<pre><code>
+sudo killall plasmashell
+
+kstart plasmashell
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>
