@@ -1,0 +1,339 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-linux.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "url": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "title": "Jellyfin container updates for HWE + AMD",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>\n<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>\n<p>Thankfully someone posted <a href=\"https://forum.jellyfin.org/t-jellyfin-amd-docker\">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>\n<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>\n<blockquote>\n<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>\n</blockquote>\n<pre><code>\napt update &amp;&amp; apt install -y curl gpg\n\nmkdir -p /etc/apt/keyrings\n\ncurl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg\n\ncat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources\n\nTypes: deb\n\nURIs: https://repo.radeon.com/rocm/apt/latest\n\nSuites: ubuntu\n\nComponents: main\n\nArchitectures: amd64\n\nSigned-By: /etc/apt/keyrings/rocm.gpg\n\nEOF\n\napt update &amp;&amp; apt install -y rocm-opencl-runtime\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T11:27:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "containers",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/rsync-like-a-pro.html",
+      "url": "https://pype.dev/rsync-like-a-pro.html",
+      "title": "rsync like a pro",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>\n<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>TLDR:\n<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>\n<h2><a href=\"#explanation\" aria-hidden=\"true\" class=\"anchor\" id=\"explanation\"></a>Explanation</h2>\n<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).\n--chmod=Da+s: Ensures the setgid bit is applied to directories.\n--info=progress2: Provides detailed progress information, including overall data transfer stats.\n--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).\n--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).\n/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:52:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "url": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "title": "D and uninterruptable sleep",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#htop\" aria-hidden=\"true\" class=\"anchor\" id=\"htop\"></a>Htop</h2>\n<p>I recently have been having significant home server issues, and that's not the point of this - today I learned what <code>D</code> state is when looking at htop.</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png\" alt=\"htop-d\" title=\"htop with D state\" />\n<p>Apparently this means &quot;uninterruptable sleep&quot; and it's a dev's nightmare...</p>\n<h3><a href=\"#context\" aria-hidden=\"true\" class=\"anchor\" id=\"context\"></a>Context</h3>\n<p>The issue I was having was that some <code>zfs rollback</code> commands were hung - for hours... I wasn't sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.</p>\n<p>Turns out I still don't know what locked the disks up but I learned why <code>&lt;C&gt;-c</code> did <u>nothing</u>...\nthe more you know</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:48:10-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "url": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "title": "hostnamectl to easily change hostname",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>\n<pre><code class=\"language-bash\">\n❯ hostnamectl --help\nhostnamectl [OPTIONS...] COMMAND ...\n\nQuery or change system hostname.\n\nCommands:\n  status                 Show current hostname settings\n  hostname [NAME]        Get/set system hostname\n  icon-name [NAME]       Get/set icon name for host\n  chassis [NAME]         Get/set chassis type for host\n  deployment [NAME]      Get/set deployment environment for host\n  location [NAME]        Get/set location for host\n\nOptions:\n  -h --help              Show this help\n     --version           Show package version\n     --no-ask-password   Do not prompt for password\n  -H --host=[USER@]HOST  Operate on remote host\n  -M --machine=CONTAINER Operate on local container\n     --transient         Only set transient hostname\n     --static            Only set static hostname\n     --pretty            Only set pretty hostname\n     --json=pretty|short|off\n                         Generate JSON output\n\nSee the hostnamectl(1) man page for details.\n</code></pre>\n<p>I learned there's transient and static hostnames, so that's cool...</p>\n<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>\n<p>pretty sweet tool</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T07:25:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "url": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "title": "DNS Broke After Reboot - Ubuntu 22.04",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>\n<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href=\"https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config\">SO Post</a></p>\n<p>sudo mkdir /etc/systemd/resolved.conf.d/\nsudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>\n<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>\n<pre><code>[Resolve]\nDNS=8.8.8.8 1.1.1.1\n</code></pre>\n<p>But I decided to use tailscale</p>\n<pre><code>[Resolve]\nDNS=100.100.100.100\n</code></pre>\n<p>Then restart systemd-resolved</p>\n<p>sudo systemctl restart systemd-resolved</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-22T08:08:40-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/restart-kde-plasma.html",
+      "url": "https://pype.dev/restart-kde-plasma.html",
+      "title": "Restart KDE Plasma",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>\n<pre><code>\nsudo killall plasmashell\n\nkstart plasmashell\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-08T15:53:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-remote-add.html",
+      "url": "https://pype.dev/docker-remote-add.html",
+      "title": "docker-remote-add",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Add from url??</p>\n<p>ADD <a href=\"http://example.com/cars.csv\">http://example.com/cars.csv</a> /tmp/cars.csv</p>\n<p>Unpack automatically!? (.tar, .tar.gz, .tgz, .bz2, .tbz2, .txz, .zip)</p>\n<p>ADD myapp.tar.gz /opt/myapp/</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:19:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-copy-and-chown.html",
+      "url": "https://pype.dev/docker-copy-and-chown.html",
+      "title": "Docker copy and chown",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>COPY --chown=myuser:mygroup source-file target-file</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:18:09-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "url": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "title": "Interesting IPs between Jellyfin clients and server depending on tailscale and server address",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>When connecting from my phone to jellyfin I'm seeing some interesting patterns.</p>\n<h2><a href=\"#scenarios\" aria-hidden=\"true\" class=\"anchor\" id=\"scenarios\"></a>Scenarios</h2>\n<h3><a href=\"#tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\" aria-hidden=\"true\" class=\"anchor\" id=\"tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\"></a>Tailscale IP of phone is listed as local network to jellyfin</h3>\n<p>Wifi: off\nTailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: LAN IP</p>\n<p>Jellyfin sees 192.168.1.1, my router address</p>\n<hr />\n<p>Wifi: off\ntailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<p>Q: This might be because of traefik somehow</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work even work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: on\ntailsacale: of\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP (via pihole DNS)</p>\n<p>Jellyfin sees the IP of my phone</p>\n<hr />\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-07-12T06:24:57-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "url": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "title": "Upgrading your kernel can F you up... whoops",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975\">https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975</a> I lost TPU for frigate, this saved me ass</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-06-26T10:21:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/fonts-in-vs-c-e.html",
+      "url": "https://pype.dev/fonts-in-vs-c-e.html",
+      "title": "Fonts in VS C**e",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Jet Brains has to be specified 'JetBrainsMono Nerd Font Mono'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-05-20T06:44:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "url": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "title": "DHCP Restart to Save Ubuntu 22.04 Server Networking",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn't show up on any networks. A solution that got me back in was a friend restarting the dhcp client for me:</p>\n<pre><code class=\"language-bash\">sudo dhclient -r -v &lt;interface&gt; &amp;&amp; sudo dhclient -v &lt;interface&gt;\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-12-31T20:26:50-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "url": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "title": "Refresh Nextcloud Groupfolders after messing around on the filesystem",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Exec in as www-data and run ./occ groupfolders:scan folder_id -v (the -v to see what it's doing)</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-09-23T12:45:06-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html",
+      "url": "https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html",
+      "title": "Convert Word Doc to PDF with Headless Libreoffice",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I've been using paperless-ngx to manage all my documents, but every once in a while I'll get a <code>.docx</code> file to deal with...</p>\n<p>Turns out Libreoffice has a headless mode a <code>pdf</code> converter built-in!</p>\n<pre><code class=\"language-Bash\">libreoffice --headless --convert-to pdf /path/to/file.docx --outdir /path/to/output/directory\n</code></pre>\n<blockquote>\n<p>Note that <code>--outdir</code> is in fact a directory, not the path to a file</p>\n</blockquote>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-03-09T06:48:38-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html",
+      "url": "https://pype.dev/i3-like-keyboard-mapping-in-pop-os.html",
+      "title": "i3-Like keyboard mapping in Pop_OS",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I was introduced to tiling window managers through i3, which I use heavily on\none of my machines. I have switched to Pop_OS! at home though, which has a\ntiling window mode but the keybindings are not what I'm used to for i3. I\nwanted to at least navigate workspaces how I'm used to doing (cause I set\nworkspace 3 for communication apps, 1 for my terminal, etc...)</p>\n<p>Here's how I set keybindings for:</p>\n<ul>\n<li><code>&lt;Super&gt; + &lt;number&gt;</code> sends me to that numbered workspace</li>\n<li><code>&lt;Shift&gt; + &lt;Super&gt; + &lt;number&gt;</code> moves the window I'm focused on to workspace <code>number</code></li>\n</ul>\n<pre><code class=\"language-bash\">#!/bin/bash\ngsettings set org.gnome.mutter dynamic-workspaces false \ngsettings set org.gnome.desktop.wm.preferences num-workspaces 8 \ngsettings set org.gnome.shell.keybindings switch-to-application-1 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-2 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-3 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-4 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-5 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-6 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-7 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-8 [] \ngsettings set org.gnome.shell.keybindings switch-to-application-9 [] \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 &quot;['&lt;Super&gt;1']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 &quot;['&lt;Super&gt;2']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 &quot;['&lt;Super&gt;3']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 &quot;['&lt;Super&gt;4']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 &quot;['&lt;Super&gt;5']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 &quot;['&lt;Super&gt;6']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 &quot;['&lt;Super&gt;7']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 &quot;['&lt;Super&gt;8']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 &quot;['&lt;Super&gt;9']&quot; \ngsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-10 &quot;['&lt;Super&gt;0']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 &quot;['&lt;Super&gt;&lt;Shift&gt;1']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 &quot;['&lt;Super&gt;&lt;Shift&gt;2']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 &quot;['&lt;Super&gt;&lt;Shift&gt;3']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 &quot;['&lt;Super&gt;&lt;Shift&gt;4']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 &quot;['&lt;Super&gt;&lt;Shift&gt;5']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 &quot;['&lt;Super&gt;&lt;Shift&gt;6']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 &quot;['&lt;Super&gt;&lt;Shift&gt;7']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 &quot;['&lt;Super&gt;&lt;Shift&gt;8']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 &quot;['&lt;Super&gt;&lt;Shift&gt;9']&quot; \ngsettings set org.gnome.desktop.wm.keybindings move-to-workspace-10 &quot;['&lt;Super&gt;&lt;Shift&gt;0']&quot;\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-01-12T05:51:25-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

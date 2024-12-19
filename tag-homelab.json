@@ -1,0 +1,337 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-homelab.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "url": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "title": "Add a healthcheck to your FastAPI app",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I'm building a few FastAPI apps to throw in docker and run on my homelab... I wanted to add healthchecks and here's a simple way to do it</p>\n<p>Make sure to install <code>curl</code> in the dockerfile (near the top for effeciency)</p>\n<pre><code># Install curl with minimal dependencies\nRUN apt-get update &amp;&amp; \\\n    apt-get install -y --no-install-recommends curl &amp;&amp; \\\n    apt-get clean &amp;&amp; \\\n    rm -rf /var/lib/apt/lists/*\n\n</code></pre>\n<p>Then I recommend making compose files even for single image deployments</p>\n<pre><code>services:\n  app:\n    build: .\n    volumes:\n      - type: bind\n        source: .\n        target: /app\n    environment:\n      - PYTHONPATH=/app\n      - DOCKER_ENV=true\n      - UV_VIRTUALENV=/opt/app-env\n    user: &quot;1000:1000&quot;\n    restart: unless-stopped\n    healthcheck:\n      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:8000/health&quot;]\n      interval: 30s\n      timeout: 10s\n      retries: 3\n      start_period: 10s\n\n</code></pre>\n<p>Then finally you'll need a <code>/health</code> endpoint</p>\n<pre><code class=\"language-python\">\n@app.get(&quot;/health&quot;, response_class=HTMLResponse)\nasync def health_check():\n    &quot;&quot;&quot;\n    A health check endpoint that returns a status message.\n    &quot;&quot;&quot;\n    return &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Service is healthy&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-15T15:41:36-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "url": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "title": "DNS Broke After Reboot - Ubuntu 22.04",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>\n<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href=\"https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config\">SO Post</a></p>\n<p>sudo mkdir /etc/systemd/resolved.conf.d/\nsudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>\n<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>\n<pre><code>[Resolve]\nDNS=8.8.8.8 1.1.1.1\n</code></pre>\n<p>But I decided to use tailscale</p>\n<pre><code>[Resolve]\nDNS=100.100.100.100\n</code></pre>\n<p>Then restart systemd-resolved</p>\n<p>sudo systemctl restart systemd-resolved</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-22T08:08:40-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/opnsense-bootstrap-recovery.html",
+      "url": "https://pype.dev/opnsense-bootstrap-recovery.html",
+      "title": "OPNSense Bootstrap Recovery",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>enabling DHCP WAN port (<code>dhclient &lt;iface&gt;</code>)- running the bootstrap script - <code>sh /usr/local/sbin/opnsense-bootstrap</code></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-07T08:40:19-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "infrastructure",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/recovering-opnsense.html",
+      "url": "https://pype.dev/recovering-opnsense.html",
+      "title": "Recovering OPNSense",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I woke up to faulty internet and after some troubleshooting it turns out the\nroot zfs dataset that OPNSense boots from got corrupted...</p>\n<blockquote>\n<p>PRO-TIP - Auto backup your OPNSense config to Google Drive, git, or\nnextcloud... But if you won't then at least back up your OPNSense config\nsomewhere everytime you update it.</p>\n</blockquote>\n<p>It's too much to recount every issue, so here's a bullet list what worked.</p>\n<ol>\n<li>On a fresh drive install OPNSense</li>\n<li>Plug in the old drive through a USB enclosure - now I'm not sure what would\nhappen if you plugged it in along with the new drive and then booted up.\nBecause both drives will have a zfs pool <code>zroot</code> and the boot dataset is\nautomounted at <code>/zroot/ROOT/default</code>. My old <code>zroot</code> pool was <code>SUSPENDED</code> so it\ndidn't automount</li>\n<li>Because the old <code>zoot/ROOT/default</code> was corrupted I did this to mount it RO:\n<code>zpool import -d &lt;path to zfs partition - /dev/stuff&gt; -N zroot zrootrecovery</code></li>\n</ol>\n<blockquote>\n<p>-d is the zfs flag to import the pool by disk id, -N it to not mount any of\nthe datasets (we need to change mountpoints) and the <code>zroot zrootrecovery</code>\nimports the <code>zroot</code> pool with a new name</p>\n</blockquote>\n<ol start=\"4\">\n<li>Change the mountpoints for all the <code>zrootrecovery</code> datasets to somewhere\nlike <code>/mnt/zrootrecovery</code></li>\n<li>Depending on the mount point you set you'll find a <code>config</code> directory around\n<code>/mnt/zrootrecovery/ROOT/default/config</code> - copy the file you want to another\nmachine via scp or whatever</li>\n<li>Go to OPNSense webui and recover from that config!</li>\n</ol>\n<p>All in all this process took me around 8 hours but I did run into about ever\nissue under the sun (several bad disks in the mix, a laptop that wouldn't live\nboot into a BSD system, etc.)</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-06T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "blog",
+        "homelab"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-remote-add.html",
+      "url": "https://pype.dev/docker-remote-add.html",
+      "title": "docker-remote-add",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Add from url??</p>\n<p>ADD <a href=\"http://example.com/cars.csv\">http://example.com/cars.csv</a> /tmp/cars.csv</p>\n<p>Unpack automatically!? (.tar, .tar.gz, .tgz, .bz2, .tbz2, .txz, .zip)</p>\n<p>ADD myapp.tar.gz /opt/myapp/</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:19:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-copy-and-chown.html",
+      "url": "https://pype.dev/docker-copy-and-chown.html",
+      "title": "Docker copy and chown",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>COPY --chown=myuser:mygroup source-file target-file</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:18:09-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "url": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "title": "Interesting IPs between Jellyfin clients and server depending on tailscale and server address",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>When connecting from my phone to jellyfin I'm seeing some interesting patterns.</p>\n<h2><a href=\"#scenarios\" aria-hidden=\"true\" class=\"anchor\" id=\"scenarios\"></a>Scenarios</h2>\n<h3><a href=\"#tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\" aria-hidden=\"true\" class=\"anchor\" id=\"tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\"></a>Tailscale IP of phone is listed as local network to jellyfin</h3>\n<p>Wifi: off\nTailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: LAN IP</p>\n<p>Jellyfin sees 192.168.1.1, my router address</p>\n<hr />\n<p>Wifi: off\ntailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<p>Q: This might be because of traefik somehow</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work even work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: on\ntailsacale: of\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP (via pihole DNS)</p>\n<p>Jellyfin sees the IP of my phone</p>\n<hr />\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-07-12T06:24:57-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "url": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "title": "Upgrading your kernel can F you up... whoops",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975\">https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975</a> I lost TPU for frigate, this saved me ass</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-06-26T10:21:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/customize-k9s.html",
+      "url": "https://pype.dev/customize-k9s.html",
+      "title": "Customize K9s",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>To customize k9s use the skins from catppuccin or the ones k9s supplies</p>\n<pre><code class=\"language-bash\">OUT=&quot;${XDG_CONFIG_HOME:-$HOME/.config}/k9s/skins&quot;\nmkdir -p &quot;$OUT&quot;\ncurl -L https://github.com/catppuccin/k9s/archive/main.tar.gz | tar xz -C &quot;$OUT&quot; --strip-components=2 k9s-main/dist\n</code></pre>\n<p>Then edit your k9s config</p>\n<pre><code># ~/.config/k9s/config.yml\nk9s:\n  ui:\n    skin: catppuccin-mocha\n    # ...or another flavor:\n    # skin: catppuccin-macchiato\n    # skin: catppuccin-frappe\n    # skin: catppuccin-latte\n\n    # ...or the transparent variants:\n    # skin: catppuccin-mocha-transparent\n    # skin: catppuccin-macchiato-transparent\n    # skin: catppuccin-frappe-transparent\n    # skin: catppuccin-latte-transparent\n</code></pre>\n<p>Other k9s skins are available <a href=\"https://github.com/derailed/k9s/tree/master/skins\">here</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-05-06T11:57:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/kanboard-to-keep-me-focused-on-my-own-ideas.html",
+      "url": "https://pype.dev/kanboard-to-keep-me-focused-on-my-own-ideas.html",
+      "title": "Kanboard to keep me focused on my own ideas",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TL;DR</h2>\n<p>I've been using kanboard as a self-hosted kanban board. It's keeping me focused on <a href=\"https://myditialharbor.com\">Digital Harbor</a> when I'd rather be doing something less productive.</p>\n<h2><a href=\"#my-todos\" aria-hidden=\"true\" class=\"anchor\" id=\"my-todos\"></a>My TODOs</h2>\n<p>Here's the thing about my TODOs... they're everywhere. I've tried a crazy amount of different organizational tactics for my todo items. I've tried post-it notes, a journal, <code>TODO.md</code> in specific repos, a master <code>todo</code> repo, todo CLIs, etc...</p>\n<p>The problem for me was consistency... I would regularly forget what I was using for TODOs at that moment in my life... was there a todo file in this project? Do I have a todo repo cloned on this computer? Is this stuff in my journal or on post-it notes?</p>\n<p>And what do I do with new ideas? Do I organize them centrally or use a repo for the idea I have?</p>\n<p>It was getting out of hand to a debilitating degree... For a while I just gave up on being organized at all... Things would get done as necessary and if I got some motivation to work on something it was immediately smothered with the anxiety of how I was going to organize my work...</p>\n<p>At some point it became too much... Now, I have some experience with Azure DevOps/Jira for project management and then I came across Kanboard...</p>\n<h2><a href=\"#kanboard\" aria-hidden=\"true\" class=\"anchor\" id=\"kanboard\"></a>Kanboard</h2>\n<p><a href=\"https://kanboard.org/\">Kanboard</a></p>\n<p>Kanboard is just a self-hosted kanban style todo app. I know there's a ton of these so the TL;DR of my lesson is I picked an app that I would just use based on simplicity of managing and hosting.</p>\n<p>I have had kanboard running in my homelab for a long time, but I only barely use it intermittenly. And at that rate I didn't spend any real time organizing my tickets, so I wasn't akshuallly using it - it was just a post-it note replacement.</p>\n<p>But then I had an idea for a genuine business idea, and if I was going to ever have a hope of making it a reality, I needed to stay organized. This was when I decided to give kanboard a little more effort... I knew I could always remember that I'd chosen an app as my TODO solution (given all the time I spent questioning what I was using at any given point in time). I also knew I could host kanboard so that I could get to it from wherever was necessary because my homelab is relatively easy to add another public service to.</p>\n<p>So once I just decided to lean into this thing, I would take advantage of any moments of motivation and just jot down ideas for things that had to get done... Simple stuff like explore an infra management option, add one feature to a config, or migrate one website to another stack... And I would just write these things downs until I have enough time free to crack down on a task. The beautiful thing is, when I am struck with just enough time to do something, and the motivation to do something, I don't waste any time deciding what to do - past-me did present-me a favor and decided what was important already... So as long as I do myself the favor, when I'm ready to go I am never beaten by the anxiety of not knowing what I ant to do or how I'll track what I'm doing... I chose kanboard and even though it's not as fast as a terminal TUI,  it is reliable, simple, and keeps me focused on what I need to do.</p>\n<h2><a href=\"#the-biggest-benefit\" aria-hidden=\"true\" class=\"anchor\" id=\"the-biggest-benefit\"></a>The biggest benefit</h2>\n<p>Not only is just having one app as the solution nice because it's centrally managed and accessible from wherever I need to get it, but the TOP feature of kanboard I use is comments on tickets... I get to continue to do future-me favors, my jotting down where I'm at in a task, what's left to do, what I'm trying, etc... and future-me is in a great mood, because when I have that free few minutes, I can just read my own past thoughts and get back up to speed without wasting time trying to remember things I never would've remembered if I hadn't written them down!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-04-20T18:27:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/git-repo-specific-ssh-key.html",
+      "url": "https://pype.dev/git-repo-specific-ssh-key.html",
+      "title": "Git repo specific SSH Key!",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>git config --add --local core.sshCommand 'ssh -i &lt;&lt;&lt;PATH_TO_SSH_KEY&gt;&gt;&gt;'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-01-04T15:42:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "url": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "title": "DHCP Restart to Save Ubuntu 22.04 Server Networking",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn't show up on any networks. A solution that got me back in was a friend restarting the dhcp client for me:</p>\n<pre><code class=\"language-bash\">sudo dhclient -r -v &lt;interface&gt; &amp;&amp; sudo dhclient -v &lt;interface&gt;\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-12-31T20:26:50-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/simple-port-forwarding-opnsense.html",
+      "url": "https://pype.dev/simple-port-forwarding-opnsense.html",
+      "title": "Simple Port Forwarding OPNSense",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://forum.opnsense.org/index.php?topic=8783.0\">https://forum.opnsense.org/index.php?topic=8783.0</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-10-17T10:26:34-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/simple-port-forwarding-opnsense.html",
+      "url": "https://pype.dev/simple-port-forwarding-opnsense.html",
+      "title": "Simple Port Forwarding OPNSense",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://forum.opnsense.org/index.php?topic=8783.0\">https://forum.opnsense.org/index.php?topic=8783.0</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-10-17T10:26:34-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "url": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "title": "Refresh Nextcloud Groupfolders after messing around on the filesystem",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Exec in as www-data and run ./occ groupfolders:scan folder_id -v (the -v to see what it's doing)</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-09-23T12:45:06-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

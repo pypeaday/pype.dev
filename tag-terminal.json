@@ -1,0 +1,119 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-terminal.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "url": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "title": "docker context (and an issue to question your sanity)",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>docker contexts are great, would recommend putting them in your prompt though (via starship or something else)... here's why</p>\n<p>I like to manage my containers remotely - I have a nice development setup on my desktop and I try to keep my server as bare-bones as possible. For a while I've been using ansible which makes it easy to manage configuration etc on other machines. But I recently learned about docker contexts and I'm planning to scale down my homelab management to just docker-compose stacks rather than a bunch of super complicated ansible playbooks</p>\n<p>So, setting up a context is easy - it's basically an ssh connection to another machine!</p>\n<p><code>docker context create koober --docker &quot;host=ssh://nic@koober&quot;</code></p>\n<p><code>koober</code> is one of my dev machines and my <code>~/.ssh/config</code> is setup such that I can <code>ssh nic@koober</code>, this makes the context work really seamlessly.</p>\n<p>So there's the <code>default</code> context (the machine you're on) and now I have <code>koober</code></p>\n<p>To use it you run <code>docker context use koober</code></p>\n<p>And then to check we can <code>ls</code> the contexts</p>\n<pre><code>docker context ls\nNAME       DESCRIPTION                               DOCKER ENDPOINT               ERROR\ndefault    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   \nkoober *                                             ssh://nic@koober\n</code></pre>\n<blockquote>\n<p>Notice the * - that indicates that's our current context.</p>\n</blockquote>\n<h2><a href=\"#trouble\" aria-hidden=\"true\" class=\"anchor\" id=\"trouble\"></a>Trouble</h2>\n<p>Now here's where things get hairy... you've gotta be super-aware of what context you're using. I have an indicator in my starship prompt that shows the current context, but since I'm new to using them I kind of didn't notice it until I ran into this issue...</p>\n<p>I'm working on a python application in docker but was not able to execute the entrypoint even though I KNEW the file was there... let's take a look</p>\n<h3><a href=\"#example\" aria-hidden=\"true\" class=\"anchor\" id=\"example\"></a>Example</h3>\n<p>Here's a minimal hello world applycation in docker to illustrate the issue</p>\n<pre><code class=\"language-python\"># main.py\nprint(&quot;hello world&quot;)\n</code></pre>\n<pre><code class=\"language-Dockerfile\"># Use an official Python runtime as a parent image\nFROM python:3.11-slim\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy the current directory contents into the container at /app\nCOPY . /app\n\n# Run the main.py script as the container's main process\nCMD [&quot;python&quot;, &quot;main.py&quot;]\n</code></pre>\n<pre><code class=\"language-yaml\">services:\n  hello-world:\n    build: .\n    volumes:\n      - .:/app\n</code></pre>\n<p>Notice volume mounting in my project directory <code>.</code> to <code>/app</code> as a common practice to develop inside the container</p>\n<p>Here's where I started to question my sanity...</p>\n<pre><code class=\"language-bash\">✗ docker compose up                                            \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | python: can't open file '/app/main.py': [Errno 2] No such file or directory\nhello-world-1 exited with code 2\n</code></pre>\n<p><code>python can't open file</code>? hmm... Let's take a look at the image</p>\n<p>First let's make sure we get the image name right</p>\n<pre><code class=\"language-bash\">✗ docker container ls -a              \nCONTAINER ID   IMAGE                                           COMMAND                  CREATED          STATUS                       PORTS                                                                                  NAMES\n3d7285fc39e2   docker-context-example-hello-world              &quot;python main.py&quot;         10 minutes ago   Exited (2) 44 seconds ago                                                                                           docker-context-example-hello-world-1\n</code></pre>\n<p>Now we can <code>docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world</code></p>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world  \nroot@ee46d0e22de8:/app# python main.py\nHello, World!\nroot@ee46d0e22de8:/app# \n</code></pre>\n<p>WHAT THE HECK??</p>\n<h2><a href=\"#what-happened\" aria-hidden=\"true\" class=\"anchor\" id=\"what-happened\"></a>What happened...</h2>\n<p>What happened turns out to be pretty simple once we realize I'm using contexts...</p>\n<p><code>koboer</code> is a remote context, the <code>docker run</code> and <code>docker compose up</code> commands are interacting with the docker socket on that machine.</p>\n<p>So if I compose up the stack notice that there's a volume bind mount in there - well those do <em>not</em> work with contexts (or at least I'm not aware of hose to make it work) and so the <code>/app</code> directory was getting blown away essentially with an empty overlay...</p>\n<p>But when running with just <code>docker run</code> with no volume mount, the code was copied in during the build and is right where we expect it...</p>\n<h3><a href=\"#lets-prove-it\" aria-hidden=\"true\" class=\"anchor\" id=\"lets-prove-it\"></a>Let's prove it</h3>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@903f591c0384:/app# python main.py\npython: can't open file '/app/main.py': [Errno 2] No such file or directory\nroot@903f591c0384:/app# \n</code></pre>\n<pre><code>Adding a `-v .:/app` to match the compose file, we get the same error...\n</code></pre>\n<p>If we switch to the default context we are back up and running as expected</p>\n<pre><code class=\"language-bash\">✗ docker context use default\ndefault\nCurrent context is now &quot;default&quot;\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker compose up         \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | Hello, World!\nhello-world-1 exited with code 0\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@4045b6aa8883:/app# python main.py\nHello, World!\nroot@4045b6aa8883:/app# \n</code></pre>\n<p>Successful runs on both accounts with the volume mount</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>Context is king</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-19T05:59:30-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/rsync-like-a-pro.html",
+      "url": "https://pype.dev/rsync-like-a-pro.html",
+      "title": "rsync like a pro",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>\n<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>TLDR:\n<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>\n<h2><a href=\"#explanation\" aria-hidden=\"true\" class=\"anchor\" id=\"explanation\"></a>Explanation</h2>\n<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).\n--chmod=Da+s: Ensures the setgid bit is applied to directories.\n--info=progress2: Provides detailed progress information, including overall data transfer stats.\n--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).\n--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).\n/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:52:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "url": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "title": "hostnamectl to easily change hostname",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>\n<pre><code class=\"language-bash\">\n❯ hostnamectl --help\nhostnamectl [OPTIONS...] COMMAND ...\n\nQuery or change system hostname.\n\nCommands:\n  status                 Show current hostname settings\n  hostname [NAME]        Get/set system hostname\n  icon-name [NAME]       Get/set icon name for host\n  chassis [NAME]         Get/set chassis type for host\n  deployment [NAME]      Get/set deployment environment for host\n  location [NAME]        Get/set location for host\n\nOptions:\n  -h --help              Show this help\n     --version           Show package version\n     --no-ask-password   Do not prompt for password\n  -H --host=[USER@]HOST  Operate on remote host\n  -M --machine=CONTAINER Operate on local container\n     --transient         Only set transient hostname\n     --static            Only set static hostname\n     --pretty            Only set pretty hostname\n     --json=pretty|short|off\n                         Generate JSON output\n\nSee the hostnamectl(1) man page for details.\n</code></pre>\n<p>I learned there's transient and static hostnames, so that's cool...</p>\n<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>\n<p>pretty sweet tool</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T07:25:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/restart-kde-plasma.html",
+      "url": "https://pype.dev/restart-kde-plasma.html",
+      "title": "Restart KDE Plasma",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>\n<pre><code>\nsudo killall plasmashell\n\nkstart plasmashell\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-08T15:53:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/fonts-in-vs-c-e.html",
+      "url": "https://pype.dev/fonts-in-vs-c-e.html",
+      "title": "Fonts in VS C**e",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Jet Brains has to be specified 'JetBrainsMono Nerd Font Mono'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-05-20T06:44:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

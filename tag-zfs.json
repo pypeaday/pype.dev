@@ -1,0 +1,298 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-zfs.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "url": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "title": "D and uninterruptable sleep",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#htop\" aria-hidden=\"true\" class=\"anchor\" id=\"htop\"></a>Htop</h2>\n<p>I recently have been having significant home server issues, and that's not the point of this - today I learned what <code>D</code> state is when looking at htop.</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png\" alt=\"htop-d\" title=\"htop with D state\" />\n<p>Apparently this means &quot;uninterruptable sleep&quot; and it's a dev's nightmare...</p>\n<h3><a href=\"#context\" aria-hidden=\"true\" class=\"anchor\" id=\"context\"></a>Context</h3>\n<p>The issue I was having was that some <code>zfs rollback</code> commands were hung - for hours... I wasn't sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.</p>\n<p>Turns out I still don't know what locked the disks up but I learned why <code>&lt;C&gt;-c</code> did <u>nothing</u>...\nthe more you know</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:48:10-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/lsof-to-find-what-s-using-your-filesystem.html",
+      "url": "https://pype.dev/lsof-to-find-what-s-using-your-filesystem.html",
+      "title": "lsof to find what's using your filesystem",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>lsof | grep /tank/nas shows me what is using my nas at any time!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-04-09T13:32:38-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration.html",
+      "url": "https://pype.dev/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration.html",
+      "title": "Changing ZFS key for child datasets of encrypted dataset after migration",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>➜ pihole sudo zfs load-key -L file:///path/to/.zfs.tank.key tank/encrypted/vms/arch-sandbox\n➜ pihole sudo zfs change-key -o keylocation=file:///path/to/.zfs.tank.key -o keyformat=raw tank/encrypted/vms/arch-sandbox\nNeed to load-key for each individual dataset, then change key location to be a file instead of the prompt</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-04-08T20:12:22-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/systemd-timer-for-syncoid.html",
+      "url": "https://pype.dev/systemd-timer-for-syncoid.html",
+      "title": "Systemd timer for syncoid",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I have a bash script called <code>syncoid-job</code> which boils down to a barebones -</p>\n<pre><code class=\"language-bash\">#!/bin/bash\n\nsyncoid --no-sync-snap --sendoptions=w --no-privilege-elevation $SYNOIC_USER@$SERVER:tank/encrypted/nas tank/encrypted/nas\n</code></pre>\n<p>I want to run this script hourly but as my user (notice the no-privilege-elevation flag)</p>\n<p>First - create a systemd unit file at <code>/etc/systemd/system/syncoid-replication.service</code></p>\n<pre><code class=\"language-bash\">[Unit]\nDescription=ZFS Replication With Syncoid\n\n[Service]\nType=oneshot\nExecStart=/$HOME/dotfiles/syncoid-job\nUser=$USER\nGroup=$GROUP\n\n[Install]\nWantedBy=multi-user.target\n\n</code></pre>\n<p>Then we save the unit file, enable the service, and then start it</p>\n<pre><code class=\"language-console\">systemctl enable syncoid-replication.service\nsystemctl start syncoid-replication.service\n\n</code></pre>\n<blockquote>\n<p>Note this will run that script... so be ready for syncoid to do its thing</p>\n</blockquote>\n<p>Now for the timer... We create <code>/etc/systemd/system/syncoid-replication.timer</code></p>\n<pre><code class=\"language-bash\">[Unit]\nDescription=Run syncoid-replication every hour\n\n[Timer]\nOnCalendar=hourly\n\n[Install]\nWantedBy=timers.target\n\n</code></pre>\n<p>Hit it with a <code>systemctl enable syncoid-replication.timer</code> and you're in business!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-21T11:38:27-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/limit-zfs-list-to-avoid-docker-vomit.html",
+      "url": "https://pype.dev/limit-zfs-list-to-avoid-docker-vomit.html",
+      "title": "Limit zfs list to avoid docker vomit",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>zfs list has a flag -r, but if you use zfs driver for docker then you'll get\nflooded with every docker volume in the world. zfs list -r -d N will limit the\ndept of the print out, so zfs list -r -d 2 gives me tank, tank/encrypted,\ntank/encrypted/docker -&gt; but then I don't see all the continer volumes</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-10-20T06:39:18-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions.html",
+      "url": "https://pype.dev/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions.html",
+      "title": "Quick setup of ZFS encrytped datasets with sane permissions",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Assuming you have a pool called <code>tank</code>...</p>\n<p>And assuming you have an encrypted dataset (See <a href=\"https://arstechnica.com/gadgets/2021/06/a-quick-start-guide-to-openzfs-native-encryption/\">Jim Saltar's short\nintro</a>)</p>\n<ol>\n<li>Create a group for permissions - in my case I have one called <code>home</code></li>\n<li>Then if there's anything in <code>/tank/encrypted</code> his it with <code>chgrp -R home /tank/encrypted</code> to give the <code>home</code> group ownership</li>\n<li>Next we need to make sure that the members of <code>home</code> can do the writing...\nso <code>chmod 775 -R /tank/encrypted</code> will do the trick</li>\n<li>Finally we want to make sure that all data created inside our dataset has\nthe same set of permissions with <code>chmod g+s /tank/encrypted</code> and <code>chmod g+w /tank/encrypted</code></li>\n</ol>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-10-06T19:58:01-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/benchmark-your-disks-with-fio.html",
+      "url": "https://pype.dev/benchmark-your-disks-with-fio.html",
+      "title": "Benchmark your disks with fio",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#intro\" aria-hidden=\"true\" class=\"anchor\" id=\"intro\"></a>Intro</h1>\n<p>I use ZFS at home in my homelab for basically all of my storage... Docker uses\nZFS backend, all my VMs have their <code>.qcow2</code> images in their own zfs datasets,\nand all my shares are ZFS datasets. I love ZFS but my home hardware presently\nis the opposite of expensive or new... Thankfully I've had a lot of my orginal\nhomelab simply given to me but the cost of this is that I didn't put my\nmachines together, I didn't choose the disks, and I definitely didn't do the\nresearch I would've otherwise done had I bankrolled my server personally...</p>\n<h2><a href=\"#the-problem\" aria-hidden=\"true\" class=\"anchor\" id=\"the-problem\"></a>The Problem</h2>\n<p>I run <code>glances</code> on basically all my machines and for the longest time I have\nbeen seeing big time <code>iowait</code> issues. Now, since everything was free I've\nlargely been able to ignore that however I'm now after some better performance\nwhich I think means new hardware!</p>\n<p>Here is a random screenshot of my glances homepage at time of writing - The\nonly major load on my server is some <code>ffmpeg</code> transcoding (about 60% CPU\nutilization)...</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png\" alt=\"glances\" title=\"glances with iowait\" />\n<p>As you can see... there's a lot of issues and <em>I don't even know what they mean</em>.</p>\n<h1><a href=\"#fio\" aria-hidden=\"true\" class=\"anchor\" id=\"fio\"></a>fio</h1>\n<p>I heard about <a href=\"https://fio.readthedocs.io/en/latest/\">fio</a> through a friend and\ndecided to try it out quick. It installs with <code>apt</code> on ubuntu quick and easy...</p>\n<p>Jim Saltar has a good blog post on it <a href=\"https://arstechnica.com/gadgets/2020/02/how-fast-are-your-disks-find-out-the-open-source-way-with-fio/\">here</a></p>\n<p>Basically it's a handy tool for benchmarking your disks and the blog dives into\nwhat types of metrics matter - it's not just throughput, but also latency,\niops, etc.</p>\n<h2><a href=\"#tests\" aria-hidden=\"true\" class=\"anchor\" id=\"tests\"></a>Tests</h2>\n<p>I ran a few basic commands inside a new zfs dataset on my server <code>tank/fio</code></p>\n<pre><code class=\"language-bash\">fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=4k --size=4g --numjobs=1 --runtime=60 --time_based --end_fsync=1 &gt; single-4KiB-random-write.txt\nfio --name=random-write --ioengine=posixaio --rw=randwrite --bs=64k --size=256m --numjobs=16 --iodepth=16 --runtime=60 --time_based --end_fsync=1 &gt; 16-parallel-64KiB-random-write.txt\nfio --name=random-write --ioengine=posixaio --rw=randwrite --bs=1m --size=16g --numjobs=1 --iodepth=1 --runtime=60 --time_based --end_fsync=1 &gt; single-1MiB-random-write.txt\n</code></pre>\n<h2><a href=\"#results\" aria-hidden=\"true\" class=\"anchor\" id=\"results\"></a>Results</h2>\n<p>The single 4 KiB random write:</p>\n<p><code>WRITE: bw=7836KiB/s (8024kB/s), 7836KiB/s-7836KiB/s (8024kB/s-8024kB/s), io=523MiB (548MB), run=68317-68317msec</code></p>\n<p>The 16 parallel 64KiB random writes:</p>\n<p><code>WRITE: bw=93.9MiB/s (98.4MB/s), 5599KiB/s-6303KiB/s (5734kB/s-6454kB/s), io=7642MiB (8013MB), run=81310-81418msec</code></p>\n<p>The single 1MiB random write:</p>\n<p><code>WRITE: bw=81.2MiB/s (85.1MB/s), 81.2MiB/s-81.2MiB/s (85.1MB/s-85.1MB/s), io=8177MiB (8574MB), run=100699-100699msec</code></p>\n<h1><a href=\"#summary\" aria-hidden=\"true\" class=\"anchor\" id=\"summary\"></a>Summary</h1>\n<p>So I don't fully understand these numbers yet... 80-100 MiB/s isn't super fast\nand that's across a parallelized workload... The single threaded workloads have\nawful performance so this tells me something is wrong... I have a few ideas...</p>\n<ol>\n<li>ZFS dataset config options such as <code>ashift</code> or the blocksize might be way misconfigured</li>\n<li>The disks/pool which came from a TrueNAS/FreeBSD machine may have some artifacts that I need to clean up</li>\n<li>The SAS controller I am using, which I flashed with IT firmware to get it into JBOD mode might be messed up</li>\n<li>The data cables themselves could be a problem...</li>\n</ol>\n<p>Points 3 and 4 are less likely given that the write speed does increase in the parallelized job but I'm a newbie so it's time to dive in!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-08-27T13:43:22-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/zfs-permissions-for-sanoid-syncoid.html",
+      "url": "https://pype.dev/zfs-permissions-for-sanoid-syncoid.html",
+      "title": "ZFS Permissions for Sanoid/Syncoid",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><code>zfs allow -u $USER clone,load-key,create,destroy,mount,mountpoint,receive,send,rollback,compression,snapshot,hold,keylocation,bookmark tank</code></p>\n<blockquote>\n<p>load-key only needed if using encrypted datasets</p>\n</blockquote>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-07-08T15:54:58-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/self-hosted-docker-registry-with-proxy-pull-through.html",
+      "url": "https://pype.dev/self-hosted-docker-registry-with-proxy-pull-through.html",
+      "title": "Self-hosted Docker registry with proxy pull through",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I decided that I want to self-host all my docker images for the purposes of\nregularly rebuilding and security scanning. The first step is to set up a\nregistry, which coincidently enough you can do with a Docker container 😛!</p>\n<p>Instructions for setting up the proxy are on the offidical docker docs <a href=\"https://docs.docker.com/registry/recipes/mirror/\">here</a></p>\n<h1><a href=\"#deployment\" aria-hidden=\"true\" class=\"anchor\" id=\"deployment\"></a>Deployment</h1>\n<p>I chose to deploy with Portainer because I already use it for monitoring all my\ndocker containers. I deploy most container with Ansible but use Portainer to\nsetup a few more adhoc or non-git driven applications.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-07-06T06:44:35-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/how-i-use-nextcloud-for-safe-central-storage.html",
+      "url": "https://pype.dev/how-i-use-nextcloud-for-safe-central-storage.html",
+      "title": "How I use Nextcloud for safe central storage",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<ol>\n<li>Setup admin</li>\n<li>External Storage extension</li>\n<li>Add my nas zfs dataset</li>\n<li>chown -R www-data:www-data on anything nextcloud uploads to.</li>\n</ol>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T21:17:42-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/nextcloud-permissions-with-zfs-and-ansible-nas.html",
+      "url": "https://pype.dev/nextcloud-permissions-with-zfs-and-ansible-nas.html",
+      "title": "Nextcloud permissions with ZFS and Ansible-NAS",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TL;DR</h1>\n<p>As the nextcloud docs say... if you want to write to an external volume that\nlocation has to be writeable by the user/group <code>www-data</code> on the host system...\nso if that makes sense to you then this TIL probably isn't a ton of value.. if\nnot however, read on :)</p>\n<h1><a href=\"#case-study\" aria-hidden=\"true\" class=\"anchor\" id=\"case-study\"></a>Case Study</h1>\n<p>You want to self-host your own cloud and use a smart file system for convenience...\nNextcloud and ZFS are pretty common goto answers for each of those problems.</p>\n<p>My home NAS is built on ZFS and among other things I have a <code>zpool</code> named\n<code>tank</code> and nested in there is a <code>tank/nas</code> dataset with several child zfs\ndatasets under that.</p>\n<p>I want to use nextcloud mainly for auto-uploading photos from my wife's and my phones for automatic backups.\nThe issue is that the nextcloud application (I run in Docker) is fixed as the\n<code>www-data</code> user and so any volume/folder that you want nextcloud to write to\nneeds to be permissioned such that <code>www-data</code> owns it... but I don't want\n<code>www-data</code> to own everything in my NAS... so what's a girl to do?</p>\n<h1><a href=\"#solution\" aria-hidden=\"true\" class=\"anchor\" id=\"solution\"></a>Solution</h1>\n<p>Well, one way to go is to just utilize docker volumes, write the data in the\ncontainer to <code>/var/www/html</code> and let that be the place your data backsup to.</p>\n<p>I still wanted nextcloud to automatically write right to my NAS so I created a\n<code>nextcloud-upload</code> directory inside of <code>tank/nas/media/photos</code> (photos cause\nthat's all that gets automatically uploaded)</p>\n<p>Then I <code>chown -R www-data:www-data /tank/nas/media/photos/nextcloud-upload</code> so\nthat just that sub-folder is owned by <code>www-data</code>. Now everyone's happy!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T13:55:20-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/see-zfs-snapshot-disk-usage.html",
+      "url": "https://pype.dev/see-zfs-snapshot-disk-usage.html",
+      "title": "See ZFS snapshot disk usage",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>As I was cleaning up my NAS recently I noticed that I ran out of storage even\nthough my disk usage looked pretty low... turns out I was keeping a mega-ton of\nZFS snapshots and due to my own ignorance at the time didn't realize the\nstorage cost of this!</p>\n<p><code>zfs list-o space tank/home</code> will show the disk usage of the dataset and snapshots in <code>tank/home</code></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T06:05:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/remove-zfs-dataset-specific-snapshots.html",
+      "url": "https://pype.dev/remove-zfs-dataset-specific-snapshots.html",
+      "title": "Remove ZFS Dataset Specific Snapshots",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I started my homelab journey being super naive about ZFS and how to manage the\nfilesystem... that bit me in the butt when transfering a ton of files out of\nfolders and into datasets because ZFS is copy on write so I was essentially\nduplicating my storage until I got a hair smarter about removing files after\nthey're moved (rsync --remove-source-file ftw). But I had a ton of snapshots of\nchild datasets with a ton of data that I just never will need, so I learned\n<code>zfs list -H -o name -t snapshot tank/dataset1/dataset2</code> will list just the\nsnapshots for dataset2 and if you pipe that into <code>xargs -n1 zfs destroy</code> then\nyou have a way to clear out some snapshots you don't need!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T05:49:16-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "cli",
+        "bash",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}
