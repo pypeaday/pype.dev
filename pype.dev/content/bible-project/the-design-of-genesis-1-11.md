@@ -1,12 +1,13 @@
 --- 
-date: 2025-01-18 04:54:03 
-templateKey: blog-post 
+date: 2025-01-18 04:54:03
+templateKey: blog-post
 title: The Design of Genesis 1-11 pt 1
-published: True 
+published: True
 tags:
     - bible-project
     - faith 
     - design-of-genesis-1-11
+
 ---
 
 ##  Genesis 1
