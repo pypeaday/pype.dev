@@ -4,9 +4,9 @@ templateKey: blog-post
 title: The Design of Genesis 1-11 pt 1
 published: True 
 tags:
-  - bible-project
-  - faith 
-  - design-of-genesis-1-11
+    - bible-project
+    - faith 
+    - design-of-genesis-1-11
 ---
 
 ##  Genesis 1
