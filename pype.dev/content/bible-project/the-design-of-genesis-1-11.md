@@ -30,7 +30,9 @@ of the waters.
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ge 1:2). Lexham
-Press. ```
+Press. 
+
+```
 
 תֹּ֫הוּ | to-hu | formless בֹּ֫הוּ | ba-hu | empty, void
  
@@ -61,7 +63,9 @@ and is repeated in every subsequent day of creation
 separation between the waters.” 7 So God made the vaulted dome, and he caused a
 separation between the waters which were under the vaulted dome and between the
 waters which were over the vaulted dome. And it was so. 8 And God called the
-vaulted dome “heaven.” ```
+vaulted dome “heaven.” 
+
+```
 
 Then on day 2 he separates "waters from the waters". God "splits" (Exodus) the
 waters, brining order to the chaotic waters.
@@ -79,6 +83,7 @@ brought to the waters.
 fruit ⌊in which there is seed⌋—according to its kind, on the earth.” And it was
 so. 12 And the earth brought forth green plants bearing seed according to its
 kind, and trees bearing fruit ⌊in which there was seed⌋ according to its kind.
+
 ```
 
 #### Bonus
@@ -100,7 +105,9 @@ What this cosmos needs now is inhabitants
 
 ``` “Let there be lights in the vaulted dome of heaven ⌊to separate day from
 night⌋, and let them be as signs and for appointed times, and for days and
-years, ```
+years, 
+
+```
 
 The "lights" are clearly the sun, moon, and stars. But they are not called by
 those names, they are just called "lights". Which is the descriptive word מָאוֹר
@@ -115,21 +122,27 @@ sins into the light (מָאוֹר | ma-or) of your countenance.
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ps 90:8). Lexham
-Press. ```
+Press. 
+
+```
 
 ``` Exodus 35:14 (LEB): 14 and lampstand of the light (מָאוֹר | ma-or) and its
 equipment and its lamps and the oil for the light (מָאוֹר | ma-or); 
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ex 35:14). Lexham
-Press. ```
+Press. 
+
+```
 
 ``` Genesis 1:16 (LEB): 16 And God made two great lights, the greater light to
 rule the day and the smaller light to rule the night, and the stars. 
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ge 1:16). Lexham
-Press. ```
+Press. 
+
+```
 
 These lights have a job to rule
 
@@ -150,6 +163,7 @@ Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ge 1:20–21).
 Lexham Press. ```
 
+
 Day 2 was about the waters, they were separated from above and below, and now
 in Day 5, above and below, will be populated, will be ordered.
 
@@ -165,7 +179,9 @@ their kind, and every creeping thing of the earth according to its kind.
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ge 1:24–25).
-Lexham Press. ```
+Lexham Press. 
+
+```
 
 On Day 6 the land, which was brought up on Day 3, is now populated with animals
 according to their kinds, again further order
@@ -179,7 +195,7 @@ have humanity, given a job to rule the earth, subdue it, and multiply
 
 Humanity are the rulers below (Day 4 with the rulers of the sky)
 
-```  So God created humankind in his image ```
+`So God created humankind in his image`
 
 Humanity are God's idols... Where do you put idols? In a temple...
 
