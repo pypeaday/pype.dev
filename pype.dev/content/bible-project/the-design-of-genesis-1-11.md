@@ -46,7 +46,9 @@ God's spirit is hovering over the dark, formless, wild, chaotic ocean.
 
 ### Day 1
 
-``` “Let there be light!” And there was light. 4 And God saw the light, that it
+``` 
+
+“Let there be light!” And there was light. 4 And God saw the light, that it
 was good, and God caused there to be a separation between the light and between
 the darkness. 5 And God called the light Day, and the darkness he called Night.
 And there was evening and there was morning, the first day.  
@@ -59,7 +61,9 @@ and is repeated in every subsequent day of creation
 
 ### Day 2
 
-``` “Let there be a vaulted dome in the midst of the waters, and let it cause a
+``` 
+
+“Let there be a vaulted dome in the midst of the waters, and let it cause a
 separation between the waters.” 7 So God made the vaulted dome, and he caused a
 separation between the waters which were under the vaulted dome and between the
 waters which were over the vaulted dome. And it was so. 8 And God called the
@@ -72,14 +76,20 @@ waters, brining order to the chaotic waters.
 
 ### Day 3
 
-``` “Let the waters under heaven be gathered to one place, and let the dry
-ground appear.” ```
+``` 
+
+“Let the waters under heaven be gathered to one place, and let the dry
+ground appear.”
+
+```
 
 
 The waters below are gathered together - so there is further order being
 brought to the waters.
 
-``` “Let the earth produce green plants that will bear seed—fruit trees bearing
+``` 
+
+“Let the earth produce green plants that will bear seed—fruit trees bearing
 fruit ⌊in which there is seed⌋—according to its kind, on the earth.” And it was
 so. 12 And the earth brought forth green plants bearing seed according to its
 kind, and trees bearing fruit ⌊in which there was seed⌋ according to its kind.
@@ -103,7 +113,9 @@ What this cosmos needs now is inhabitants
 
 ### Day 4
 
-``` “Let there be lights in the vaulted dome of heaven ⌊to separate day from
+``` 
+
+“Let there be lights in the vaulted dome of heaven ⌊to separate day from
 night⌋, and let them be as signs and for appointed times, and for days and
 years, 
 
@@ -117,7 +129,9 @@ was also a symbol of God's presence.
 > Notice this is __not__ the same word for "light" in the separation of light
 > and darkness, that is אוֹר | or, not ma-or
 
-``` Psalm 90:8 (LEB): 8 You have put our iniquities before you,  our hidden
+``` 
+
+Psalm 90:8 (LEB): 8 You have put our iniquities before you,  our hidden
 sins into the light (מָאוֹר | ma-or) of your countenance.  
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
@@ -126,7 +140,9 @@ Press.
 
 ```
 
-``` Exodus 35:14 (LEB): 14 and lampstand of the light (מָאוֹר | ma-or) and its
+``` 
+
+Exodus 35:14 (LEB): 14 and lampstand of the light (מָאוֹר | ma-or) and its
 equipment and its lamps and the oil for the light (מָאוֹר | ma-or); 
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
@@ -135,7 +151,9 @@ Press.
 
 ```
 
-``` Genesis 1:16 (LEB): 16 And God made two great lights, the greater light to
+``` 
+
+Genesis 1:16 (LEB): 16 And God made two great lights, the greater light to
 rule the day and the smaller light to rule the night, and the stars. 
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
@@ -152,7 +170,9 @@ These lights have a job to rule
 
 ### Day 5
 
-``` Genesis 1:20–21 (LEB): 20 And God said, “Let the waters swarm with swarms
+``` 
+
+Genesis 1:20–21 (LEB): 20 And God said, “Let the waters swarm with swarms
 of living creatures, and let birds fly over the earth across the face of the
 vaulted dome of heaven.” 21 So God created the great sea creatures and every
 living creature that moves, with which the waters swarm, according to their
@@ -161,18 +181,23 @@ good.
 
 Harris, W. H., III, Ritzema, E., Brannan, R., Mangum, D., Dunham, J., Reimer,
 J. A., & Wierenga, M., eds. (2012). The Lexham English Bible (Ge 1:20–21).
-Lexham Press. ```
+Lexham Press. 
+
+```
 
 
 Day 2 was about the waters, they were separated from above and below, and now
 in Day 5, above and below, will be populated, will be ordered.
 
-> Great Sea Creaters - תַּנִּין | tan-nin is a rabbit-hole for another time, but
+> Great Sea Creatures - תַּנִּין | tan-nin is a rabbit-hole for another time, but
 > it's not insignificant
+
 
 ### Day 6
 
-``` “Let the earth bring forth living creatures according to their kind: cattle
+``` 
+
+“Let the earth bring forth living creatures according to their kind: cattle
 and moving things, and wild animals according to their kind.” And it was so.
 25 So God made wild animals according to their kind and the cattle according to
 their kind, and every creeping thing of the earth according to its kind.
