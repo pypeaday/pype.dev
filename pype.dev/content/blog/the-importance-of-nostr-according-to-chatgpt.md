@@ -9,6 +9,10 @@ tags:
 
 ---
 
+## Disclaimer
+
+This was written by ChatGPT with zero oversight from me. There are a few things that are not 100% accurate, but the main idea is there... I am hoping to actually write about my experience with nostr as I get more involved on the platform.
+
 ### The Power of the Decentralized Social Media Platform Nostr: A Guide for Beginners
 
 Social media has become a cornerstone of modern communication, allowing individuals to connect across borders and share ideas instantly. However, traditional platforms have raised concerns about censorship, data privacy, and the monopolistic control of user-generated content. **Nostr (Notes and Other Stuff Transmitted by Relays)**, a decentralized social media protocol, offers a revolutionary alternative by emphasizing freedom, privacy, and user autonomy. This essay explores the transformative power of Nostr, why it matters, and provides a practical guide for beginners to get started.
