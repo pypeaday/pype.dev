@@ -60,12 +60,14 @@ get-vault-key:
 # BAD EXAMPLES! DO NOT DO THIS
 
 encrypt:
+    set -e
     just get-vault-key >> key
     ansible-vault encrypt ./secret-file --vault-password-file key
     ansible-vault encrypt ./secret-file2 --vault-password-file key
     rm key
 
 decrypt:
+    set -e
     just get-vault-key >> key
     ansible-vault decrypt ./secret-file --vault-password-file key
     ansible-vault decrypt ./secret-file2 --vault-password-file key
@@ -122,6 +124,8 @@ failure in a command - well then I'll start getting confused...
 
 Follow along with the workflow of adding a file that I'll need encrypted
 
+> Only secret-file is in the just recipe here - I add secret-file2 after
+
 ```bash
 nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ just decrypt
@@ -139,6 +143,8 @@ nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)  
 nic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ echo "Added secret-file2 to my Just recipes"
 Added secret-file2 to my Just recipes
+
+# ADDED secret-file2 to the justfile here
 
 nic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ just encrypt
