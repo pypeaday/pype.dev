@@ -134,8 +134,8 @@ ERROR! input is not vault encrypted data. /var/home/nic/projects/personal/pype.d
 error: Recipe `decrypt` failed with exit code 1
 
 nic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 
-✗ echo "Good - secret-file is already decrypted! So let's add another file"
-Good - secret-file is already decrypted! So let's add another file
+✗ echo "Good - secret-file is already decrypted! So lets add another file"
+Good - secret-file is already decrypted! So lets add another file
 
 nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ echo "Foo Bar Bam Baz" > secret-file2                                    
@@ -143,8 +143,6 @@ nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)  
 nic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ echo "Added secret-file2 to my Just recipes"
 Added secret-file2 to my Just recipes
-
-# ADDED secret-file2 to the justfile here
 
 nic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 
 ❯ just encrypt
