@@ -1,0 +1,339 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-linux.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/i-was-wrecked-by-a-weird-combo-of-and-e.html",
+      "url": "https://pype.dev/i-was-wrecked-by-a-weird-combo-of-and-e.html",
+      "title": "I was wrecked by a weird combo of >> and -e",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TL;DR</h2>\n<p>If state matters then check it in the beginning or handle it on a failure... Let me explain</p>\n<p>I ran into some trouble recently <em>almost</em> losing some encrypted data... Now\nthis would be the second time I've had that happen, so I'm going to write a\nlittle bit about it now that I figured it out</p>\n<h2><a href=\"#the-stage\" aria-hidden=\"true\" class=\"anchor\" id=\"the-stage\"></a>The Stage</h2>\n<p>Here's the scenario - I use <code>ansible-vault</code> to keep some sensitive data in a\nfew public repos, and I keep the keys I use in Bitwarden Secrets Manager.</p>\n<p>I use <code>just</code> as a command runner and have common <code>just encrypt</code> and <code>just decrypt</code> recipes throughout many justfiles. It might look something like this</p>\n<pre><code class=\"language-bash\">\nget-vault-key:\n    bws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\n\nencrypt:\n    #!/bin/bash\n    set +e\n    just get-vault-key &gt; key\n    ansible-vault encrypt ./secret-file --vault-password-file key\n    ansible-vault encrypt ./secret-file2 --vault-password-file key\n    rm key\n\ndecrypt:\n    #!/bin/bash\n    set +e\n    just get-vault-key &gt; key\n    ansible-vault decrypt ./secret-file --vault-password-file key\n    ansible-vault decrypt ./secret-file2 --vault-password-file key\n    rm key\n</code></pre>\n<h2><a href=\"#spoiler\" aria-hidden=\"true\" class=\"anchor\" id=\"spoiler\"></a>Spoiler</h2>\n<p>Above is a good example of the 2 recipes, but prior to this morning they looked like this</p>\n<pre><code class=\"language-bash\">\nget-vault-key:\n    bws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\n\n# BAD EXAMPLES! DO NOT DO THIS\n\nencrypt:\n    set -e\n    just get-vault-key &gt;&gt; key\n    ansible-vault encrypt ./secret-file --vault-password-file key\n    ansible-vault encrypt ./secret-file2 --vault-password-file key\n    rm key\n\ndecrypt:\n    set -e\n    just get-vault-key &gt;&gt; key\n    ansible-vault decrypt ./secret-file --vault-password-file key\n    ansible-vault decrypt ./secret-file2 --vault-password-file key\n    rm key\n</code></pre>\n<h2><a href=\"#problem\" aria-hidden=\"true\" class=\"anchor\" id=\"problem\"></a>Problem</h2>\n<p>So here's the story - in real life I started using distrobox when I ran into\nthis and I thought it was an issue with different versions of ansible installed\nin distrobox and on my desktop. After a few more odd deployment workflows I\nthink I've determined that the real problem is that <code>&gt;&gt;</code> appends to a file (see\nthe issue yet?), but if my recipes fail (say I try to encrypt an already\nencrypted file) then the command exits but what's left on my disk? <code>key</code> is\nstill there... and the next time I go to run a command I'll echo the real key\nto the <code>key</code> file again and if I called <code>encrypt</code> when the first or more files\nin the list were <code>decrypted</code> then they'll be encrypted not with my key, but\nwith my key repeated as many times as I ran a command with <code>just get-vault-key &gt;&gt; key</code>\nbefore ever removing the key file!</p>\n<pre><code class=\"language-bash\">\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\nDanger, Will Robinson\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just encrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nEncryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\n$ANSIBLE_VAULT;1.1;AES256\n39616332393662346639633030633766666336323939346138633238626239363733316431333737\n6463663763366434376437303335643431663431326135300a636261663636336139323033316232\n37666439383131393631333332353731633661396431633834326432363936613331623135666565\n6364363039663933620a326563323931643632323031396664646363613636613562366166386439\n63653661653037393538356461323239396630643338393231306163343964623866\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nDecryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\nDanger, Will Robinson\n</code></pre>\n<p>So as you can see, I have <code>secret-file</code> here, and I can encrypt and decrypt\njust fine. But if I have that <code>&gt;&gt;</code> in the recipe, add a second file, and a\nfailure in a command - well then I'll start getting confused...</p>\n<p>Follow along with the workflow of adding a file that I'll need encrypted</p>\n<blockquote>\n<p>Only secret-file is in the just recipe here - I add secret-file2 after</p>\n</blockquote>\n<pre><code class=\"language-bash\">nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nERROR! input is not vault encrypted data. /var/home/nic/projects/personal/pype.dev/secret-file is not a vault encrypted file for /var/home/nic/projects/personal/pype.dev/secret-file\nerror: Recipe `decrypt` failed with exit code 1\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n✗ echo &quot;Good - secret-file is already decrypted! So lets add another file&quot;\nGood - secret-file is already decrypted! So lets add another file\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ echo &quot;Foo Bar Bam Baz&quot; &gt; secret-file2                                    \n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ echo &quot;Added secret-file2 to my Just recipes&quot;\nAdded secret-file2 to my Just recipes\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just encrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nEncryption successful\nEncryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nERROR! Decryption failed (no vault secrets were found that could decrypt) on /var/home/nic/projects/personal/pype.dev/secret-file for /var/home/nic/projects/personal/pype.dev/secret-file\nerror: Recipe `decrypt` failed with exit code 1\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n✗ echo &quot;Oh no!&quot;\n</code></pre>\n<p>So what happened?</p>\n<p>Recall that my recipes originally had <code>set -e</code> at the top and used <code>&gt;&gt;</code> to cat\nmy secret to a file <code>key</code>. Well, when the fir| decryption recipe failed the\n<code>key</code> file was left behind. Then when I went to encrypt both of my files the\nrecipe got the key again and made a keyfile like this:</p>\n<pre><code class=\"language-bash\">secretKey\nsecretKey\n</code></pre>\n<p>The encryption recipe encrypted the files with this key, removed the key file,\nand then the next decryption recipe failed because when it got the key and made\nthe file it looked like</p>\n<pre><code>secretKey\n</code></pre>\n<p>So the solution in the end is to remake the <code>key</code> file every time (<code>&gt;</code> instead\nof <code>&gt;&gt;</code>), or check if it exists, or handle the error when the recipe fails, or\njust keep going (<code>set +e</code>)</p>\n<h2><a href=\"#fin\" aria-hidden=\"true\" class=\"anchor\" id=\"fin\"></a>Fin</h2>\n<p>And that's how I lost some secrets in my homelab once, and how I almost lost a\nsecond time if I hadn't noticed the <code>key</code> file in my file tree</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2025-04-23T08:44:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/smb-with-zfs-on-ubuntu.html",
+      "url": "https://pype.dev/smb-with-zfs-on-ubuntu.html",
+      "title": "SMB with ZFS on Ubuntu",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>sudo apt-get install -y samba \\ then set sharesmb=on \\ chown the user \\ smbpasswd <user> -a \\ then mount with user/password from other machine</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2025-02-20T09:18:35-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "zfs",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "url": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "title": "Jellyfin container updates for HWE + AMD",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>\n<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>\n<p>Thankfully someone posted <a href=\"https://forum.jellyfin.org/t-jellyfin-amd-docker\">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>\n<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>\n<blockquote>\n<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>\n</blockquote>\n<pre><code>\napt update &amp;&amp; apt install -y curl gpg\n\nmkdir -p /etc/apt/keyrings\n\ncurl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg\n\ncat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources\n\nTypes: deb\n\nURIs: https://repo.radeon.com/rocm/apt/latest\n\nSuites: ubuntu\n\nComponents: main\n\nArchitectures: amd64\n\nSigned-By: /etc/apt/keyrings/rocm.gpg\n\nEOF\n\napt update &amp;&amp; apt install -y rocm-opencl-runtime\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T11:27:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "containers",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/rsync-like-a-pro.html",
+      "url": "https://pype.dev/rsync-like-a-pro.html",
+      "title": "rsync like a pro",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>\n<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>TLDR:\n<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>\n<h2><a href=\"#explanation\" aria-hidden=\"true\" class=\"anchor\" id=\"explanation\"></a>Explanation</h2>\n<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).\n--chmod=Da+s: Ensures the setgid bit is applied to directories.\n--info=progress2: Provides detailed progress information, including overall data transfer stats.\n--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).\n--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).\n/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:52:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "url": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "title": "D and uninterruptable sleep",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#htop\" aria-hidden=\"true\" class=\"anchor\" id=\"htop\"></a>Htop</h2>\n<p>I recently have been having significant home server issues, and that's not the point of this - today I learned what <code>D</code> state is when looking at htop.</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png\" alt=\"htop-d\" title=\"htop with D state\" />\n<p>Apparently this means &quot;uninterruptable sleep&quot; and it's a dev's nightmare...</p>\n<h3><a href=\"#context\" aria-hidden=\"true\" class=\"anchor\" id=\"context\"></a>Context</h3>\n<p>The issue I was having was that some <code>zfs rollback</code> commands were hung - for hours... I wasn't sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.</p>\n<p>Turns out I still don't know what locked the disks up but I learned why <code>&lt;C&gt;-c</code> did <u>nothing</u>...\nthe more you know</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:48:10-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "url": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "title": "hostnamectl to easily change hostname",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>\n<pre><code class=\"language-bash\">\n❯ hostnamectl --help\nhostnamectl [OPTIONS...] COMMAND ...\n\nQuery or change system hostname.\n\nCommands:\n  status                 Show current hostname settings\n  hostname [NAME]        Get/set system hostname\n  icon-name [NAME]       Get/set icon name for host\n  chassis [NAME]         Get/set chassis type for host\n  deployment [NAME]      Get/set deployment environment for host\n  location [NAME]        Get/set location for host\n\nOptions:\n  -h --help              Show this help\n     --version           Show package version\n     --no-ask-password   Do not prompt for password\n  -H --host=[USER@]HOST  Operate on remote host\n  -M --machine=CONTAINER Operate on local container\n     --transient         Only set transient hostname\n     --static            Only set static hostname\n     --pretty            Only set pretty hostname\n     --json=pretty|short|off\n                         Generate JSON output\n\nSee the hostnamectl(1) man page for details.\n</code></pre>\n<p>I learned there's transient and static hostnames, so that's cool...</p>\n<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>\n<p>pretty sweet tool</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T07:25:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "url": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "title": "DNS Broke After Reboot - Ubuntu 22.04",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>\n<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href=\"https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config\">SO Post</a></p>\n<p>sudo mkdir /etc/systemd/resolved.conf.d/\nsudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>\n<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>\n<pre><code>[Resolve]\nDNS=8.8.8.8 1.1.1.1\n</code></pre>\n<p>But I decided to use tailscale</p>\n<pre><code>[Resolve]\nDNS=100.100.100.100\n</code></pre>\n<p>Then restart systemd-resolved</p>\n<p>sudo systemctl restart systemd-resolved</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-22T08:08:40-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/restart-kde-plasma.html",
+      "url": "https://pype.dev/restart-kde-plasma.html",
+      "title": "Restart KDE Plasma",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>\n<pre><code>\nsudo killall plasmashell\n\nkstart plasmashell\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-08T15:53:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-remote-add.html",
+      "url": "https://pype.dev/docker-remote-add.html",
+      "title": "docker-remote-add",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Add from url??</p>\n<p>ADD <a href=\"http://example.com/cars.csv\">http://example.com/cars.csv</a> /tmp/cars.csv</p>\n<p>Unpack automatically!? (.tar, .tar.gz, .tgz, .bz2, .tbz2, .txz, .zip)</p>\n<p>ADD myapp.tar.gz /opt/myapp/</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:19:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-copy-and-chown.html",
+      "url": "https://pype.dev/docker-copy-and-chown.html",
+      "title": "Docker copy and chown",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>COPY --chown=myuser:mygroup source-file target-file</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-09-17T06:18:09-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "url": "https://pype.dev/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address.html",
+      "title": "Interesting IPs between Jellyfin clients and server depending on tailscale and server address",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>When connecting from my phone to jellyfin I'm seeing some interesting patterns.</p>\n<h2><a href=\"#scenarios\" aria-hidden=\"true\" class=\"anchor\" id=\"scenarios\"></a>Scenarios</h2>\n<h3><a href=\"#tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\" aria-hidden=\"true\" class=\"anchor\" id=\"tailscale-ip-of-phone-is-listed-as-local-network-to-jellyfin\"></a>Tailscale IP of phone is listed as local network to jellyfin</h3>\n<p>Wifi: off\nTailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: LAN IP</p>\n<p>Jellyfin sees 192.168.1.1, my router address</p>\n<hr />\n<p>Wifi: off\ntailscale: on\nUse exit node: on\nLAN access: on\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<p>Q: This might be because of traefik somehow</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work even work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: on\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP</p>\n<p>Jellyfin sees the 192.168.1.1</p>\n<p>Q: Why did this work?</p>\n<hr />\n<p>Wifi: off\ntailsacale: on\nUse exit node: off\nLAN access: off\nJellyfin: Tailscale magic DNS</p>\n<p>Jellyfin sees the docker bridge network</p>\n<hr />\n<p>Wifi: on\ntailsacale: of\nUse exit node: off\nLAN access: off\nJellyfin: LAN IP (via pihole DNS)</p>\n<p>Jellyfin sees the IP of my phone</p>\n<hr />\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-07-12T06:24:57-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "url": "https://pype.dev/upgrading-your-kernel-can-f-you-up-whoops.html",
+      "title": "Upgrading your kernel can F you up... whoops",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975\">https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975</a> I lost TPU for frigate, this saved me ass</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-06-26T10:21:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/fonts-in-vs-c-e.html",
+      "url": "https://pype.dev/fonts-in-vs-c-e.html",
+      "title": "Fonts in VS C**e",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Jet Brains has to be specified 'JetBrainsMono Nerd Font Mono'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-05-20T06:44:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "url": "https://pype.dev/dhcp-restart-to-save-ubuntu-22-04-server-networking.html",
+      "title": "DHCP Restart to Save Ubuntu 22.04 Server Networking",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn't show up on any networks. A solution that got me back in was a friend restarting the dhcp client for me:</p>\n<pre><code class=\"language-bash\">sudo dhclient -r -v &lt;interface&gt; &amp;&amp; sudo dhclient -v &lt;interface&gt;\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-12-31T20:26:50-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "url": "https://pype.dev/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem.html",
+      "title": "Refresh Nextcloud Groupfolders after messing around on the filesystem",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Exec in as www-data and run ./occ groupfolders:scan folder_id -v (the -v to see what it's doing)</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-09-23T12:45:06-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

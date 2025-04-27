@@ -1,0 +1,329 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/archive-2024.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "url": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "title": "docker context (and an issue to question your sanity)",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>docker contexts are great, would recommend putting them in your prompt though (via starship or something else)... here's why</p>\n<p>I like to manage my containers remotely - I have a nice development setup on my desktop and I try to keep my server as bare-bones as possible. For a while I've been using ansible which makes it easy to manage configuration etc on other machines. But I recently learned about docker contexts and I'm planning to scale down my homelab management to just docker-compose stacks rather than a bunch of super complicated ansible playbooks</p>\n<p>So, setting up a context is easy - it's basically an ssh connection to another machine!</p>\n<p><code>docker context create koober --docker &quot;host=ssh://nic@koober&quot;</code></p>\n<p><code>koober</code> is one of my dev machines and my <code>~/.ssh/config</code> is setup such that I can <code>ssh nic@koober</code>, this makes the context work really seamlessly.</p>\n<p>So there's the <code>default</code> context (the machine you're on) and now I have <code>koober</code></p>\n<p>To use it you run <code>docker context use koober</code></p>\n<p>And then to check we can <code>ls</code> the contexts</p>\n<pre><code>docker context ls\nNAME       DESCRIPTION                               DOCKER ENDPOINT               ERROR\ndefault    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   \nkoober *                                             ssh://nic@koober\n</code></pre>\n<blockquote>\n<p>Notice the * - that indicates that's our current context.</p>\n</blockquote>\n<h2><a href=\"#trouble\" aria-hidden=\"true\" class=\"anchor\" id=\"trouble\"></a>Trouble</h2>\n<p>Now here's where things get hairy... you've gotta be super-aware of what context you're using. I have an indicator in my starship prompt that shows the current context, but since I'm new to using them I kind of didn't notice it until I ran into this issue...</p>\n<p>I'm working on a python application in docker but was not able to execute the entrypoint even though I KNEW the file was there... let's take a look</p>\n<h3><a href=\"#example\" aria-hidden=\"true\" class=\"anchor\" id=\"example\"></a>Example</h3>\n<p>Here's a minimal hello world applycation in docker to illustrate the issue</p>\n<pre><code class=\"language-python\"># main.py\nprint(&quot;hello world&quot;)\n</code></pre>\n<pre><code class=\"language-Dockerfile\"># Use an official Python runtime as a parent image\nFROM python:3.11-slim\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy the current directory contents into the container at /app\nCOPY . /app\n\n# Run the main.py script as the container's main process\nCMD [&quot;python&quot;, &quot;main.py&quot;]\n</code></pre>\n<pre><code class=\"language-yaml\">services:\n  hello-world:\n    build: .\n    volumes:\n      - .:/app\n</code></pre>\n<p>Notice volume mounting in my project directory <code>.</code> to <code>/app</code> as a common practice to develop inside the container</p>\n<p>Here's where I started to question my sanity...</p>\n<pre><code class=\"language-bash\">✗ docker compose up                                            \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | python: can't open file '/app/main.py': [Errno 2] No such file or directory\nhello-world-1 exited with code 2\n</code></pre>\n<p><code>python can't open file</code>? hmm... Let's take a look at the image</p>\n<p>First let's make sure we get the image name right</p>\n<pre><code class=\"language-bash\">✗ docker container ls -a              \nCONTAINER ID   IMAGE                                           COMMAND                  CREATED          STATUS                       PORTS                                                                                  NAMES\n3d7285fc39e2   docker-context-example-hello-world              &quot;python main.py&quot;         10 minutes ago   Exited (2) 44 seconds ago                                                                                           docker-context-example-hello-world-1\n</code></pre>\n<p>Now we can <code>docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world</code></p>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world  \nroot@ee46d0e22de8:/app# python main.py\nHello, World!\nroot@ee46d0e22de8:/app# \n</code></pre>\n<p>WHAT THE HECK??</p>\n<h2><a href=\"#what-happened\" aria-hidden=\"true\" class=\"anchor\" id=\"what-happened\"></a>What happened...</h2>\n<p>What happened turns out to be pretty simple once we realize I'm using contexts...</p>\n<p><code>koboer</code> is a remote context, the <code>docker run</code> and <code>docker compose up</code> commands are interacting with the docker socket on that machine.</p>\n<p>So if I compose up the stack notice that there's a volume bind mount in there - well those do <em>not</em> work with contexts (or at least I'm not aware of hose to make it work) and so the <code>/app</code> directory was getting blown away essentially with an empty overlay...</p>\n<p>But when running with just <code>docker run</code> with no volume mount, the code was copied in during the build and is right where we expect it...</p>\n<h3><a href=\"#lets-prove-it\" aria-hidden=\"true\" class=\"anchor\" id=\"lets-prove-it\"></a>Let's prove it</h3>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@903f591c0384:/app# python main.py\npython: can't open file '/app/main.py': [Errno 2] No such file or directory\nroot@903f591c0384:/app# \n</code></pre>\n<pre><code>Adding a `-v .:/app` to match the compose file, we get the same error...\n</code></pre>\n<p>If we switch to the default context we are back up and running as expected</p>\n<pre><code class=\"language-bash\">✗ docker context use default\ndefault\nCurrent context is now &quot;default&quot;\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker compose up         \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | Hello, World!\nhello-world-1 exited with code 0\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@4045b6aa8883:/app# python main.py\nHello, World!\nroot@4045b6aa8883:/app# \n</code></pre>\n<p>Successful runs on both accounts with the volume mount</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>Context is king</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-19T05:59:30-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "url": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "title": "Add a healthcheck to your FastAPI app",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I'm building a few FastAPI apps to throw in docker and run on my homelab... I wanted to add healthchecks and here's a simple way to do it</p>\n<p>Make sure to install <code>curl</code> in the dockerfile (near the top for effeciency)</p>\n<pre><code># Install curl with minimal dependencies\nRUN apt-get update &amp;&amp; \\\n    apt-get install -y --no-install-recommends curl &amp;&amp; \\\n    apt-get clean &amp;&amp; \\\n    rm -rf /var/lib/apt/lists/*\n\n</code></pre>\n<p>Then I recommend making compose files even for single image deployments</p>\n<pre><code>services:\n  app:\n    build: .\n    volumes:\n      - type: bind\n        source: .\n        target: /app\n    environment:\n      - PYTHONPATH=/app\n      - DOCKER_ENV=true\n      - UV_VIRTUALENV=/opt/app-env\n    user: &quot;1000:1000&quot;\n    restart: unless-stopped\n    healthcheck:\n      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:8000/health&quot;]\n      interval: 30s\n      timeout: 10s\n      retries: 3\n      start_period: 10s\n\n</code></pre>\n<p>Then finally you'll need a <code>/health</code> endpoint</p>\n<pre><code class=\"language-python\">\n@app.get(&quot;/health&quot;, response_class=HTMLResponse)\nasync def health_check():\n    &quot;&quot;&quot;\n    A health check endpoint that returns a status message.\n    &quot;&quot;&quot;\n    return &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Service is healthy&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-15T15:41:36-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/statically-io-to-help-me-out.html",
+      "url": "https://pype.dev/statically-io-to-help-me-out.html",
+      "title": "statically.io to help me out",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://statically.io\">statically.io</a> offers a CDN that I'm going to try to lean into for images in my blog. My hope is that the builds get and stay fast, and that page loads are fast too.</p>\n<p>Example:</p>\n<pre><code class=\"language-html\">\n&lt;img src=&quot;https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png&quot; alt=&quot;Skimpy ZSH&quot; title=&quot;A fancy data summary in the shell&quot; /&gt;\n</code></pre>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png\" alt=\"Skimpy ZSH\" title=\"A fancy data summary in the shell\" />\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T13:35:31-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "infrastructure",
+        "tech",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "url": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+      "title": "Jellyfin container updates for HWE + AMD",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>\n<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>\n<p>Thankfully someone posted <a href=\"https://forum.jellyfin.org/t-jellyfin-amd-docker\">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>\n<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>\n<blockquote>\n<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>\n</blockquote>\n<pre><code>\napt update &amp;&amp; apt install -y curl gpg\n\nmkdir -p /etc/apt/keyrings\n\ncurl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg\n\ncat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources\n\nTypes: deb\n\nURIs: https://repo.radeon.com/rocm/apt/latest\n\nSuites: ubuntu\n\nComponents: main\n\nArchitectures: amd64\n\nSigned-By: /etc/apt/keyrings/rocm.gpg\n\nEOF\n\napt update &amp;&amp; apt install -y rocm-opencl-runtime\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T11:27:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "containers",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/the-flood-story-types-and-baptism.html",
+      "url": "https://pype.dev/the-flood-story-types-and-baptism.html",
+      "title": "The Flood Story - Types and Baptism",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#the-flood-story-and-jesus\" aria-hidden=\"true\" class=\"anchor\" id=\"the-flood-story-and-jesus\"></a>The Flood Story and Jesus</h1>\n<p>Jesus brings up the Flood story from Genesis just one time (in the recorded teachings we have).</p>\n<p>First to set the scene, Jesus and his disciples are visiting the temple, and the disiples are kind of &quot;ooo-ing&quot; and &quot;aaah-ing&quot; when Jesus tells them about about the coming destruction...</p>\n<pre><code>Matthew 24:1–2 (ESV):  24 Jesus left the temple and was going away, when his\ndisciples came to point out to him the buildings of the temple. 2 But he\nanswered them, “You see all these, do you not? Truly, I say to you, there will\nnot be left here one stone upon another that will not be thrown down.”  \n\nThe Holy Bible: English Standard Version (Mt 24:1–2). (2016). Crossway Bibles.\n\n</code></pre>\n<pre><code>Matthew 24:37–39 (ESV): 37 For as were the days of Noah, so will be the coming\nof the Son of Man. 38 For as in those days before the flood they were eating\nand drinking, marrying and giving in marriage, until the day when Noah entered\nthe ark, 39 and they were unaware until the flood came and swept them all away,\nso will be the coming of the Son of Man. \n\nThe Holy Bible: English Standard Version (Mt 24:37–39). (2016). Crossway Bibles.\n</code></pre>\n<p>At one point in Jesus' description of the destruction of the temple in\nJerusalem, he brings up the Son of Man and Noah...</p>\n<p>Jesus says that the &quot;coming of the Son of Man&quot; will be like when Noah built the\nark, and no one understood until the flood (κατακλυσμός | kataklysmos) came and\ntook them away.</p>\n<p>In Jesus' mind the flood narrative gives him imagery and vocabulary to talk\nabout when God allows foreign powers to come and bring judgement... This isn't\nan interpretation of the flood narrative, but it clues us into the idea that\nthe Hebrew bible is full of imagery, like a quilt, that follows a (or several)\npattern(s).</p>\n<pre><code>Jesus understood the flood story as a pattern - a theological category to talk\nabout God overthrowing the corrupt power systems of our world - Tim Mackie\n</code></pre>\n<blockquote>\n<p>I think sometimes we look at the flood and think God is so bad for taking out\nall of humanity, but we miss the point... God is RESTORING humanity by\nremoving corruption... that's eventually the story we're invited into via\nfaith in Jesus</p>\n</blockquote>\n<h2><a href=\"#types\" aria-hidden=\"true\" class=\"anchor\" id=\"types\"></a>Types</h2>\n<p>A <code>type</code> is a category of prophecy, and an <code>antitype</code> is the revelation of the type.</p>\n<p>Essentially - a <code>type</code> is a pattern, and the <code>antytype</code> is the revelation of\nthe meaning of the pattern - and without understanding the preceding types (in\nthis case, the flood) then the antitype cannot be understood (in this case\nbaptism)</p>\n<blockquote>\n<p>a trivial example of how a type, or a pattern, can be noticed and even build\nanticipation is to think 2, 4, 6, 8... what comes next? 10, and we all know\nthat immediately. Types in general, and types in the Bible are no different,\nalbeit not so simple...</p>\n</blockquote>\n<h2><a href=\"#flood-and-baptism\" aria-hidden=\"true\" class=\"anchor\" id=\"flood-and-baptism\"></a>Flood and Baptism</h2>\n<p>Brace yourself...</p>\n<pre><code>1 Peter 3:18–22 (ESV): 18 For Christ also suffered once for sins, the righteous\nfor the unrighteous, that he might bring us to God, being put to death in the\nflesh but made alive in the spirit, 19 in which he went and proclaimed to the\nspirits in prison, 20 because they formerly did not obey, when God’s patience\nwaited in the days of Noah, while the ark was being prepared, in which a few,\nthat is, eight persons, were brought safely through water. 21 Baptism, which\ncorresponds to this, now saves you, not as a removal of dirt from the body but\nas an appeal to God for a good conscience, through the resurrection of Jesus\nChrist, 22 who has gone into heaven and is at the right hand of God, with\nangels, authorities, and powers having been subjected to him.  \n\nThe Holy Bible: English Standard Version (1 Pe 3:18–22). (2016). Crossway\nBibles.\n</code></pre>\n<p>Notice verse 21 - &quot;Baptism, which <u>corresponds</u> to this&quot;</p>\n<p>Corresponds is the word ἀντίτυπος (antitupos) in Greek, which means &quot;anti-type&quot;\nThis means clearly that the <code>type</code>, or <em>a</em> type, for baptism, is the flood\nnarrative... or that baptism is the antitype for the flood</p>\n<p>What does this mean for baptism?</p>\n<pre><code>21 Baptism, which\ncorresponds to this, now saves you, not as a removal of dirt from the body but\nas an appeal to God for a good conscience, through the resurrection of Jesus\nChrist, 22 who has gone into heaven and is at the right hand of God, with\nangels, authorities, and powers having been subjected to him\n</code></pre>\n<p>Through baptism, we experience with Jesus, resurrection and rule of the angels,\nauthorities, and power of the world...</p>\n<h2><a href=\"#take-away\" aria-hidden=\"true\" class=\"anchor\" id=\"take-away\"></a>Take Away</h2>\n<p>For the disciples listening... are they arguing about when the flood happened?\nor if it was a global or local flood?</p>\n<p>No... they are listening to Jesus unpack patterns in the Bible and they hear\nhim invite them, through a story they know very well, into rule and reign with\nhim</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T06:06:38-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bible-project",
+        "faith",
+        "flood-story"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/the-flood-story-quilt-analogy.html",
+      "url": "https://pype.dev/the-flood-story-quilt-analogy.html",
+      "title": "The Flood Story - Quilt Analogy",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#the-flood-story-in-the-hebrew-bible\" aria-hidden=\"true\" class=\"anchor\" id=\"the-flood-story-in-the-hebrew-bible\"></a>The Flood Story in the Hebrew Bible</h1>\n<p>I'm slowly making my way through some Bible Project classes online because Tim\nMackie is a fantastic teacher and BP has done be a <em>great</em> service by opening\nmy eyes to the reality of the Biblical narrative and what it means for my life\nof faith in Jesus.</p>\n<p>The second session is filled with great points and 10 minutes in I had to jot\nthis one down...</p>\n<h2><a href=\"#a-quilt-as-history\" aria-hidden=\"true\" class=\"anchor\" id=\"a-quilt-as-history\"></a>A Quilt as History</h2>\n<p>Imagine your grandmother's grandmother made a quilt, and passed it down the\nfamily tree. In a sense, that quilt contains history that would pre-date you\nbut would absolutely have meaning to you... However, you might look for meaning\nthat was never intended to be present.</p>\n<p>The pieces of the quilt have their own history - there will be material that\nmight've been part of a dress, or curtains, or bedsheets, or anything else\nsomeone in the family tree found interesting and meaningful for the story they\nare telling with their quilt.</p>\n<p>The question of what each of the pieces mean on their own, or in where they\ncome from is interesting perhaps, but it's not the same question as asking what\nthose pieces mean now that they have been curated into the family quilt... The\ncreator(s) of the quilt may repurpose those pieces entirely, and it wouldn't be\n&quot;right&quot; for you or me to be upset that one piece of the quilt came from an\narticle of clothing or cloth associated with something we might not like - the\nauthor (your grandma) <u>repurposed</u> it for that very reason, to change the\nmeaning and communicate something to you, perhaps something totally different\nthan what that cloth might've meant before it was added to the quilt.</p>\n<h2><a href=\"#creation-as-a-quilt\" aria-hidden=\"true\" class=\"anchor\" id=\"creation-as-a-quilt\"></a>Creation as a Quilt</h2>\n<p>The quilt is a curated piece of pieces of fabric - and to bring the metaphor\nhome very abruptly, so is the Hebrew Bible... the authors of the Hebrew\nscripture absolutely repurposed stories and images that were present in their\ntime and before, but not to make something that is a cheap copy, but to\ncommunicate the story of the <em>actual</em> God of gods, ruling over the world.</p>\n<p>For example - the very beginning of the creationa ccount in Genesis 1 has the\nspirit of God hovering over the waters. Without getting into more details than\na short write-up warrants, the waters in ancient thought represent chaos. Not\nonly that, but there is an older creation account called the Enuma Elish where\ntheir savior god, Marduk, fights the chaos waters (Tiamat) and conquers her\neventually... The thing about the Hebrew narrative is that Yahweh doesn't have\nto fight the waters... he subdues with his words because he isn't in tension\nwith creation, or even with chaos, all things obey him and the chaos waters\nthat other gods had to fight and die over are no different. So the meaning of\nthe waters is somewhat consistent across lots of cultures, but Hebrews took the\nstories and in essence made them &quot;more true&quot;, but at the very least made them\nrelevant to the story they are/were communicating about the God of gods and\nLord of love - that he is the creator of all things and invites us to partner\nwith him (as his image-bearers).</p>\n<h2><a href=\"#calm-down\" aria-hidden=\"true\" class=\"anchor\" id=\"calm-down\"></a>Calm Down</h2>\n<p>A lot of Christians get upset or skiddish when other stories and cultures get\nbrought up - as if the Bible had to fall from heaven in their favorite English\ntranslation... but in my opinion that is the silliest and cheapest view of the\nWord of God... he chose people out of foreign lands to make an inheritence for\nhimself, his people, and those people tell his story using images that they\nknow.</p>\n<p>It's important for us to answer interesting questions but not lose sight of\nwhat's important... The Enuma Elish is an interesting piece, and there's\nparallels with the Hebrew bible, but the Hebrew creation account clearly\ncommunicates that Yahweh doesn't have to labor and fight for order, he speaks\norder into chaos. That lesson is wholly different from other creation\nnarratives, but is it derivative of them...</p>\n<p>That used to bother me, but understanding that the authors of the Bible,\ncarried forth by the guidance of God's spirit, curated these stories and\nnarratives for God's people to communicate the truest Truths about him and his\nlove for people help me understand the reality of God partnering with humanity</p>\n<ul>\n<li>which starts in the Garden and is how Revelation ends</li>\n</ul>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-14T05:43:43-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bible-project",
+        "faith",
+        "flood-story"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/rsync-like-a-pro.html",
+      "url": "https://pype.dev/rsync-like-a-pro.html",
+      "title": "rsync like a pro",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>\n<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>TLDR:\n<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>\n<h2><a href=\"#explanation\" aria-hidden=\"true\" class=\"anchor\" id=\"explanation\"></a>Explanation</h2>\n<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).\n--chmod=Da+s: Ensures the setgid bit is applied to directories.\n--info=progress2: Provides detailed progress information, including overall data transfer stats.\n--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).\n--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).\n/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:52:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "url": "https://pype.dev/d-and-uninterruptable-sleep.html",
+      "title": "D and uninterruptable sleep",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#htop\" aria-hidden=\"true\" class=\"anchor\" id=\"htop\"></a>Htop</h2>\n<p>I recently have been having significant home server issues, and that's not the point of this - today I learned what <code>D</code> state is when looking at htop.</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png\" alt=\"htop-d\" title=\"htop with D state\" />\n<p>Apparently this means &quot;uninterruptable sleep&quot; and it's a dev's nightmare...</p>\n<h3><a href=\"#context\" aria-hidden=\"true\" class=\"anchor\" id=\"context\"></a>Context</h3>\n<p>The issue I was having was that some <code>zfs rollback</code> commands were hung - for hours... I wasn't sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.</p>\n<p>Turns out I still don't know what locked the disks up but I learned why <code>&lt;C&gt;-c</code> did <u>nothing</u>...\nthe more you know</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:48:10-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/advent-2024-peace.html",
+      "url": "https://pype.dev/advent-2024-peace.html",
+      "title": "Advent 2024 - Peace",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#scripture\" aria-hidden=\"true\" class=\"anchor\" id=\"scripture\"></a>Scripture</h2>\n<p>Luke 2:14 (ESV): 14 “Glory to God in the highest, and on earth peace among those with whom he is pleased!”</p>\n<h2><a href=\"#edification\" aria-hidden=\"true\" class=\"anchor\" id=\"edification\"></a>Edification</h2>\n<p>There is a word we probably know - Shalom. It's the Hebrew word we translate often as &quot;peace&quot;. But when I hear &quot;peace&quot; I often think about being calm - and that oversimplifies Shalom... I think a more appropriate understanding is &quot;things are as they are supposed to be&quot;.</p>\n<p>In the Garden, we see Shalom - the Lord partnering with humanity to steward the earth, to make things as they were supposed to be...</p>\n<p>You all know we messed that up, Shalom was broken and humanity was exiled.</p>\n<p>But we have a Great Healer.</p>\n<p>Jesus is Lord of all, King of Heaven and Earth, Ruler of your lives and mine, and he is the Prince of Peace</p>\n<p>Things in our lives are probably not often as they are supposed to be... We get sick, worry about bills, experience tragedy, and weather the storms of life. But there is hope - confident expectation - that peace already has been, and will continue to be, restored to those whom Jesus chooses, the ones with whom he is pleased.</p>\n<p>John records a lot before telling us about the cross, and I won't recount that in this short edification. But he recalls a hopeful word from the Lord -</p>\n<p>John 16:33 (LEB): 33 I [Jesus] have said these things to you so that in me you may have peace. In the world you have affliction, but have courage! I have conquered the world.”</p>\n<p>This season, and this week of Advent, I pray God presses the reality, and the hope for, peace, the expectation of Shalom, deeper into my heart. I pray the Spirit guides us all to bring the will of God to earth as it is in Heaven</p>\n<p>Finally I pray we may all be given, and accept, the conviction of Paul -</p>\n<p>Romans 8:18 For I consider that the sufferings of this present time are not worthy to be compared with the glory that is to be revealed to us.” Our present trials are not on an equal scale with the glory of heaven</p>\n<p>May the rest, the peace, the Shalom that Jesus gives to his followers be with you all. Amen.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T15:26:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "faith"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "url": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "title": "hostnamectl to easily change hostname",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>\n<pre><code class=\"language-bash\">\n❯ hostnamectl --help\nhostnamectl [OPTIONS...] COMMAND ...\n\nQuery or change system hostname.\n\nCommands:\n  status                 Show current hostname settings\n  hostname [NAME]        Get/set system hostname\n  icon-name [NAME]       Get/set icon name for host\n  chassis [NAME]         Get/set chassis type for host\n  deployment [NAME]      Get/set deployment environment for host\n  location [NAME]        Get/set location for host\n\nOptions:\n  -h --help              Show this help\n     --version           Show package version\n     --no-ask-password   Do not prompt for password\n  -H --host=[USER@]HOST  Operate on remote host\n  -M --machine=CONTAINER Operate on local container\n     --transient         Only set transient hostname\n     --static            Only set static hostname\n     --pretty            Only set pretty hostname\n     --json=pretty|short|off\n                         Generate JSON output\n\nSee the hostnamectl(1) man page for details.\n</code></pre>\n<p>I learned there's transient and static hostnames, so that's cool...</p>\n<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>\n<p>pretty sweet tool</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T07:25:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/how-to-survive-the-flood.html",
+      "url": "https://pype.dev/how-to-survive-the-flood.html",
+      "title": "How To Survive The Flood",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>There a lot of flood stories throughout the history of the world, and the Bible\nis no different in this regard. God warns Noah of a de-creation event, whereby\nhe'll start over with humanity via Noah and his family. Noah survives the flood\nby abiding in Yahweh and staying close to the One who loves him.</p>\n<blockquote>\n<p>Note this reflection doesn't address <em>AT ALL</em> if the flood narrative is a\n&quot;real&quot; historical event, whether it's a global or local event, or anything\nlike that - regardless of those points the Biblical authors used this type of\nimagery of chaos waters to communicate themes of judgement and wrath.</p>\n</blockquote>\n<p>Jesus, in the Sermon on the Mount with the 2 houses, calls back to the images\nof the chaos waters (the winds and the rains). His instruction is that the wise\nman who built his house on the rock will survive, but the foolish man builds\nhis house on the sand and the winds and the rains destroyed it.</p>\n<p>Somewhat obviously this is metaphorical for basing your life on wisdom or\nfolly. The wisdom is Jesus' teaching which is all based on Yahweh's love for\nhumanity and his desire to partner with humanity for the good of the whole\nearth.</p>\n<p>The simple take-away is for us to survive the winds and the rain, and to say it\nmore fully - to survive de-creation and destruction, we must live our lives in\na way that revolves around Jesus, the perfect human. He calls us to a greater\nhumanity, an unbroken humanity, which is unachievable apart from him (just look\naround if you doubt this truth).</p>\n<p>It's important to notice though that abiding in the Lord, basing your life on\nthe rock, doesn't spare you from the wind and the rain. Trials come, life gets\nhard, shit hits the fan. The last few weeks for me haven't been my favorite and\nI've certainly experienced turmoil in my life but frankly Jesus makes those\nthings bearable... in a way I can't put enough words to I'll just be reminded of\nPaul in Romans 8...</p>\n<pre><code class=\"language-Romans\">worthy to be compared with the glory that is to be revealed to us.” Our present\ntrials are not on an equal scale with the glory of heaven ```\n\nBy God's grace he's molded my heart to be nearly incapable of separating the\nLove God has for me from any trial I face - it's not a magic answer or silver\nbullet to fixing those problems, and it doesn't make them go away, but I know\nthe sufferings here aren't even worth comparing to the glory of the Lord. Amen.\n\n&lt;!-- Content Injected to every content markdown footer --&gt;\n\n[github]: https://github.com/rochacbruno/marmite\n</code></pre>\n",
+      "summary": "",
+      "date_published": "2024-12-04T05:52:44-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bible-project",
+        "faith"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/welcome.html",
+      "url": "https://pype.dev/welcome.html",
+      "title": "Welcome to Marmite",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>This is your first post!</p>\n<h2><a href=\"#edit-this-content\" aria-hidden=\"true\" class=\"anchor\" id=\"edit-this-content\"></a>Edit this content</h2>\n<p>edit on <code>content/{date}-welcome.md</code></p>\n<h2><a href=\"#add-more-content\" aria-hidden=\"true\" class=\"anchor\" id=\"add-more-content\"></a>Add more content</h2>\n<p>create new markdown files in the <code>content</code> folder</p>\n<p>use <code>marmite --new</code> to create new content</p>\n<h2><a href=\"#customize-your-site\" aria-hidden=\"true\" class=\"anchor\" id=\"customize-your-site\"></a>Customize your site</h2>\n<p>edit <code>marmite.yaml</code> to change site settings</p>\n<p>edit the files starting with <code>_</code> in the <code>content</code> folder to change the layout</p>\n<p>or edit the templates to create a custom layout</p>\n<h2><a href=\"#deploy-your-site\" aria-hidden=\"true\" class=\"anchor\" id=\"deploy-your-site\"></a>Deploy your site</h2>\n<p>read more on <a href=\"https://rochacbruno.github.io/marmite\">marmite documentation</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-04T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/stylus-for-custom-webpage-themes.html",
+      "url": "https://pype.dev/stylus-for-custom-webpage-themes.html",
+      "title": "Stylus for custom webpage themes",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>the Logos web app is DISGUSTINGY bright/white - enough to actually ruin your morning...</p>\n<p>Thankfully there's an extension called <a href=\"https://addons.mozilla.org/en-US/firefox/addon/styl-us/\">stylus</a> and some kind folks in the Logos community created a nice dark theme <a href=\"https://userstyles.world/style/18547/logos-web-app-dark-mode\">here</a>. You simply install the extension, then go to the userstyles link &lt;-- and click <code>install</code>. It only changes themes for the sites configured - in this case <a href=\"app-logos-com.html\">app.logos.com</a></p>\n<h1><a href=\"#todo-image\" aria-hidden=\"true\" class=\"anchor\" id=\"todo-image\"></a>TODO: image</h1>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-27T06:07:39-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/the-two-houses.html",
+      "url": "https://pype.dev/the-two-houses.html",
+      "title": "The Two Houses",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#context\" aria-hidden=\"true\" class=\"anchor\" id=\"context\"></a>Context</h2>\n<pre><code>24 “Everyone then who hears these words of mine and does them will be like a wise man who built his house on the rock. 25 And the rain fell, and the floods came, and the winds blew and beat on that house, but it did not fall, because it had been founded on the rock. 26 And everyone who hears these words of mine and does not do them will be like a foolish man who built his house on the sand. 27 And the rain fell, and the floods came, and the winds blew and beat against that house, and it fell, and great was the fall of it.\n\nThe Holy Bible: English Standard Version (Mt 7:24–27). (2016). Crossway Bibles.\n</code></pre>\n<h2><a href=\"#reflection\" aria-hidden=\"true\" class=\"anchor\" id=\"reflection\"></a>Reflection</h2>\n<p>From the visual commentary Tim calls out a few things:</p>\n<ol>\n<li>\n<p><code>the rock</code> is supposed to first call us back to earlier in the sermon when Jesus calls his people &quot;the light of the world&quot; and says &quot;a city on a hill [mountain] cannot be hidden&quot; (Matthew 5:14). The hill [ὄρος | oros] means &quot;mountain&quot; and is a hyperlink to OT teaching of God's people living in the ideal Jerusalem on Mt. Zion. Lots of Hebrew imagery here.</p>\n</li>\n<li>\n<p>The rain and floods are a callback to the Chaos Waters of the OT (and general ANE thinking). It's a reference to the destructive nature that we humans have unleashed on the world - but the wise man who listens to Jesus lives a life with some amount of protection from those hardships - and ultimate protection from God handing us over to Chaos (destruction).</p>\n</li>\n</ol>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-27T05:40:24-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "bible-project",
+        "faith"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "url": "https://pype.dev/dns-broke-after-reboot-ubuntu-22-04.html",
+      "title": "DNS Broke After Reboot - Ubuntu 22.04",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...</p>\n<p>After much toil and none of the other options working for me (sorry to not have those documented here) this is what got me the vic from this <a href=\"https://askubuntu.com/questions/1406827/how-to-set-dns-on-ubuntu-22-04-when-you-have-no-netplan-config\">SO Post</a></p>\n<p>sudo mkdir /etc/systemd/resolved.conf.d/\nsudo $EDITOR /etc/systemd/resolved.conf.d/dns_servers.conf</p>\n<p>Most folks probably are good with google (8.8.8.8) and cloudflare (1.1.1.1)</p>\n<pre><code>[Resolve]\nDNS=8.8.8.8 1.1.1.1\n</code></pre>\n<p>But I decided to use tailscale</p>\n<pre><code>[Resolve]\nDNS=100.100.100.100\n</code></pre>\n<p>Then restart systemd-resolved</p>\n<p>sudo systemctl restart systemd-resolved</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-22T08:08:40-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "homelab",
+        "linux",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

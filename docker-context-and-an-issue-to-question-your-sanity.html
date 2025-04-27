@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content="Marmite" />
+    
+<meta property="og:title" content="docker context (and an issue to question your sanity)">
+
+<meta property="og:description" content="
+docker contexts are great, would recommend putting them in your prompt though (via starship or some...">
+
+<meta property="og:image" content="https://pype.dev/media/og-02.png">
+
+
+<meta property="og:url" content="https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pype.dev">
+
+<meta property="article:published_time" content=" 2024-12-19T05:59:30+00:00">
+
+
+<meta property="article:author" content="https://pype.dev/author-nicpayne.html">
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html"
+    },
+    "url": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+    "headline": "docker context (and an issue to question your sanity)",
+    "description": "docker contexts are great, would recommend putting them in your prompt though (via starship or something else)... here's why
+I like to manag...",
+    
+    "author": {
+        "@type": "Person",
+        "name": "Nicholas Payne",
+        "url": "https://pype.dev/author-nicpayne.html",
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Pype.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://pype.dev/media/nic-round.png"
+        }
+    },
+    "datePublished": "2024-12-19T05:59:30+00:00"
+}
+</script>
+
+
+    <title>docker context (and an issue to question your sanity) | Pype.dev</title>
+    <link rel="stylesheet" type="text/css" href="./static/pico.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/marmite.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/colorschemes/nord.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/custom.css">
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css" id="highlightjs-theme" />
+
+
+
+    <link rel="alternate" type="application/rss+xml" title="index" href="index.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: tech" href="tag-tech.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homelab" href="tag-homelab.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: linux" href="tag-linux.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bema" href="tag-bema.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: python" href="tag-python.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cli" href="tag-cli.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: faith" href="tag-faith.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bible-project" href="tag-bible-project.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: zfs" href="tag-zfs.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vim" href="tag-vim.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: terminal" href="tag-terminal.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bash" href="tag-bash.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: til" href="tag-til.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: infrastructure" href="tag-infrastructure.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: blog" href="tag-blog.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: git" href="tag-git.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: data" href="tag-data.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homepage" href="tag-homepage.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: flood-story" href="tag-flood-story.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: nostr" href="tag-nostr.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: webdev" href="tag-webdev.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: reflection" href="tag-reflection.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: containers" href="tag-containers.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: olivet" href="tag-olivet.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: design-of-genesis-1-11" href="tag-design-of-genesis-1-11.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: k8s" href="tag-k8s.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: books" href="tag-books.rss">
+    <link rel="alternate" type="application/rss+xml" title="author: nicpayne" href="author-nicpayne.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2025" href="archive-2025.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2024" href="archive-2024.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2023" href="archive-2023.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2022" href="archive-2022.rss">
+    
+
+    
+    <link rel="alternate" type="application/feed+json" title="JSON index" href="index.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: tech" href="tag-tech.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homelab" href="tag-homelab.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: linux" href="tag-linux.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bema" href="tag-bema.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: python" href="tag-python.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cli" href="tag-cli.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: faith" href="tag-faith.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bible-project" href="tag-bible-project.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: zfs" href="tag-zfs.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vim" href="tag-vim.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: terminal" href="tag-terminal.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bash" href="tag-bash.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: til" href="tag-til.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: infrastructure" href="tag-infrastructure.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: blog" href="tag-blog.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: git" href="tag-git.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: data" href="tag-data.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homepage" href="tag-homepage.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: flood-story" href="tag-flood-story.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: nostr" href="tag-nostr.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: webdev" href="tag-webdev.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: reflection" href="tag-reflection.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: containers" href="tag-containers.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: olivet" href="tag-olivet.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: design-of-genesis-1-11" href="tag-design-of-genesis-1-11.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: k8s" href="tag-k8s.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: books" href="tag-books.json">
+    <link rel="alternate" type="application/feed+json" title="JSON author: nicpayne" href="author-nicpayne.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2025" href="archive-2025.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2024" href="archive-2024.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2023" href="archive-2023.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2022" href="archive-2022.json">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <div class="container-fluid announcement-wrapper">
+        <div class="announcement"></div>
+    </div>
+    
+    <main class="container">
+        
+        <header class="header-content">
+            <nav class="header-nav">
+                <ul class="header-name">
+                    <li>
+                        <hgroup>
+                            <h2><a href="./" class="contrast">Pype.dev</a></h2>
+                             <p>my mental data-lake</p> 
+                        </hgroup>
+                    </li>
+                </ul>
+                <button id="menu-toggle" class="hamburger">&#9776;</button>
+                
+                <ul class="header-menu" id="header-menu">
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./archive.html">Archive</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./tags.html">Tags</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="https://github.com/pypeaday/pype.dev" target="_blank" >Github</a>
+                        
+                    </li>
+                    
+                    <li><span class="theme-toggle secondary" title="dark mode">&#9789;</span></li>
+                    
+                    <li><a href="#" id="search-toggle" class="secondary" title="Search (Ctrl + Shift + F)"> <span class="search-txt">Search</span><span class="search-magnifier"></span></a></li>
+                    
+                    <div class="underline"></div>
+                </ul>
+            </nav>
+            
+            <div class="marmite-background-overlay" id="overlay-close"></div>
+            <div class="marmite-search-bar hidden">
+                <span>Search</span>
+                <button class="marmite-close-button" id="search-close">X</button>
+                <input placeholder="Search" id="marmite-search-input" />
+                <div class="marmite-search-bar-result">
+                    <ul id="marmite-search-bar-result"></ul>
+                </div>
+            </div>
+            
+        </header>
+        
+        <section class="main-content">
+            
+
+
+
+<article>
+
+  
+
+
+<div class="content-title" id="title">
+    <h1>docker context (and an issue to question your sanity)</h1> 
+    
+
+
+<span class="content-date">
+    <small> Dec 19, 2024 - &#10710; 9 min</small>
+</span>
+
+</div>
+
+  
+  <div class="content-toc">
+    <a href="#" id="toc"></a>
+    <details>
+    <summary>🗒️</summary>
+    <ul>
+<ul>
+<li><a href="#trouble">Trouble</a></li>
+<ul>
+<li><a href="#example">Example</a></li>
+</ul>
+<li><a href="#what-happened">What happened...</a></li>
+<ul>
+<li><a href="#lets-prove-it">Let's prove it</a></li>
+</ul>
+<li><a href="#tldr">TLDR</a></li>
+</ul>
+</ul>
+
+    </details>
+  </div>
+  
+
+  <div class="content-html"><!-- Content Injected to every content markdown header -->
+<p>docker contexts are great, would recommend putting them in your prompt though (via starship or something else)... here's why</p>
+<p>I like to manage my containers remotely - I have a nice development setup on my desktop and I try to keep my server as bare-bones as possible. For a while I've been using ansible which makes it easy to manage configuration etc on other machines. But I recently learned about docker contexts and I'm planning to scale down my homelab management to just docker-compose stacks rather than a bunch of super complicated ansible playbooks</p>
+<p>So, setting up a context is easy - it's basically an ssh connection to another machine!</p>
+<p><code>docker context create koober --docker &quot;host=ssh://nic@koober&quot;</code></p>
+<p><code>koober</code> is one of my dev machines and my <code>~/.ssh/config</code> is setup such that I can <code>ssh nic@koober</code>, this makes the context work really seamlessly.</p>
+<p>So there's the <code>default</code> context (the machine you're on) and now I have <code>koober</code></p>
+<p>To use it you run <code>docker context use koober</code></p>
+<p>And then to check we can <code>ls</code> the contexts</p>
+<pre><code>docker context ls
+NAME       DESCRIPTION                               DOCKER ENDPOINT               ERROR
+default    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   
+koober *                                             ssh://nic@koober
+</code></pre>
+<blockquote>
+<p>Notice the * - that indicates that's our current context.</p>
+</blockquote>
+<h2><a href="#trouble" aria-hidden="true" class="anchor" id="trouble"></a>Trouble</h2>
+<p>Now here's where things get hairy... you've gotta be super-aware of what context you're using. I have an indicator in my starship prompt that shows the current context, but since I'm new to using them I kind of didn't notice it until I ran into this issue...</p>
+<p>I'm working on a python application in docker but was not able to execute the entrypoint even though I KNEW the file was there... let's take a look</p>
+<h3><a href="#example" aria-hidden="true" class="anchor" id="example"></a>Example</h3>
+<p>Here's a minimal hello world applycation in docker to illustrate the issue</p>
+<pre><code class="language-python"># main.py
+print(&quot;hello world&quot;)
+</code></pre>
+<pre><code class="language-Dockerfile"># Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Run the main.py script as the container's main process
+CMD [&quot;python&quot;, &quot;main.py&quot;]
+</code></pre>
+<pre><code class="language-yaml">services:
+  hello-world:
+    build: .
+    volumes:
+      - .:/app
+</code></pre>
+<p>Notice volume mounting in my project directory <code>.</code> to <code>/app</code> as a common practice to develop inside the container</p>
+<p>Here's where I started to question my sanity...</p>
+<pre><code class="language-bash">✗ docker compose up                                            
+[+] Running 1/0
+ ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s 
+Attaching to hello-world-1
+hello-world-1  | python: can't open file '/app/main.py': [Errno 2] No such file or directory
+hello-world-1 exited with code 2
+</code></pre>
+<p><code>python can't open file</code>? hmm... Let's take a look at the image</p>
+<p>First let's make sure we get the image name right</p>
+<pre><code class="language-bash">✗ docker container ls -a              
+CONTAINER ID   IMAGE                                           COMMAND                  CREATED          STATUS                       PORTS                                                                                  NAMES
+3d7285fc39e2   docker-context-example-hello-world              &quot;python main.py&quot;         10 minutes ago   Exited (2) 44 seconds ago                                                                                           docker-context-example-hello-world-1
+</code></pre>
+<p>Now we can <code>docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world</code></p>
+<pre><code class="language-bash">❯ docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world  
+root@ee46d0e22de8:/app# python main.py
+Hello, World!
+root@ee46d0e22de8:/app# 
+</code></pre>
+<p>WHAT THE HECK??</p>
+<h2><a href="#what-happened" aria-hidden="true" class="anchor" id="what-happened"></a>What happened...</h2>
+<p>What happened turns out to be pretty simple once we realize I'm using contexts...</p>
+<p><code>koboer</code> is a remote context, the <code>docker run</code> and <code>docker compose up</code> commands are interacting with the docker socket on that machine.</p>
+<p>So if I compose up the stack notice that there's a volume bind mount in there - well those do <em>not</em> work with contexts (or at least I'm not aware of hose to make it work) and so the <code>/app</code> directory was getting blown away essentially with an empty overlay...</p>
+<p>But when running with just <code>docker run</code> with no volume mount, the code was copied in during the build and is right where we expect it...</p>
+<h3><a href="#lets-prove-it" aria-hidden="true" class="anchor" id="lets-prove-it"></a>Let's prove it</h3>
+<pre><code class="language-bash">❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world
+root@903f591c0384:/app# python main.py
+python: can't open file '/app/main.py': [Errno 2] No such file or directory
+root@903f591c0384:/app# 
+</code></pre>
+<pre><code>Adding a `-v .:/app` to match the compose file, we get the same error...
+</code></pre>
+<p>If we switch to the default context we are back up and running as expected</p>
+<pre><code class="language-bash">✗ docker context use default
+default
+Current context is now &quot;default&quot;
+
+nic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET 
+❯ docker compose up         
+[+] Running 1/0
+ ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s 
+Attaching to hello-world-1
+hello-world-1  | Hello, World!
+hello-world-1 exited with code 0
+
+nic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET 
+❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world
+root@4045b6aa8883:/app# python main.py
+Hello, World!
+root@4045b6aa8883:/app# 
+</code></pre>
+<p>Successful runs on both accounts with the volume mount</p>
+<h2><a href="#tldr" aria-hidden="true" class="anchor" id="tldr"></a>TLDR</h2>
+<p>Context is king</p>
+<!-- Content Injected to every content markdown footer -->
+</div>
+  
+  <footer class="data-tags-footer">
+
+    <div class="content-authors-flex">
+      <div class="content-authors-full">
+        
+<div class="content-authors">
+    <ul>
+        
+            
+            
+            <li>
+                <a href="author-nicpayne.html">
+                    <img src="https://github.com/pypeaday.png" alt="Nicholas Payne" class="avatar">
+                    Nicholas Payne
+                </a>
+            </li>
+            
+        
+    </ul>
+</div>
+
+
+      </div>
+
+      <div class="date-tags-container">
+        <div class="content-date">
+          
+
+
+<span class="content-date">
+    <small> Dec 19, 2024 - &#10710; 9 min</small>
+</span>
+
+        </div>
+
+        <ul class="content-tags">
+          
+          <li><a href="./tag-python.html">python</a></li>
+          
+          <li><a href="./tag-terminal.html">terminal</a></li>
+          
+          <li><a href="./tag-tech.html">tech</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+</article>
+
+
+
+
+
+  
+  
+  
+  
+  <article>
+    Related python content
+    <ul>
+      
+      
+      <li><a href="./my-mcp-configuration.html">My MCP Configuration</a></li>
+      
+      
+      
+      
+      <li><a href="./add-a-healthcheck-to-your-fastapi-app.html">Add a healthcheck to your FastAPI app</a></li>
+      
+      
+      <li><a href="./switching-from-altacv-to-rendercv-for-my-resume.html">Switching from AltaCV to RenderCV for my Resume</a></li>
+      
+      
+      <li><a href="./switching-from-altacv-to-rendercv-for-my-resume.html">Switching from AltaCV to RenderCV for my Resume</a></li>
+      
+    </ul>
+  </article>
+  
+
+
+
+
+    <article><h4><a href="#comments" aria-hidden="true" class="anchor" id="comments"></a>Comments</h4>
+<script src="https://giscus.app/client.js"
+        data-repo="pypeaday/pype.dev"
+        data-repo-id="R_kgDOG8jshQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOG8jshc4CmIcO"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="catppuccin_mocha"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+</article>
+
+
+
+        </section>
+        
+        <footer class="footer-content grid">
+            <div>Powered by <a href="https://github.com/rochacbruno/marmite">Marmite</a> | <small><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY_NC-SA</a></small></div>
+            
+        </footer>
+        
+    </main>
+
+    <script src="./static/marmite.js"></script>
+    <script src="./static/custom.js"></script>
+    
+    <script type="module" src="./static/search.js"></script>
+    
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>
+
+
+
+</body>
+</html>
