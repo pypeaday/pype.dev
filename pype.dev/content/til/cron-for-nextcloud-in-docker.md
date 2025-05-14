@@ -5,7 +5,7 @@ title: Cron for Nextcloud in Docker
 published: True
 tags:
   - homelab
-  - homelab
+  - docker
   - tech
 
 ---

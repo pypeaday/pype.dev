@@ -4,9 +4,8 @@ templateKey: til
 title: Monolith - download and save site as html
 published: True
 tags:
-  - tech
+  - cli
   - terminal
-  - tech
 
 ---
 

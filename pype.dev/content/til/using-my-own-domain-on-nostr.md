@@ -5,7 +5,6 @@ title: Using my own domain on nostr
 published: True
 tags:
   - nostr
-  - tech
 
 ---
 

@@ -5,6 +5,7 @@ title: Stylus for custom webpage themes
 published: True
 tags:
   - tech
+  - logos
 ---
 
 the Logos web app is DISGUSTINGY bright/white - enough to actually ruin your morning...

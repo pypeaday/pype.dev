@@ -4,9 +4,7 @@ templateKey: til
 title: Fonts in VS C**e
 published: True
 tags:
-  - linux
-  - terminal
-  - tech
+  - vscode
 
 ---
 

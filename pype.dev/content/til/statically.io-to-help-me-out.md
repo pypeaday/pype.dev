@@ -6,7 +6,7 @@ published: True
 tags:
   - infrastructure
   - tech
-  - tech
+  - webdev
 
 ---
 

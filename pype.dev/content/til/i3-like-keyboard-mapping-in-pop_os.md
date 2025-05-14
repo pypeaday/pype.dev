@@ -5,7 +5,6 @@ title: i3-Like keyboard mapping in Pop_OS
 published: True
 tags:
   - linux
-  - linux
   - tech
 
 ---

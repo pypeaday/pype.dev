@@ -5,8 +5,7 @@ title: Git repo specific SSH Key!
 published: True
 tags:
   - cli
-  - homelab
-  - tech
+  - git
 
 ---
 

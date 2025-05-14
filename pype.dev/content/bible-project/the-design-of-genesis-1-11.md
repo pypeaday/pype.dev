@@ -235,3 +235,13 @@ God has just built for himself a temple of Creation.
 God is clearly in charge, but he wants to rule the creation with his image
 bearers. So now he rests
 
+## Genesis 3
+
+The one thing, the first thing, that a creature in the narrative sees as "good"
+is the one thing God said would bring death...
+
+"So when the woman saw that the tree [of knowledge of good and bad] was
+good...". God said to eat from every tree except this one... The first
+judgement call humanity makes is contrary to God's command
+
+

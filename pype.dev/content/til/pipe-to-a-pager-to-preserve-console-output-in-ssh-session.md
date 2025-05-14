@@ -6,7 +6,6 @@ published: True
 tags:
   - linux
   - cli
-  - tech
 
 ---
 

@@ -7,6 +7,7 @@ tags:
   - cli
   - homelab
   - tech
+  - k8s
 
 ---
 

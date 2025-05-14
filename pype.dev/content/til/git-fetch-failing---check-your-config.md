@@ -5,8 +5,7 @@ title: Git fetch failing - check your config
 published: True
 tags:
   - cli
-  - data
-  - tech
+  - git
 
 ---
 

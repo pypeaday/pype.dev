@@ -6,7 +6,7 @@ published: False
 tags:
   - cli
   - vim
-  - tech
+  - git
 
 ---
 

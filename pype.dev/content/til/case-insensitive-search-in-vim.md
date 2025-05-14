@@ -5,7 +5,6 @@ title: Case-insensitive search in Vim
 published: True
 tags:
   - vim
-  - vim
   - tech
 
 ---

@@ -5,8 +5,8 @@ title: Adding docker daemon.json broke docker
 published: True
 tags:
   - linux
-  - linux
   - tech
+  - docker
 
 ---
 

@@ -6,6 +6,7 @@ published: False
 tags:
   - homelab
   - tech
+  - cameras
 
 ---
 

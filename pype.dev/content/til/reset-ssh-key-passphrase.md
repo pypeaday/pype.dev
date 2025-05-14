@@ -6,7 +6,7 @@ published: True
 tags:
   - homelab
   - cli
-  - tech
+  - linux
 
 ---
 

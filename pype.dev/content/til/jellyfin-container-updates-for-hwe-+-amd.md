@@ -4,9 +4,9 @@ templateKey: til
 title: Jellyfin container updates for HWE + AMD
 published: True
 tags:
-  - containers
+  - docker
   - linux
-  - tech
+  - homelab
 
 ---
 

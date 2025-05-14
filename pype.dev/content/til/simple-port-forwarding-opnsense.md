@@ -5,7 +5,6 @@ title: Simple Port Forwarding OPNSense
 published: True
 tags:
   - homelab
-  - homelab
   - tech
 
 ---

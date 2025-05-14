@@ -4,7 +4,7 @@ templateKey: til
 title: Check your SMART status with smartctl
 published: True
 tags:
-  - homelab
+  - cli
   - linux
   - tech
 
