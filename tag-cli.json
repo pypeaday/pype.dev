@@ -1,0 +1,337 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-cli.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/i-was-wrecked-by-a-weird-combo-of-and-e.html",
+      "url": "https://pype.dev/i-was-wrecked-by-a-weird-combo-of-and-e.html",
+      "title": "I was wrecked by a weird combo of >> and -e",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TL;DR</h2>\n<p>If state matters then check it in the beginning or handle it on a failure... Let me explain</p>\n<p>I ran into some trouble recently <em>almost</em> losing some encrypted data... Now\nthis would be the second time I've had that happen, so I'm going to write a\nlittle bit about it now that I figured it out</p>\n<h2><a href=\"#the-stage\" aria-hidden=\"true\" class=\"anchor\" id=\"the-stage\"></a>The Stage</h2>\n<p>Here's the scenario - I use <code>ansible-vault</code> to keep some sensitive data in a\nfew public repos, and I keep the keys I use in Bitwarden Secrets Manager.</p>\n<p>I use <code>just</code> as a command runner and have common <code>just encrypt</code> and <code>just decrypt</code> recipes throughout many justfiles. It might look something like this</p>\n<pre><code class=\"language-bash\">\nget-vault-key:\n    bws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\n\nencrypt:\n    #!/bin/bash\n    set +e\n    just get-vault-key &gt; key\n    ansible-vault encrypt ./secret-file --vault-password-file key\n    ansible-vault encrypt ./secret-file2 --vault-password-file key\n    rm key\n\ndecrypt:\n    #!/bin/bash\n    set +e\n    just get-vault-key &gt; key\n    ansible-vault decrypt ./secret-file --vault-password-file key\n    ansible-vault decrypt ./secret-file2 --vault-password-file key\n    rm key\n</code></pre>\n<h2><a href=\"#spoiler\" aria-hidden=\"true\" class=\"anchor\" id=\"spoiler\"></a>Spoiler</h2>\n<p>Above is a good example of the 2 recipes, but prior to this morning they looked like this</p>\n<pre><code class=\"language-bash\">\nget-vault-key:\n    bws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\n\n# BAD EXAMPLES! DO NOT DO THIS\n\nencrypt:\n    set -e\n    just get-vault-key &gt;&gt; key\n    ansible-vault encrypt ./secret-file --vault-password-file key\n    ansible-vault encrypt ./secret-file2 --vault-password-file key\n    rm key\n\ndecrypt:\n    set -e\n    just get-vault-key &gt;&gt; key\n    ansible-vault decrypt ./secret-file --vault-password-file key\n    ansible-vault decrypt ./secret-file2 --vault-password-file key\n    rm key\n</code></pre>\n<h2><a href=\"#problem\" aria-hidden=\"true\" class=\"anchor\" id=\"problem\"></a>Problem</h2>\n<p>So here's the story - in real life I started using distrobox when I ran into\nthis and I thought it was an issue with different versions of ansible installed\nin distrobox and on my desktop. After a few more odd deployment workflows I\nthink I've determined that the real problem is that <code>&gt;&gt;</code> appends to a file (see\nthe issue yet?), but if my recipes fail (say I try to encrypt an already\nencrypted file) then the command exits but what's left on my disk? <code>key</code> is\nstill there... and the next time I go to run a command I'll echo the real key\nto the <code>key</code> file again and if I called <code>encrypt</code> when the first or more files\nin the list were <code>decrypted</code> then they'll be encrypted not with my key, but\nwith my key repeated as many times as I ran a command with <code>just get-vault-key &gt;&gt; key</code>\nbefore ever removing the key file!</p>\n<pre><code class=\"language-bash\">\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\nDanger, Will Robinson\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just encrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nEncryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\n$ANSIBLE_VAULT;1.1;AES256\n39616332393662346639633030633766666336323939346138633238626239363733316431333737\n6463663763366434376437303335643431663431326135300a636261663636336139323033316232\n37666439383131393631333332353731633661396431633834326432363936613331623135666565\n6364363039663933620a326563323931643632323031396664646363613636613562366166386439\n63653661653037393538356461323239396630643338393231306163343964623866\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nDecryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ cat secret-file\nDanger, Will Robinson\n</code></pre>\n<p>So as you can see, I have <code>secret-file</code> here, and I can encrypt and decrypt\njust fine. But if I have that <code>&gt;&gt;</code> in the recipe, add a second file, and a\nfailure in a command - well then I'll start getting confused...</p>\n<p>Follow along with the workflow of adding a file that I'll need encrypted</p>\n<blockquote>\n<p>Only secret-file is in the just recipe here - I add secret-file2 after</p>\n</blockquote>\n<pre><code class=\"language-bash\">nic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nERROR! input is not vault encrypted data. /var/home/nic/projects/personal/pype.dev/secret-file is not a vault encrypted file for /var/home/nic/projects/personal/pype.dev/secret-file\nerror: Recipe `decrypt` failed with exit code 1\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n✗ echo &quot;Good - secret-file is already decrypted! So lets add another file&quot;\nGood - secret-file is already decrypted! So lets add another file\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ echo &quot;Foo Bar Bam Baz&quot; &gt; secret-file2                                    \n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ echo &quot;Added secret-file2 to my Just recipes&quot;\nAdded secret-file2 to my Just recipes\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just encrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nEncryption successful\nEncryption successful\n\nnic in pype.dev   main   ×2  ×3  ×7 via   v3.11.10(pype-dev)   (dev) 󰒄 \n❯ just decrypt\nbws secret get $HOMELAB_BOT_VAULT_KEY_ID  | jq -r '.value'\nERROR! Decryption failed (no vault secrets were found that could decrypt) on /var/home/nic/projects/personal/pype.dev/secret-file for /var/home/nic/projects/personal/pype.dev/secret-file\nerror: Recipe `decrypt` failed with exit code 1\n\nnic in pype.dev   main   ×2  ×3  ×8 via   v3.11.10(pype-dev)   (dev) 󰒄 \n✗ echo &quot;Oh no!&quot;\n</code></pre>\n<p>So what happened?</p>\n<p>Recall that my recipes originally had <code>set -e</code> at the top and used <code>&gt;&gt;</code> to cat\nmy secret to a file <code>key</code>. Well, when the fir| decryption recipe failed the\n<code>key</code> file was left behind. Then when I went to encrypt both of my files the\nrecipe got the key again and made a keyfile like this:</p>\n<pre><code class=\"language-bash\">secretKey\nsecretKey\n</code></pre>\n<p>The encryption recipe encrypted the files with this key, removed the key file,\nand then the next decryption recipe failed because when it got the key and made\nthe file it looked like</p>\n<pre><code>secretKey\n</code></pre>\n<p>So the solution in the end is to remake the <code>key</code> file every time (<code>&gt;</code> instead\nof <code>&gt;&gt;</code>), or check if it exists, or handle the error when the recipe fails, or\njust keep going (<code>set +e</code>)</p>\n<h2><a href=\"#fin\" aria-hidden=\"true\" class=\"anchor\" id=\"fin\"></a>Fin</h2>\n<p>And that's how I lost some secrets in my homelab once, and how I almost lost a\nsecond time if I hadn't noticed the <code>key</code> file in my file tree</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2025-04-23T08:44:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/monolith-download-and-save-site-as-html.html",
+      "url": "https://pype.dev/monolith-download-and-save-site-as-html.html",
+      "title": "Monolith - download and save site as html",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#til-monolith\" aria-hidden=\"true\" class=\"anchor\" id=\"til-monolith\"></a>TIL: Monolith</h2>\n<p>I needed to save a website earlier and this was just what I needed...</p>\n<p><a href=\"https://github.com/Y2Z/monolith\">https://github.com/Y2Z/monolith</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2025-03-16T16:03:31-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "terminal"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/rsync-like-a-pro.html",
+      "url": "https://pype.dev/rsync-like-a-pro.html",
+      "title": "rsync like a pro",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using <code>zfs send/recv</code> for this just to make sure I don't propagate any corrupted data to my new pool.</p>\n<p>I've used <code>rsync</code> for simple things before but I needed this to be a little smarter and I wanted to see simple progress without flooding my terminal with a billion filenames.</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>TLDR:\n<code>rsync -aHAX --chmod=Da+s --info=progress2 --inplace --exclude='encrypted/docker/frigate-media' /tank/ /harbor/</code></p>\n<h2><a href=\"#explanation\" aria-hidden=\"true\" class=\"anchor\" id=\"explanation\"></a>Explanation</h2>\n<p>-aHAX: Preserves attributes (archive mode, hard links, ACLs, extended attributes).\n--chmod=Da+s: Ensures the setgid bit is applied to directories.\n--info=progress2: Provides detailed progress information, including overall data transfer stats.\n--inplace: Writes directly to the destination file, avoiding temporary files (useful for large files).\n--exclude='encrypted/docker/frigate-media': Excludes the specified path (relative to the /tank root).\n/tank/ /harbor/: Ensures the contents of /tank are copied directly into /harbor.</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-11T10:52:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "cli"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "url": "https://pype.dev/hostnamectl-to-easily-change-hostname.html",
+      "title": "hostnamectl to easily change hostname",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways</p>\n<pre><code class=\"language-bash\">\n❯ hostnamectl --help\nhostnamectl [OPTIONS...] COMMAND ...\n\nQuery or change system hostname.\n\nCommands:\n  status                 Show current hostname settings\n  hostname [NAME]        Get/set system hostname\n  icon-name [NAME]       Get/set icon name for host\n  chassis [NAME]         Get/set chassis type for host\n  deployment [NAME]      Get/set deployment environment for host\n  location [NAME]        Get/set location for host\n\nOptions:\n  -h --help              Show this help\n     --version           Show package version\n     --no-ask-password   Do not prompt for password\n  -H --host=[USER@]HOST  Operate on remote host\n  -M --machine=CONTAINER Operate on local container\n     --transient         Only set transient hostname\n     --static            Only set static hostname\n     --pretty            Only set pretty hostname\n     --json=pretty|short|off\n                         Generate JSON output\n\nSee the hostnamectl(1) man page for details.\n</code></pre>\n<p>I learned there's transient and static hostnames, so that's cool...</p>\n<p>The thing I needed was <code>hostnamectl --static hostname babyblue-aurora</code></p>\n<p>pretty sweet tool</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-06T07:25:59-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "homelab",
+        "cli"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/restart-kde-plasma.html",
+      "url": "https://pype.dev/restart-kde-plasma.html",
+      "title": "Restart KDE Plasma",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...</p>\n<pre><code>\nsudo killall plasmashell\n\nkstart plasmashell\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-11-08T15:53:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "terminal",
+        "cli"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/customize-k9s.html",
+      "url": "https://pype.dev/customize-k9s.html",
+      "title": "Customize K9s",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>To customize k9s use the skins from catppuccin or the ones k9s supplies</p>\n<pre><code class=\"language-bash\">OUT=&quot;${XDG_CONFIG_HOME:-$HOME/.config}/k9s/skins&quot;\nmkdir -p &quot;$OUT&quot;\ncurl -L https://github.com/catppuccin/k9s/archive/main.tar.gz | tar xz -C &quot;$OUT&quot; --strip-components=2 k9s-main/dist\n</code></pre>\n<p>Then edit your k9s config</p>\n<pre><code># ~/.config/k9s/config.yml\nk9s:\n  ui:\n    skin: catppuccin-mocha\n    # ...or another flavor:\n    # skin: catppuccin-macchiato\n    # skin: catppuccin-frappe\n    # skin: catppuccin-latte\n\n    # ...or the transparent variants:\n    # skin: catppuccin-mocha-transparent\n    # skin: catppuccin-macchiato-transparent\n    # skin: catppuccin-frappe-transparent\n    # skin: catppuccin-latte-transparent\n</code></pre>\n<p>Other k9s skins are available <a href=\"https://github.com/derailed/k9s/tree/master/skins\">here</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-05-06T11:57:07-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "homelab",
+        "tech",
+        "k8s"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/git-fetch-failing-check-your-config.html",
+      "url": "https://pype.dev/git-fetch-failing-check-your-config.html",
+      "title": "Git fetch failing - check your config",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I started deploying a website to Cloudflare on a branch called <code>pages</code>. Similar to one of the GH Pages deployment patterns. But when my CI was pushing the branch I couldn't see it locally...</p>\n<p><code>git fetch -a</code> wasn't pulling any new branches, and <code>git branch -a</code> was only showing my development and main branches at the remote... so what gives?</p>\n<p>I checked my git config, and to this moment I have no idea how this happened but check out my fetch config:</p>\n<pre><code>git config --get remote.origin.fetch\n+refs/tags/*:refs/tags/*\n</code></pre>\n<p>So to fix this:</p>\n<pre><code>git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'\n</code></pre>\n<p>Now <code>git fetch -a</code> works again</p>\n<pre><code>&gt; git fetch -a\n\nFrom github.com:DigitalHarbor7/DigitalHarbor\n   357a28a..969b027  develop    -&gt; origin/develop\n   c052ac9..6d40210  main       -&gt; origin/main\n * [new branch]      pages      -&gt; origin/pages\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-04-18T08:32:33-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "git"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/git-repo-specific-ssh-key.html",
+      "url": "https://pype.dev/git-repo-specific-ssh-key.html",
+      "title": "Git repo specific SSH Key!",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>git config --add --local core.sshCommand 'ssh -i &lt;&lt;&lt;PATH_TO_SSH_KEY&gt;&gt;&gt;'</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-01-04T15:42:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "git"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html",
+      "url": "https://pype.dev/convert-word-doc-to-pdf-with-headless-libreoffice.html",
+      "title": "Convert Word Doc to PDF with Headless Libreoffice",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I've been using paperless-ngx to manage all my documents, but every once in a while I'll get a <code>.docx</code> file to deal with...</p>\n<p>Turns out Libreoffice has a headless mode a <code>pdf</code> converter built-in!</p>\n<pre><code class=\"language-Bash\">libreoffice --headless --convert-to pdf /path/to/file.docx --outdir /path/to/output/directory\n</code></pre>\n<blockquote>\n<p>Note that <code>--outdir</code> is in fact a directory, not the path to a file</p>\n</blockquote>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-03-09T06:48:38-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/ffmpeg-10-bit-videos-to-8-bit.html",
+      "url": "https://pype.dev/ffmpeg-10-bit-videos-to-8-bit.html",
+      "title": "FFMPEG 10-bit videos to 8-bit",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><code>ffmpeg -i input.mp4 -map 0 -c:v libx264 -vf format=yuv420p -c:a copy output.mp4</code></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-01-16T13:15:53-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "cli",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/use-non-standard-named-ssh-keys-with-github.html",
+      "url": "https://pype.dev/use-non-standard-named-ssh-keys-with-github.html",
+      "title": "Use non-standard named ssh keys with github",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I was getting <code>(publickey denied)</code> when trying to push to GH using ssh. When I\ntested the connection I saw that a bunch of keys in ``~/.ssh/ were being\nattempted</p>\n<pre><code class=\"language-console\">✗ ssh git@github.com -vv\n\n...\n\ndebug1: Will attempt key: /home/nic/.ssh/id_rsa \ndebug1: Will attempt key: /home/nic/.ssh/id_ecdsa \ndebug1: Will attempt key: /home/nic/.ssh/id_ecdsa_sk \ndebug1: Will attempt key: /home/nic/.ssh/id_ed25519 \ndebug1: Will attempt key: /home/nic/.ssh/id_ed25519_sk \ndebug1: Will attempt key: /home/nic/.ssh/id_xmss \ndebug1: Will attempt key: /home/nic/.ssh/id_dsa \n\n...\n\ndebug1: No more authentication methods to try.\ngit@github.com: Permission denied (publickey).\n\n</code></pre>\n<p>None of those were the key I setup with GH. So I added an entry\ninto <code>~/.ssh/config</code>:</p>\n<pre><code class=\"language-text\">Host\ngithub.com\nUser git\nPort 22\nHostname github.com\nIdentityFile ~/.ssh/my_custom_github_key\nTCPKeepAlive yes\nIdentitiesOnly yes \n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2023-01-03T08:34:50-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/modal-labs.html",
+      "url": "https://pype.dev/modal-labs.html",
+      "title": "Modal Labs",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Playing around with Modal Labs</p>\n<p>One of the first things I tried was a regular cron job...</p>\n<pre><code class=\"language-python\">@stub.function(\n    schedule=modal.Period(minutes=59), secret=modal.Secret.from_name(&quot;my-dummy-secret&quot;)\n)\ndef say_hi():\n    now = time.ctime()\n    secret = os.environ.get(&quot;dummy-secret&quot;)\n    print(f&quot;Hello {os.environ.get('USER', 'Rodney')} at {now}&quot;)\n    print(f&quot;{secret=}&quot;)\n\n</code></pre>\n<p>This can get deployed with <code>modal deploy --name &lt;app name&gt; &lt;path to .py file with the stub and function defined in it&gt; </code></p>\n<p>This function gets deployed as an app that I conveniently call <code>say_hi</code> (as far\nas I can tell the app name can be anything - as I add functions to this same\napp and deploy with the same name to get a new version)</p>\n<p>Notice that this also is an example of giving access to a secret - defined in the Modal Labs dashboard</p>\n<p>We can take a look at the apps running at <a href=\"https://modal.com/apps\">https://modal.com/apps</a></p>\n<p>I then added another function to experiment with custom container images and\nsaw then that Modal will just slap a new version on anything provisioned with\nthe same name (intuitive enough for sure) so when I add functions to my .py\nscript and run <code>modal deploy --name say_hi myscript.py</code> over and over, the app\ncalled <code>say_hi</code> in the Modal apps dashboard just gets a new version</p>\n<p>This means I can spin up several instances of functionally the same app but with different names/versions etc...\nQ: Maybe there's gitops or policy stuff builtin to app names then?</p>\n<p>I needed to take down an app I deployed as a duplicate but you don't stop apps\nby name, you stop them by an id... see below</p>\n<pre><code class=\"language-console\">\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n✗ modal app stop --help\n\n Usage: modal app stop [OPTIONS] APP_ID\n\n Stop an app.\n\n╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│ *    app_id      TEXT  [default: None] [required]                                                                                                │\n╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│ --help          Show this message and exit.                                                                                                      │\n╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n\n\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n❯ modal app list\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ App ID                    ┃ Description         ┃ State    ┃ Creation time             ┃ Stop time                 ┃\n┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩\n│ ap-lzy1AAuVy7POFkUcDKRxpQ │ print_info          │ deployed │ 2022-12-28 20:59:07-06:00 │                           │\n│ ap-qYjE45dciqgT3C3CpNp3RL │ say_hi              │ deployed │ 2022-12-28 19:49:22-06:00 │                           │\n│ ap-X7FYneUeYV5IKHcyirSb87 │ link-scraper        │ stopped  │ 2022-12-28 15:39:02-06:00 │ 2022-12-28 15:39:04-06:00 │\n│ ap-UOXTUU4uSRx2UZypJOcAsk │ example-get-started │ stopped  │ 2022-12-28 15:17:47-06:00 │ 2022-12-28 15:17:49-06:00 │\n└───────────────────────────┴─────────────────────┴──────────┴───────────────────────────┴───────────────────────────┘\n\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n❯ modal app stop ap-lzy1AAuVy7POFkUcDKRxpQ\n\n</code></pre>\n<h1><a href=\"#git-warning\" aria-hidden=\"true\" class=\"anchor\" id=\"git-warning\"></a>Git warning!</h1>\n<p>I ran <code>modal deploy ...</code> after comitting some stuff I wanted to try BUT I had\nchanges in my file I didn't want to deploy... some git safety would be nice for\ndeployment!</p>\n<blockquote>\n<p>git stash &amp;&amp; modal deploy .. &amp;&amp; git stash pop</p>\n</blockquote>\n<p>Question for Modal team - in my modal sandbox repo at commit:</p>\n<pre><code>aab6162 (HEAD -&gt; main) HEAD@{1}: commit: print base version of my own image to prove it to me\n 1 file changed, 2 insertions(+)\n\n</code></pre>\n<p>An environment variable, <code>BASE_VERSION</code> that I expect to be in my base image\nwas not available to the python function in my Modal app... hopefully the log\nis still\n<a href=\"https://modal.com/logs/ap-qYjE45dciqgT3C3CpNp3RL?functionId=fu-rOt31ShRE1W1CQfuf02fsq&amp;taskId=ta-dm8BfiblvFLwVIQyt75YC2&amp;inputId=in-n64klEFrLtbcm2BiykJEvW\">here</a></p>\n<h2><a href=\"#github-actions\" aria-hidden=\"true\" class=\"anchor\" id=\"github-actions\"></a>GitHub Actions</h2>\n<p>I think it'd be easy to deploy from GH actions... just need an API Key...</p>\n<h1><a href=\"#deployment\" aria-hidden=\"true\" class=\"anchor\" id=\"deployment\"></a>Deployment</h1>\n<p>Without gitops it's already ahrd to manage my versions... need to get that built in either to github or locally sooooon</p>\n<p>Nomad?? :D</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-28T21:01:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/pipe-to-a-pager-to-preserve-console-output-in-ssh-session.html",
+      "url": "https://pype.dev/pipe-to-a-pager-to-preserve-console-output-in-ssh-session.html",
+      "title": "Pipe to a pager to preserve console output in SSH session",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I'm playing with my ansible playbook in a remote tmux session, and I'm no wiz\nso I don't know the ins and outs, but I can't scroll up to get any console log\noutput that's not already visible on my screen. So I'm starting to end my\ncommands with <code> | less</code> so I can page through the console output!</p>\n<p><code>ansible-playbook plays.yml -v --tags mytag | less</code></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-18T15:04:02-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html",
+      "url": "https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html",
+      "title": "Call basicConfig to get Python log messages in iPython",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#logging-instead-of-printing\" aria-hidden=\"true\" class=\"anchor\" id=\"logging-instead-of-printing\"></a>Logging instead of printing</h1>\n<p>I am trying to adopt <code>logger.debug</code> instead of <code>print</code> but ran into a confusing\nthing in ipython during Advent of Code... I riddled by script with\n<code>logger.debug</code> (yes after setting <code>logging.setLevel('DEBUG')</code>) but in ipython\nnone of my log messages showed up!</p>\n<pre><code class=\"language-python\">import logging\n\nlogger = logging.getLogger(__name__)\nlogger.setLevel(&quot;DEBUG&quot;)\n\n</code></pre>\n<p>Turns out what I was missing was a call to <code>basicConfig</code></p>\n<pre><code class=\"language-python\">import logging\n\n# forget this and your messages are in the ether! or at least not seen in ipython...\nlogging.basicConfig()\n\nlogger = logging.getLogger(__name__)\nlogger.setLevel(&quot;DEBUG&quot;)\n</code></pre>\n<h1><a href=\"#bonus\" aria-hidden=\"true\" class=\"anchor\" id=\"bonus\"></a>Bonus</h1>\n<p>Want your new messages to show up while iterating on something without killing\nthe ipython kernel?</p>\n<pre><code class=\"language-python\">from importlib import reload\nreload(logging) # to make sure you get new log messages you add while developing!\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-10T14:04:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/make-a-series-of-directories-fast.html",
+      "url": "https://pype.dev/make-a-series-of-directories-fast.html",
+      "title": "Make a series of directories fast!",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>mkdir s{1..10} will make directories s1, s2, ... s10 in one command!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-11-10T15:27:50-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "linux",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    }
+  ]
+}

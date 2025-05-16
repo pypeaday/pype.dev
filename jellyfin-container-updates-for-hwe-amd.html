@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="./static/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark" />
+    <meta name="generator" content="Marmite" />
+    
+<meta property="og:title" content="Jellyfin container updates for HWE + AMD">
+
+<meta property="og:description" content="
+I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickp...">
+
+<meta property="og:image" content="https://pype.dev/media/og-02.png">
+
+
+<meta property="og:url" content="https://pype.dev/jellyfin-container-updates-for-hwe-amd.html">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Pype.dev">
+
+<meta property="article:published_time" content=" 2024-12-14T11:27:15+00:00">
+
+
+<meta property="article:author" content="https://pype.dev/author-nicpayne.html">
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html"
+    },
+    "url": "https://pype.dev/jellyfin-container-updates-for-hwe-amd.html",
+    "headline": "Jellyfin container updates for HWE + AMD",
+    "description": "I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...
+There was almost ...",
+    
+    "author": {
+        "@type": "Person",
+        "name": "Nicholas Payne",
+        "url": "https://pype.dev/author-nicpayne.html",
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Pype.dev",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://pype.dev/media/nic-round.png"
+        }
+    },
+    "datePublished": "2024-12-14T11:27:15+00:00"
+}
+</script>
+
+
+    <title>Jellyfin container updates for HWE + AMD | Pype.dev</title>
+    <link rel="stylesheet" type="text/css" href="./static/pico.min.css">
+    <link rel="stylesheet" type="text/css" href="./static/marmite.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/colorschemes/nord.css">
+    
+    <link rel="stylesheet" type="text/css" href="./static/custom.css">
+    
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github.min.css" id="highlightjs-theme" />
+
+
+
+    <link rel="alternate" type="application/rss+xml" title="index" href="index.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: tech" href="tag-tech.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homelab" href="tag-homelab.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: linux" href="tag-linux.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bema" href="tag-bema.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: python" href="tag-python.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cli" href="tag-cli.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: faith" href="tag-faith.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bible-project" href="tag-bible-project.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: zfs" href="tag-zfs.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vim" href="tag-vim.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: git" href="tag-git.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: bash" href="tag-bash.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: terminal" href="tag-terminal.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: til" href="tag-til.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: infrastructure" href="tag-infrastructure.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: blog" href="tag-blog.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: docker" href="tag-docker.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: webdev" href="tag-webdev.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: k8s" href="tag-k8s.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: nostr" href="tag-nostr.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: flood-story" href="tag-flood-story.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: data" href="tag-data.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: homepage" href="tag-homepage.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: vscode" href="tag-vscode.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: cameras" href="tag-cameras.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: design-of-genesis-1-11" href="tag-design-of-genesis-1-11.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: reflection" href="tag-reflection.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: olivet" href="tag-olivet.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: logos" href="tag-logos.rss">
+    <link rel="alternate" type="application/rss+xml" title="tag: books" href="tag-books.rss">
+    <link rel="alternate" type="application/rss+xml" title="author: nicpayne" href="author-nicpayne.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2025" href="archive-2025.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2024" href="archive-2024.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2023" href="archive-2023.rss">
+    <link rel="alternate" type="application/rss+xml" title="year: 2022" href="archive-2022.rss">
+    
+
+    
+    <link rel="alternate" type="application/feed+json" title="JSON index" href="index.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: tech" href="tag-tech.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homelab" href="tag-homelab.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: linux" href="tag-linux.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bema" href="tag-bema.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: python" href="tag-python.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cli" href="tag-cli.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: faith" href="tag-faith.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bible-project" href="tag-bible-project.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: zfs" href="tag-zfs.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vim" href="tag-vim.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: git" href="tag-git.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: bash" href="tag-bash.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: terminal" href="tag-terminal.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: til" href="tag-til.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: infrastructure" href="tag-infrastructure.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: blog" href="tag-blog.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: docker" href="tag-docker.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: webdev" href="tag-webdev.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: k8s" href="tag-k8s.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: nostr" href="tag-nostr.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: flood-story" href="tag-flood-story.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: data" href="tag-data.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: homepage" href="tag-homepage.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: vscode" href="tag-vscode.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: cameras" href="tag-cameras.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: design-of-genesis-1-11" href="tag-design-of-genesis-1-11.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: reflection" href="tag-reflection.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: olivet" href="tag-olivet.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: logos" href="tag-logos.json">
+    <link rel="alternate" type="application/feed+json" title="JSON tag: books" href="tag-books.json">
+    <link rel="alternate" type="application/feed+json" title="JSON author: nicpayne" href="author-nicpayne.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2025" href="archive-2025.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2024" href="archive-2024.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2023" href="archive-2023.json">
+    <link rel="alternate" type="application/feed+json" title="JSON year: 2022" href="archive-2022.json">
+    
+    
+    
+    
+</head>
+<body>
+    
+    <div class="container-fluid announcement-wrapper">
+        <div class="announcement"></div>
+    </div>
+    
+    <main class="container">
+        
+        <header class="header-content">
+            <nav class="header-nav">
+                <ul class="header-name">
+                    <li>
+                        <hgroup>
+                            <h2><a href="./" class="contrast">Pype.dev</a></h2>
+                             <p>my mental data-lake</p> 
+                        </hgroup>
+                    </li>
+                </ul>
+                <button id="menu-toggle" class="hamburger">&#9776;</button>
+                
+                <ul class="header-menu" id="header-menu">
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./archive.html">Archive</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="./tags.html">Tags</a>
+                        
+                    </li>
+                    
+                      
+                      
+                    <li>
+                        
+                        <a class="menu-item secondary"  href="https://github.com/pypeaday/pype.dev" target="_blank" >Github</a>
+                        
+                    </li>
+                    
+                    <li><span class="theme-toggle secondary" title="dark mode">&#9789;</span></li>
+                    
+                    <li><a href="#" id="search-toggle" class="secondary" title="Search (Ctrl + Shift + F)"> <span class="search-txt">Search</span><span class="search-magnifier"></span></a></li>
+                    
+                    <div class="underline"></div>
+                </ul>
+            </nav>
+            
+            <div class="marmite-background-overlay" id="overlay-close"></div>
+            <div class="marmite-search-bar hidden">
+                <span>Search</span>
+                <button class="marmite-close-button" id="search-close">X</button>
+                <input placeholder="Search" id="marmite-search-input" />
+                <div class="marmite-search-bar-result">
+                    <ul id="marmite-search-bar-result"></ul>
+                </div>
+            </div>
+            
+        </header>
+        
+        <section class="main-content">
+            
+
+
+
+<article>
+
+  
+
+
+<div class="content-title" id="title">
+    <h1>Jellyfin container updates for HWE + AMD</h1> 
+    
+
+
+<span class="content-date">
+    <small> Dec 14, 2024 - &#10710; 1 min</small>
+</span>
+
+</div>
+
+  
+
+  <div class="content-html"><!-- Content Injected to every content markdown header -->
+<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>
+<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>
+<p>Thankfully someone posted <a href="https://forum.jellyfin.org/t-jellyfin-amd-docker">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>
+<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>
+<blockquote>
+<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>
+</blockquote>
+<pre><code>
+apt update &amp;&amp; apt install -y curl gpg
+
+mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg
+
+cat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources
+
+Types: deb
+
+URIs: https://repo.radeon.com/rocm/apt/latest
+
+Suites: ubuntu
+
+Components: main
+
+Architectures: amd64
+
+Signed-By: /etc/apt/keyrings/rocm.gpg
+
+EOF
+
+apt update &amp;&amp; apt install -y rocm-opencl-runtime
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+</div>
+  
+  <footer class="data-tags-footer">
+
+    <div class="content-authors-flex">
+      <div class="content-authors-full">
+        
+<div class="content-authors">
+    <ul>
+        
+            
+            
+            <li>
+                <a href="author-nicpayne.html">
+                    <img src="https://github.com/pypeaday.png" alt="Nicholas Payne" class="avatar">
+                    Nicholas Payne
+                </a>
+            </li>
+            
+        
+    </ul>
+</div>
+
+
+      </div>
+
+      <div class="date-tags-container">
+        <div class="content-date">
+          
+
+
+<span class="content-date">
+    <small> Dec 14, 2024 - &#10710; 1 min</small>
+</span>
+
+        </div>
+
+        <ul class="content-tags">
+          
+          <li><a href="./tag-docker.html">docker</a></li>
+          
+          <li><a href="./tag-linux.html">linux</a></li>
+          
+          <li><a href="./tag-homelab.html">homelab</a></li>
+          
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+</article>
+
+
+
+
+
+  
+  
+  
+  
+  <article>
+    Related docker content
+    <ul>
+      
+      
+      
+      
+      <li><a href="./adding-docker-daemon-json-broke-docker.html">Adding docker daemon.json broke docker</a></li>
+      
+      
+      <li><a href="./cron-for-nextcloud-in-docker.html">Cron for Nextcloud in Docker</a></li>
+      
+    </ul>
+  </article>
+  
+
+
+
+
+    <article><h4><a href="#comments" aria-hidden="true" class="anchor" id="comments"></a>Comments</h4>
+<script src="https://giscus.app/client.js"
+        data-repo="pypeaday/pype.dev"
+        data-repo-id="R_kgDOG8jshQ"
+        data-category="Announcements"
+        data-category-id="DIC_kwDOG8jshc4CmIcO"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="catppuccin_mocha"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+</script>
+</article>
+
+
+
+        </section>
+        
+        <footer class="footer-content grid">
+            <div>Powered by <a href="https://github.com/rochacbruno/marmite">Marmite</a> | <small><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC-BY_NC-SA</a></small></div>
+            
+        </footer>
+        
+    </main>
+
+    <script src="./static/marmite.js"></script>
+    <script src="./static/custom.js"></script>
+    
+    <script type="module" src="./static/search.js"></script>
+    
+    
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+</script>
+
+
+
+</body>
+</html>

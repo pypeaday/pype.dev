@@ -1,0 +1,333 @@
+{
+  "version": "https://jsonfeed.org/version/1",
+  "title": "Pype.dev",
+  "home_page_url": "https://pype.dev",
+  "feed_url": "https://pype.dev/tag-python.json",
+  "description": "my mental data-lake",
+  "items": [
+    {
+      "id": "https://pype.dev/my-mcp-configuration.html",
+      "url": "https://pype.dev/my-mcp-configuration.html",
+      "title": "My MCP Configuration",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#my-mcp\" aria-hidden=\"true\" class=\"anchor\" id=\"my-mcp\"></a>My MCP</h1>\n<h2><a href=\"#the-tools\" aria-hidden=\"true\" class=\"anchor\" id=\"the-tools\"></a>The Tools</h2>\n<h3><a href=\"#docker\" aria-hidden=\"true\" class=\"anchor\" id=\"docker\"></a>Docker</h3>\n<h3><a href=\"#ragdocs\" aria-hidden=\"true\" class=\"anchor\" id=\"ragdocs\"></a>RAGDocs</h3>\n<h3><a href=\"#sequential-thinking\" aria-hidden=\"true\" class=\"anchor\" id=\"sequential-thinking\"></a>Sequential Thinking</h3>\n<h3><a href=\"#git\" aria-hidden=\"true\" class=\"anchor\" id=\"git\"></a>Git</h3>\n<h3><a href=\"#not-tried-yet\" aria-hidden=\"true\" class=\"anchor\" id=\"not-tried-yet\"></a>Not Tried Yet</h3>\n<p><a href=\"https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite\">https://github.com/modelcontextprotocol/servers/tree/main/src/sqlite</a></p>\n<h2><a href=\"#the-config\" aria-hidden=\"true\" class=\"anchor\" id=\"the-config\"></a>The Config</h2>\n<pre><code class=\"language-json\">\n{\n  &quot;mcpServers&quot;: {\n    &quot;docker-mcp&quot;: {\n        &quot;command&quot;: &quot;uvx&quot;,\n        &quot;args&quot;: [\n          &quot;docker-mcp&quot;\n        ]\n      },\n    &quot;ragdocs&quot;: {\n      &quot;command&quot;: &quot;node&quot;,\n      &quot;args&quot;: [\n        &quot;/home/nic/projects/personal/quadtask/node_modules/@qpd-v/mcp-server-ragdocs/build/index.js&quot;\n      ],\n      &quot;env&quot;: {\n        &quot;QDRANT_URL&quot;: &quot;http://babyblue-aurora:6333&quot;,\n        &quot;EMBEDDING_PROVIDER&quot;: &quot;ollama&quot;,\n        &quot;OLLAMA_URL&quot;: &quot;http://babyblue-aurora:11434&quot;\n      },\n      &quot;alwaysAllow&quot;: [\n        &quot;search_documentation&quot;,\n        &quot;list_sources&quot;,\n        &quot;test_ollama&quot;,\n        &quot;add_documentation&quot;\n      ],\n      &quot;disabled&quot;: false\n    },\n    &quot;sequentialthinking&quot;: {\n      &quot;command&quot;: &quot;docker&quot;,\n      &quot;args&quot;: [\n        &quot;run&quot;,\n        &quot;--rm&quot;,\n        &quot;-i&quot;,\n        &quot;--name&quot;,\n        &quot;sequentialthinking&quot;,\n        &quot;mcp/sequentialthinking&quot;\n      ],\n      &quot;disabled&quot;: false,\n      &quot;alwaysAllow&quot;: [\n        &quot;sequentialthinking&quot;\n      ]\n    },\n    &quot;git&quot;: {\n      &quot;command&quot;: &quot;uvx&quot;,\n      &quot;args&quot;: [\n        &quot;mcp-server-git&quot;\n      ],\n      &quot;disabled&quot;: false,\n      &quot;alwaysAllow&quot;: [\n        &quot;git_status&quot;,\n        &quot;git_commit&quot;,\n        &quot;git_add&quot;,\n        &quot;git_log&quot;,\n        &quot;git_diff&quot;\n      ]\n    }\n  }\n}\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2025-04-27T05:29:54-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "tech",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "url": "https://pype.dev/docker-context-and-an-issue-to-question-your-sanity.html",
+      "title": "docker context (and an issue to question your sanity)",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>docker contexts are great, would recommend putting them in your prompt though (via starship or something else)... here's why</p>\n<p>I like to manage my containers remotely - I have a nice development setup on my desktop and I try to keep my server as bare-bones as possible. For a while I've been using ansible which makes it easy to manage configuration etc on other machines. But I recently learned about docker contexts and I'm planning to scale down my homelab management to just docker-compose stacks rather than a bunch of super complicated ansible playbooks</p>\n<p>So, setting up a context is easy - it's basically an ssh connection to another machine!</p>\n<p><code>docker context create koober --docker &quot;host=ssh://nic@koober&quot;</code></p>\n<p><code>koober</code> is one of my dev machines and my <code>~/.ssh/config</code> is setup such that I can <code>ssh nic@koober</code>, this makes the context work really seamlessly.</p>\n<p>So there's the <code>default</code> context (the machine you're on) and now I have <code>koober</code></p>\n<p>To use it you run <code>docker context use koober</code></p>\n<p>And then to check we can <code>ls</code> the contexts</p>\n<pre><code>docker context ls\nNAME       DESCRIPTION                               DOCKER ENDPOINT               ERROR\ndefault    Current DOCKER_HOST based configuration   unix:///var/run/docker.sock   \nkoober *                                             ssh://nic@koober\n</code></pre>\n<blockquote>\n<p>Notice the * - that indicates that's our current context.</p>\n</blockquote>\n<h2><a href=\"#trouble\" aria-hidden=\"true\" class=\"anchor\" id=\"trouble\"></a>Trouble</h2>\n<p>Now here's where things get hairy... you've gotta be super-aware of what context you're using. I have an indicator in my starship prompt that shows the current context, but since I'm new to using them I kind of didn't notice it until I ran into this issue...</p>\n<p>I'm working on a python application in docker but was not able to execute the entrypoint even though I KNEW the file was there... let's take a look</p>\n<h3><a href=\"#example\" aria-hidden=\"true\" class=\"anchor\" id=\"example\"></a>Example</h3>\n<p>Here's a minimal hello world applycation in docker to illustrate the issue</p>\n<pre><code class=\"language-python\"># main.py\nprint(&quot;hello world&quot;)\n</code></pre>\n<pre><code class=\"language-Dockerfile\"># Use an official Python runtime as a parent image\nFROM python:3.11-slim\n\n# Set the working directory in the container\nWORKDIR /app\n\n# Copy the current directory contents into the container at /app\nCOPY . /app\n\n# Run the main.py script as the container's main process\nCMD [&quot;python&quot;, &quot;main.py&quot;]\n</code></pre>\n<pre><code class=\"language-yaml\">services:\n  hello-world:\n    build: .\n    volumes:\n      - .:/app\n</code></pre>\n<p>Notice volume mounting in my project directory <code>.</code> to <code>/app</code> as a common practice to develop inside the container</p>\n<p>Here's where I started to question my sanity...</p>\n<pre><code class=\"language-bash\">✗ docker compose up                                            \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | python: can't open file '/app/main.py': [Errno 2] No such file or directory\nhello-world-1 exited with code 2\n</code></pre>\n<p><code>python can't open file</code>? hmm... Let's take a look at the image</p>\n<p>First let's make sure we get the image name right</p>\n<pre><code class=\"language-bash\">✗ docker container ls -a              \nCONTAINER ID   IMAGE                                           COMMAND                  CREATED          STATUS                       PORTS                                                                                  NAMES\n3d7285fc39e2   docker-context-example-hello-world              &quot;python main.py&quot;         10 minutes ago   Exited (2) 44 seconds ago                                                                                           docker-context-example-hello-world-1\n</code></pre>\n<p>Now we can <code>docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world</code></p>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug docker-context-example-hello-world  \nroot@ee46d0e22de8:/app# python main.py\nHello, World!\nroot@ee46d0e22de8:/app# \n</code></pre>\n<p>WHAT THE HECK??</p>\n<h2><a href=\"#what-happened\" aria-hidden=\"true\" class=\"anchor\" id=\"what-happened\"></a>What happened...</h2>\n<p>What happened turns out to be pretty simple once we realize I'm using contexts...</p>\n<p><code>koboer</code> is a remote context, the <code>docker run</code> and <code>docker compose up</code> commands are interacting with the docker socket on that machine.</p>\n<p>So if I compose up the stack notice that there's a volume bind mount in there - well those do <em>not</em> work with contexts (or at least I'm not aware of hose to make it work) and so the <code>/app</code> directory was getting blown away essentially with an empty overlay...</p>\n<p>But when running with just <code>docker run</code> with no volume mount, the code was copied in during the build and is right where we expect it...</p>\n<h3><a href=\"#lets-prove-it\" aria-hidden=\"true\" class=\"anchor\" id=\"lets-prove-it\"></a>Let's prove it</h3>\n<pre><code class=\"language-bash\">❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@903f591c0384:/app# python main.py\npython: can't open file '/app/main.py': [Errno 2] No such file or directory\nroot@903f591c0384:/app# \n</code></pre>\n<pre><code>Adding a `-v .:/app` to match the compose file, we get the same error...\n</code></pre>\n<p>If we switch to the default context we are back up and running as expected</p>\n<pre><code class=\"language-bash\">✗ docker context use default\ndefault\nCurrent context is now &quot;default&quot;\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker compose up         \n[+] Running 1/0\n ✔ Container docker-context-example-hello-world-1  Created                                                                                                                                                                                                                                                              0.0s \nAttaching to hello-world-1\nhello-world-1  | Hello, World!\nhello-world-1 exited with code 0\n\nnic in /tmp/docker-context-example  via   v3.13.0  (dev) 󰒄 󱔎 NO PYTHON ENVIORNMENT SET \n❯ docker run --rm -it --entrypoint /bin/bash --name debug -v .:/app docker-context-example-hello-world\nroot@4045b6aa8883:/app# python main.py\nHello, World!\nroot@4045b6aa8883:/app# \n</code></pre>\n<p>Successful runs on both accounts with the volume mount</p>\n<h2><a href=\"#tldr\" aria-hidden=\"true\" class=\"anchor\" id=\"tldr\"></a>TLDR</h2>\n<p>Context is king</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-19T05:59:30-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "terminal",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "url": "https://pype.dev/add-a-healthcheck-to-your-fastapi-app.html",
+      "title": "Add a healthcheck to your FastAPI app",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I'm building a few FastAPI apps to throw in docker and run on my homelab... I wanted to add healthchecks and here's a simple way to do it</p>\n<p>Make sure to install <code>curl</code> in the dockerfile (near the top for effeciency)</p>\n<pre><code># Install curl with minimal dependencies\nRUN apt-get update &amp;&amp; \\\n    apt-get install -y --no-install-recommends curl &amp;&amp; \\\n    apt-get clean &amp;&amp; \\\n    rm -rf /var/lib/apt/lists/*\n\n</code></pre>\n<p>Then I recommend making compose files even for single image deployments</p>\n<pre><code>services:\n  app:\n    build: .\n    volumes:\n      - type: bind\n        source: .\n        target: /app\n    environment:\n      - PYTHONPATH=/app\n      - DOCKER_ENV=true\n      - UV_VIRTUALENV=/opt/app-env\n    user: &quot;1000:1000&quot;\n    restart: unless-stopped\n    healthcheck:\n      test: [&quot;CMD&quot;, &quot;curl&quot;, &quot;-f&quot;, &quot;http://localhost:8000/health&quot;]\n      interval: 30s\n      timeout: 10s\n      retries: 3\n      start_period: 10s\n\n</code></pre>\n<p>Then finally you'll need a <code>/health</code> endpoint</p>\n<pre><code class=\"language-python\">\n@app.get(&quot;/health&quot;, response_class=HTMLResponse)\nasync def health_check():\n    &quot;&quot;&quot;\n    A health check endpoint that returns a status message.\n    &quot;&quot;&quot;\n    return &quot;&lt;html&gt;&lt;body&gt;&lt;h1&gt;Service is healthy&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-12-15T15:41:36-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "homelab",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/switching-from-altacv-to-rendercv-for-my-resume.html",
+      "url": "https://pype.dev/switching-from-altacv-to-rendercv-for-my-resume.html",
+      "title": "Switching from AltaCV to RenderCV for my Resume",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I was using a fun LaTex-based project for managing my resume called <a href=\"https://github.com/liantze/AltaCV\">AltaCV</a>. I loved the customization and was familiar with Tek from school. However, I update my resume so infrequently that anytime I'd hop back to it I'd have to remember how to work with Tex and that was frustrating as I've lost touch with it over the years.</p>\n<p>Scrolling GitHub treding repos I saw <a href=\"https://github.com/sinaatalay/rendercv\">RenderCV</a> which let's me just use YAML to write my resume and then it compiles to Tek through Python. There's a sister project to make your own using this very easly call <a href=\"https://github.com/sinaatalay/rendercv-pipeline\">rendercv-pipeline</a>. I forked that repo and translated my tek resume to the YAML. The included theme is nice enough is YAML is much easier to maintain long-term.</p>\n<p>My resume is behind a private GH repo but the example from rendercv-pipeline is <a href=\"https://github.com/sinaatalay/rendercv-pipeline/blob/main/John_Doe_CV.pdf\">here on GitHub</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-08-01T05:59:46-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "python",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/switching-from-altacv-to-rendercv-for-my-resume.html",
+      "url": "https://pype.dev/switching-from-altacv-to-rendercv-for-my-resume.html",
+      "title": "Switching from AltaCV to RenderCV for my Resume",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I was using a fun LaTex-based project for managing my resume called <a href=\"https://github.com/liantze/AltaCV\">AltaCV</a>. I loved the customization and was familiar with Tek from school. However, I update my resume so infrequently that anytime I'd hop back to it I'd have to remember how to work with Tex and that was frustrating as I've lost touch with it over the years.</p>\n<p>Scrolling GitHub treding repos I saw <a href=\"https://github.com/sinaatalay/rendercv\">RenderCV</a> which let's me just use YAML to write my resume and then it compiles to Tek through Python. There's a sister project to make your own using this very easly call <a href=\"https://github.com/sinaatalay/rendercv-pipeline\">rendercv-pipeline</a>. I forked that repo and translated my tek resume to the YAML. The included theme is nice enough is YAML is much easier to maintain long-term.</p>\n<p>My resume is behind a private GH repo but the example from rendercv-pipeline is <a href=\"https://github.com/sinaatalay/rendercv-pipeline/blob/main/John_Doe_CV.pdf\">here on GitHub</a></p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2024-08-01T05:59:46-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "python",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/modal-labs.html",
+      "url": "https://pype.dev/modal-labs.html",
+      "title": "Modal Labs",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>Playing around with Modal Labs</p>\n<p>One of the first things I tried was a regular cron job...</p>\n<pre><code class=\"language-python\">@stub.function(\n    schedule=modal.Period(minutes=59), secret=modal.Secret.from_name(&quot;my-dummy-secret&quot;)\n)\ndef say_hi():\n    now = time.ctime()\n    secret = os.environ.get(&quot;dummy-secret&quot;)\n    print(f&quot;Hello {os.environ.get('USER', 'Rodney')} at {now}&quot;)\n    print(f&quot;{secret=}&quot;)\n\n</code></pre>\n<p>This can get deployed with <code>modal deploy --name &lt;app name&gt; &lt;path to .py file with the stub and function defined in it&gt; </code></p>\n<p>This function gets deployed as an app that I conveniently call <code>say_hi</code> (as far\nas I can tell the app name can be anything - as I add functions to this same\napp and deploy with the same name to get a new version)</p>\n<p>Notice that this also is an example of giving access to a secret - defined in the Modal Labs dashboard</p>\n<p>We can take a look at the apps running at <a href=\"https://modal.com/apps\">https://modal.com/apps</a></p>\n<p>I then added another function to experiment with custom container images and\nsaw then that Modal will just slap a new version on anything provisioned with\nthe same name (intuitive enough for sure) so when I add functions to my .py\nscript and run <code>modal deploy --name say_hi myscript.py</code> over and over, the app\ncalled <code>say_hi</code> in the Modal apps dashboard just gets a new version</p>\n<p>This means I can spin up several instances of functionally the same app but with different names/versions etc...\nQ: Maybe there's gitops or policy stuff builtin to app names then?</p>\n<p>I needed to take down an app I deployed as a duplicate but you don't stop apps\nby name, you stop them by an id... see below</p>\n<pre><code class=\"language-console\">\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n✗ modal app stop --help\n\n Usage: modal app stop [OPTIONS] APP_ID\n\n Stop an app.\n\n╭─ Arguments ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│ *    app_id      TEXT  [default: None] [required]                                                                                                │\n╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n╭─ Options ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮\n│ --help          Show this message and exit.                                                                                                      │\n╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯\n\n\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n❯ modal app list\n┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n┃ App ID                    ┃ Description         ┃ State    ┃ Creation time             ┃ Stop time                 ┃\n┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩\n│ ap-lzy1AAuVy7POFkUcDKRxpQ │ print_info          │ deployed │ 2022-12-28 20:59:07-06:00 │                           │\n│ ap-qYjE45dciqgT3C3CpNp3RL │ say_hi              │ deployed │ 2022-12-28 19:49:22-06:00 │                           │\n│ ap-X7FYneUeYV5IKHcyirSb87 │ link-scraper        │ stopped  │ 2022-12-28 15:39:02-06:00 │ 2022-12-28 15:39:04-06:00 │\n│ ap-UOXTUU4uSRx2UZypJOcAsk │ example-get-started │ stopped  │ 2022-12-28 15:17:47-06:00 │ 2022-12-28 15:17:49-06:00 │\n└───────────────────────────┴─────────────────────┴──────────┴───────────────────────────┴───────────────────────────┘\n\nmodal-sandbox/modal_sandbox   main   ×1  ×9 via   v3.10.6(modal-sandbox)\n❯ modal app stop ap-lzy1AAuVy7POFkUcDKRxpQ\n\n</code></pre>\n<h1><a href=\"#git-warning\" aria-hidden=\"true\" class=\"anchor\" id=\"git-warning\"></a>Git warning!</h1>\n<p>I ran <code>modal deploy ...</code> after comitting some stuff I wanted to try BUT I had\nchanges in my file I didn't want to deploy... some git safety would be nice for\ndeployment!</p>\n<blockquote>\n<p>git stash &amp;&amp; modal deploy .. &amp;&amp; git stash pop</p>\n</blockquote>\n<p>Question for Modal team - in my modal sandbox repo at commit:</p>\n<pre><code>aab6162 (HEAD -&gt; main) HEAD@{1}: commit: print base version of my own image to prove it to me\n 1 file changed, 2 insertions(+)\n\n</code></pre>\n<p>An environment variable, <code>BASE_VERSION</code> that I expect to be in my base image\nwas not available to the python function in my Modal app... hopefully the log\nis still\n<a href=\"https://modal.com/logs/ap-qYjE45dciqgT3C3CpNp3RL?functionId=fu-rOt31ShRE1W1CQfuf02fsq&amp;taskId=ta-dm8BfiblvFLwVIQyt75YC2&amp;inputId=in-n64klEFrLtbcm2BiykJEvW\">here</a></p>\n<h2><a href=\"#github-actions\" aria-hidden=\"true\" class=\"anchor\" id=\"github-actions\"></a>GitHub Actions</h2>\n<p>I think it'd be easy to deploy from GH actions... just need an API Key...</p>\n<h1><a href=\"#deployment\" aria-hidden=\"true\" class=\"anchor\" id=\"deployment\"></a>Deployment</h1>\n<p>Without gitops it's already ahrd to manage my versions... need to get that built in either to github or locally sooooon</p>\n<p>Nomad?? :D</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-28T21:01:52-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html",
+      "url": "https://pype.dev/call-basicconfig-to-get-python-log-messages-in-ipython.html",
+      "title": "Call basicConfig to get Python log messages in iPython",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#logging-instead-of-printing\" aria-hidden=\"true\" class=\"anchor\" id=\"logging-instead-of-printing\"></a>Logging instead of printing</h1>\n<p>I am trying to adopt <code>logger.debug</code> instead of <code>print</code> but ran into a confusing\nthing in ipython during Advent of Code... I riddled by script with\n<code>logger.debug</code> (yes after setting <code>logging.setLevel('DEBUG')</code>) but in ipython\nnone of my log messages showed up!</p>\n<pre><code class=\"language-python\">import logging\n\nlogger = logging.getLogger(__name__)\nlogger.setLevel(&quot;DEBUG&quot;)\n\n</code></pre>\n<p>Turns out what I was missing was a call to <code>basicConfig</code></p>\n<pre><code class=\"language-python\">import logging\n\n# forget this and your messages are in the ether! or at least not seen in ipython...\nlogging.basicConfig()\n\nlogger = logging.getLogger(__name__)\nlogger.setLevel(&quot;DEBUG&quot;)\n</code></pre>\n<h1><a href=\"#bonus\" aria-hidden=\"true\" class=\"anchor\" id=\"bonus\"></a>Bonus</h1>\n<p>Want your new messages to show up while iterating on something without killing\nthe ipython kernel?</p>\n<pre><code class=\"language-python\">from importlib import reload\nreload(logging) # to make sure you get new log messages you add while developing!\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-12-10T14:04:23-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "cli",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/benchmark-your-disks-with-fio.html",
+      "url": "https://pype.dev/benchmark-your-disks-with-fio.html",
+      "title": "Benchmark your disks with fio",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#intro\" aria-hidden=\"true\" class=\"anchor\" id=\"intro\"></a>Intro</h1>\n<p>I use ZFS at home in my homelab for basically all of my storage... Docker uses\nZFS backend, all my VMs have their <code>.qcow2</code> images in their own zfs datasets,\nand all my shares are ZFS datasets. I love ZFS but my home hardware presently\nis the opposite of expensive or new... Thankfully I've had a lot of my orginal\nhomelab simply given to me but the cost of this is that I didn't put my\nmachines together, I didn't choose the disks, and I definitely didn't do the\nresearch I would've otherwise done had I bankrolled my server personally...</p>\n<h2><a href=\"#the-problem\" aria-hidden=\"true\" class=\"anchor\" id=\"the-problem\"></a>The Problem</h2>\n<p>I run <code>glances</code> on basically all my machines and for the longest time I have\nbeen seeing big time <code>iowait</code> issues. Now, since everything was free I've\nlargely been able to ignore that however I'm now after some better performance\nwhich I think means new hardware!</p>\n<p>Here is a random screenshot of my glances homepage at time of writing - The\nonly major load on my server is some <code>ffmpeg</code> transcoding (about 60% CPU\nutilization)...</p>\n<img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png\" alt=\"glances\" title=\"glances with iowait\" />\n<p>As you can see... there's a lot of issues and <em>I don't even know what they mean</em>.</p>\n<h1><a href=\"#fio\" aria-hidden=\"true\" class=\"anchor\" id=\"fio\"></a>fio</h1>\n<p>I heard about <a href=\"https://fio.readthedocs.io/en/latest/\">fio</a> through a friend and\ndecided to try it out quick. It installs with <code>apt</code> on ubuntu quick and easy...</p>\n<p>Jim Saltar has a good blog post on it <a href=\"https://arstechnica.com/gadgets/2020/02/how-fast-are-your-disks-find-out-the-open-source-way-with-fio/\">here</a></p>\n<p>Basically it's a handy tool for benchmarking your disks and the blog dives into\nwhat types of metrics matter - it's not just throughput, but also latency,\niops, etc.</p>\n<h2><a href=\"#tests\" aria-hidden=\"true\" class=\"anchor\" id=\"tests\"></a>Tests</h2>\n<p>I ran a few basic commands inside a new zfs dataset on my server <code>tank/fio</code></p>\n<pre><code class=\"language-bash\">fio --name=random-write --ioengine=posixaio --rw=randwrite --bs=4k --size=4g --numjobs=1 --runtime=60 --time_based --end_fsync=1 &gt; single-4KiB-random-write.txt\nfio --name=random-write --ioengine=posixaio --rw=randwrite --bs=64k --size=256m --numjobs=16 --iodepth=16 --runtime=60 --time_based --end_fsync=1 &gt; 16-parallel-64KiB-random-write.txt\nfio --name=random-write --ioengine=posixaio --rw=randwrite --bs=1m --size=16g --numjobs=1 --iodepth=1 --runtime=60 --time_based --end_fsync=1 &gt; single-1MiB-random-write.txt\n</code></pre>\n<h2><a href=\"#results\" aria-hidden=\"true\" class=\"anchor\" id=\"results\"></a>Results</h2>\n<p>The single 4 KiB random write:</p>\n<p><code>WRITE: bw=7836KiB/s (8024kB/s), 7836KiB/s-7836KiB/s (8024kB/s-8024kB/s), io=523MiB (548MB), run=68317-68317msec</code></p>\n<p>The 16 parallel 64KiB random writes:</p>\n<p><code>WRITE: bw=93.9MiB/s (98.4MB/s), 5599KiB/s-6303KiB/s (5734kB/s-6454kB/s), io=7642MiB (8013MB), run=81310-81418msec</code></p>\n<p>The single 1MiB random write:</p>\n<p><code>WRITE: bw=81.2MiB/s (85.1MB/s), 81.2MiB/s-81.2MiB/s (85.1MB/s-85.1MB/s), io=8177MiB (8574MB), run=100699-100699msec</code></p>\n<h1><a href=\"#summary\" aria-hidden=\"true\" class=\"anchor\" id=\"summary\"></a>Summary</h1>\n<p>So I don't fully understand these numbers yet... 80-100 MiB/s isn't super fast\nand that's across a parallelized workload... The single threaded workloads have\nawful performance so this tells me something is wrong... I have a few ideas...</p>\n<ol>\n<li>ZFS dataset config options such as <code>ashift</code> or the blocksize might be way misconfigured</li>\n<li>The disks/pool which came from a TrueNAS/FreeBSD machine may have some artifacts that I need to clean up</li>\n<li>The SAS controller I am using, which I flashed with IT firmware to get it into JBOD mode might be messed up</li>\n<li>The data cables themselves could be a problem...</li>\n</ol>\n<p>Points 3 and 4 are less likely given that the write speed does increase in the parallelized job but I'm a newbie so it's time to dive in!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-08-27T13:43:22-00:00",
+      "image": "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "zfs",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/playing-with-mdformat.html",
+      "url": "https://pype.dev/playing-with-mdformat.html",
+      "title": "Playing with mdformat",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<pre><code class=\"language-python\">import this; print(this); print(&quot;what is taking so long black!!&quot;)\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-08-23T06:56:15-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "vim",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/add-colored-indicators-to-your-dataframes-html-representation.html",
+      "url": "https://pype.dev/add-colored-indicators-to-your-dataframes-html-representation.html",
+      "title": "Add colored indicators to your dataframes html representation",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p><a href=\"https://twitter.com/driscollis\">Mike Driscoll</a> recently tweeted about making\ncolored out with pandas DataFrames and I just had to try it for myself</p>\n<h1><a href=\"#use-case\" aria-hidden=\"true\" class=\"anchor\" id=\"use-case\"></a>Use Case</h1>\n<p>First though... why?\nMy biggest use case is a monitoring pipeline of mine... The details aside, the\noutput of my pipeline is a dataframe where each row has information about a\nfailed pipeline that I need to go look into. I dump that result to a simle html\nfile that's hosted on an internal site and the file is updated every couple of\nhours. Adding some colored indicators automatically to the rows to help me\nassess severity of each record would be a handy way to quickly get an\nunderstanding the state of our pipelines.</p>\n<h1><a href=\"#how\" aria-hidden=\"true\" class=\"anchor\" id=\"how\"></a>How?</h1>\n<p>The docs for the <code>applymap</code> method state simply:</p>\n<pre><code>Apply a CSS-styling function elementwise.\n\nUpdates the HTML representation with the result.\n\n</code></pre>\n<p>So we can write a function that returns <code>color: {color}</code> based on the dataframe\nvalues and when we drop that dataframe to html we'll have some simple css\nstyling applied automagically!</p>\n<p>By default the function will be applied to all columns of the dataframe, but\nthat's not useful if the columns are different types which is usually the case.\nLuckily there is a <code>subset</code> keyword to only apply to the columns you need!</p>\n<p>Consider my example</p>\n<pre><code class=\"language-python\">sandbox   main via 3.8.11(sandbox) ipython\n❯ df = pd.read_csv(&quot;cars.csv&quot;)\n\nsandbox   main via 3.8.11(sandbox) ipython\n❯ def mpg_color(val: float):\n...:     color = &quot;red&quot; if val &lt; 21 else &quot;green&quot;\n...:     return f&quot;color: {color}&quot;\n\nsandbox   main via 3.8.11(sandbox) ipython\n❯ df.style.applymap(mpg_color, subset=&quot;mpg&quot;).to_html(&quot;color.html&quot;)\n</code></pre>\n<p>I want to quickly see if the <code>mpg</code> is any good for the cars in the cars dataset\nand I'll define &quot;good&quot; as better than 21 mpg (not great I know but just for the\nsake of discussion...)</p>\n<p>The function returns an appropriate css string and after I <code>style.applymap</code> on just the <code>mpg</code> column we get this!</p>\n<style type=\"text/css\">\n#T_95e99_row0_col1, #T_95e99_row1_col1, #T_95e99_row2_col1, #T_95e99_row3_col1 {\n  color: green;\n}\n#T_95e99_row4_col1 {\n  color: red;\n}\n</style>\n<table id=\"T_95e99\">\n  <thead>\n    <tr>\n      <th class=\"blank level0\" >&nbsp;</th>\n      <th id=\"T_95e99_level0_col0\" class=\"col_heading level0 col0\" >Unnamed: 0</th>\n      <th id=\"T_95e99_level0_col1\" class=\"col_heading level0 col1\" >mpg</th>\n      <th id=\"T_95e99_level0_col2\" class=\"col_heading level0 col2\" >cyl</th>\n      <th id=\"T_95e99_level0_col3\" class=\"col_heading level0 col3\" >disp</th>\n      <th id=\"T_95e99_level0_col4\" class=\"col_heading level0 col4\" >hp</th>\n      <th id=\"T_95e99_level0_col5\" class=\"col_heading level0 col5\" >drat</th>\n      <th id=\"T_95e99_level0_col6\" class=\"col_heading level0 col6\" >wt</th>\n      <th id=\"T_95e99_level0_col7\" class=\"col_heading level0 col7\" >qsec</th>\n      <th id=\"T_95e99_level0_col8\" class=\"col_heading level0 col8\" >vs</th>\n      <th id=\"T_95e99_level0_col9\" class=\"col_heading level0 col9\" >am</th>\n      <th id=\"T_95e99_level0_col10\" class=\"col_heading level0 col10\" >gear</th>\n      <th id=\"T_95e99_level0_col11\" class=\"col_heading level0 col11\" >carb</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <th id=\"T_95e99_level0_row0\" class=\"row_heading level0 row0\" >0</th>\n      <td id=\"T_95e99_row0_col0\" class=\"data row0 col0\" >Mazda RX4</td>\n      <td id=\"T_95e99_row0_col1\" class=\"data row0 col1\" >21.000000</td>\n      <td id=\"T_95e99_row0_col2\" class=\"data row0 col2\" >6</td>\n      <td id=\"T_95e99_row0_col3\" class=\"data row0 col3\" >160.000000</td>\n      <td id=\"T_95e99_row0_col4\" class=\"data row0 col4\" >110</td>\n      <td id=\"T_95e99_row0_col5\" class=\"data row0 col5\" >3.900000</td>\n      <td id=\"T_95e99_row0_col6\" class=\"data row0 col6\" >2.620000</td>\n      <td id=\"T_95e99_row0_col7\" class=\"data row0 col7\" >16.460000</td>\n      <td id=\"T_95e99_row0_col8\" class=\"data row0 col8\" >0</td>\n      <td id=\"T_95e99_row0_col9\" class=\"data row0 col9\" >1</td>\n      <td id=\"T_95e99_row0_col10\" class=\"data row0 col10\" >4</td>\n      <td id=\"T_95e99_row0_col11\" class=\"data row0 col11\" >4</td>\n    </tr>\n    <tr>\n      <th id=\"T_95e99_level0_row1\" class=\"row_heading level0 row1\" >1</th>\n      <td id=\"T_95e99_row1_col0\" class=\"data row1 col0\" >Mazda RX4 Wag</td>\n      <td id=\"T_95e99_row1_col1\" class=\"data row1 col1\" >21.000000</td>\n      <td id=\"T_95e99_row1_col2\" class=\"data row1 col2\" >6</td>\n      <td id=\"T_95e99_row1_col3\" class=\"data row1 col3\" >160.000000</td>\n      <td id=\"T_95e99_row1_col4\" class=\"data row1 col4\" >110</td>\n      <td id=\"T_95e99_row1_col5\" class=\"data row1 col5\" >3.900000</td>\n      <td id=\"T_95e99_row1_col6\" class=\"data row1 col6\" >2.875000</td>\n      <td id=\"T_95e99_row1_col7\" class=\"data row1 col7\" >17.020000</td>\n      <td id=\"T_95e99_row1_col8\" class=\"data row1 col8\" >0</td>\n      <td id=\"T_95e99_row1_col9\" class=\"data row1 col9\" >1</td>\n      <td id=\"T_95e99_row1_col10\" class=\"data row1 col10\" >4</td>\n      <td id=\"T_95e99_row1_col11\" class=\"data row1 col11\" >4</td>\n    </tr>\n    <tr>\n      <th id=\"T_95e99_level0_row2\" class=\"row_heading level0 row2\" >2</th>\n      <td id=\"T_95e99_row2_col0\" class=\"data row2 col0\" >Datsun 710</td>\n      <td id=\"T_95e99_row2_col1\" class=\"data row2 col1\" >22.800000</td>\n      <td id=\"T_95e99_row2_col2\" class=\"data row2 col2\" >4</td>\n      <td id=\"T_95e99_row2_col3\" class=\"data row2 col3\" >108.000000</td>\n      <td id=\"T_95e99_row2_col4\" class=\"data row2 col4\" >93</td>\n      <td id=\"T_95e99_row2_col5\" class=\"data row2 col5\" >3.850000</td>\n      <td id=\"T_95e99_row2_col6\" class=\"data row2 col6\" >2.320000</td>\n      <td id=\"T_95e99_row2_col7\" class=\"data row2 col7\" >18.610000</td>\n      <td id=\"T_95e99_row2_col8\" class=\"data row2 col8\" >1</td>\n      <td id=\"T_95e99_row2_col9\" class=\"data row2 col9\" >1</td>\n      <td id=\"T_95e99_row2_col10\" class=\"data row2 col10\" >4</td>\n      <td id=\"T_95e99_row2_col11\" class=\"data row2 col11\" >1</td>\n    </tr>\n    <tr>\n      <th id=\"T_95e99_level0_row3\" class=\"row_heading level0 row3\" >3</th>\n      <td id=\"T_95e99_row3_col0\" class=\"data row3 col0\" >Hornet 4 Drive</td>\n      <td id=\"T_95e99_row3_col1\" class=\"data row3 col1\" >21.400000</td>\n      <td id=\"T_95e99_row3_col2\" class=\"data row3 col2\" >6</td>\n      <td id=\"T_95e99_row3_col3\" class=\"data row3 col3\" >258.000000</td>\n      <td id=\"T_95e99_row3_col4\" class=\"data row3 col4\" >110</td>\n      <td id=\"T_95e99_row3_col5\" class=\"data row3 col5\" >3.080000</td>\n      <td id=\"T_95e99_row3_col6\" class=\"data row3 col6\" >3.215000</td>\n      <td id=\"T_95e99_row3_col7\" class=\"data row3 col7\" >19.440000</td>\n      <td id=\"T_95e99_row3_col8\" class=\"data row3 col8\" >1</td>\n      <td id=\"T_95e99_row3_col9\" class=\"data row3 col9\" >0</td>\n      <td id=\"T_95e99_row3_col10\" class=\"data row3 col10\" >3</td>\n      <td id=\"T_95e99_row3_col11\" class=\"data row3 col11\" >1</td>\n    </tr>\n    <tr>\n      <th id=\"T_95e99_level0_row4\" class=\"row_heading level0 row4\" >4</th>\n      <td id=\"T_95e99_row4_col0\" class=\"data row4 col0\" >Hornet Sportabout</td>\n      <td id=\"T_95e99_row4_col1\" class=\"data row4 col1\" >18.700000</td>\n      <td id=\"T_95e99_row4_col2\" class=\"data row4 col2\" >8</td>\n      <td id=\"T_95e99_row4_col3\" class=\"data row4 col3\" >360.000000</td>\n      <td id=\"T_95e99_row4_col4\" class=\"data row4 col4\" >175</td>\n      <td id=\"T_95e99_row4_col5\" class=\"data row4 col5\" >3.150000</td>\n      <td id=\"T_95e99_row4_col6\" class=\"data row4 col6\" >3.440000</td>\n      <td id=\"T_95e99_row4_col7\" class=\"data row4 col7\" >17.020000</td>\n      <td id=\"T_95e99_row4_col8\" class=\"data row4 col8\" >0</td>\n      <td id=\"T_95e99_row4_col9\" class=\"data row4 col9\" >0</td>\n      <td id=\"T_95e99_row4_col10\" class=\"data row4 col10\" >3</td>\n      <td id=\"T_95e99_row4_col11\" class=\"data row4 col11\" >2</td>\n    </tr>\n  </tbody>\n</table>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-06-04T06:12:33-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "data",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/subset-a-list-based-on-values-in-another-list-with-itertools-compress.html",
+      "url": "https://pype.dev/subset-a-list-based-on-values-in-another-list-with-itertools-compress.html",
+      "title": "Subset a list based on values in another list with itertools.compress",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I have list [True, False, False, True] and another list [1, 2, 3, 4] and a use case where I want to filter list 2 based on list 1 to remove values that line up with the element False in list 1.... so the outcome will be [1, 4]. list(compress(list2, list1)) will do it. As long as you can create a mask for the filter than itertool.compress will be your friend!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-19T14:22:58-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/dynamic-form-values-with-jinja-and-fastapi.html",
+      "url": "https://pype.dev/dynamic-form-values-with-jinja-and-fastapi.html",
+      "title": "Dynamic-Form-Values-With-Jinja-And-Fastapi",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I'm currently working on a self-hostable wish list app using FastAPI so we can\nfinally drop Amazon forever. (The lists funcionality has been super handy for\nsharing holiday gift ideas with the famj!)</p>\n<h1><a href=\"#fastapi\" aria-hidden=\"true\" class=\"anchor\" id=\"fastapi\"></a>FastAPI</h1>\n<p>FastAPI is an amazing framework for quickly building APIs with Python. I will have a slightly longer post about my brief experience with it coming later...</p>\n<h1><a href=\"#jinja-forms-and-fastapi\" aria-hidden=\"true\" class=\"anchor\" id=\"jinja-forms-and-fastapi\"></a>Jinja, Forms, and FastAPI</h1>\n<p>One of the last things I needed to figure out in my app was how to generate a\nform in a Jinja template with a dynamic number of inputs and then pass all the\ninputs to the backend to perform a database operation (my exact case was\nremoving rows from a table).</p>\n<h2><a href=\"#explicit-values\" aria-hidden=\"true\" class=\"anchor\" id=\"explicit-values\"></a>Explicit Values</h2>\n<p>The way to pass back explicit variables is really easy...</p>\n<p>Our form would look like this (I'm using bootstrap CSS)</p>\n<pre><code class=\"language-jinja\">&lt;form method=&quot;post&quot;&gt;\n    &lt;div class=&quot;form-check &quot;&gt;\n        &lt;input class=&quot;form-check-input&quot;  name=&quot;item_1&quot; id=&quot;itemOne&quot; value=&quot;1&quot; type=&quot;checkbox&quot;&gt;\n        &lt;label class=&quot;form-check-label&quot; for=&quot;itemOne&quot; &gt; A label for this item &lt;/label&gt;\n    &lt;/div&gt;\n    &lt;div class=&quot;form-check &quot;&gt;\n        &lt;input class=&quot;form-check-input&quot;  name=&quot;item_2&quot; id=&quot;itemTwo&quot; value=&quot;2&quot; type=&quot;checkbox&quot;&gt;\n        &lt;label class=&quot;form-check-label&quot; for=&quot;itemTwo&quot; &gt; A label for item 2 &lt;/label&gt;\n    &lt;/div&gt;\n\n&lt;button type=&quot;submit&quot; class=&quot;submit btn btn-xl&quot; &gt;Submit&lt;/button&gt;\n&lt;/form&gt;\n</code></pre>\n<p>So what is this? This form will have 2 rows with the lables you see in <code>&lt;label&gt; &lt;/label&gt;</code> and checkboxes that when checked would have the value <code>value</code> in each\n<code>&lt;input&gt;</code> line.</p>\n<p>So our backend might looks something like this...</p>\n<p><u>I'm keeping all the imports and stuff here to show where they come from but I won't discuss it all here - that'll be in a future post</u></p>\n<pre><code class=\"language-python\">import starlette.status as status\nfrom fastapi import APIRouter, Depends, Form, Request\nfrom fastapi.encoders import jsonable_encoder\nfrom fastapi.responses import HTMLResponse, RedirectResponse\nfrom fastapi.templating import Jinja2Templates\nfrom sqlalchemy.orm import Session\n\nfrom app.session.session import create_get_session\n\nrouter = APIRouter()\ntemplates = Jinja2Templates(directory=&quot;templates/&quot;)\n\n@router.post(&quot;/my_route/do_something_with_form&quot;, response_class=HTMLResponse)\nasync def delete_rows(\n    request: Request,\n    item_1: int = Form(...),\n    item_2: int = Form(...)\n    db: Session = Depends(create_get_session),\n):\n    print(item_1)  # will just print 1 to the console where fastapi is running if the checkbox was checked\n    print(item_2)  # will just print 1 to the console where fastapi is running if the checkbox was checked\n    return RedirectResponse(&quot;/&quot;, status_code=status.HTTP_302_FOUND)\n</code></pre>\n<h2><a href=\"#dynamic-values\" aria-hidden=\"true\" class=\"anchor\" id=\"dynamic-values\"></a>Dynamic values</h2>\n<p>That's all pretty simple... pass back values by the name in the form...</p>\n<p>What about a form that's generated dynamically? This is my case since I display a row/checkbox for every row in my table so my form looks like this...</p>\n<blockquote>\n<p>data is the result of a database query, and item is each row, so the dot notation is the value of each column basically in that row</p>\n</blockquote>\n<pre><code class=\"language-jinja\">&lt;form method=&quot;post&quot;&gt;\n  {% for item in data %}\n    &lt;div class=&quot;form-check &quot;&gt;\n        &lt;input class=&quot;form-check-input&quot;  name=&quot;item_{{ item.id }}&quot; id=&quot;{{ item.name }}&quot; value=&quot;{{ item.id }}&quot; type=&quot;checkbox&quot;&gt;\n        &lt;label class=&quot;form-check-label&quot; for=&quot;{{ item.id }}&quot; &gt; Label for: {{ item.name }} &lt;/label&gt;\n    &lt;/div&gt;\n  {% endfor %}\n\n&lt;button type=&quot;submit&quot; class=&quot;submit btn btn-xl btn-outline-danger&quot; &gt;Remove&lt;/button&gt;\n&lt;/form&gt;\n\n</code></pre>\n<p>This form generates a row with a checkbox for every <code>item</code> in <code>data</code> (in my\ncase each <code>item</code> is an existing row in my table). Now I started scratching my\nhead on how to pass an unknown number of inputs to my backend of FastAPI wants\neach input explicitly defined and typed... I can't just pass the form back\nbecuase that's not a thing so what's the way to do it?</p>\n<pre><code class=\"language-python\"># same stuff as above, only showing post method here\n@router.post(&quot;/my_route/do_something_with_form&quot;, response_class=HTMLResponse)\nasync def delete_rows(\n    request: Request,\n    db: Session = Depends(create_get_session),\n):\n    form_data = await request.get_form()\n    data = jsonable_encoder(form_data)\n    # data = {&quot;item_1&quot;: 1, &quot;item_2&quot;: 2, ... &quot;item_N&quot;: N}\n    return RedirectResponse(&quot;/&quot;, status_code=status.HTTP_302_FOUND)\n</code></pre>\n<p>We <code>await request.get_form()</code> and after encoding the data we get a dictionary with key/value pairs of the name/value from the form!</p>\n<p>This took me quite a long time to figure out in part because most of the Google-able resources are still on Flask...</p>\n<p>I look forward to my wish list app maturing and I hope this helps someone working with FastAPI!</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-15T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/forms-with-fastapi-and-jinja.html",
+      "url": "https://pype.dev/forms-with-fastapi-and-jinja.html",
+      "title": "Forms with FastAPI and Jinja",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<p>I just started using FastAPI for a home project and needed to pass back a\ndynamic number of values from a form rendered with jinja...</p>\n<h1><a href=\"#dynamic-values\" aria-hidden=\"true\" class=\"anchor\" id=\"dynamic-values\"></a>Dynamic Values</h1>\n<p>The jinja templating for rendering HTML based on something like a python iterable is nice and easy</p>\n<blockquote>\n<p>data is the result of a database query, and item is each row, so the dot notation is the value of each column basically in that row</p>\n</blockquote>\n<pre><code class=\"language-jinja\">&lt;form method=&quot;post&quot;&gt;\n  {% for item in data %}\n    &lt;div class=&quot;form-check &quot;&gt;\n        &lt;input class=&quot;form-check-input&quot;  name=&quot;item_{{ item.id }}&quot; id=&quot;{{ item.name }}&quot; value=&quot;{{ item.id }}&quot; type=&quot;checkbox&quot;&gt;\n        &lt;label class=&quot;form-check-label&quot; for=&quot;{{ item.id }}&quot; &gt; Label for: {{ item.name }} &lt;/label&gt;\n    &lt;/div&gt;\n  {% endfor %}\n\n&lt;button type=&quot;submit&quot; class=&quot;submit btn btn-xl btn-outline-danger&quot; &gt;Remove&lt;/button&gt;\n&lt;/form&gt;\n\n</code></pre>\n<p>This form generates a row with a checkbox for every <code>item</code> in <code>data</code> (in my\ncase each <code>item</code> is an existing row in my table). it?</p>\n<p>The way to pass back all those values is pretty straight forward (after hours of messing around that is!)</p>\n<pre><code class=\"language-python\"># I hate it when tutorials don't show ALL relevant pieces to the blurb\nimport starlette.status as status\nfrom fastapi import APIRouter, Depends, Form, Request\nfrom fastapi.encoders import jsonable_encoder\nfrom fastapi.responses import HTMLResponse, RedirectResponse\nfrom fastapi.templating import Jinja2Templates\nfrom sqlalchemy.orm import Session\n\nfrom app.session.session import create_get_session\n\nrouter = APIRouter()\ntemplates = Jinja2Templates(directory=&quot;templates/&quot;)\n\n@router.post(&quot;/my_route/do_something_with_form&quot;, response_class=HTMLResponse)\nasync def delete_rows(\n    request: Request,\n    db: Session = Depends(create_get_session),\n):\n    form_data = await request.get_form()\n    data = jsonable_encoder(form_data)\n    # data = {&quot;item_1&quot;: 1, &quot;item_2&quot;: 2, ... &quot;item_N&quot;: N}\n    return RedirectResponse(&quot;/&quot;, status_code=status.HTTP_302_FOUND)\n</code></pre>\n<p>We <code>await request.get_form()</code> and after encoding the data we get a dictionary with key/value pairs of the name/value from the form!</p>\n<p>This took me quite a long time to figure out in part because most of the Google-able resources are still on Flask...</p>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-15T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python",
+        "tech"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/mocking-s3-with-moto.html",
+      "url": "https://pype.dev/mocking-s3-with-moto.html",
+      "title": "Mocking-S3-With-Moto",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h2><a href=\"#todo\" aria-hidden=\"true\" class=\"anchor\" id=\"todo\"></a>TODO</h2>\n<pre><code class=\"language-python\">\nimport os\n\nimport boto3\nimport pytest\nfrom moto import mock_s3\n\nMY_BUCKET = &quot;bucket&quot;\n# BAD PREFIX\nMY_PREFIX = &quot;bucket/project/data/layer/dataset/&quot;\n\n\n@pytest.fixture(scope=&quot;function&quot;)\ndef aws_credentials():\n    &quot;&quot;&quot;Mocked AWS Credentials for moto.&quot;&quot;&quot;\n    os.environ[&quot;AWS_ACCESS_KEY_ID&quot;] = &quot;testing&quot;\n    os.environ[&quot;AWS_SECRET_ACCESS_KEY&quot;] = &quot;testing&quot;\n    os.environ[&quot;AWS_SECURITY_TOKEN&quot;] = &quot;testing&quot;\n    os.environ[&quot;AWS_SESSION_TOKEN&quot;] = &quot;testing&quot;\n    os.environ[&quot;AWS_DEFAULT_REGION&quot;] = &quot;us-east-1&quot;\n\n\n@pytest.fixture(scope=&quot;function&quot;)\ndef s3(aws_credentials):\n    with mock_s3():\n        yield boto3.client(&quot;s3&quot;, region_name=&quot;us-east-1&quot;)\n\n\ndef _upload_fixtures(s3) -&gt; None:\n    s3.put_object(Bucket=MY_BUCKET, Key=&quot;project/data/layer/dataset&quot;, Body=b&quot;some data&quot;)\n\n\ndef test_get_list_of_dataset_versions(s3):\n    # We need to create the bucket since this is all in Moto's 'virtual' AWS account\n    s3.create_bucket(Bucket=MY_BUCKET)\n    _upload_fixtures(s3)\n\n    objs = s3.list_objects_v2(Bucket=MY_BUCKET)  # , Prefix=MY_PREFIX)\n    assert objs.get(&quot;Contents&quot;) is not None\n\n    # test_datasets = [\n    #     c[&quot;Key&quot;]\n    #     for c in s3.list_objects_v2(Bucket=MY_BUCKET, Prefix=MY_PREFIX)[&quot;Contents&quot;]\n    #     if c[&quot;Key&quot;] != MY_PREFIX\n    # ]\n\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-12T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "python"
+      ],
+      "language": "en"
+    },
+    {
+      "id": "https://pype.dev/python-eval.html",
+      "url": "https://pype.dev/python-eval.html",
+      "title": "Python-Eval",
+      "content_html": "<!-- Content Injected to every content markdown header -->\n<h1><a href=\"#todo\" aria-hidden=\"true\" class=\"anchor\" id=\"todo\"></a>TODO</h1>\n<pre><code class=\"language-python\">title = &quot;my Title&quot;\neval('&quot;my&quot; in title')\n\n&gt;&gt;&gt; True\n\n</code></pre>\n<pre><code class=\"language-python\">print(&quot;hello, world&quot;); print(&quot;formatting&quot;)\n</code></pre>\n<!-- Content Injected to every content markdown footer -->\n",
+      "summary": "",
+      "date_published": "2022-05-12T00:00:00-00:00",
+      "image": "",
+      "authors": [
+        {
+          "name": "Nicholas Payne",
+          "url": "https://github.com/pypeaday",
+          "avatar": "https://github.com/pypeaday.png"
+        }
+      ],
+      "tags": [
+        "tech",
+        "python"
+      ],
+      "language": "en"
+    }
+  ]
+}
