@@ -1,0 +1,24 @@
+# Welcome to Pype.dev
+
+👋 Hi, I'm **Nic Payne**. This is my digital space where I share my thoughts, learnings, and explorations. Consider this my mental datalake - a place where I dump knowledge and occasionally find patterns.
+
+## Connect With Me
+
+- [![Connect](https://img.shields.io/badge/Connect-DigitalHarbor-green?style=flat-square&logo=boat)](https://mydigitalharbor.com/pypeaday)
+- [![GitHub](https://img.shields.io/badge/GitHub-pypeaday-black?style=flat-square&logo=github)](https://github.com/pypeaday)
+- [![Twitter](https://img.shields.io/badge/Twitter-pypeaday-blue?style=flat-square&logo=x)](https://twitter.com/pypeaday)
+
+
+
+### Technical Content
+- [Linux Posts](/linux) - My thoughts on the pang-wang
+- [TIL Archive](/til) - Quick tips and learnings
+
+### Faith & Reflections
+- [Bible Project Notes](/bible-project) - Notes from The Bible Project
+- [Faith Journey](/faith) - Personal reflections on faith
+- [Reflections](/reflections) - Personal reflections on faith
+
+---
+
+> "The purpose of learning is growth, and our minds, unlike our bodies, can continue growing as we continue to live." — Mortimer Adler
