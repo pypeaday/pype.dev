@@ -18,8 +18,11 @@ is a debate between God's sovereignty and predestination, and then an idea of fr
 I have been a part of these conversations for years - I've been in hundreds of them certainly,
 and they all go in a very similar direction. Almost irrespective of the theological prowess
 or training of the group of people I'm in the unspoken goal always is the same
-- to find a hard and fast line between the 2 things or to find some comfortable
+
+```
+to find a hard and fast line between the 2 things or to find some comfortable
 verbiage for the tension
+```
 
 ## My Anecdotal Experience With Other Believers
 
