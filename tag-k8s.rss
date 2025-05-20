@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Wed, 15 Jan 2025 18:07:57 GMT</pubDate><lastBuildDate>Tue, 20 May 2025 12:44:25 GMT</lastBuildDate><generator>marmite</generator><image><url>https://pype.dev/media/og-02.png</url><title></title><link></link></image><item><title>Deployments are not StatefulSets</title><link>https://pype.dev/deployments-are-not-statefulsets.html</link><author>nicpayne</author><category>infrastructure</category><category>tech</category><category>k8s</category><guid>https://pype.dev/deployments-are-not-statefulsets.html</guid><pubDate>Wed, 15 Jan 2025 18:07:57 GMT</pubDate><source url="https://pype.dev">tag-k8s</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I was debugging some ArgoCD stuff earlier today and I love using k9s to explore
+my k8s resources.</p>
+<p>The TLDR is that I put some bad env vars in the <code>global</code> values for my ArgoCD
+pods, this caused the webUI to hang. An easy way to push things through is to
+open k9s, view the Deployments, and edit the env vars there so the pods can be
+in the right state to restart and pickup the changes (you've obviously fixed
+the values file already right?)</p>
+<p>Well the Notification Controller was the pod hanging, and I couldn't find it in
+the Deployments view! This blew my mind... until I realized that it was a
+Stateful Set.</p>
+<p>So, this is not a comparison of the 2 - this is just a note to say that all I
+had to do was find the StatefulSets in k9s and do the same workflow for editing
+what I needed to edit to get the pods into workable state while working on the
+values file...</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Customize K9s</title><link>https://pype.dev/customize-k9s.html</link><author>nicpayne</author><category>cli</category><category>homelab</category><category>tech</category><category>k8s</category><guid>https://pype.dev/customize-k9s.html</guid><pubDate>Mon, 06 May 2024 11:57:07 GMT</pubDate><source url="https://pype.dev">tag-k8s</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>To customize k9s use the skins from catppuccin or the ones k9s supplies</p>
+<pre><code class="language-bash">OUT=&quot;${XDG_CONFIG_HOME:-$HOME/.config}/k9s/skins&quot;
+mkdir -p &quot;$OUT&quot;
+curl -L https://github.com/catppuccin/k9s/archive/main.tar.gz | tar xz -C &quot;$OUT&quot; --strip-components=2 k9s-main/dist
+</code></pre>
+<p>Then edit your k9s config</p>
+<pre><code># ~/.config/k9s/config.yml
+k9s:
+  ui:
+    skin: catppuccin-mocha
+    # ...or another flavor:
+    # skin: catppuccin-macchiato
+    # skin: catppuccin-frappe
+    # skin: catppuccin-latte
+
+    # ...or the transparent variants:
+    # skin: catppuccin-mocha-transparent
+    # skin: catppuccin-macchiato-transparent
+    # skin: catppuccin-frappe-transparent
+    # skin: catppuccin-latte-transparent
+</code></pre>
+<p>Other k9s skins are available <a href="https://github.com/derailed/k9s/tree/master/skins">here</a></p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>

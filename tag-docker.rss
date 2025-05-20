@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Pype.dev</title><link>https://pype.dev</link><description>my mental data-lake</description><pubDate>Sat, 14 Dec 2024 11:27:15 GMT</pubDate><lastBuildDate>Tue, 20 May 2025 12:44:24 GMT</lastBuildDate><generator>marmite</generator><image><url>https://pype.dev/media/og-02.png</url><title></title><link></link></image><item><title>Jellyfin container updates for HWE + AMD</title><link>https://pype.dev/jellyfin-container-updates-for-hwe-amd.html</link><author>nicpayne</author><category>docker</category><category>linux</category><category>homelab</category><guid>https://pype.dev/jellyfin-container-updates-for-hwe-amd.html</guid><pubDate>Sat, 14 Dec 2024 11:27:15 GMT</pubDate><source url="https://pype.dev">tag-docker</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn't get trickplay to work with HWE...</p>
+<p>There was almost NOTHING on the internet about the error, and all the threads were about BSD systems...</p>
+<p>Thankfully someone posted <a href="https://forum.jellyfin.org/t-jellyfin-amd-docker">on the formum here</a> but the only answer was to literally upgrade stuff in the container...</p>
+<p>Someday maybe I'll build off of LSIO to add this, but until then I shell'd in and homelab'd the hell out of it</p>
+<blockquote>
+<p>THIS IS INSIDE THE CONTAINER - I use Portianer to make it easy</p>
+</blockquote>
+<pre><code>
+apt update &amp;&amp; apt install -y curl gpg
+
+mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://repo.radeon.com/rocm/rocm.gpg.key | gpg --dearmor -o /etc/apt/keyrings/rocm.gpg
+
+cat &lt;&lt;EOF | tee /etc/apt/sources.list.d/rocm.sources
+
+Types: deb
+
+URIs: https://repo.radeon.com/rocm/apt/latest
+
+Suites: ubuntu
+
+Components: main
+
+Architectures: amd64
+
+Signed-By: /etc/apt/keyrings/rocm.gpg
+
+EOF
+
+apt update &amp;&amp; apt install -y rocm-opencl-runtime
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Adding docker daemon.json broke docker</title><link>https://pype.dev/adding-docker-daemon-json-broke-docker.html</link><author>nicpayne</author><category>linux</category><category>tech</category><category>docker</category><guid>https://pype.dev/adding-docker-daemon-json-broke-docker.html</guid><pubDate>Wed, 21 Dec 2022 10:02:25 GMT</pubDate><source url="https://pype.dev">tag-docker</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>in /lib/systemd/system/docker.service there is an ExecStart command that got placed there when I setup Docker with Ansible - it threw the -H flag which told the daemon what hosts to setup. But I added the &quot;hosts&quot; key in my daemon.json and it broke - so removing the -H flag from the systemd unit fixed it</p>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item><item><title>Cron for Nextcloud in Docker</title><link>https://pype.dev/cron-for-nextcloud-in-docker.html</link><author>nicpayne</author><category>homelab</category><category>docker</category><category>tech</category><guid>https://pype.dev/cron-for-nextcloud-in-docker.html</guid><pubDate>Tue, 13 Dec 2022 06:43:45 GMT</pubDate><source url="https://pype.dev">tag-docker</source><content:encoded><![CDATA[<!-- Content Injected to every content markdown header -->
+<p>AJAX wasn't cutting it, traditional crontab in containers doesn't make much
+sense to me, webcron is recommended but I don't want to register with anything
+outside my LAN... Turns out you can just spin up an identical container with a
+different entrypoint to /cron.sh that does what you need!</p>
+<blockquote>
+<p>Note that this is a task in an Ansible playbook - but the docker-compose is straight forward</p>
+</blockquote>
+<p>So the only thing you need to make sure of is that <em>all</em> the configuration
+options - data volumes, user permissions, etc. are <em>identical</em> between the
+containers running the cron job and the one actually hosting NextCloud. This
+ensures that the container running cron has proper access to the database and
+filesystem - or at least the same access as NextCloud proper.</p>
+<pre><code class="language-yaml">- name: Nextcloud Cron Docker Container
+  docker_container:
+    name: nextcloud-cron
+    image: &quot;{{ nextcloud_image }}&quot;
+    pull: true
+    links:
+      - nextcloud-mysql:mysql
+    entrypoint: /cron.sh
+    volumes:
+      - &quot;{{ nextcloud_data_directory }}/nextcloud:/var/www/html:rw&quot;
+    env:
+      MYSQL_HOST: &quot;mysql&quot;
+      MYSQL_DATABASE: &quot;nextcloud&quot;
+      MYSQL_USER: &quot;{{ nextcloud_sql_user }}&quot;
+      MYSQL_PASSWORD: &quot;{{ nextcloud_sql_password }}&quot;
+      NEXTCLOUD_TRUSTED_DOMAINS: &quot;{{ nextcloud_hostname }}.{{ ansible_nas_domain }}&quot;
+      PUID: &quot;{{ nextcloud_user_id }}&quot;
+      PGID: &quot;{{ nextcloud_group_id }}&quot;
+      TZ: &quot;{{ ansible_nas_timezone }}&quot;
+    restart_policy: unless-stopped
+    memory: &quot;{{ nextcloud_memory }}&quot;
+
+</code></pre>
+<!-- Content Injected to every content markdown footer -->
+]]></content:encoded></item></channel></rss>
