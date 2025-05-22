@@ -1,8 +1,12 @@
 default:
   @just --list
 
+build:
+    ./.venv/bin/markata clean && ./.venv/bin/markata build
 serve: 
-    marmite pype.dev markout --watch --serve --bind "0.0.0.0:8001"
+    @just build
+    python -m http.server -d markout 8003
+    # marmite pype.dev markout --watch --serve --bind "0.0.0.0:8001"
 
 [group('i-was-wrecked')]
 get-vault-key:
