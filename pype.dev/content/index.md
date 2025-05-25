@@ -1,3 +1,11 @@
+---
+templateKey: blog-post
+tags: []
+title: ""
+date: 2022-03-09T00:00:00
+published: False
+
+---
 # Welcome to Pype.dev
 
 👋 Hi, I'm **Nic Payne**. This is my digital space where I share my thoughts, learnings, and explorations. Consider this my mental datalake - a place where I dump knowledge and occasionally find patterns.
@@ -9,6 +17,9 @@
 - [![Twitter](https://img.shields.io/badge/Twitter-pypeaday-blue?style=flat-square&logo=x)](https://twitter.com/pypeaday)
 
 
+## Feeds
+
+- [All Posts](/all) - All my posts
 
 ### Technical Content
 - [Linux Posts](/linux) - My thoughts on the pang-wang
@@ -16,8 +27,8 @@
 
 ### Faith & Reflections
 - [Bible Project Notes](/bible-project) - Notes from The Bible Project
-- [Faith Journey](/faith) - Personal reflections on faith
-- [Reflections](/reflections) - Personal reflections on faith
+- [Faith](/faith) - General notes on things related to my faith
+- [Reflections](/reflections) - Longer reflections that are typically faith-related
 
 ---
 
