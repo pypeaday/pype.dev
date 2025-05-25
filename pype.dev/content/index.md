@@ -1,11 +1,3 @@
----
-templateKey: blog-post
-tags: []
-title: ""
-date: 2022-03-09T00:00:00
-published: False
-
----
 # Welcome to Pype.dev
 
 👋 Hi, I'm **Nic Payne**. This is my digital space where I share my thoughts, learnings, and explorations. Consider this my mental datalake - a place where I dump knowledge and occasionally find patterns.
