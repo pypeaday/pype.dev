@@ -17,3 +17,5 @@ same host, so a quick [rsync] from /harbor/encrypted/docker/manyfold to
 replicated the messed up permission set yet
 
 Q: How to link to my rsync like a pro post?
+
+A: Wikilinks `[[rsync-like-a-pro]]` [[rsync-like-a-pro]]
