@@ -17,12 +17,8 @@ I was in men's group the other day, and one of the things that came up almost in
 is a debate between God's sovereignty and predestination, and then an idea of free will.
 I have been a part of these conversations for years - I've been in hundreds of them certainly,
 and they all go in a very similar direction. Almost irrespective of the theological prowess
-or training of the group of people I'm in the unspoken goal always is the same
-
-```
-to find a hard and fast line between the 2 things or to find some comfortable
-verbiage for the tension
-```
+or training of the group of people I'm in the unspoken goal always is the same... 
+**to find a hard and fast line between the 2 things or to find some comfortable verbiage for the tension**
 
 ## My Anecdotal Experience With Other Believers
 
@@ -85,39 +81,33 @@ and the human's choice to live their life are not at odds with each other.
 
 But here's a thought I started to formulate just recently...
 
-```
-Even for a PhD in theological studies or in theology or an expert in church history or
-church fathers or whatever - for somebody _today_ to think that we can define these terms 
-in a totally correct and understandable way is another manifestation of the
-__PEAK ARROGANCE__ of the West  (Blog on Western v Eastern medicine in the works)
-```
+!!! note a recent thought
+    Even for a PhD in theological studies or in theology or an expert in church history or
+    church fathers or whatever - for somebody _today_ to think that we can define these terms 
+    in a totally correct and understandable way is another manifestation of the
+    __PEAK ARROGANCE__ of the West  (Blog on Western v Eastern medicine in the works)
 
 I don't mean to claim here that I have the _right_ understanding of sovereignty and free will.
 But Paul has some choice words for believers who love quarreling and debates, and he calls
 them spiritual children who aren't ready for real food.
 
-```
-2 Timothy 2:23-24
+!!! source 2 Timothy 2:23-24
 
-23 But reject foolish and ignorant disputes, knowing that they breed quarrels.
-24 The Lord's slave must not quarrel, but must be gentle to everyone, able to teach, and patient,
-```
+    23 But reject foolish and ignorant disputes, knowing that they breed quarrels.
+    24 The Lord's slave must not quarrel, but must be gentle to everyone, able to teach, and patient,
 
-```
-1 Corinthians 3
+!!! source 1 Corinthians 3
+    1For my part, brothers and sisters, I was not able to speak to you as spiritual
+    people but as people of the flesh, as babies in Christ.a 2I gave you milk to
+    drink, not solid food, since you were not yet ready for it. In fact, you are
+    still not ready, 3because you are still worldly. For since there is envya and
+    strifea b among you, are you not worldly and behaving like mere humans? 4For
+    whenever someone says, “I belong to Paul,” and another, “I belong to Apollos,”a
 
-1For my part, brothers and sisters, I was not able to speak to you as spiritual
-people but as people of the flesh, as babies in Christ.a 2I gave you milk to
-drink, not solid food, since you were not yet ready for it. In fact, you are
-still not ready, 3because you are still worldly. For since there is envya and
-strifea b among you, are you not worldly and behaving like mere humans? 4For
-whenever someone says, “I belong to Paul,” and another, “I belong to Apollos,”a
-are you not acting like mere humans?
-```
-
-> I've often heard the Corinthian church used as an example of a bad place to
-> be - and no doubt it was. But modern American Christianity may be much closer
-> to Corinth than Thessolinca as far as maturity and Christ-like living goes.
+!!! warning It's you
+    I've often heard the Corinthian church used as an example of a bad place to
+    be - and no doubt it was. But modern American Christianity may be much closer
+    to Corinth than Thessolinca as far as maturity and Christ-like living goes.
 
 He says things like "I gave you milk to drink, not solid food, since you were
 not yet ready for it"
@@ -136,11 +126,13 @@ So there's a parent-child relationship.
 And then in the God-human relationship, I understand my position better now as a parent
 of real children, of humans, which helps me understand my position as a child of God.
 
-> I don't think we take that very seriously.
+!!! failure ""
+    I don't think we take that very seriously.
 
-> I think use this more as comforting language rather than a humbling truth - __I'm a child of God__
-> But really, I think the TLDR is that even the most highly trained theological individual - that person is not a grown-up in the eyes of God.
-> He or she is still a child, and our understanding is still limited to what a child can understand.
+!!! success ""
+    I think use this more as comforting language rather than a humbling truth - __I'm a child of God__
+    But really, I think the TLDR is that even the most highly trained theological individual - that person is not a grown-up in the eyes of God.
+    He or she is still a child, and our understanding is still limited to what a child can understand.
 
 Let's continue with the metaphor...
 

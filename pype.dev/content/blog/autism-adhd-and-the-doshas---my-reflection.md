@@ -13,13 +13,15 @@ tags:
 
 I was recently diagnosed with Autism Spectrum Disorder Level 1 and ADHD, the inattentive
 type. I suppose, AuDHD for short.
-There are many reasons why I now how this official label of AuDHD, not that I
+There are many reasons why I now have this official label of AuDHD, not that I
 was hoping for it, but due to a childhood behavioral disorder diagnosis and a
-desire to understand myself better, I decided to start considering a something
-that my childhood issue was misunderstood.
-But what started as simply considering some new diagnosis turned into a larger
-worldview shift when it comes to medicine and how we treat people for things we
-label disorderly.
+desire to understand myself better, I decided to start considering that something
+in my childhood issue was misunderstood.
+
+!!! note ""
+    But what started as simply considering some new diagnosis turned into a
+    larger worldview shift when it comes to medicine and how we treat people for
+    things we label disorderly.
 
 ### Personal History
 
@@ -31,8 +33,9 @@ the things that my mom specifically was concerned about.
 There is another point for later on, which is that part of me wanted to be bipolar.
 I felt like it would be cool, but also it made me special.
 
-> And there's no way that this desire didn't turn into massive confirmation bias
-> in getting this diagnosis as a kid and as a late teenager.
+!!! warning "bias"
+    And there's no way that this desire didn't turn into massive confirmation bias
+    in getting this diagnosis as a kid and as a late teenager.
 
 Once I started kind of thinking for myself a little bit - the bipolar diagnosis
 was one of my first spiritual challenges in understanding the brokenness of
@@ -48,9 +51,10 @@ with this medicine to help heal some of the brokenness."
 
 So I had these two competing ideas that were very loud in my head.
 
-> In hindsight, an AuDHD diagnosis somewhat explains this behavior of mine.
-> Wherein I wanted to be sick, and I had these competing ideas about the
-> character of God.
+!!! note ""
+    In hindsight, an AuDHD diagnosis somewhat explains this behavior of mine.
+    Wherein I wanted to be sick, and I had these competing ideas about the
+    character of God.
 
 So I've been more at less at peace with the idea that behavior disorders are
 apart of life for many people, and thus as I've gotten older and reflected on
@@ -65,40 +69,88 @@ measurably on the Autism Specrum and that certainly there were ADHD tendencies
 that negatively affected my life. I talked with my doctor and after several
 psych evaluations it turns out that my self-diagnosis was consistent with the
 conclusion of the evaluation. So if this was the end then my thought would've
-been "ok I'm not bi-polar, I'm AuDHD - there's some coping mechanisms I can
-learn now and things make sense"... But there's a lot more here and as we look
+been 
+
+!!! note "I'm not bi-polar"
+    ok I'm not bi-polar, I'm AuDHD - there's some coping mechanisms I can
+    learn now and things make sense.
+
+But there's a lot more here and as we look
 ahead, I want to be clear that I take no special pride in the AuDHD label...
 I'll talk about myself with this label as a way of communicating with people who
 understand it, but the main point of this post will be in how understanding
 myself as a human being more holistically led to a different point of view of
 what the West calls neurodivergencies.
 
-### Two Systems | East v West
+## Treatment
 
-### Blog Post Outline: Navigating Western and Eastern Medicine Approaches to ADHD
+I have been taking a light mood stabilizer for a while now per my bi-polar
+diagnosis. There's no doubt that it is a helpful tool in coping with some
+debilitating aspects of AuDHD but the more I reflect the more I want to get away
+from it - personally.
 
-#### Heading 1: Introduction to Personal Journey with ADHD Diagnosis
-- Brief overview of the recent ADHD diagnosis
-- Mentioning the influence of Western medicine and its approach to treating symptoms
-- Expressing interest in exploring alternative approaches, specifically Eastern medicine
-- Link to the personal context of removing oneself from the Western mindset and seeking balance
+I'm not sure what to think about treatment overall... I recognize that some folks are
+much more negatively affected by the tendencies we label as neurodivergent and
+that there are meainginful changes that can come from modern western medicine.
+However, there's also natural solutions to many problems that I think are often
+overlooked 
 
-#### Heading 2: Critique of Western Medicine's Approach to Treatment
-- Discussion on the limitations perceived in Western medicine’s focus on chemical imbalances and symptom management
-- Argument that the thousands-of-years-old approaches of Eastern medicine may offer complementary perspectives
-- Citing the arrogance in dismissing traditional remedies as inferior to modern medical monitoring techniques
+!!! quote "Simple doesn't mean easy"
+    often exercise and cleaner eating can treat depression and anxiety for
+    example. That doesn't mean the anxiety wasn't significant or legitimate, but
+    it's not like a pharmaceutical is the only option for treating something
+    legitimate.
 
-#### Heading 3: Exploring Antigens and Holistic Treatments (Based on Book Readings)
-- Introduction to antigens, particularly those found in mushrooms and plants
-- Explanation of how Eastern medicine might classify ADHD traits differently and use these classifications for holistic treatment planning
-- Description of the potential synergistic effects of combining different antigenic substances like lion's mane mushroom and goji berries
+!!! warning "The other side"
+    I also see that obviously there are severe cases of Autism - I think we
+    should better understand where that comes from, and I wouldn't ever claim
+    that just drinking some tea and figuring out an exervise regime can cure
+    something that is fully debilitating.
+    
+## Two Systems | East v West
 
-#### Heading 4: Personal Integration of Western and Eastern Medicine Approaches
-- Sharing thoughts on the process of incorporating insights from both systems into daily life
-- Reflecting on balancing individualized treatments with an open mind to alternative therapies
-- Encouragement for others to consider exploring holistic approaches alongside traditional medical advice
+I've become critical of the modern Western perspective on neurodivergence
+and mental/behavioral health. It's primarily that I'd be much less skeptical if
+it wasn't for all the money... I notice patterns as well that I don't find
+comforting - such as the focus on symptoms and isolated treatment of them or
+groups of symptoms rather than looking at a human-being as an entire organism or
+system. I know that certain pieces of a system can break, and sometimes treating
+those isolated breakages is the way to go - but also we (in the West) seem to
+avoid thinking about ourselves as 1 whole thing... There's language that
+younger people use about their "whole self" but honestly I only see them talk
+about sexuality as if that defined everything about a person... that's 100% not
+what I have in mind here... 
 
-#### Heading 5: Conclusion - Bridging Two Worlds for Personal Well-being
-- Recap of the journey and the initial stages of adopting a more balanced approach to health care
-- Closing thoughts on the potential benefits of fusing Western and Eastern medicine practices
-- Call to action for readers to reflect on their own perspectives and consider exploring complementary approaches
+Every one of my psychiatric appointments up through the last few years had never
+sought to get off my medication... It got me thinking the goal was for me to be
+a customer for life. I don't like being reliant on anything external and the
+fact that there was never a goal for me to be self-sufficient in my own health
+became troubling.
+
+My philosophical issues arising with our modern medical systems have led me
+to becomming more open to Eastern medicine and as I explore how those systems
+have historically analyzed patterns and attributed those patterns to different
+ways of thinking, I think the pattern-analysis and subsequent recommendations
+can be extremely valuable. This is where adaptogens come in for me.
+
+## Lifestyle Changes
+
+I'd heard of Lion's Mane via some Joe Rogan clips (have become a bigger and
+bigger fan of him over the last few years), and then got a subscription to
+FourSigmatic which is a coffee company that offers mushroom-replacement and
+supplements for coffee and tea basically. So I'm drinking coffee with Lion's
+Mane, and have added a few other mushroom tinctures with Reishi and Chaga
+specifically, as well as Eleuthero and Turkey Tail as a means of introducing
+adaptogens into my routine and maybe it's confirmation bias again, but as I've
+gone on and off the Lion's Mane specifically I notice a significant difference
+in my cognitive function... When I'm diligent about putting the Lion's Mane
+tincture into my coffee in the morning it is like unlocking on-demand
+hyper-focus some mornings...
+
+## Wrapping It Up
+
+This post is mostly a stream-of-consciousness as I reflect on the atpypical
+nature of much of my life, how that fits into the modern Western discourse of
+mental health, and how the Western perspective might end up not being a helpful lens
+through which to process these behavioral issues.
+
