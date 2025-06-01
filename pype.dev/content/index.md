@@ -11,16 +11,24 @@
 
 ## Feeds
 
-- [All Posts](/all) - All my posts
+Below you can find more tailered feeds for my thoughts on different topics
 
 ### Technical Content
+
+- [Linux Posts](/tech) - A general technology-releated feed
 - [Linux Posts](/linux) - My thoughts on the pang-wang
 - [TIL Archive](/til) - Quick tips and learnings
 
 ### Faith & Reflections
+
 - [Bible Project Notes](/bible-project) - Notes from The Bible Project
 - [Faith](/faith) - General notes on things related to my faith
 - [Reflections](/reflections) - Longer reflections that are typically faith-related
+
+### Kitchen Sink
+
+- [All Posts](/all) - All my posts
+- [Bonus Cooking Thoughts](/cooking) - Notes from my cooking adventures
 
 ---
 
