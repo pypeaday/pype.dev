@@ -2,7 +2,7 @@
 date: 2025-06-01 14:30:43
 templateKey: blog-post
 title: Windows Update Broke Wifi
-published: False
+published: True
 tags:
   - tech
   - windows
