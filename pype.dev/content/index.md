@@ -15,7 +15,7 @@ Below you can find more tailered feeds for my thoughts on different topics
 
 ### Technical Content
 
-- [Linux Posts](/tech) - A general technology-releated feed
+- [Tech](/tech) - A general technology-releated feed
 - [Linux Posts](/linux) - My thoughts on the pang-wang
 - [TIL Archive](/til) - Quick tips and learnings
 
