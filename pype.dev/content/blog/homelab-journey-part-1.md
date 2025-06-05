@@ -61,9 +61,10 @@ part of my infrastructure now for a long time.
 
 ## Router | OPNSense
 
-CPU: i5-8700
-Memory: 8GB of whatever was in the box
-Storage: 1TB SSD
+!!! note "stats"
+    CPU: i5-8700
+    Memory: 8GB of whatever was in the box
+    Storage: 1TB SSD
 
 My router is an old Optiplex. I'll find the link to that. So I'm running a x86 system for my router with
 OpenSense on it. Just seemed it to be another home lab standard and I'd like to
@@ -82,11 +83,12 @@ They're on tailscale as well so my DNS happens over tailscale.
 
 ## My Desktop
 
-CPU: Ryzen 7 5700X
-GPU: Nvidia 3090
-Memory: 64 GB
-Storage: 4TB SSD + 2 TB HDD for zfs backup
-OS: Universal Blue Aurora
+!!! note "stats"
+    CPU: Ryzen 7 5700X
+    GPU: Nvidia 3090
+    Memory: 64 GB
+    Storage: 4TB SSD + 2 TB HDD for zfs backup
+    OS: Universal Blue Aurora
 
 My daily-driver desktop is somewhat apart of my homelab now as I have a 3090 in
 there with 20 GB of VRAM so I can run some heavier LLMs for self-hosted AI
@@ -99,11 +101,12 @@ Some of the apps I run here are ollama, open-webui, automatic1111's stable diffu
 
 ## NAS / Server
 
-CPU: Ryzen 7 5700G
-GPU: None right now
-Memory: 128 GB
-Storage: 2x12 TB ZFS Mirror + another 2x12 TB ZFS Mirror + 500GB disk for NVR
-OS: Ubuntu Server 24.04
+!!! note "stats"
+    CPU: Ryzen 7 5700G
+    GPU: None right now
+    Memory: 128 GB
+    Storage: 2x12 TB ZFS Mirror + another 2x12 TB ZFS Mirror + 500GB disk for NVR
+    OS: Ubuntu Server 24.04
 
 At the moment I am managing containers using Docker Compose stacks. Many
 applications have their own stack but then I also have stacks of many
