@@ -66,18 +66,19 @@ part of my infrastructure now for a long time.
     Memory: 8GB of whatever was in the box
     Storage: 1TB SSD
 
-My router is an old Optiplex. I'll find the link to that. So I'm running a x86 system for my router with
+My router is an old Optiplex SFF 5060 I got from Amazon for less than $100. 
+So I'm running a x86 system for my router with
 OpenSense on it. Just seemed it to be another home lab standard and I'd like to
 someday bring pi-hole over there or use AdGuard or integrate those two things
 maybe a little bit more completely but right now they are mostly separate.
 
-### Networking | VLANs
+## Networking | VLANs
 
 There's a
 managed switch in there for some VLAN tomfoolery for my cameras and an IOT
 network type of a thing. 
 
-### Networking | VPN | Tailscale
+## Networking | VPN | Tailscale
 
 They're on tailscale as well so my DNS happens over tailscale.
 
@@ -85,9 +86,13 @@ They're on tailscale as well so my DNS happens over tailscale.
 
 !!! note "stats"
     CPU: Ryzen 7 5700X
+
     GPU: Nvidia 3090
+
     Memory: 64 GB
+
     Storage: 4TB SSD + 2 TB HDD for zfs backup
+
     OS: Universal Blue Aurora
 
 My daily-driver desktop is somewhat apart of my homelab now as I have a 3090 in
