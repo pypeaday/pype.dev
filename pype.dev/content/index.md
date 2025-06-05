@@ -11,6 +11,10 @@
 
 ## Feeds
 
+### Everything!
+
+- [All Posts](/all) - All my posts
+
 Below you can find more tailered feeds for my thoughts on different topics
 
 ### Technical Content
@@ -27,7 +31,6 @@ Below you can find more tailered feeds for my thoughts on different topics
 
 ### Kitchen Sink
 
-- [All Posts](/all) - All my posts
 - [Bonus Cooking Thoughts](/cooking) - Notes from my cooking adventures
 
 ---
