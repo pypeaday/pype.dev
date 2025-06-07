@@ -34,4 +34,4 @@ So without arguing myself into oblivion I just want to throw out there that you 
 !!! note "Find joy?"
     As a final attempt to make this a blog post - a final comment might be that
     it's ok to find joy in something, especially if you become an expert in it,
-    because that expertise might itself bring joy to someone else
+    and that expertise might itself bring joy to someone else
