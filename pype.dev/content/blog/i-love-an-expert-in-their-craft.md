@@ -2,7 +2,7 @@
 date: 2025-06-06 19:38:13
 templateKey: blog-post
 title: I love an expert in their craft
-published: False
+published: True
 tags:
   - reflection
 
