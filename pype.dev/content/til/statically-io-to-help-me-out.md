@@ -16,7 +16,7 @@ Example:
 
 ```html
 
-<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
 ```
 
-<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/static/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/skimpy-zsh.png" alt="Skimpy ZSH" title="A fancy data summary in the shell" />
