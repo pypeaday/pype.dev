@@ -25,7 +25,7 @@ See the image repo with app details at [images.pype.dev](https://github.com/pype
 # Usage
 
 Anyone could copy the script and config to their own git repo to put images in
-and run this at home - instructions are in the readme but it's just `uv run`
+and run this at home - instructions are in the readme but for simple running on localhost it's just `uv run`
 
 # Example
 
