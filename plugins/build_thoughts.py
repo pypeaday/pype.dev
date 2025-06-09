@@ -91,7 +91,7 @@ thoughts at [[ my-thoughts ]]
         """
         post["raw"] = post["content"]
         post["jinja"] = False
-        post["published"] = True
+        post["published"] = False
 
     thoughts = markata.Posts.parse_obj(
         {"posts": posts},
