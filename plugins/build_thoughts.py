@@ -78,12 +78,9 @@ Here's my thought on <a href="{post["link"]}">{post["title"]}</a>
 ---
 
 !!! note
-     This post is a [thought](https://thoughts.waylonwalker.com).  It's a short note that I make about someone else's
+     This is one of [[ my-thoughts ]]. I picked this up from [Waylon Walker](https://waylonwalker.com)(https://thoughts.waylonwalker.com). It's a short note that I make about someone else's
      content online.  Learn more about the process [[ thoughts ]]
 
-{text_opacity_80}
-This post was a thought by [Nic Payne](https://pype.dev) see all my
-thoughts at [[ my-thoughts ]]
 
 ---
 
