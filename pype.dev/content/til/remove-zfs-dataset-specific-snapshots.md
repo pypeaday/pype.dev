@@ -2,7 +2,7 @@
 date: 2022-05-19 05:49:16
 templateKey: til
 title: Remove ZFS Dataset Specific Snapshots
-published: False
+published: True
 tags:
   - linux
   - zfs

@@ -2,9 +2,8 @@
 date: 2024-08-01 05:59:46
 templateKey: blog-post
 title: Switching from AltaCV to RenderCV for my Resume
-published: False
+published: True
 tags:
-  - python
   - python
   - tech
 

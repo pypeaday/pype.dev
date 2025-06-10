@@ -2,7 +2,7 @@
 date: 2025-04-23 08:44:59
 templateKey: blog-post
 title: I was wrecked by a weird combo of >> and -e
-published: False
+published: True
 tags:
   - linux
   - cli

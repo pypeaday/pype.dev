@@ -2,7 +2,7 @@
 date: 2025-04-27 05:29:54
 templateKey: blog-post
 title: My MCP Configuration
-published: False
+published: True
 tags:
   - python
   - tech
