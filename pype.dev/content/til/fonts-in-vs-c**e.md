@@ -5,6 +5,7 @@ title: Fonts in VS C**e
 published: True
 tags:
   - vscode
+  - til
 
 ---
 

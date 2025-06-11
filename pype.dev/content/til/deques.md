@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'tech']
+tags: ['python', 'tech', 'til']
 title: Deques
 date: 2022-03-31T00:00:00
 published: True

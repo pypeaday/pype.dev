@@ -7,6 +7,7 @@ tags:
   - python
   - terminal
   - tech
+  - til
 
 ---
 

@@ -7,6 +7,7 @@ tags:
   - vim
   - linux
   - tech
+  - til
 
 ---
 

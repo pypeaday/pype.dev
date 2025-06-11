@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'homepage', 'tech']
+tags: ['python', 'homepage', 'tech', 'til']
 title: Skimpy
 date: 2022-03-23T00:00:00
 published: True

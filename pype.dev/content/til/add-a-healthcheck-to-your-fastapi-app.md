@@ -7,6 +7,7 @@ tags:
   - python
   - homelab
   - tech
+  - til
 
 ---
 

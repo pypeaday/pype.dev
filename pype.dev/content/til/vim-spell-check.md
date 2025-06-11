@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['vim', 'tech']
+tags: ['vim', 'tech', 'til']
 title: Vim-Spell-Check
 date: 2022-04-01T00:00:00
 published: True

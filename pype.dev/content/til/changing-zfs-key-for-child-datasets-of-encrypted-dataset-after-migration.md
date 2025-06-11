@@ -7,6 +7,7 @@ tags:
   - zfs
   - homelab
   - tech
+  - til
 ---
 
 ➜ pihole sudo zfs load-key -L file:///path/to/.zfs.tank.key tank/encrypted/vms/arch-sandbox

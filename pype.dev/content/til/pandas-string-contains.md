@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: [ 'python', 'tech']
+tags: [ 'python', 'tech', 'til']
 title: Pandas-String-Contains
 date: 2022-05-02T00:00:00
 published: True

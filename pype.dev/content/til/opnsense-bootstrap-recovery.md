@@ -7,6 +7,7 @@ tags:
   - infrastructure
   - homelab
   - tech
+  - til
 
 ---
 

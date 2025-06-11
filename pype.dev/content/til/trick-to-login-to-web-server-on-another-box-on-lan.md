@@ -7,6 +7,7 @@ tags:
   - homelab
   - cli
   - tech
+  - til
 
 ---
 

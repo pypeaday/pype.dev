@@ -6,6 +6,7 @@ published: True
 tags:
   - tech
   - logos
+  - til
 ---
 
 the Logos web app is DISGUSTINGY bright/white - enough to actually ruin your morning...

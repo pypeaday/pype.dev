@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['bash', 'linux', 'tech']
+tags: ['bash', 'linux', 'tech', 'til']
 title: Stow
 date: 2022-03-04T00:00:00
 published: True

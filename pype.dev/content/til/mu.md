@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'git', 'tech']
+tags: ['python', 'git', 'tech', 'til']
 title: Mu
 date: 2022-03-15T00:00:00
 published: True

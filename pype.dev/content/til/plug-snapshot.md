@@ -6,6 +6,7 @@ title: Plug Snapshot!
 tags:
   - vim
   - tech
+  - til
 
 ---
 

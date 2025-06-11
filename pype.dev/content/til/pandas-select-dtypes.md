@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'tech']
+tags: ['python', 'tech', 'til']
 title: Pandas-Select-Dtypes
 date: 2022-03-05T00:00:00
 published: True
