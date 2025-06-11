@@ -5,14 +5,21 @@ Description: A dark, card-based theme with teal/mint accents, inspired by tech a
 :root {
     --primary-dark-bg: #081c24;
     --secondary-dark-bg: #0b2731;
-    --text-primary: #e6f1ff;
+    --text-primary: #DCD0BA; /* More distinctly warm primary text */
     --text-secondary: #a0aec0;
     --accent-color: #2FD8B4;
     --accent-color-darker: #26B396;
+    --accent-color-purple: #B695E0; /* New pastel purple */
+    --accent-color-warm: #C5A080; /* New warm accent */
     --border-color: #1e3a45;
-    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --card-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 8px -2px var(--accent-color-warm); /* Updated card shadow for depth & warmth */
+    --glitch-text-shadow: 
+        0.05em 0 0 rgba(47, 216, 180, 0.75),
+        -0.025em -0.05em 0 rgba(8, 28, 36, 0.75),
+        0.025em 0.05em 0 rgba(11, 39, 49, 0.75);
 
-    --font-heading: 'Lora', serif;
+    --font-heading: 'VT323', monospace; /* Nerdy font */
+    --font-subheading: 'Lora', serif;
     --font-body: 'Inter', sans-serif;
 }
 
@@ -31,6 +38,16 @@ body {
     line-height: 1.7;
     overflow-x: hidden;
     padding-top: 1rem; /* Add some space at the top */
+    /* Subtle animated gradient or pattern for chaos */
+    background: linear-gradient(45deg, var(--primary-dark-bg) 0%, var(--secondary-dark-bg) 50%, var(--primary-dark-bg) 100%);
+    background-size: 400% 400%;
+    animation: chaoticBackground 40s ease infinite; /* Slowed down animation */
+}
+
+@keyframes chaoticBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -40,18 +57,52 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    color: var(--text-primary);
-    font-size: 2.8rem;
+    font-family: var(--font-heading);
+    color: var(--accent-color);
+    font-size: 4rem; /* Larger for impact */
+    text-shadow: var(--glitch-text-shadow);
+    letter-spacing: 0.1em;
+    transition: text-shadow 0.2s ease;
+}
+
+h1:hover, h1:focus {
+    animation: subtleGlitch 0.5s 2 steps(2, end); /* Glitch on hover only */
+}
+
+@keyframes subtleGlitch {
+  0%, 100% { text-shadow: var(--glitch-text-shadow); opacity: 1; }
+  49% {  text-shadow: var(--glitch-text-shadow); opacity: 1;}
+  50% { text-shadow: 0.06em 0.01em 0 var(--accent-color-darker), -0.03em -0.02em 0 var(--primary-dark-bg), -0.01em 0.03em 0 var(--secondary-dark-bg); opacity: 0.9; }
+  51% { text-shadow: var(--glitch-text-shadow); opacity: 1; }
 }
 
 section h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
+    font-family: var(--font-heading);
+    font-size: 2.8rem; /* Larger section titles */
+    margin-bottom: 2rem;
+    text-align: left; /* Shift from center for asymmetry */
     color: var(--accent-color);
+    position: relative;
+    padding-left: 1em;
+    letter-spacing: 0.05em;
+}
+
+section h2::before {
+    content: '>'; /* Terminal prompt style */
+    position: absolute;
+    left: 0;
+    top: 0.05em; /* Adjust alignment */
+    color: var(--accent-color-darker);
+    animation: blinkCursor 2s infinite step-end; /* Slowed down blink */
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 h3 {
+    font-family: var(--font-subheading); /* Lora for subheadings */
     color: var(--text-primary);
     font-size: 1.5rem;
 }
@@ -59,17 +110,20 @@ h3 {
 a {
     color: var(--accent-color);
     text-decoration: none;
-    border-bottom: 1px solid transparent; /* Subtle or no underline by default */
-    transition: color 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px dashed var(--accent-color); /* Dashed underline for a bit of chaos */
+    transition: color 0.2s ease, border-color 0.2s ease, text-shadow 0.2s ease;
+    position: relative; /* For pseudo-elements if needed */
 }
 
-a:hover {
-    color: var(--accent-color-darker);
-    border-bottom-color: var(--accent-color-darker);
+a:hover, a:focus {
+    color: var(--text-primary); /* Brighter on hover */
+    border-bottom-color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-color), 0 0 8px var(--accent-color-warm); /* Warmer link hover glow */
+    outline: none;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1100px; /* Wider container */
     margin-left: auto;
     margin-right: auto;
     padding: 0 1rem;
@@ -77,14 +131,42 @@ a:hover {
 
 /* --- Header (Hero) --- */
 .hero {
-    text-align: center;
+    text-align: left; /* Asymmetry */
     padding: 4rem 1rem 3rem;
-    margin-bottom: 2rem; /* Space before first card */
+    margin-bottom: 3rem; 
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--accent-color);
+    background-color: var(--secondary-dark-bg); /* Slight differentiation */
+    position: relative;
+    overflow: hidden; /* For pseudo-elements */
+    border-radius: 8px; /* Soften corners */
+}
+
+.hero::after { /* Scanline effect */
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+        transparent,
+        transparent 2px,
+        rgba(8, 28, 36, 0.1) 3px, /* Fainter scanlines */
+        rgba(8, 28, 36, 0.1) 4px
+    );
+    animation: scanlines 20s linear infinite alternate; /* Slower scanlines */
+}
+
+@keyframes scanlines {
+    from { background-position: 0 0; }
+    to { background-position: 0 100px; }
 }
 
 .hero h1 {
     margin-bottom: 0.75rem;
-    font-weight: 400; /* Match previous styling if preferred */
+    /* font-weight is now in the main h1 style */
 }
 
 .hero .subtitle {
@@ -99,12 +181,30 @@ a:hover {
 /* --- Card Styling for Content Sections --- */
 main > section,
 .site-footer {
-    background-color: var(--secondary-dark-bg);
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-    border-radius: 8px;
+    background-color: rgba(11, 39, 49, 0.8); /* Slightly more transparent for depth with animated bg */
+    padding: 2rem 1.5rem; /* Adjust padding */
+    margin-bottom: 2.5rem;
     border: 1px solid var(--border-color);
+    border-left: 3px solid var(--accent-color-darker);
+    border-right: 3px solid var(--accent-color-purple);
+    border-radius: 8px; /* Soften corners */
     box-shadow: var(--card-shadow);
+    position: relative;
+    transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+}
+
+main > section:nth-child(odd) {
+    transform: translateX(-5px) rotate(-0.5deg); /* Slight chaotic offset for odd sections */
+}
+
+main > section:nth-child(even) {
+    transform: translateX(5px) rotate(0.5deg); /* Slight chaotic offset for even sections */
+}
+
+main > section:hover {
+    transform: translateX(0) rotate(0) scale(1.02); /* Bring to front and normalize on hover */
+    z-index: 10;
+    box-shadow: -5px 5px 25px rgba(47, 216, 180, 0.25), 5px -5px 25px rgba(182, 149, 224, 0.25), 0 0 15px var(--accent-color-warm); /* Added warm glow to hover */
 }
 
 main > section:last-of-type {
@@ -124,10 +224,44 @@ section p:last-child {
     margin-bottom: 0;
 }
 
+.welcome-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.welcome-section h2 {
+    padding-left: 0;
+    text-align: left;
+}
+
+.welcome-section h2::before {
+    content: ''; /* Remove the '>' cursor */
+    animation: none; /* Remove blinking animation */
+}
+
 .welcome-section p {
     font-size: 1.15rem; /* Slightly larger for welcome */
     color: var(--text-primary);
-    text-align: center;
+    text-align: left;
+    margin-bottom: 0; /* Remove bottom margin since it's in a flex container */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4); /* Subtle shadow for depth */
+}
+
+.profile-bitmoji {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    padding: 4px;
+    background-color: var(--secondary-dark-bg);
+    box-shadow: 0 0 15px -5px var(--accent-color), 0 0 15px -5px var(--accent-color-purple) inset;
+    transition: transform 0.3s ease-out;
+    flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.profile-bitmoji:hover {
+    transform: scale(1.05) rotate(3deg);
 }
 
 /* --- Feeds Section --- */
@@ -146,20 +280,24 @@ section p:last-child {
 .button-primary {
     display: inline-block;
     padding: 0.8em 1.8em;
-    background-color: var(--accent-color);
-    color: var(--primary-dark-bg); /* Dark text on light accent button */
+    background-color: transparent;
+    color: var(--accent-color); 
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 0px;
     font-weight: bold;
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     font-size: 1.1rem;
-    border: none;
+    border: 2px solid var(--accent-color);
+    font-family: var(--font-heading);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .button-primary:hover {
-    background-color: var(--accent-color-darker);
-    color: #000; /* Ensure contrast on hover */
-    transform: translateY(-2px);
+    background-color: var(--accent-color);
+    color: var(--primary-dark-bg); 
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 0 15px var(--accent-color);
 }
 
 .button-primary .fas {
@@ -175,67 +313,77 @@ section p:last-child {
 }
 
 .feed-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 1.5rem;
 }
 
 .feed-category {
-    background-color: var(--primary-dark-bg); /* Slightly darker inner cards */
-    padding: 1.5rem;
-    border-radius: 6px;
-    border: 1px solid var(--border-color);
+background-color: var(--primary-dark-bg); 
+padding: 1.5rem;
+border-radius: 0px;
+border: 1px dashed var(--border-color); /* Dashed border for chaos */
+transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.feed-category:hover {
+transform: scale(1.03) rotate(1deg); /* More chaotic hover */
+border-color: var(--accent-color);
 }
 
 .feed-category h3 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--accent-color);
+font-size: 1.3rem;
+margin-bottom: 1rem;
+padding-bottom: 0.5rem;
+border-bottom: 1px solid var(--border-color);
+color: var(--accent-color);
 }
 
 .feed-category ul {
-    list-style: none;
+list-style: none;
 }
 
 .feed-category ul li {
-    margin-bottom: 0.6rem;
+margin-bottom: 0.6rem;
 }
 
 .feed-category ul a {
-    font-size: 1rem;
+font-size: 1rem;
 }
 
 /* --- Connect Section --- */
 .connect-section ul {
-    list-style: none;
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    padding-top: 1rem;
+list-style: none;
+display: flex;
+justify-content: center;
+gap: 1.5rem;
+flex-wrap: wrap;
+padding-top: 1rem;
 }
 
 .connect-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 1.05rem;
-    padding: 0.5em 1em;
-    border-radius: 4px;
-    background-color: var(--primary-dark-bg);
-    border: 1px solid var(--border-color);
+display: flex;
+align-items: center;
+padding: 0.75rem 1rem;
+margin-bottom: 0.5rem;
+border-radius: 0px;
+background-color: transparent;
+border: 1px dashed var(--border-color);
+transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+font-family: var(--font-heading);
+letter-spacing: 0.03em;
 }
 
 .connect-link:hover {
-    background-color: var(--border-color);
-    color: var(--accent-color-darker);
+background-color: var(--border-color);
+color: var(--accent-color-darker);
+border-color: var(--accent-color);
+border-style: solid;
 }
 
 .connect-link i {
-    font-size: 1.2rem;
-    color: var(--accent-color);
+font-size: 1.2rem;
+color: var(--accent-color);
 }
 
 /* --- Footer --- */
@@ -288,48 +436,60 @@ section p:last-child {
 
 .series-card {
     background-color: var(--primary-dark-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 2rem;
-    text-align: center;
+    border: 1px dashed var(--border-color); /* Dashed border */
+    border-left: 3px solid var(--accent-color); /* Accent on one side */
+    border-radius: 8px; /* Soften corners */
+    padding: 1.5rem;
+    text-align: left; /* Asymmetry */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    align-items: flex-start; /* Align items to the left */
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease-out;
 }
 
 .series-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px) rotate(-1deg) scale(1.02); /* Chaotic hover */
+    box-shadow: 0 6px 18px rgba(47, 216, 180, 0.2);
+    border-color: var(--accent-color);
 }
 
 .series-icon {
     font-size: 2.5rem;
     color: var(--accent-color);
     margin-bottom: 1rem;
+    align-self: center; /* Keep icon centered if desired, or remove for full left align */
 }
 
 .series-card h3 {
-    font-size: 1.5rem;
-    color: var(--text-primary);
+    font-family: var(--font-heading); /* Use nerdy font */
+    font-size: 1.7rem; /* Slightly larger */
+    color: var(--accent-color);
     margin-bottom: 0.75rem;
+    letter-spacing: 0.03em;
 }
 
 .series-card p {
-    text-align: center;
+    text-align: left;
     font-size: 1rem;
     flex-grow: 1; /* Allows description to push link down */
+    color: var(--text-secondary);
 }
 
 .series-link {
     display: inline-block;
     margin-top: 1rem;
-    font-weight: bold;
-    border-bottom: 2px solid transparent;
+    font-family: var(--font-heading);
+    font-weight: normal; /* VT323 is already boldish */
+    border-bottom: 1px dashed var(--accent-color);
+    padding-bottom: 2px;
+    letter-spacing: 0.05em;
+    align-self: flex-start; /* Align link to the left */
 }
 
 .series-link:hover {
-    border-bottom-color: var(--accent-color-darker);
+    color: var(--text-primary);
+    border-bottom-color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-color);
 }
 
 .series-link i {
