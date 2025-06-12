@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'tech']
+tags: ['python', 'tech', 'til']
 title: Dataframe-Memory-Usage
 date: 2022-03-07T00:00:00
 published: True

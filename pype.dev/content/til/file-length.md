@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ["linux", 'tech']
+tags: ["linux", 'tech', 'til']
 title: File-Length
 date: 2022-04-04T00:00:00
 published: True

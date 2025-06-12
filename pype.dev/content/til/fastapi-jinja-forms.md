@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'tech']
+tags: ['python', 'tech', 'til']
 title: Forms with FastAPI and Jinja
 date: 2022-05-15T00:00:00
 published: False

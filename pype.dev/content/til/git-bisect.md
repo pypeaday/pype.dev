@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['git', 'tech']
+tags: ['git', 'tech', 'til']
 title: Git-Bisect
 date: 2022-05-03T00:00:00
 published: True

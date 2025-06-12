@@ -6,6 +6,7 @@ published: False
 cover: "media/mocking-s3-with-moto.png"
 tags:
   - python
+  - til
 
 ---
 

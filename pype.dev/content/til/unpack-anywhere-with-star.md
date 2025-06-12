@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['python', 'tech']
+tags: ['python', 'tech', 'til']
 title: Unpack-Anywhere-With-Star
 date: 2022-04-24T00:00:00
 published: True

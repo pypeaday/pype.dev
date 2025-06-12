@@ -7,6 +7,7 @@ tags:
   - linux
   - cli
   - tech
+  - til
 
 ---
 

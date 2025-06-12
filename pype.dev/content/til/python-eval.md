@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: [tech, python]
+tags: [tech, python, til]
 title: Python-Eval
 date: 2022-05-12T00:00:00
 published: False

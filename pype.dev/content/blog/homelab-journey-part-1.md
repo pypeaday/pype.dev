@@ -6,6 +6,7 @@ published: True
 tags:
   - homelab
   - tech
+  - series-homelab
 
 ---
 
@@ -63,7 +64,9 @@ part of my infrastructure now for a long time.
 
 !!! note "stats"
     CPU: i5-8700
+
     Memory: 8GB of whatever was in the box
+
     Storage: 1TB SSD
 
 My router is an old Optiplex SFF 5060 I got from Amazon for less than $100. 
@@ -108,9 +111,13 @@ Some of the apps I run here are ollama, open-webui, automatic1111's stable diffu
 
 !!! note "stats"
     CPU: Ryzen 7 5700G
+
     GPU: None right now
+
     Memory: 128 GB
+
     Storage: 2x12 TB ZFS Mirror + another 2x12 TB ZFS Mirror + 500GB disk for NVR
+
     OS: Ubuntu Server 24.04
 
 At the moment I am managing containers using Docker Compose stacks. Many

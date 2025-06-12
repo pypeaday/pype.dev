@@ -7,6 +7,7 @@ tags:
   - homelab
   - linux
   - tech
+  - til
 ---
 
 I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that's the issue with Ubuntu I guess...

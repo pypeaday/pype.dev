@@ -7,6 +7,7 @@ tags:
   - cli
   - bash
   - tech
+  - til
 
 ---
 

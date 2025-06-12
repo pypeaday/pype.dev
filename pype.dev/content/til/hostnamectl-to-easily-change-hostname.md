@@ -8,6 +8,7 @@ tags:
   - terminal
   - homelab
   - cli
+  - til
 ---
 
 hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways

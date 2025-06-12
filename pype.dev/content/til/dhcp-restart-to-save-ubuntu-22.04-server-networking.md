@@ -7,6 +7,7 @@ tags:
   - homelab
   - linux
   - tech
+  - til
 ---
 
 I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn't show up on any networks. A solution that got me back in was a friend restarting the dhcp client for me:

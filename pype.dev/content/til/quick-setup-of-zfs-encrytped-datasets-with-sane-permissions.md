@@ -7,6 +7,7 @@ tags:
   - zfs
   - homelab
   - tech
+  - til
 ---
 
 Assuming you have a pool called `tank`...

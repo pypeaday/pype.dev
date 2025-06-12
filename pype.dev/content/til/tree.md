@@ -1,6 +1,6 @@
 ---
 templateKey: til
-tags: ['linux', 'tech']
+tags: ['linux', 'tech', 'til']
 title: Tree
 date: 2022-03-06T00:00:00
 published: True

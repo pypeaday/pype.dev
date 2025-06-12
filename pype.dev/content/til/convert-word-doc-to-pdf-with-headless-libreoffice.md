@@ -7,6 +7,7 @@ tags:
   - linux
   - cli
   - tech
+  - til
 ---
 
 I've been using paperless-ngx to manage all my documents, but every once in a while I'll get a `.docx` file to deal with...
