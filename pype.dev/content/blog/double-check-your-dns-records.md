@@ -2,7 +2,7 @@
 date: 2025-06-13 06:53:50
 templateKey: blog-post
 title: Double Check Your DNS Records
-published: False
+published: True
 tags:
   - homelab
   - tech
