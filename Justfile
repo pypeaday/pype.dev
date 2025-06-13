@@ -1,12 +1,29 @@
 default:
   @just --list
 
+clean:
+    rm -rf markout || echo "markout directory not found"
+    ./.venv/bin/markata clean
+
 build:
-    ./.venv/bin/markata clean && ./.venv/bin/markata build
+    ./.venv/bin/markata build
+
+clean-build:
+    @just clean
+    @just build
+
 serve: 
     @just build
     python -m http.server -d markout 8003
-    # marmite pype.dev markout --watch --serve --bind "0.0.0.0:8001"
+
+clean-serve: 
+    @just clean
+    @just build
+    python -m http.server -d markout 8003
+
+tailwind:
+    npx tailwindcss --input tailwind/input.css --output static/app.css --minify --watch
+    # npx tailwindcss --input tailwind/input.css --output static/app.css --minify
 
 [group('i-was-wrecked')]
 get-vault-key:
