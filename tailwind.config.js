@@ -48,8 +48,21 @@ module.exports = {
                 color: theme('colors.accent-cool'),
               },
             },
+            h1: {
+              color: theme('colors.text-heading'),
+            },
+            h2: {
+              color: theme('colors.text-heading'),
+            },
+            h3: {
+              color: theme('colors.text-heading'),
+            },
+            h4: {
+              color: theme('colors.text-heading'),
+            },
             pre: {
-              backgroundColor: theme('colors.primary-light'),
+              backgroundColor: theme('colors.primary-dark'),
+              color: theme('colors.text-main'),
               padding: theme('padding.4'),
               borderRadius: theme('borderRadius.lg'),
               width: '80%',
@@ -62,18 +75,6 @@ module.exports = {
             },
             'code::after': {
               content: '""',
-            },
-            h1: {
-              color: theme('colors.text-heading'),
-            },
-            h2: {
-              color: theme('colors.text-heading'),
-            },
-            h3: {
-              color: theme('colors.text-heading'),
-            },
-            h4: {
-              color: theme('colors.text-heading'),
             },
             blockquote: {
               color: theme('colors.text-main'),
@@ -88,20 +89,37 @@ module.exports = {
               marginTop: theme('spacing.6'),
               marginBottom: theme('spacing.6'),
             },
-            pre: {
-              backgroundColor: theme('colors.primary-dark'),
-              color: theme('colors.text-main'),
+            img: {
+              borderRadius: theme('borderRadius.lg'),
+              boxShadow: theme('boxShadow.lgc'),
+              borderWidth: '2px',
+              borderColor: theme('colors.white'),
+              marginTop: theme('spacing.6'),
+              marginBottom: theme('spacing.6'),
             },
-            'code::before': {
-              content: '""',
-            },
-            'code::after': {
-              content: '""',
-            },
-            code: {
+            code: { 
               color: theme('colors.accent-warm'),
               fontWeight: '500',
-            }
+            },
+          }
+        },
+        invert: {
+          css: {
+            // Add any specific dark mode overrides for typography elements here if needed.
+            // For example, if default prose-invert link colors are not suitable:
+            // a: {
+            //   color: theme('colors.accent-cool'),
+            //   '&:hover': {
+            //     color: theme('colors.accent-green'),
+            //   },
+            // },
+            img: {
+              borderColor: theme('colors.gray.600'),
+            },
+            // If inline code needs specific dark mode styling, add it here:
+            // code: {
+            //   color: theme('colors.someOtherColorForDarkCode'),
+            // },
           },
         },
       }),
