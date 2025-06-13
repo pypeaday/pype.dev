@@ -1,5 +1,25 @@
-<section class="title">
-    <h1 id="title">
-        {{ post.title }}
-    </h1>
+<section class="post-header mb-8 text-center">
+    <h1 id="title" class="text-4xl md:text-5xl font-bold text-text-heading mb-4">{{ post.title }}</h1>
+    <div class="text-sm text-text-main/80">
+        <time datetime="{{ post.date.isoformat() if post.date else '' }}">
+            Published on {{ post.date.strftime('%B %d, %Y') if post.date else 'N/A' }}
+        </time>
+        {# You can add author here if you have 'post.author' available #}
+        {# {% if post.author %}
+            <span class="mx-2">&bull;</span>
+            <span>By {{ post.author }}</span>
+        {% endif %} #}
+    </div>
+    {% if post.tags and post.tags|length > 0 %}
+    <div class="mt-4">
+        {% for tag in post.tags %}
+            {# Assuming you have a route like /tags/tag-name/ #}
+            {# You might need to adjust the href if your tag URL structure is different #}
+            {# Also, ensure 'slugify' filter is available or replace with appropriate logic #}
+            <a href="{{ markata.config.get('url', '') }}/tags/{{ tag }}/" class="inline-block bg-accent-cool/20 text-accent-cool-darker text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full hover:bg-accent-cool/30 transition-colors">
+                #{{ tag }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
 </section>
