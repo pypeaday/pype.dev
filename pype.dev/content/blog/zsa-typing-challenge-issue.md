@@ -2,7 +2,7 @@
 date: 2025-06-13 08:07:41
 templateKey: blog-post
 title: ZSA typing challenge issue
-published: False
+published: True
 tags:
   - homelab
   - tech
