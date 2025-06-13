@@ -48,6 +48,21 @@ module.exports = {
                 color: theme('colors.accent-cool'),
               },
             },
+            pre: {
+              backgroundColor: theme('colors.primary-light'),
+              padding: theme('padding.4'),
+              borderRadius: theme('borderRadius.lg'),
+              width: '80%',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              fontSize: '0.9rem',
+            },
+            'code::before': {
+              content: '""',
+            },
+            'code::after': {
+              content: '""',
+            },
             h1: {
               color: theme('colors.text-heading'),
             },
