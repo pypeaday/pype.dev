@@ -8,6 +8,7 @@ tags:
   - reflection
   - free-will
   - sovereignty
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614184824_22e1d8af.png"
 
 ---
 
