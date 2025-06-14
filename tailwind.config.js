@@ -125,7 +125,7 @@ module.exports = {
               borderColor: theme('colors.primary-light'), // Changed from white
               marginTop: theme('spacing.6'),
               marginBottom: theme('spacing.6'),
-              maxWidth: theme('maxWidth.3xl'), // Added to scale down images
+              maxWidth: '80%', // Increased from 3xl to make content images larger
               marginLeft: 'auto',             // Added to center images
               marginRight: 'auto',            // Added to center images
             },
