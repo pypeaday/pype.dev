@@ -6,7 +6,9 @@ published: True
 tags:
   - reflection
   - health
-
+  - mental-health
+  - autism
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614145712_e33ac670.png"
 ---
 
 # Introduction
