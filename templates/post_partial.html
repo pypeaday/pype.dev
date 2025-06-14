@@ -1,6 +1,19 @@
 <article class='w-full'>
+    {% if post.cover %}
+    <div class="mt-8 mb-8 -mx-8">
+        <img src="{{ post.cover if post.cover.startswith('http') else '/' + markata.config.path_prefix + post.cover }}" alt="{{ post.title }} cover image" class="w-full object-cover rounded-lg shadow-2xl border-4 border-white dark:border-gray-600" style="max-height: 400px;">
+    </div>
+    {% endif %}
     {% include "title.html" %}
-    <section class="body">
-        {{ post.article_html }}
+    <section class="article-content prose dark:prose-invert lg:prose-xl max-w-none mx-auto mt-8">
+        {#
+          The 'prose' classes are from the @tailwindcss/typography plugin.
+          If you're not using it, replace with your own class and add styles
+          to static/post.css for h1, p, ul, code, blockquote etc. inside articles.
+          'lg:prose-xl' makes the typography a bit larger on large screens.
+          'dark:prose-invert' handles dark mode for typography.
+          'max-w-none' removes the default max-width from prose if you want your article to span wider.
+        #}
+        {{ post.article_html | safe }}
     </section>
 </article>

@@ -1,5 +1,17 @@
-<section class="title">
-    <h1 id="title">
-        {{ post.title }}
-    </h1>
+<section class="post-header mb-8">
+    <h1 id="title" class="text-4xl md:text-5xl font-bold text-text-heading mb-4">{{ post.title }}</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="{{ post.date.isoformat() if post.date else '' }}">
+            {{ post.date.strftime('%B %d, %Y') if post.date else 'N/A' }}
+        </time>
+    </div>
+    {% if post.tags and post.tags|length > 0 %}
+    <div class="flex flex-wrap gap-2">
+        {% for tag in post.tags %}
+            <a href="{{ markata.config.get('url', '') }}/tags/{{ tag }}/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20">
+                #{{ tag }}
+            </a>
+        {% endfor %}
+    </div>
+    {% endif %}
 </section>
