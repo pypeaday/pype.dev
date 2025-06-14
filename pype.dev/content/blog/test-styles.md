@@ -5,7 +5,8 @@ title: Test Styles
 published: True
 tags:
   - test
-cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250613203559_6470ff5a.png"
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614005154_0b476df6.png"
+
 ---
 
 

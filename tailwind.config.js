@@ -13,44 +13,44 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Gruvbox Dark Inspired Palette
-        'primary-dark': '#282828',    // Gruvbox main background (bg)
-        'primary-light': '#3c3836',   // Gruvbox slightly lighter background (bg1)
-        'text-main': '#ebdbb2',       // Gruvbox main foreground (fg)
-        'text-heading': '#fabd2f',    // Gruvbox bright yellow (for headings)
-        'text-subtle': '#a89984',     // Gruvbox lighter grey (derived for subtle text)
-        'border-color': '#504945',    // Gruvbox medium grey (bg2, for borders)
+        // Twilight Cove Palette
+        'primary-dark': '#262B34',    // Dark, cool slate gray (Main page background)
+        'primary-light': '#343D46',   // Slightly lighter gray (Cards/elements)
+        'text-main': '#A7B5C5',       // Soft, light gray (Main body text)
+        'text-heading': '#EAE0C8',    // Pale, sandy color (Headings)
+        'text-subtle': '#6A7C8E',     // Muted, darker gray (Subtle/secondary text)
+        'border-color': '#434E5A',    // Border color slightly lighter than background
 
-        'accent-warm': '#d65d0e',     // Gruvbox orange (Primary Call to Action, Warm Links)
-        'accent-cool': '#458588',     // Gruvbox blue (Secondary Accent, Cool Links)
-        'accent-green': '#98971a',    // Gruvbox green (Success, Positive Feedback)
-        'accent-red': '#cc241d',      // Gruvbox red (Error, Danger)
-        'accent-yellow': '#d79921',   // Gruvbox yellow (Warnings, Highlights)
-        'accent-purple': '#b16286',   // Gruvbox purple (Special Highlights)
+        'accent-warm': '#D37C5F',     // Muted, dusky orange (Primary call to action, warm links)
+        'accent-cool': '#608A9F',     // Desaturated sea blue (Secondary accent, cool links)
+        'accent-green': '#6A8A82',    // Dark, muted seafoam green (Success, positive feedback)
+        'accent-red': '#B86A6A',      // Dusky, muted red (Error, danger)
+        'accent-yellow': '#EADDAF',   // Soft, pale moonlight yellow (Warnings, highlights)
+        'accent-purple': '#8A799C',   // Deep, dusky purple (Special highlights)
 
-        // Code Block Specifics (Gruvbox syntax)
-        'code-background': '#282828', // Gruvbox main background (bg)
-        'code-text': '#ebdbb2',       // Gruvbox main foreground (fg)
-        'code-keyword': '#fb4934',    // Gruvbox bright red
-        'code-function': '#fabd2f',   // Gruvbox bright yellow
-        'code-string': '#b8bb26',     // Gruvbox bright green
-        'code-comment': '#928374',    // Gruvbox grey (comments)
-        'code-variable': '#83a598',   // Gruvbox bright blue/aqua (variables)
-        'code-operator': '#fe8019',   // Gruvbox bright orange (operators)
+        // Code Block Specifics
+        'code-background': '#21252B', // Slightly deeper dark gray (Code block background)
+        'code-text': '#A7B5C5',       // Soft, light gray (Default code text)
+        'code-keyword': '#D37C5F',    // Muted, dusky orange (Keywords)
+        'code-function': '#EADDAF',   // Pale moonlight yellow (Function names)
+        'code-string': '#6A8A82',     // Muted seafoam green (Strings)
+        'code-comment': '#6A7C8E',    // Muted, darker gray (Comments)
+        'code-variable': '#608A9F',   // Desaturated sea blue (Variables)
+        'code-operator': '#A7B5C5',   // Soft, light gray (Operators)
 
         // --- Mapping to your existing theme names (used by typography plugin) ---
-        'link': '#d65d0e',            // Gruvbox orange (accent-warm)
-        'link-hover': '#fe8019',      // Gruvbox bright orange (for hover)
-        'keyword': '#fb4934',         // code-keyword
-        'function': '#fabd2f',        // code-function
-        'string': '#b8bb26',          // code-string
-        'comment': '#928374',         // code-comment
-        'variable': '#83a598',        // code-variable
-        'operator': '#fe8019',        // code-operator
-        'error': '#cc241d',           // Gruvbox red (accent-red)
-        'warning': '#d79921',         // Gruvbox yellow (accent-yellow)
-        'info': '#458588',            // Gruvbox blue (accent-cool)
-        'success': '#98971a',         // Gruvbox green (accent-green)
+        'link': '#D37C5F',            // accent-warm (Muted, dusky orange)
+        'link-hover': '#EAE0C8',      // text-heading (Pale, sandy color for hover)
+        'keyword': '#D37C5F',         // code-keyword
+        'function': '#EADDAF',        // code-function
+        'string': '#6A8A82',          // code-string
+        'comment': '#6A7C8E',         // code-comment
+        'variable': '#608A9F',        // code-variable
+        'operator': '#A7B5C5',        // code-operator
+        'error': '#B86A6A',           // accent-red
+        'warning': '#EADDAF',         // accent-yellow
+        'info': '#608A9F',            // accent-cool
+        'success': '#6A8A82',         // accent-green
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
@@ -107,9 +107,9 @@ module.exports = {
             },
             blockquote: {
               color: theme('colors.text-subtle'),
-              borderLeftColor: theme('colors.accent-cool'), // Gruvbox blue for border
+              borderLeftColor: theme('colors.accent-cool'), // Desaturated sea blue for border
               borderLeftWidth: '0.25rem',
-              backgroundColor: theme('colors.primary-light'), // Gruvbox bg1 for background
+              backgroundColor: theme('colors.primary-light'), // Lighter gray for background
               paddingTop: theme('spacing.2'),
               paddingBottom: theme('spacing.2'),
               paddingLeft: theme('spacing.4'),
@@ -127,13 +127,13 @@ module.exports = {
               marginBottom: theme('spacing.6'),
             },
             code: {
-              // Inline code with Gruvbox style
-              color: theme('colors.accent-green'), // Gruvbox green for text
+              // Inline code with Twilight Cove style
+              color: theme('colors.accent-green'), // Muted seafoam green for text
               fontWeight: '500',
               padding: '0.2em 0.4em',
               margin: '0',
               fontSize: '85%',
-              backgroundColor: theme('colors.primary-light'), // Gruvbox bg1 for background
+              backgroundColor: theme('colors.primary-light'), // Lighter gray for background
               borderRadius: '0.3em',
             },
             hr: {
