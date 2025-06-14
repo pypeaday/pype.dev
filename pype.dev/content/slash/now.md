@@ -9,16 +9,18 @@ tags:
 cover: "https://thumbs.dreamstime.com/b/alarm-clock-banner-retro-wooden-table-background-68049878.jpg"
 ---
 
-# Work
+Last updated 2025-06-14
 
-I work primarily as a platform engineer supporting data scientists and app developers deploy their code on kubernetes based systems
+## Projects
 
-# Hobbies
+Haven't forgotten about [[cronicle]]
 
-Homelabbing
+or Soonish - event calendar and dashboard
 
-BJJ
+Working on [[quadtask]]
 
-# Family
+I built a fun self-hosted weather app [[dad-can-i-wear-this]]
 
-I have one.
+## Life
+
+I got my blue belt in BJJ July 2023 (should blog about my BJJ experience...)
