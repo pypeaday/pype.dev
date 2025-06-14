@@ -2,9 +2,9 @@
 date: 2025-06-13 20:58:00
 templateKey: blog-post
 title: Cronicle
-published: True
+published: False
 tags:
-  - projets
+  - projects
   - cronicle
 ---
 

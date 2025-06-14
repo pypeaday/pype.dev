@@ -4,7 +4,7 @@ templateKey: blog-post
 title: Dad, Can I Wear This?
 published: True
 tags:
-  - projets
+  - projects
 ---
 
 [Repo](https://github.com/pypeaday/dad-can-i-wear-this)
