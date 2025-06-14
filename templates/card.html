@@ -1,9 +1,15 @@
 <li class='my-6 list-none'>
     <a class='block w-full p-6 no-underline rounded-lg bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
-        {% if markata.config.path_prefix+post.slug !='' %} href="/{{markata.config.path_prefix}}{{post.slug}}/">
+        {% if post.slug == '/' or post.slug == '' or post.slug == 'index' or post.slug == 'index.html' %}
+        href="/"
         {% else %}
-        href="/">
+        {% set path_prefix = markata.config.get('path_prefix', '') %}
+        {% if path_prefix %}
+        href="/{{ path_prefix.strip('/') }}/{{ post.slug.lstrip('/') }}"
+        {% else %}
+        href="/{{ post.slug.lstrip('/') }}"
         {% endif %}
+        {% endif %}>
         <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading'>
             {{ post.title }}
         </h2>
@@ -13,7 +19,7 @@
 
         {% if post.cover %}
         <div class="my-4 h-48 overflow-hidden">
-            <img src="{{ post.cover if post.cover.startswith('http') else '/' + markata.config.path_prefix + post.cover }}" alt="{{ post.title }} cover image" class="w-full h-full object-cover" style="mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%);">
+            <img src="{% set _cover_url = post.cover %}{% if not _cover_url.startswith('http') %}{% set _path_prefix = markata.config.get('path_prefix', '') %}{% if _path_prefix %}{% set _cover_url = "/" + _path_prefix.strip('/') + "/" + _cover_url.lstrip('/') %}{% else %}{% set _cover_url = "/" + _cover_url.lstrip('/') %}{% endif %}{% endif %}{{ _cover_url }}" alt="{{ post.title }} cover image" class="w-full h-full object-cover" style="mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%);">
         </div>
         {% endif %}
 

@@ -1,5 +1,34 @@
 {% extends "content_base.html" %}
 
 {% block content %}
-    {% include "feed_partial.html" %}
+<article>
+    <header class='sticky top-0 py-4 bg-primary-light/80 backdrop-blur-sm z-10'>
+        <h1 class='text-3xl font-semibold text-text-heading px-6'>{{ title }}</h1>
+    </header>
+    <div class='px-6 py-4'>
+        <ul id='feed' class='list-none max-w-3xl mx-auto'>
+        {% for post in feed.posts %}
+        {% include 'card.html' %}
+        {% endfor %}
+        </ul>
+    </div>
+
+    {# Pagination Links #}
+    <div class="flex justify-between items-center mt-8 px-6 pb-6">
+        <div>
+            {% if feed.prev_page_slug %}
+                <a href="/{{ markata.config.path_prefix }}{{ feed.prev_page_slug }}/" class="inline-block px-4 py-2 border border-accent-cool rounded hover:bg-primary-dark hover:text-text-light transition-colors">
+                    &larr; Newer Posts
+                </a>
+            {% endif %}
+        </div>
+        <div>
+            {% if feed.next_page_slug %}
+                <a href="/{{ markata.config.path_prefix }}{{ feed.next_page_slug }}/" class="inline-block px-4 py-2 border border-accent-cool rounded hover:bg-primary-dark hover:text-text-light transition-colors">
+                    Older Posts &rarr;
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</article>
 {% endblock content %}
