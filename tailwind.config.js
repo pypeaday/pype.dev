@@ -13,66 +13,44 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // --- Base Nord Tones ---
-        'nord-polar-night-0': '#2E3440', // nord0 - Deepest background
-        'nord-polar-night-1': '#3B4252', // nord1 - Main content background
-        'nord-polar-night-2': '#434C5E', // nord2 - Elevated surfaces, borders
-        'nord-polar-night-3': '#4C566A', // nord3 - Subtle text, placeholder, subdued comments
+        // Gruvbox Dark Inspired Palette
+        'primary-dark': '#282828',    // Gruvbox main background (bg)
+        'primary-light': '#3c3836',   // Gruvbox slightly lighter background (bg1)
+        'text-main': '#ebdbb2',       // Gruvbox main foreground (fg)
+        'text-heading': '#fabd2f',    // Gruvbox bright yellow (for headings)
+        'text-subtle': '#a89984',     // Gruvbox lighter grey (derived for subtle text)
+        'border-color': '#504945',    // Gruvbox medium grey (bg2, for borders)
 
-        'nord-snow-storm-0': '#D8DEE9',  // nord4 - Main foreground/text
-        'nord-snow-storm-1': '#E5E9F0',  // nord5 - Brighter foreground
-        'nord-snow-storm-2': '#ECEFF4',  // nord6 - Headings, very bright text
+        'accent-warm': '#d65d0e',     // Gruvbox orange (Primary Call to Action, Warm Links)
+        'accent-cool': '#458588',     // Gruvbox blue (Secondary Accent, Cool Links)
+        'accent-green': '#98971a',    // Gruvbox green (Success, Positive Feedback)
+        'accent-red': '#cc241d',      // Gruvbox red (Error, Danger)
+        'accent-yellow': '#d79921',   // Gruvbox yellow (Warnings, Highlights)
+        'accent-purple': '#b16286',   // Gruvbox purple (Special Highlights)
 
-        // --- Nord Frost Accents (Blues/Cyans) ---
-        'nord-frost-0': '#8FBCBB',       // nord7 - Cyan/Teal
-        'nord-frost-1': '#88C0D0',       // nord8 - Light Blue (Primary Accent)
-        'nord-frost-2': '#81A1C1',       // nord9 - Medium Blue
-        'nord-frost-3': '#5E81AC',       // nord10 - Dark Blue (Secondary Accent)
-
-        // --- Nord Aurora Accents (Warm & Expressive) ---
-        'nord-aurora-red': '#BF616A',    // nord11
-        'nord-aurora-orange': '#D08770', // nord12
-        'nord-aurora-yellow': '#EBCB8B', // nord13
-        'nord-aurora-green': '#A3BE8C',  // nord14
-        'nord-aurora-purple': '#B48EAD', // nord15
-
-        // --- Tokyo Night Tones (for specific highlights/elements) ---
-        'tokyo-bg-alt': '#24283B',       // Dark blue, good for code blocks or focused areas
-        'tokyo-fg': '#c0caf5',           // Main text alternative (brighter than nord-snow-storm-0)
-        'tokyo-fg-alt': '#a9b1d6',       // Secondary text, UI text
-        'tokyo-comment': '#b4f9f8',      // Bright cyan for comments
-
-        'tokyo-red': '#f7768e',
-        'tokyo-orange': '#ff9e64',
-        'tokyo-yellow': '#e0af68',
-        'tokyo-green': '#9ece6a',
-        'tokyo-teal': '#73daca',
-        'tokyo-blue': '#7dcfff',
-        'tokyo-blue-alt': '#7aa2f7',     // Often for functions
-        'tokyo-purple': '#bb9af7',       // Often for keywords
+        // Code Block Specifics (Gruvbox syntax)
+        'code-background': '#282828', // Gruvbox main background (bg)
+        'code-text': '#ebdbb2',       // Gruvbox main foreground (fg)
+        'code-keyword': '#fb4934',    // Gruvbox bright red
+        'code-function': '#fabd2f',   // Gruvbox bright yellow
+        'code-string': '#b8bb26',     // Gruvbox bright green
+        'code-comment': '#928374',    // Gruvbox grey (comments)
+        'code-variable': '#83a598',   // Gruvbox bright blue/aqua (variables)
+        'code-operator': '#fe8019',   // Gruvbox bright orange (operators)
 
         // --- Mapping to your existing theme names (used by typography plugin) ---
-        'primary-dark': '#2E3440',    // nord0 (Nord Polar Night)
-        'primary-light': '#3B4252',   // nord1 (Nord Polar Night)
-        'text-main': '#D8DEE9',       // nord4 (Nord Snow Storm)
-        'text-heading': '#ECEFF4',    // nord6 (Nord Snow Storm)
-        'accent-warm': '#D08770',     // nord12 (Nord Aurora Orange)
-        'accent-cool': '#88C0D0',     // nord8 (Nord Frost Light Blue)
-        'accent-green': '#A3BE8C',    // nord14 (Nord Aurora Green)
-
-        // --- Additional semantic names for the crossover theme (using direct hex for clarity/safety) ---
-        'link': '#88C0D0',            // nord8 (Nord Frost Light Blue)
-        'link-hover': '#8FBCBB',      // nord7 (Nord Frost Cyan/Teal)
-        'keyword': '#bb9af7',         // Tokyo Night Purple
-        'function': '#7aa2f7',        // Tokyo Night Blue Alt
-        'string': '#A3BE8C',          // nord14 (Nord Aurora Green)
-        'comment': '#b4f9f8',         // Tokyo Night Comment (Bright Cyan)
-        'variable': '#D8DEE9',        // nord4 (Nord Snow Storm)
-        'operator': '#81A1C1',        // nord9 (Nord Frost Medium Blue)
-        'error': '#BF616A',           // nord11 (Nord Aurora Red)
-        'warning': '#EBCB8B',         // nord13 (Nord Aurora Yellow)
-        'info': '#88C0D0',            // nord8 (Nord Frost Light Blue)
-        'success': '#A3BE8C',         // nord14 (Nord Aurora Green)
+        'link': '#d65d0e',            // Gruvbox orange (accent-warm)
+        'link-hover': '#fe8019',      // Gruvbox bright orange (for hover)
+        'keyword': '#fb4934',         // code-keyword
+        'function': '#fabd2f',        // code-function
+        'string': '#b8bb26',          // code-string
+        'comment': '#928374',         // code-comment
+        'variable': '#83a598',        // code-variable
+        'operator': '#fe8019',        // code-operator
+        'error': '#cc241d',           // Gruvbox red (accent-red)
+        'warning': '#d79921',         // Gruvbox yellow (accent-yellow)
+        'info': '#458588',            // Gruvbox blue (accent-cool)
+        'success': '#98971a',         // Gruvbox green (accent-green)
       },
       fontFamily: {
         sans: ['Inter', ...defaultTheme.fontFamily.sans],
@@ -96,9 +74,9 @@ module.exports = {
           css: {
             color: theme('colors.text-main'),
             a: {
-              color: theme('colors.accent-green'),
+              color: theme('colors.link'),
               '&:hover': {
-                color: theme('colors.accent-cool'),
+                color: theme('colors.link-hover'),
               },
             },
             h1: {
@@ -114,8 +92,8 @@ module.exports = {
               color: theme('colors.text-heading'),
             },
             pre: {
-              backgroundColor: theme('colors.primary-dark'),
-              color: theme('colors.text-main'),
+              backgroundColor: theme('colors.code-background'),
+              color: theme('colors.code-text'),
               padding: theme('padding.4'),
               borderRadius: theme('borderRadius.lg'),
               fontSize: '0.9rem',
@@ -128,10 +106,10 @@ module.exports = {
               content: '""',
             },
             blockquote: {
-              color: theme('colors.text-main'),
-              borderLeftColor: theme('colors.accent-warm'),
+              color: theme('colors.text-subtle'),
+              borderLeftColor: theme('colors.accent-cool'), // Gruvbox blue for border
               borderLeftWidth: '0.25rem',
-              backgroundColor: theme('colors.primary-dark'),
+              backgroundColor: theme('colors.primary-light'), // Gruvbox bg1 for background
               paddingTop: theme('spacing.2'),
               paddingBottom: theme('spacing.2'),
               paddingLeft: theme('spacing.4'),
@@ -149,16 +127,17 @@ module.exports = {
               marginBottom: theme('spacing.6'),
             },
             code: {
-              color: theme('colors.accent-warm'),
+              // Inline code with Gruvbox style
+              color: theme('colors.accent-green'), // Gruvbox green for text
               fontWeight: '500',
               padding: '0.2em 0.4em',
               margin: '0',
               fontSize: '85%',
-              backgroundColor: theme('colors.primary-light'),
+              backgroundColor: theme('colors.primary-light'), // Gruvbox bg1 for background
               borderRadius: '0.3em',
             },
             hr: {
-              borderColor: theme('colors.accent-cool'),
+              borderColor: theme('colors.border-color'), // Using the defined border-color (Desaturated Aqua/Teal)
               borderTopWidth: '1px',
               marginTop: theme('spacing.8'),
               marginBottom: theme('spacing.8'),
