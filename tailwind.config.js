@@ -120,11 +120,14 @@ module.exports = {
             },
             img: {
               borderRadius: theme('borderRadius.lg'),
-              boxShadow: theme('boxShadow.lgc'),
+              boxShadow: theme('boxShadow.lgc'), // Make sure 'lgc' is defined in your boxShadow theme
               borderWidth: '2px',
-              borderColor: theme('colors.white'),
+              borderColor: theme('colors.primary-light'), // Changed from white
               marginTop: theme('spacing.6'),
               marginBottom: theme('spacing.6'),
+              maxWidth: theme('maxWidth.3xl'), // Added to scale down images
+              marginLeft: 'auto',             // Added to center images
+              marginRight: 'auto',            // Added to center images
             },
             code: {
               // Inline code with Twilight Cove style

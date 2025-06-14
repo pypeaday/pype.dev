@@ -9,7 +9,7 @@ tags:
   - dns
   - terraform
   - cloudflare
-
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614141035_d7382c0e.png"
 ---
 
 # My Blog

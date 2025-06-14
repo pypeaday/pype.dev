@@ -5,6 +5,8 @@ title: About
 published: True
 tags:
   - slash
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614141411_35b02366.png"
+
 ---
 
 # Work

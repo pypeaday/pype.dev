@@ -6,7 +6,7 @@ published: True
 tags:
   - now
   - slash
-cover: "https://thumbs.dreamstime.com/b/alarm-clock-banner-retro-wooden-table-background-68049878.jpg"
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614141616_0d1e39b0.png"
 ---
 
 Last updated 2025-06-14
