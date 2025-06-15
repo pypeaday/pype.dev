@@ -3,7 +3,7 @@ date: 2025-06-15 09:02:09
 templateKey: blog-post
 title: Father's Day 2025
 published: True
-cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615180524_3adc14dd.png"
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615181154_a21e920b.png"
 tags:
   - reflection
   - fathers-day
