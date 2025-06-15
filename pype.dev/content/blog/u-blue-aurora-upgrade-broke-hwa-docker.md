@@ -3,7 +3,7 @@ date: 2025-06-15 08:42:09
 templateKey: blog-post
 title: U-Blue Aurora Upgrade Broke HWA Docker
 published: True
-cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615211459_f9af91c6.png"
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615211643_9d25390e.png"
 tags:
   - homelab
   - tech
