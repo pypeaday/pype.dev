@@ -80,7 +80,7 @@ behave obediently and act in accordance with the reality, not with the fear.
 The reality is that Yahweh loves and protects me, just as I love and protect my
 daughter, even when she was scared on the trapeze bar.
 
-# Reflecting on Fatherhood & God’s Love
+# End
 
 So Father's Day is, for me, a good time to just reflect on what that means to
 be a dad. I'm not going to celebrate and do anything crazy. My family isn't
