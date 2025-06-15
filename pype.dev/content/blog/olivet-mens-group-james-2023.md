@@ -2,7 +2,7 @@
 date: 2023-01-21 06:06:31
 templateKey: blog-post
 title: olivet-mens-group-james-2023
-published: False
+published: True
 tags:
   - olivet
   - faith
