@@ -2,7 +2,7 @@
 date: 2025-05-18 07:15:06
 templateKey: blog-post
 title: A New Perspective on Being God's Child
-published: False
+published: True
 tags:
   - faith
   - reflection
