@@ -3,13 +3,14 @@ date: 2025-06-15 09:02:09
 templateKey: blog-post
 title: Father's Day 2025
 published: True
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615180524_3adc14dd.png"
 tags:
   - reflection
   - fathers-day
 
 ---
 
-# Introduction: Father’s Day & A Shifting Perspective
+# Intro
 
 I just wanted to capture some thoughts on Father's
 Day and how becoming a dad and raising two beautiful kids has affected my view
@@ -26,10 +27,14 @@ where the crux of that post is that, as smart as we might think we
 are as educated theologians, in the eyes of God we're still just children. And
 I mean that we should think that our understanding of our complex topics, is
 still the level of a child in relation to God. And so in that
-same vein I'm asking "in what other ways am I like a child to God?"
+same vein I'm asking 
+
+!!! warning ""
+    "In what other ways am I like a child to God?" 
+
 So again today, I'm making sure to process some of these thoughts.
 
-# The Overtired Baby Analogy
+## Babies and Who Am I?
 
 I remember both of my kids as babies would get overtired, and they'd be so
 tired that they couldn't fall asleep. And I would look at them and go - "this
