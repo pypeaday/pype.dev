@@ -3,7 +3,7 @@ templateKey: blog-post
 title: self-hosted-media
 date: 2022-03-24T00:00:00
 published: True
-cover: "media/self-hosted-media.png"
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250618111543_54b9eac0.png"
 tags: 
   - python
   - homelab
