@@ -88,7 +88,7 @@ Here's my thought on <a href="{post["link"]}">{post["title"]}</a>
         """
         post["raw"] = post["content"]
         post["jinja"] = False
-        post["published"] = False
+        post["published"] = True
 
     thoughts = markata.Posts.parse_obj(
         {"posts": posts},
