@@ -11,6 +11,16 @@ tags:
   - stable-diffusion
 ---
 
+# Ulra Top Contendor Nic's Favorite
+
+![20250621020431_d6c69cd2.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250621020431_d6c69cd2.png)
+
+(fjords of Finland:1.3), (steep cliffs:1.1), (crystal-clear water:1.2), (reflection of sky on water:1.1), (early morning light:1.2), (golden hour glow:1.1), (pine trees:1.1), (green orange:1.0), (serene nature:1.2), (8K landscape photography:1.3), (gaming concept art:1.2), (ultra realistic: 1.1)
+
+Negative prompt: (blurry:1.3), (low resolution:1.3), (overexposed:1.2), (cartoonish:1.3), (unrealistic colors:1.3), (people:1.1), (city buildings:1.2), (vehicles:1.2), (text:1.3), (distortion:1.2)
+
+Steps: 30, Sampler: Euler a, Schedule type: Automatic, CFG scale: 7, Seed: 2926433856, Size: 768x768, Model hash: 4199bcdd14, Model: revAnimated_v122EOL, ControlNet 0: "Module: none, Model: control_v1p_sd15_brightness [5f6aa6ed], Weight: 0.25, Resize Mode: Crop and Resize, Processor Res: 512, Threshold A: 0.5, Threshold B: 0.5, Guidance Start: 0.25, Guidance End: 1.0, Pixel Perfect: False, Control Mode: Balanced", ControlNet 1: "Module: none, Model: control_v1p_sd15_brightness [5f6aa6ed], Weight: 0.25, Resize Mode: Crop and Resize, Processor Res: 512, Threshold A: 0.5, Threshold B: 0.5, Guidance Start: 0.25, Guidance End: 0.85, Pixel Perfect: False, Control Mode: Balanced", Version: v1.9.4
+
 # Codes and prompts
 
 ---
