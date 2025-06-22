@@ -2,9 +2,11 @@
 date: 2024-12-06 15:26:15
 templateKey: blog-post
 title: Advent 2024 - Peace
-published: False
+published: True
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250622113553_71e52795.png"
 tags:
   - faith
+  - advent
 ---
 
 ## Scripture
