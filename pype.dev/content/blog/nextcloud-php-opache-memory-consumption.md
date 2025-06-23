@@ -7,6 +7,7 @@ tags:
   - homelab
   - tech
   - nextcloud
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250623135539_6c7d6fa2.png"
 ---
 
 # Intro
