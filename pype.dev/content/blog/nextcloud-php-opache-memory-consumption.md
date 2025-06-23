@@ -2,7 +2,7 @@
 date: 2025-06-23 08:46:20
 templateKey: blog-post
 title: Nextcloud PHP Opache Memory Consumption
-published: False
+published: True
 tags:
   - homelab
   - tech
