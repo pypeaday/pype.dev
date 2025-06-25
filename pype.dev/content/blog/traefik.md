@@ -1,7 +1,7 @@
 ---
 templateKey: blog-post
 tags: ['homelab', 'tech']
-title: Traefik-01
+title: Traefik
 date: 2022-03-06T00:00:00
 published: True
 cover: "media/traefik-01.png"
