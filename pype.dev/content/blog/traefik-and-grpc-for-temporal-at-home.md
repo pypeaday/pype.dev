@@ -3,6 +3,7 @@ date: 2025-06-24 20:55:42
 templateKey: blog-post
 title: Traefik and gRPC for Temporal at home
 published: True
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250625023937_636de378.png"
 tags:
   - homelab
   - tech
