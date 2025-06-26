@@ -1,12 +1,11 @@
 ---
 date: 2025-06-13 20:58:00
-templateKey: blog-post
+templateKey: slashPage
 title: About
 published: True
 tags:
   - slash
 cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614141411_35b02366.png"
-
 ---
 
 # Work

@@ -1,6 +1,6 @@
 ---
 date: 2025-06-13 20:58:00
-templateKey: blog-post
+templateKey: slashPage
 title: Contact
 published: True
 tags:
@@ -8,13 +8,13 @@ tags:
   - contact
 ---
 
-# Contact Me!
+# Contact Me
 
 You can find more places to find me at [my digital harbor](https://mydigitalharbor.com/pypeaday)
 
 ## Email
 
-You can also email me at nic@pype.dev
+You can also email me at <nic@pype.dev>
 
 ## GitHub
 

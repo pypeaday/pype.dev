@@ -1,6 +1,6 @@
 ---
 date: 2025-06-13 20:58:00
-templateKey: blog-post
+templateKey: slashPage
 title: Now
 published: True
 tags:
@@ -24,3 +24,4 @@ I built a fun self-hosted weather app [[dad-can-i-wear-this]]
 ## Life
 
 I got my blue belt in BJJ July 2023 (should blog about my BJJ experience...)
+
