@@ -64,8 +64,7 @@ Diagrams don't have to be picture perfect, even for documentation's sake. They
 can even remain somewhat unfinished (permitted you don't get yourself into a
 bind of treating diagrams as docs that you didn't clean up)
 
-Here's an example of what I mean - I'm working on a simple workflow to take my
-[[thoughts]] and post them to [[nostr]]. I started with a diagram like this...
+Here's an example of what I mean - I'm working on a simple workflow to take [my-thoughts](/my-thoughts) and post them to [[nostr]]. I started with a diagram like this...
 
 ![20250622112223_f1838d9b.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250622112223_f1838d9b.png)
 

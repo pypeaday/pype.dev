@@ -13,7 +13,7 @@ tags:
 
 # Intro
 
-> This started as one of my [[thoughts]] and got long enough to warrant putting right in the blog
+> This started as one of [[my-thoughts]] and got long enough to warrant putting right in the blog
 
 Faith and works is a common point of conversation for Christians who like
 debating things, and I'm at the point in my life where I'm kind of over the
