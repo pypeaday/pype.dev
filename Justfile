@@ -14,12 +14,12 @@ clean-build:
 
 serve: 
     @just build
-    python -m http.server -d markout 8003
+    python -m http.server -d markout 8123
 
 clean-serve: 
     @just clean
     @just build
-    python -m http.server -d markout 8003
+    python -m http.server -d markout 8123
 
 tailwind:
     npx tailwindcss --input tailwind/input.css --output static/app.css --minify --watch

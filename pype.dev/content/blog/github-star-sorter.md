@@ -6,7 +6,7 @@ published: True
 tags:
   - homelab
   - tech
-
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250703021259_6f3ee0ae.png"
 ---
 
 I wrote a simple app to sort, tag, and create tickets at home for my github
