@@ -17,7 +17,6 @@ def hover_links(doc):
     wikilinks = doc.xpath("//a[@class='wikilink']")
     hoverlinks = doc.xpath("//a[@class='hoverlink']")
 
-    print(f"found {len(wikilinks)} wikilinks and {len(hoverlinks)} hoverlinks")
     for link in wikilinks + hoverlinks:
         parent = link.getparent()
         classes = parent.get("class", "").split()
@@ -38,6 +37,7 @@ def hover_links(doc):
         prefix = ""
         boost = ""
         if href.endswith(".webp") or href.endswith(".mp4"):
+            # TODO: when I add more media think about what to do here
             href = f"https://obsidian-assets.waylonwalker.com/{href}"
         elif not href.startswith("https://"):
             href = f"https://pype.dev/{href}"
@@ -65,8 +65,8 @@ def hover_links(doc):
         else:
             img = f"""
     <span class="z-10 group group-hover:z-20 relative inline-block">
-        <a class="wikilink text-green-500 hover:underline" href="{href}" title="{title}"{boost}>{prefix} {title}</a>
-        <button class="ml-2 text-green-500 hover:underline focus:outline-none" aria-label="Preview">
+        <a class="wikilink text-pink-500 hover:underline" href="{href}" title="{title}"{boost}>{prefix} {title}</a>
+        <button class="ml-2 text-pink-500 hover:underline focus:outline-none" aria-label="Preview">
             <svg xmlns="https://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="h-5 w-5 inline align-middle">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -102,24 +102,23 @@ def hover_links(doc):
     return doc
 
 
-@hook_impl
-def post_render(markata):
-    "Hook to replace youtubes on images.waylonwalker.com with mp4's if they exist"
-
-    print("looking for wikilinks")
-    with markata.cache as cache:
-        for post in markata.filter("not skip"):
-            if post.html is None:
-                print("No html for post:", post.slug)
-                continue
-
-            if isinstance(post.html, dict):
-                for key, post_html in post.html.items():
-                    post.html[key] = do_hover_links(
-                        cache, markata, post_html, post.slug
-                    )
-            else:
-                post.html = do_hover_links(cache, markata, post.html, post.slug)
+# @hook_impl
+# def post_render(markata):
+#     "Hook to replace youtubes on images.waylonwalker.com with mp4's if they exist"
+#
+#     with markata.cache as cache:
+#         for post in markata.filter("not skip"):
+#             if post.html is None:
+#                 continue
+#
+#             if isinstance(post.html, dict):
+#                 for key, post_html in post.html.items():
+#                     post.html[key] = do_hover_links(
+#                         cache, markata, post_html, post.slug
+#                     )
+#             else:
+#                 post.html = do_hover_links(cache, markata, post.html, post.slug)
+#
 
 
 def do_hover_links(cache, markata, post_html, post_slug):
@@ -140,3 +139,4 @@ def do_hover_links(cache, markata, post_html, post_slug):
         return html_str
     else:
         return post_html
+
