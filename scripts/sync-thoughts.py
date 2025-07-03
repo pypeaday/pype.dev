@@ -98,6 +98,7 @@ def sync_thoughts():
         slug: "{slug}"
         date: "{date}"
         tags: {tags}
+        templateKey: "thoughts"
         description: "{description.replace('"', '\\"')}"
         link: "{link}"
         published: true
