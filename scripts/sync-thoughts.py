@@ -86,9 +86,8 @@ def sync_thoughts():
 
         ---
 
-        !!! note
-             This is one of [[ my-thoughts ]]. I picked this up from [Waylon Walker](https://waylonwalker.com)(https://thoughts.waylonwalker.com). It's a short note that I make about someone else's
-             content online.  Learn more about the process [[ thoughts ]]
+        ???+ note "This is one of [[my-thoughts]]"
+            I picked this up from [Waylon Walker](https://waylonwalker.com) who made [thoughts](https://thoughts.waylonwalker.com). It's a short note that I make about someone else's content online.  Learn more about [[thoughts]]
         """
         )
 
