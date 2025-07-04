@@ -27,6 +27,14 @@ This trip I also got the idea for the [[gwl-margarita-tracker]]!
     the game said our time expired... Turns out you have to pay $15 for another
     session of playing even if you already bought all the gear!
 
+## Tips for packing
+
+- I brought my lulu shirts but the wristband snags them and my sweatshirts like
+  crazy - bring athletic hoodies and regular cotton t-shirts to avoid the snag
+- There is a Culver's literally down the street, you could walk... so if you'
+  re starving at night and don't want to spend $29 on a personal pizza, you can
+  take a quick hike for a butter burger
+
 ## Food
 
 We decided to try to save some money on food on this trip, but we had to be
