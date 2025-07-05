@@ -1,5 +1,5 @@
-<li class='my-6 list-none overflow-x-hidden'>
-    <a class='block w-full p-6 no-underline rounded-lg bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+<li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
         {% if post.slug == '/' or post.slug == '' or post.slug == 'index' or post.slug == 'index.html' %}
         href="/"
         {% else %}
@@ -18,8 +18,99 @@
         </p>
 
         {% if post.cover %}
-        <div class="my-4 h-48 overflow-hidden">
-            <img src="{% set _cover_url = post.cover %}{% if not _cover_url.startswith('http') %}{% set _path_prefix = markata.config.get('path_prefix', '') %}{% if _path_prefix %}{% set _cover_url = "/" + _path_prefix.strip('/') + "/" + _cover_url.lstrip('/') %}{% else %}{% set _cover_url = "/" + _cover_url.lstrip('/') %}{% endif %}{% endif %}{{ _cover_url }}" alt="{{ post.title }} cover image" class="w-full h-full object-cover" style="mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%); -webkit-mask-image: radial-gradient(ellipse at center, black 25%, transparent 100%);">
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="{% set _cover_url = post.cover %}{% if not _cover_url.startswith('http') %}{% set _path_prefix = markata.config.get('path_prefix', '') %}{% if _path_prefix %}{% set _cover_url = "/" + _path_prefix.strip('/') + "/" + _cover_url.lstrip('/') %}{% else %}{% set _cover_url = "/" + _cover_url.lstrip('/') %}{% endif %}{% endif %}{{ _cover_url }}" 
+                    alt="{{ post.title }} cover image" 
+                    class="card-image"
+                >
+            </div>
         </div>
         {% endif %}
 
@@ -33,6 +124,9 @@
                     #{{ tag }}
                 </span>
             {% endfor %}
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                {{ post.published }}
+            </span>
         </div>
         {% endif %}
     </a>

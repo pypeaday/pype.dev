@@ -48,6 +48,7 @@ hooks = [
   # TODO: fix reqs in CI
   # "plugins.analytics",
   "plugins.wikilinks_hover",
+  "plugins.password_protection",
   # TODO: test this locally first
   # "plugins.generate_feed_conf",
   # "markata.plugins.prevnext",
@@ -88,6 +89,7 @@ index = 'post.html'
 partial = 'post_partial.html'
 og = 'og.html'
 'raw.md' = 'raw'
+'protected-post' = 'protected-post.html'
 
 
 # markdown_it flavor
@@ -159,6 +161,22 @@ len = 500
 # title = "Project Gallery"
 # filter = "'project-gallery' in str(path)"
 # sort = 'title'
+
+[[markata.feeds]]
+slug = 'drafts'
+title = "drafts"
+filter = "published == False"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata.feeds]]
+slug = 'stable-diffusion'
+title = "Stable Diffusion"
+filter = "'stable-diffusion' in tags"
+sort = "date"
+reverse = true
+page_size = 10
 
 [[markata.feeds]]
 slug = 'all'
@@ -369,6 +387,13 @@ plugin = "mdit_py_plugins.anchors:anchors_plugin"
 plugin = "markata.plugins.md_it_wikilinks:wikilinks_plugin"
 config = { markata = "markata" }
 
+# Password Protection Plugin Configuration
+[markata.password_protection]
+# Salt for password hashing (required for security)
+salt = "blog_salt_2025"
+# Global default password - use plain text, will be hashed automatically
+encryption_password = "pype"
+
 [markata.glob]
-glob_patterns = ["pype.dev/**/*.md"]
+glob_patterns = ["pages/**/*.md"]
 use_gitignore = true

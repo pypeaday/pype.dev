@@ -3,10 +3,13 @@ default:
 
 clean:
     rm -rf markout || echo "markout directory not found"
-    ./.venv/bin/markata clean
+    @just decode-private
+    uv run markata clean
 
 build:
-    ./.venv/bin/markata build
+    @just decode-private
+    uv run markata build
+    @just encode-private
 
 clean-build:
     @just clean
@@ -24,6 +27,40 @@ clean-serve:
 tailwind:
     npx tailwindcss --input tailwind/input.css --output static/app.css --minify --watch
     # npx tailwindcss --input tailwind/input.css --output static/app.css --minify
+
+# Base64 encode private files to obfuscate from GitHub search
+encode-private:
+    #!/bin/bash
+    echo "Encoding private files..."
+    for file in pages/private/*.md; do
+        if [ -f "$file" ] && [[ "$file" != *.b64 ]]; then
+            echo "Encoding: $file"
+            base64 -w 0 "$file" > "$file.b64"
+            rm "$file"
+        fi
+    done
+    echo "Private files encoded."
+
+# Base64 decode private files for build time
+decode-private:
+    #!/bin/bash
+    echo "Decoding private files..."
+    for file in pages/private/*.b64; do
+        if [ -f "$file" ]; then
+            original="${file%.b64}"
+            echo "Decoding: $file -> $original"
+            base64 -d "$file" > "$original"
+        fi
+    done
+    echo "Private files decoded."
+
+# Manually encode all private files (for initial setup or manual use)
+manual-encode-private:
+    @just encode-private
+
+# Manually decode all private files (for editing)
+manual-decode-private:
+    @just decode-private
 
 [group('i-was-wrecked')]
 get-vault-key:

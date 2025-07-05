@@ -3,7 +3,9 @@
 {% endif %}
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-{% if post.description or markata.config.description %}
+{% if post.templateKey == 'protected-post' %}
+<meta name="description" content="🔒 This content is password protected." />
+{% elif post.description or markata.config.description %}
 <meta name="description" content="{{ post.description or markata.config.description }}" />
 {% endif %} {% if markata.config.icon.name %}
 <link href="/{{ markata.config.icon.name }}" rel="icon" type="image/png" />
@@ -14,15 +16,46 @@
 
 <link rel="stylesheet" href="/post.css" />
 <link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
 <script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
 
-<!-- Meta tags from original file -->
-<meta property="og:title" content="Pype.dev | Nic Payne" />
-<meta name="twitter:title" content="Pype.dev | Nic Payne" />
+<!-- Open Graph and Twitter Card meta tags -->
+{% if post.templateKey == 'protected-post' %}
+<!-- Protected post meta tags -->
+<meta property="og:title" content="🔒 {{ post.title or 'Protected Content' }} - Pype.dev" />
+<meta property="og:description" content="🔒 This content is password protected." />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev{{ post.slug }}" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="🔒 {{ post.title or 'Protected Content' }} - Pype.dev" />
+<meta name="twitter:description" content="🔒 This content is password protected." />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+{% else %}
+<!-- Regular post meta tags -->
+<meta property="og:title" content="{{ post.title or 'Pype.dev' }} | Nic Payne" />
+{% if post.description %}
+<meta property="og:description" content="{{ post.description }}" />
+{% endif %}
+{% if post.cover %}
+<meta property="og:image" content="{{ post.cover }}" />
+{% else %}
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+{% endif %}
+<meta property="og:url" content="https://pype.dev{{ post.slug or '' }}" />
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:image" name="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pype.dev/content/media/og-02.png" />
-<meta name="twitter:image" name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pype.dev/content/media/og-02.png" />
-<meta property="og:url" content="https://pype.dev" />
+<meta name="twitter:title" content="{{ post.title or 'Pype.dev' }} | Nic Payne" />
+{% if post.description %}
+<meta name="twitter:description" content="{{ post.description }}" />
+{% endif %}
+{% if post.cover %}
+<meta name="twitter:image" content="{{ post.cover }}" />
+{% else %}
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+{% endif %}
+{% endif %}
+<!-- Common Twitter meta tags -->
 <meta name="twitter:creator" content="@pypeaday">
 <meta name="twitter:site" content="@pypeaday">
 
