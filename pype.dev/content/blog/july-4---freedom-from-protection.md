@@ -19,7 +19,7 @@ earth... there's a LOT worse places on the earth to be. And so as we all
 celebrate with cookouts and stuff I was getting ready to have a great time with
 a few friends enjoying some that tastey freedom...
 
-## A Boundary Respected
+## Friends and Boundaries
 
 We hosted this gathering and pretty clearly scheduled it until 630 PM which is
 when we typically get our daughters ready for bed (yes yes early bedtime...
@@ -39,14 +39,10 @@ Well I got pulled away needing to tend to my youngest daughter's tantrum and in 
     While I was tending to my kid, my friends got all ready to leave on time...
     ![20250705005214_a83dd563.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250705005214_a83dd563.png)
 
-## The Unexpected Departure
-
 Great guests know when it's time to leave and don't make it your responsibility
 to end the time of hanging out. And honestly that's the whole post... Today all
 of our friends were mindful of the time, gave their kiddos adequate warnings,
 and everyone's cars were gone by 6:38...
-
-## A Weight Lifted
 
 I found myself SHOCKED and concerned that I had offended everyone and they couldn't
 wait to leave. But no... it was our friends knowing our boundary and not making
@@ -58,8 +54,6 @@ of having offended someone what I realized is...
 
     I realized that my friends here freed me from having to protect my own
     boundaries and it's hard to put that into words...
-
-## Gratitude for a Considerate Community
 
 Without the words to describe it - I am grateful to have a community that is
 considerate of others (ie. me and my family).
