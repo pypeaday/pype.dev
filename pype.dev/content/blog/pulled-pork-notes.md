@@ -2,7 +2,7 @@
 date: 2025-06-26 05:56:12
 templateKey: blog-post
 title: Pulled Pork Notes
-published: False
+published: True
 tags:
   - cooking
   - traegar
@@ -33,3 +33,8 @@ apple juice spray and then covering it in the latter part of the smoke...
 As for quantity - 2 pork shoulders (and 1 beef arm roast that I smoked today)
 easily fed 4 families (8 adults + 9 kids) and we have plenty left over... like
 probably a full pork shoulder's worth, between all 3 meats.
+
+## Notes
+
+1. spicy pickles were a good addition
+2. seriously need to tend to the pork more during the smoking, after a second re-heat it's getting pretty dry
