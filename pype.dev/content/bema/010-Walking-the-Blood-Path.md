@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 010 Walking the Blood Path
 date: 2022-01-10
-status: published
+published: True
 cover: ""
 ---
 

@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 011 Here I Am
 date: 2022-01-11
-status: published
+published: True
 cover: ""
 ---
 

@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: Session 2 Intro
 date: 2022-01-31
-status: published
+published: True
 cover: ""
 ---
 

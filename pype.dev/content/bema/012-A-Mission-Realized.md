@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 012 A Mission Realized
 date: 2022-01-12
-status: published
+published: True
 cover: ""
 ---
 

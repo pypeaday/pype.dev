@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 009 Letting Go
 date: 2022-01-09
-status: published
+published: True
 cover: ""
 ---
 

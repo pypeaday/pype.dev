@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 022 Under the Chuppah
 date: 2022-01-22
-status: published
+published: True
 cover: ""
 ---
 

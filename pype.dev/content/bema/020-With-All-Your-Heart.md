@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 020 With All Your Heart
 date: 2022-01-20
-status: published
+published: True
 cover: ""
 ---
 

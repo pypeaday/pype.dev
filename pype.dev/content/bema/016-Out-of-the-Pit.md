@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 016 Out of the Pit
 date: 2022-01-16
-status: published
+published: True
 cover: ""
 ---
 

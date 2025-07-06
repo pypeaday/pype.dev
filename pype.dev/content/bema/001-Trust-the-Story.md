@@ -4,8 +4,9 @@ templateKey: blog-post
 tags: ['bema']
 title: 001 Trust the Story
 date: 2022-01-01
-status: published
+published: True
 cover: ""
+jinja: true
 ---
 
 <!doctype html>

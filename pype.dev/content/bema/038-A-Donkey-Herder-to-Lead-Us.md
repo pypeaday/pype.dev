@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 038 A Donkey Herder to Lead Us
 date: 2022-01-31
-status: published
+published: True
 cover: ""
 ---
 

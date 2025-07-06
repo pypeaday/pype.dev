@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 008 Buried in a Geneology
 date: 2022-01-08
-status: published
+published: True
 cover: ""
 ---
 

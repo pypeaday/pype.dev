@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 007 The Preface
 date: 2022-01-07
-status: published
+published: True
 cover: ""
 ---
 

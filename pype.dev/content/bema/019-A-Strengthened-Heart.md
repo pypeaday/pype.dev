@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 019 A Strengthened Heart
 date: 2022-01-19
-status: published
+published: True
 cover: ""
 ---
 

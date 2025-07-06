@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 025 A Kingdom of What
 date: 2022-01-25
-status: published
+published: True
 cover: ""
 ---
 

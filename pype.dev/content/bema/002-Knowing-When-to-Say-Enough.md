@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 002 Knowing When to Say Enough
 date: 2022-01-02
-status: published
+published: True
 cover: ""
 ---
 

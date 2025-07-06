@@ -3,7 +3,7 @@ templateKey: blog-post
 tags: ['bema']
 title: Session 3 Intro 
 date: 2022-08-29
-status: published
+published: True
 cover: "media/session-3-intro.png"
 
 ---

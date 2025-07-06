@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 018 A Tale of Two Kingdoms
 date: 2022-01-18
-status: published
+published: True
 cover: ""
 ---
 

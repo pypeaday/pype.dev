@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 006 A Tale of a Tower
 date: 2022-01-06
-status: published
+published: True
 cover: ""
 ---
 

@@ -2,7 +2,7 @@
 date: 2022-08-29 06:26:42
 templateKey: blog-post
 title: 074 - Silent Years - Synagogue
-status: published
+published: True
 tags:
   - bema
 

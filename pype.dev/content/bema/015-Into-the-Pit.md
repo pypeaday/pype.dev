@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 015 Into the Pit
 date: 2022-01-15
-status: published
+published: True
 cover: ""
 ---
 

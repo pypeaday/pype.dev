@@ -2,7 +2,7 @@
 date: 2022-09-02 06:21:21
 templateKey: blog-post
 title: 076 Silent Years - Sadducees
-status: published
+published: True
 tags:
   - bema
 

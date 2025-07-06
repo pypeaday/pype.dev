@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 003 Master the Beast
 date: 2022-01-03
-status: published
+published: True
 cover: ""
 ---
 

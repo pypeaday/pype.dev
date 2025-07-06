@@ -4,7 +4,7 @@ templateKey: blog-post
 tags: ['bema']
 title: 030 Lead with Your Voice
 date: 2022-01-29
-status: published
+published: True
 cover: ""
 ---
 
