@@ -6,8 +6,7 @@ published: False
 tags:
   - tech
   - homelab
-  - tech
-
+  - computer-vision
 ---
 
 Done in 11 seconds! Subtitle and audio files are in the outputs folder.
