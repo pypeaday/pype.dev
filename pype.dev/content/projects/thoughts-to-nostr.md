@@ -22,6 +22,8 @@ but it's the app code. I also have a repo homelab-social-media-pipelines -
 which has been consolidated down into homelab-temporal. once that all works I
 can destroy the homelab-social-media-pipelines repo
 
+## Issue 01
+
 I am currently hitting a stupid python issue:
 
 ```
@@ -38,8 +40,14 @@ ModuleNotFoundError: No module named 'homelab_temporal'
 
 very dumb venv problem...
 
+## Resolution
+
 need to use `python -m` because the script is outside the project root? see [[2025-07-08-notes]] and the chatgpt notes for more on this but it works now
 
 ## TODOs
 
 [] - destroy the homelab-social-media-pipelines repo
+
+[] - think about how to structure things more... monorepo in homelab-temporal might be hard to manage with AI tools due to context management... unsure though
+
+[] - create workflow and activities for thoughts to nostr... revisit diagram to see what you need to build out in the temporal repo
