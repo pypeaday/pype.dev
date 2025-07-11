@@ -7,6 +7,7 @@ tags:
   - lua
   - til
   - tech
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250711111623_6317d028.png"
 ---
 
 I have tons of linting errors in my nvim config, partly because I use Lazyvim
