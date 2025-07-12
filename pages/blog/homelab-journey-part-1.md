@@ -7,7 +7,6 @@ tags:
   - homelab
   - tech
   - series-homelab
-
 ---
 
 # Introduction
@@ -33,7 +32,7 @@ etc. all from just exploring and trying out the features of pi-hole.
 From there I happened to come into a few computers kind of for free that a church was
 recycling and so now with new-to-me x86 hardware and armed with a tiny bit of
 docker experience at work - I thought "well I wonder if I could run pi-hole in
-docker on a Linux machine?" and that opened the door to running other things in docker. 
+docker on a Linux machine?" and that opened the door to running other things in docker.
 
 # Applications | Free-NAS
 
@@ -43,9 +42,10 @@ systems (Freenas has since morphed into a few things - primarily TrueNAS Core
 for the homelabber). That got me somewhat familiar with jails (which is a BSD
 concept as FreeNAS was based on FreeBSD, not Linux) and running
 containers in different ways and then I decided I wanted Linux so I rebuilt with
-Ubuntu. 
+Ubuntu.
 
 !!! note ""
+
     there's been several hardware changes and such in there but that
     does more or less get me to arrive at where I'm at today which is I have a
     few different boxes running pretty standard operating systems for their
@@ -53,23 +53,26 @@ Ubuntu.
 
 # Current Homelab Setup
 
+!!! note "Find updated at [[the-homelab]]"
+
 ## Ad blocking | Pi-Hole
 
 Hardware: pi-3
 
 I have a Raspberry Pi 3 hardwired in that is running pi-hole so that's been a
-part of my infrastructure now for a long time. 
+part of my infrastructure now for a long time.
 
 ## Router | OPNSense
 
 !!! note "stats"
+
     CPU: i5-8700
 
     Memory: 8GB of whatever was in the box
 
     Storage: 1TB SSD
 
-My router is an old Optiplex SFF 5060 I got from Amazon for less than $100. 
+My router is an old Optiplex SFF 5060 I got from Amazon for less than $100.
 So I'm running a x86 system for my router with
 OpenSense on it. Just seemed it to be another home lab standard and I'd like to
 someday bring pi-hole over there or use AdGuard or integrate those two things
@@ -79,7 +82,7 @@ maybe a little bit more completely but right now they are mostly separate.
 
 There's a
 managed switch in there for some VLAN tomfoolery for my cameras and an IOT
-network type of a thing. 
+network type of a thing.
 
 ## Networking | VPN | Tailscale
 
@@ -88,6 +91,7 @@ They're on tailscale as well so my DNS happens over tailscale.
 ## My Desktop
 
 !!! note "stats"
+
     CPU: Ryzen 7 5700X
 
     GPU: Nvidia 3090
@@ -110,6 +114,7 @@ Some of the apps I run here are ollama, open-webui, automatic1111's stable diffu
 ## NAS / Server
 
 !!! note "stats"
+
     CPU: Ryzen 7 5700G
 
     GPU: None right now
@@ -123,7 +128,7 @@ Some of the apps I run here are ollama, open-webui, automatic1111's stable diffu
 At the moment I am managing containers using Docker Compose stacks. Many
 applications have their own stack but then I also have stacks of many
 applications. The Compose files are all organized by host and they're in git
-and I use GitHub as my main get back and remote storage. 
+and I use GitHub as my main get back and remote storage.
 
 ### Applications
 
@@ -133,7 +138,7 @@ There are currently 74 containers running on my server, I will not list them all
 - portainer
 - nextcloud
 - jellyfin
-- *arr stack
+- \*arr stack
 - code-server
 - kanboard
 
