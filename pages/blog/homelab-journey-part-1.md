@@ -53,7 +53,7 @@ Ubuntu.
 
 # Current Homelab Setup
 
-!!! note "Find updated at [[the-homelab]]"
+!!! note "Find updated information at [[the-homelab]]"
 
 ## Ad blocking | Pi-Hole
 
