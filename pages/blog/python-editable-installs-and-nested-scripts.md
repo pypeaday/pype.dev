@@ -29,7 +29,7 @@ So here's where I learned a little something about `python my_script.py` vs
 
 I setup a short example repo to illustrate the problem
 
-[link to repo](...)
+[link to repo](https://github.com/pypeaday/python-e-example)
 
 The repo structure is very simple...
 

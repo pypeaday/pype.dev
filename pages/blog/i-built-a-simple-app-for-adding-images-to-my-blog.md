@@ -8,7 +8,6 @@ tags:
   - tech
   - python
   - uv
-
 ---
 
 # Quick Deets

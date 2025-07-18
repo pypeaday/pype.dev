@@ -8,12 +8,11 @@ tags:
   - linux
   - tech
   - til
-
 ---
 
 I ran out of space on the SSD in my server when doing some file transfers but only 100GB was used of a 256 GB SSD?
 
-# LVM 
+# LVM
 
 When installing Ubuntu live server the default option for how to partition the
 disk (in my experience) has been to setup an LVM group that defaults to less
@@ -27,7 +26,7 @@ that's fast enough
 
 # Extending the LVM
 
- A moment of googling brought me to Ubuntu's wiki and I
+A moment of googling brought me to Ubuntu's wiki and I
 learned that I can expand my LVM to the space I need...
 
 `sudo lvdisplay` and `sudo pvdisplay` show detailed views of the logical volumes and physical volumes respectively.
