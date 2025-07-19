@@ -1,0 +1,2746 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>My thoughts on the pang-wang</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Meta tags from original file -->
+<meta property="og:title" content="Pype.dev | Nic Payne" />
+<meta name="twitter:title" content="Pype.dev | Nic Payne" />
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" name="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pype.dev/content/media/og-02.png" />
+<meta name="twitter:image" name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pype.dev/content/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev" />
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class='flex flex-row w-full min-h-screen bg-pattern-gradient text-text-main'>
+    <main class="flex-grow fade-in overflow-visible">
+        <div class='container flex-grow p-2 sm:p-6 mx-auto bg-content-blend overflow-visible'>
+<header class='py-4'>
+
+    <nav class='flex flex-wrap justify-center sm:justify-start items-center'>
+        <a class="nav-link accent-glow"
+            href='/'>Home</a>
+        <a class="nav-link accent-glow"
+            href='https://github.com/pypeaday/pype.dev'>GitHub</a>
+        <a class="nav-link accent-glow"
+            href='https://mydigitalharbor.com/pypeaday'>DigitalHarbor</a>
+        <a class="nav-link accent-glow"
+            href='/slash'>Start Here</a>
+        <a class="nav-link accent-glow"
+            href='/my-thoughts'>My Thoughts</a>
+    </nav>
+
+    <!-- <div>
+        <label id="theme-switch" class="theme-switch" for="checkbox-theme" title="light/dark mode toggle">
+            <input type="checkbox" id="checkbox-theme" />
+            <div class="slider round"></div>
+        </label>
+    </div> -->
+</header><article>
+    <header class='sticky top-0 py-4 bg-primary-light/80 backdrop-blur-sm z-10 px-6'>
+        <h1 class='text-3xl font-semibold text-text-heading'></h1>
+        <div class='mt-4'>
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-pink-500"
+               placeholder="'/' Search for a page">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+    </header>
+    <div class='py-4'>
+        <ul id='feed' class='list-none'>
+<li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/i-was-wrecked-by-a-weird-combo-of-and-e"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            I was wrecked by a weird combo of >> and -e
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            TL;DR If state matters then check it in the beginning or handle it on a failure... Let me explain I ran into some trouble recently _almost_ losing some encrypte
+        </p>
+
+
+        <time datetime="2025-04-23" class='text-sm text-accent-cool'>
+            April 23, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/smb-with-zfs-on-ubuntu"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            SMB with ZFS on Ubuntu
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            sudo apt-get install -y samba \\ then set sharesmb=on \\ chown the user \\ smbpasswd &lt;user&gt; -a \\ then mount with user/password from other machine
+        </p>
+
+
+        <time datetime="2025-02-20" class='text-sm text-accent-cool'>
+            February 20, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #zfs
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/jellyfin-container-updates-for-hwe-amd"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Jellyfin container updates for HWE + AMD
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I use LSIO Jelyfin container for the easy addon they provide for AMD GPUs but I couldn&#x27;t get trickplay to work with HWE... There was almost NOTHING on the 
+        </p>
+
+
+        <time datetime="2024-12-14" class='text-sm text-accent-cool'>
+            December 14, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #docker
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/d-and-uninterruptable-sleep"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            D and uninterruptable sleep
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Htop I recently have been having significant home server issues, and that&#x27;s not the point of this - today I learned what `D` state is when looking at htop.
+        </p>
+
+
+        <time datetime="2024-12-11" class='text-sm text-accent-cool'>
+            December 11, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #zfs
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/rsync-like-a-pro"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            rsync like a pro
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using `zfs send/recv` for this just to make sure I don&#x27;t pr
+        </p>
+
+
+        <time datetime="2024-12-11" class='text-sm text-accent-cool'>
+            December 11, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #terminal
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/hostnamectl-to-easily-change-hostname"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            hostnamectl to easily change hostname
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            hostnamectl is apparently a linux utility for easily changing your hostname in a variety of ways I learned there&#x27;s transient and static hostnames, so that&
+        </p>
+
+
+        <time datetime="2024-12-06" class='text-sm text-accent-cool'>
+            December 06, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #terminal
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/dns-broke-after-reboot-ubuntu-22-04"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            DNS Broke After Reboot - Ubuntu 22.04
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I rebooted by server and DNS broke randomly. I have no idea if it was from a kernel update or what but that&#x27;s the issue with Ubuntu I guess... After much t
+        </p>
+
+
+        <time datetime="2024-11-22" class='text-sm text-accent-cool'>
+            November 22, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/restart-kde-plasma"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Restart KDE Plasma
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Plasma shits the bed a little too often on Fedora for me right now but I finally have a quick fix...
+        </p>
+
+
+        <time datetime="2024-11-08" class='text-sm text-accent-cool'>
+            November 08, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #terminal
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/docker-remote-add"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            docker-remote-add
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Add from url?? ADD http://example.com/cars.csv /tmp/cars.csv Unpack automatically!? (.tar, .tar.gz, .tgz, .bz2, .tbz2, .txz, .zip) ADD myapp.tar.gz /opt/myapp/
+        </p>
+
+
+        <time datetime="2024-09-17" class='text-sm text-accent-cool'>
+            September 17, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/docker-copy-and-chown"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Docker copy and chown
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            COPY --chown=myuser:mygroup source-file target-file
+        </p>
+
+
+        <time datetime="2024-09-17" class='text-sm text-accent-cool'>
+            September 17, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Interesting IPs between Jellyfin clients and server depending on tailscale and server address
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            When connecting from my phone to jellyfin I&#x27;m seeing some interesting patterns. Scenarios Tailscale IP of phone is listed as local network to jellyfin Wifi
+        </p>
+
+
+        <time datetime="2024-07-12" class='text-sm text-accent-cool'>
+            July 12, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/upgrading-your-kernel-can-f-you-up-whoops"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Upgrading your kernel can F you up... whoops
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            https://forum.proxmox.com/threads/update-error-with-coral-tpu-drivers.136888/#post-608975 I lost TPU for frigate, this saved me ass
+        </p>
+
+
+        <time datetime="2024-06-26" class='text-sm text-accent-cool'>
+            June 26, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/dhcp-restart-to-save-ubuntu-22-04-server-networking"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            DHCP Restart to Save Ubuntu 22.04 Server Networking
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I moved a computer to a remote location for an off-site backup but when it was powered on it wouldn&#x27;t show up on any networks. A solution that got me back 
+        </p>
+
+
+        <time datetime="2023-12-31" class='text-sm text-accent-cool'>
+            December 31, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Refresh Nextcloud Groupfolders after messing around on the filesystem
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Exec in as www-data and run ./occ groupfolders:scan folder_id -v (the -v to see what it&#x27;s doing)
+        </p>
+
+
+        <time datetime="2023-09-23" class='text-sm text-accent-cool'>
+            September 23, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/convert-word-doc-to-pdf-with-headless-libreoffice"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Convert Word Doc to PDF with Headless Libreoffice
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I&#x27;ve been using paperless-ngx to manage all my documents, but every once in a while I&#x27;ll get a `.docx` file to deal with... Turns out Libreoffice has 
+        </p>
+
+
+        <time datetime="2023-03-09" class='text-sm text-accent-cool'>
+            March 09, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/i3-like-keyboard-mapping-in-pop-os"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            i3-Like keyboard mapping in Pop_OS
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I was introduced to tiling window managers through i3, which I use heavily on
+one of my machines. I have switched to Pop_OS! at home though, which has a
+tiling 
+        </p>
+
+
+        <time datetime="2023-01-12" class='text-sm text-accent-cool'>
+            January 12, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/use-non-standard-named-ssh-keys-with-github"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Use non-standard named ssh keys with github
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I was getting `(publickey denied)` when trying to push to GH using ssh. When I
+tested the connection I saw that a bunch of keys in ``~/.ssh/ were being
+attempte
+        </p>
+
+
+        <time datetime="2023-01-03" class='text-sm text-accent-cool'>
+            January 03, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/reminder-about-ssh-copy-id-for-ssh-and-ansible"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Reminder about ssh-copy-id for SSH and Ansible
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            `ssh-copy-id -i my.key.pub &lt;hostname probably from tailscale&gt;` 
+this makes sure I can run ansible from my desktop against VMs on my server
+easily if they 
+        </p>
+
+
+        <time datetime="2022-12-28" class='text-sm text-accent-cool'>
+            December 28, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/nextcloud-docker-upgrade-error"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Nextcloud Docker Upgrade Error
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error
+        </p>
+
+
+        <time datetime="2022-12-28" class='text-sm text-accent-cool'>
+            December 28, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/adding-docker-daemon-json-broke-docker"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Adding docker daemon.json broke docker
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            in /lib/systemd/system/docker.service there is an ExecStart command that got placed there when I setup Docker with Ansible - it threw the -H flag which told the
+        </p>
+
+
+        <time datetime="2022-12-21" class='text-sm text-accent-cool'>
+            December 21, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #docker
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/suda-vim-for-sudo-access-to-files"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            suda.vim for sudo access to files
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I regularly need to edit system config files - take /etc/sanoid/sanoid.conf as
+an example... I&#x27;ll want to play with something but if I don&#x27;t start Neo
+        </p>
+
+
+        <time datetime="2022-12-21" class='text-sm text-accent-cool'>
+            December 21, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #vim
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/pipe-to-a-pager-to-preserve-console-output-in-ssh-session"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Pipe to a pager to preserve console output in SSH session
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I&#x27;m playing with my ansible playbook in a remote tmux session, and I&#x27;m no wiz
+so I don&#x27;t know the ins and outs, but I can&#x27;t scroll up to get
+        </p>
+
+
+        <time datetime="2022-12-18" class='text-sm text-accent-cool'>
+            December 18, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/description-of-my-proposed-vimconf-2022-talk"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Description of my proposed vimconf 2022 talk
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Switching to Vim opened a whole new world to me for interacting with a computer
+and for getting things done. Before I adopted Vim I used GUIs for everything
+bec
+        </p>
+
+
+        <time datetime="2022-11-12" class='text-sm text-accent-cool'>
+            November 12, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #vim
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/make-a-series-of-directories-fast"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Make a series of directories fast!
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            mkdir s{1..10} will make directories s1, s2, ... s10 in one command!
+        </p>
+
+
+        <time datetime="2022-11-10" class='text-sm text-accent-cool'>
+            November 10, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/dont-forget-to-load-xmp"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Don't forget to load XMP!
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Bought some DDR4-3600 speed RAM but only seeing 2666? Load up the BIOS, find DRAM config or something similar, and make sure to load the XMP profile to get that
+        </p>
+
+
+        <time datetime="2022-10-09" class='text-sm text-accent-cool'>
+            October 09, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/my-passmark-scores"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            My PassMark Scores
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            !!! note &quot;Babyblue v2&quot; !!! note &quot;Venus &quot; !!! note &quot;Hogwarts&quot; !!! note &quot;Server 2 ... Change the name&quot; !!! note &quot;Serv
+        </p>
+
+
+        <time datetime="2022-10-08" class='text-sm text-accent-cool'>
+            October 08, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/suddenly-ssh-requires-a-password"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Suddenly SSH requires a password
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            ssh -v -i ~/.ssh/id_rsa nic@hogwarts THen we can look at print outs cat /var/log/auth.log  also showed me that I had too wide permissions on files in ~/.ssh -&g
+        </p>
+
+
+        <time datetime="2022-10-07" class='text-sm text-accent-cool'>
+            October 07, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/check-your-bios-version-on-ubuntu"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Check Your BIOS Version On Ubuntu
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            sudo dmidecode -s bios-version
+        </p>
+
+
+        <time datetime="2022-10-02" class='text-sm text-accent-cool'>
+            October 02, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/append-string-to-list-of-files-with-xarg"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Append string to list of files with xarg
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            ❯ find . -name &quot;requirements.in&quot; -print0 | xargs -0 sh -c &#x27;for arg in &quot;$@&quot;; do echo &quot;awscli&quot; &gt;&gt;&quot;$arg&quot;; done&#
+        </p>
+
+
+        <time datetime="2022-09-21" class='text-sm text-accent-cool'>
+            September 21, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #bash
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/check-your-smart-status-with-smartctl"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Check your SMART status with smartctl
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            https://www.simplified.guide/linux/disk-health-check Install For ubuntu/debian based distros (which is what I primarly use presently) `sudo apt update -y &amp;&
+        </p>
+
+
+        <time datetime="2022-08-29" class='text-sm text-accent-cool'>
+            August 29, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/mounting-exfat-usb-in-linux"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Mounting exFAT USB in Linux
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Steps `sudo fdisk -l` then look for the device and partition get the Type column mount Example
+        </p>
+
+
+        <time datetime="2022-07-31" class='text-sm text-accent-cool'>
+            July 31, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/setup-kvm-to-boot-from-local-pxe-server"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Setup KVM to boot from local PXE server
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Assuming you have a PXE server running you only need small edits to the virt-manager config
+        </p>
+
+
+        <time datetime="2022-07-06" class='text-sm text-accent-cool'>
+            July 06, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/kvm-network-interface-via-nat-ubuntu-20"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            kvm-network-interface-via-nat-ubuntu-20
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I have started using VMs more and more in my development workflow and it&#x27;s
+impossible to work in a VM without an internet connection for me most of the
+tim
+        </p>
+
+
+        <time datetime="2022-06-25" class='text-sm text-accent-cool'>
+            June 25, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/cheat-on-your-man"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            cheat on your man
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            `man` can be a pain to read... and there&#x27;s lots of alternatives out there and one I&#x27;ve just started playing with is [cheat](https://github.com/cheat/c
+        </p>
+
+
+        <time datetime="2022-06-23" class='text-sm text-accent-cool'>
+            June 23, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/reset-ssh-key-passphrase"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Reset SSH key passphrase
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I got into a pickle where I encrypted the ssh keys I use for my SSH connections on LAN, but then I couldn&#x27;t run my ansible playbook on my server! ssh-keyge
+        </p>
+
+
+        <time datetime="2022-06-13" class='text-sm text-accent-cool'>
+            June 13, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/samba-on-ubuntu-22-needs-inherit-permissions-set"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Samba on Ubuntu 22 needs "inherit permissions" set
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            see samba config on hogwarts
+        </p>
+
+
+        <time datetime="2022-05-31" class='text-sm text-accent-cool'>
+            May 31, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/filtering-emails-with-core-utils"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Filtering emails with core utils
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-05-30" class='text-sm text-accent-cool'>
+            May 30, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/reindex-nextcloud-after-adding-data-via-cli"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Reindex Nextcloud After Adding Data via CLI
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            My Nextcloud woes I wrote [here](&quot;nextcloud-permissions-with-zfs-and-ansible-nas&quot;) about setting
+up `www-data` as the owner of any directories you wan
+        </p>
+
+
+        <time datetime="2022-05-29" class='text-sm text-accent-cool'>
+            May 29, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/add-space-to-your-lvm-on-ubuntu"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Add space to your LVM on Ubuntu
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I ran out of space on the SSD in my server when doing some file transfers but only 100GB was used of a 256 GB SSD? LVM When installing Ubuntu live server the de
+        </p>
+
+
+        <time datetime="2022-05-26" class='text-sm text-accent-cool'>
+            May 26, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/initial-proxmox-setup"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Initial Proxmox Setup
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            `apt-get` by default wil go to the pve.enterprise repos so we need to point it to the non-enterprise ones.
+        </p>
+
+
+        <time datetime="2022-05-23" class='text-sm text-accent-cool'>
+            May 23, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/netplan-change-from-focal-to-jammy"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Netplan change from Focal to Jammy
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I am revamping my home server and bumped myself early up to Jammy Jellyfish...
+however to my peril I reused my netplan config and after hitting my server with
+t
+        </p>
+
+
+        <time datetime="2022-05-22" class='text-sm text-accent-cool'>
+            May 22, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/configure-bridge-network-on-ubuntu-22-04-with-netplan"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Configure bridge network on Ubuntu 22.04 with Netplan
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            See 02-....yaml in ansible-nas
+        </p>
+
+
+        <time datetime="2022-05-22" class='text-sm text-accent-cool'>
+            May 22, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/remove-zfs-dataset-specific-snapshots"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Remove ZFS Dataset Specific Snapshots
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I started my homelab journey being super naive about ZFS and how to manage the
+filesystem... that bit me in the butt when transfering a ton of files out of
+fold
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #zfs
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #bash
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/deleting-files-on-remote-storage-from-ubuntu-might-not-do-what-you-think"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Deleting files on remote storage from Ubuntu might not do what you think
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            From my daily driver Ubuntu machine I often open nautilus, dolphin, etc. and delete a file here or there on my NAS... turns out Ubuntu sends thse file to `.Tras
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/caps-lock-polybar"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Caps-Lock-Polybar
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            My moonlander is great, and I just recently added CAPS LOCK back to my keymapping but I&#x27;ve moved it...
+At present it is where the ESC kep usually is howeve
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/caps-lock-polybar.png" 
+                    alt="Caps-Lock-Polybar cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-04-15" class='text-sm text-accent-cool'>
+            April 15, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/file-length"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            File-Length
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I have a specific need for counting the number of lines in a file quickly.
+At work we use S3 for data storage during our Kedro pipeline development, and in the 
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/file-length.png" 
+                    alt="File-Length cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-04-04" class='text-sm text-accent-cool'>
+            April 04, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/polybar-01"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Polybar-01
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            [polybar](https://github.com/polybar/polybar) is an awesome and super customizable status bar for your desktop environment. I use it with i3-gaps on Ubuntu for 
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/polybar-01.png" 
+                    alt="Polybar-01 cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-04-01" class='text-sm text-accent-cool'>
+            April 01, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/starship"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Starship
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            If you spend time in the terminal then you&#x27;ll want it to look somewhat pleasing to the eye.
+I used to ssh into servers with no customization, use `vi`  to 
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/starship.png" 
+                    alt="Starship cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-25" class='text-sm text-accent-cool'>
+            March 25, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/tree"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Tree
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I wanted a quick way to generate an `index.html` for a directory of html files that grows by 1 or 2 files a week.
+I don&#x27;t know any html (the files are expo
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/tree.png" 
+                    alt="Tree cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-06" class='text-sm text-accent-cool'>
+            March 06, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/stow-target"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Stow-Target
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Check out [stow](/stow) for a brief introduction to `stow` What if I want to stow a package somewhere else?
+Boom, that&#x27;s where `-t` comes in... Maybe I don
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/stow-target.png" 
+                    alt="Stow-Target cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-04" class='text-sm text-accent-cool'>
+            March 04, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #bash
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/stow"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Stow
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Stow is a great tool for managing dotfiles. My usage looks like cloning my dotfiles to my home directory, setting some environment variables via a script, then 
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/stow.png" 
+                    alt="Stow cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-04" class='text-sm text-accent-cool'>
+            March 04, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #bash
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/ubuntu-static-ip"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Ubuntu-Static-Ip
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Sometimes I need to manually set a static IP of a Linux machine. I generally run the latest version of Ubuntu server in my VMs at home. In Ubuntu 20 I&#x27;m ab
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/ubuntu-static-ip.png" 
+                    alt="Ubuntu-Static-Ip cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-03" class='text-sm text-accent-cool'>
+            March 03, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                True
+            </span>
+        </div>
+    </a>
+</li>        </ul>
+    </div>
+
+    <div class="flex justify-between items-center mt-8 px-6 pb-6">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</article>
+        </div>
+    </main>
+
+</div>
+     </body>
+</html>
