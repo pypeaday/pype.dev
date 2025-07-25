@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>password_protection.py</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Password Protection Plugin for Markata Adds client-side password protection to posts using secure hash-based authentication.
+This plugin encrypts post content a" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="password_protection.py | Nic Payne" />
+<meta property="og:description" content="Password Protection Plugin for Markata Adds client-side password protection to posts using secure hash-based authentication.
+This plugin encrypts post content a" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.devplugins/password-protection" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="password_protection.py | Nic Payne" />
+<meta name="twitter:description" content="Password Protection Plugin for Markata Adds client-side password protection to posts using secure hash-based authentication.
+This plugin encrypts post content a" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class='flex flex-row w-full min-h-screen bg-pattern-gradient text-text-main'>
+    <main class="flex-grow fade-in overflow-visible">
+        <div class='container flex-grow p-2 sm:p-6 mx-auto bg-content-blend overflow-visible'>
+<header class='py-4'>
+
+    <nav class='flex flex-wrap justify-center sm:justify-start items-center'>
+        <a class="nav-link accent-glow"
+            href='/'>Home</a>
+        <a class="nav-link accent-glow"
+            href='https://github.com/pypeaday/pype.dev'>GitHub</a>
+        <a class="nav-link accent-glow"
+            href='https://mydigitalharbor.com/pypeaday'>DigitalHarbor</a>
+        <a class="nav-link accent-glow"
+            href='/slash'>Start Here</a>
+        <a class="nav-link accent-glow"
+            href='/my-thoughts'>My Thoughts</a>
+    </nav>
+
+    <!-- <div>
+        <label id="theme-switch" class="theme-switch" for="checkbox-theme" title="light/dark mode toggle">
+            <input type="checkbox" id="checkbox-theme" />
+            <div class="slider round"></div>
+        </label>
+    </div> -->
+</header><div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-pink-500"
+               placeholder="'/' Search for a page">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script><style>
+    /* Ultra-aggressive title styling override */
+    #title, h1#title, .post-header h1, h1.gradient-text {
+        font-size: 3.75rem !important; /* ~text-7xl */
+        font-weight: 800 !important;
+        line-height: 1.1 !important;
+        letter-spacing: -0.025em !important;
+    }
+    
+    @media (min-width: 768px) {
+        #title, h1#title, .post-header h1, h1.gradient-text {
+            font-size: 4.5rem !important; /* Even larger than text-7xl */
+        }
+    }
+    
+    /* Floating cover image above article */
+    .cover-floating-container {
+        position: relative;
+        width: 100%;
+        margin: 2.5rem auto 0; /* Space from search bar */
+        z-index: 20;
+    }
+    
+    /* True boundary-breaking cover image */
+    .boundary-break-container {
+        position: relative;
+        width: calc(100% + 3rem); /* Extend 1.5rem on each side beyond article */
+        left: -1.5rem; /* Pull left edge 1.5rem beyond container */
+        height: 380px; /* Reduced from 450px for smaller image */
+        overflow: visible;
+        z-index: 20;
+    }
+    
+    /* Glow effect that extends beyond image */
+    .boundary-break-glow {
+        position: absolute;
+        top: -2rem;
+        left: -2rem;
+        right: -2rem;
+        bottom: -1rem;
+        background: linear-gradient(45deg, 
+            rgba(211, 124, 95, 0.7),  /* accent-warm */
+            rgba(96, 138, 159, 0.7),  /* accent-cool */
+            rgba(106, 138, 130, 0.7)  /* accent-green */
+        );
+        filter: blur(2.5rem);
+        border-radius: 1rem;
+        opacity: 0.8;
+        z-index: 10;
+        animation: boundary-break-pulse 4s infinite alternate;
+    }
+    
+    @keyframes boundary-break-pulse {
+        0% { opacity: 0.7; filter: blur(2rem); }
+        100% { opacity: 0.9; filter: blur(3rem); }
+    }
+    
+    /* Image styling */
+    .boundary-break-image {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0.75rem;
+        border: 0.5rem solid white;
+        box-shadow: 0 2rem 4rem -1rem rgba(0,0,0,0.8), 0 0 2.5rem 0.25rem rgba(0,0,0,0.5);
+        transform: scale(1.05);
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+                    box-shadow 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        z-index: 20;
+    }
+    
+    /* Hover effect */
+    .boundary-break-image:hover {
+        transform: scale(1.08) translateY(-0.5rem);
+        box-shadow: 0 2.5rem 4.5rem -1rem rgba(0,0,0,0.85), 0 0 3rem 0.25rem rgba(0,0,0,0.6);
+    }
+    
+    /* Article container styling */
+    .post-container {
+        margin-top: -3.5rem; /* Reduced overlap for breathing room */
+        padding-top: 5rem; /* Adjusted padding to maintain proper spacing */
+        position: relative;
+        z-index: 10;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .boundary-break-container {
+            width: calc(100% + 2rem);
+            left: -1rem;
+            height: auto; /* Auto height to prevent cropping */
+            max-height: 350px; /* Maximum height constraint */
+        }
+        
+        .boundary-break-glow {
+            top: -1.5rem;
+            left: -1.5rem;
+            right: -1.5rem;
+            bottom: -0.75rem;
+        }
+        
+        .boundary-break-image {
+            height: auto; /* Let height be determined by aspect ratio */
+            max-height: 350px;
+            object-fit: contain; /* Show entire image without cropping */
+            transform: scale(1.02); /* Slightly reduced scale for mobile */
+        }
+        
+        .post-container {
+            margin-top: -5rem;
+            padding-top: 6rem;
+        }
+    }
+    
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+        .boundary-break-container {
+            height: auto;
+            max-height: 280px;
+        }
+        
+        .boundary-break-image {
+            max-height: 280px;
+            border-width: 0.25rem;
+        }
+    }
+</style>
+
+
+<article class='w-full pattern-card glow-card p-4 md:p-6 post-container'>
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">password_protection.py</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2025-07-25">
+            July 25, 2025
+        </time>
+    </div>
+</section>    <section class="article-content prose dark:prose-invert lg:prose-xl mx-auto mt-8">
+        <hr />
+<p>Password Protection Plugin for Markata</p>
+<p>Adds client-side password protection to posts using secure hash-based authentication.
+This plugin encrypts post content and provides a password prompt interface for decryption.</p>
+<h1 id="installation">Installation <a class="header-anchor" href="#installation"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Add the plugin to your markata.toml hooks:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="n">hooks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;plugins.password_protection&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+</pre>
+
+<h1 id="configuration">Configuration <a class="header-anchor" href="#configuration"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Configure the plugin in your markata.toml (minimal setup):</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">[markata.password_protection]</span>
+<span class="c1"># Salt for password hashing (required for security)</span>
+<span class="n">salt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;blog_salt_2025&quot;</span>
+<span class="c1"># Global default password - use plain text, will be hashed automatically</span>
+<span class="n">encryption_password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your_password&quot;</span>
+</pre></div>
+
+</pre>
+
+<p><strong>Note</strong>: The following are automatically set and don't need configuration:</p>
+<ul>
+<li><code>protected_template_key = &quot;protected-post&quot;</code> (hardcoded)</li>
+<li><code>encrypt_content = true</code> (always enabled for protected posts)</li>
+</ul>
+<h1 id="usage">Usage <a class="header-anchor" href="#usage"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Protect posts by setting the template key and optionally a custom password:</p>
+<p><strong>Method 1: Use global password</strong></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Secret Post</span>
+<span class="nt">templateKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">protected-post</span>
+<span class="nn">---</span>
+</pre></div>
+
+</pre>
+
+<p><strong>Method 2: Custom password per post</strong></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Secret Post</span>
+<span class="nt">templateKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">protected-post</span>
+<span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;my-custom-password&quot;</span>
+<span class="nn">---</span>
+</pre></div>
+
+</pre>
+
+<p><strong>Method 3: Custom password hash per post</strong></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">My Secret Post</span>
+<span class="nt">templateKey</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">protected-post</span>
+<span class="nt">password_hash</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;sha256_hash_of_password&quot;</span>
+<span class="nn">---</span>
+</pre></div>
+
+</pre>
+
+<h1 id="password-hashing-requirements">Password Hashing Requirements <a class="header-anchor" href="#password-hashing-requirements"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p><strong>CRITICAL</strong>: Both Python (server-side) and JavaScript (client-side) must use identical
+password hashing algorithms for authentication to work correctly.</p>
+<p><strong>Current Implementation</strong>: SHA256(password + salt)</p>
+<ul>
+<li>Python: <code>hashlib.sha256((password + salt).encode()).hexdigest()</code></li>
+<li>JavaScript: <code>CryptoJS.SHA256(password + SALT).toString()</code></li>
+</ul>
+<p><strong>DO NOT MODIFY</strong> the hashing logic without updating both sides simultaneously.
+Any mismatch will cause password authentication to fail.</p>
+<h1 id="security-features">Security Features <a class="header-anchor" href="#security-features"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<ul>
+<li><strong>Content Encryption</strong>: Post content is encrypted using AES-CBC with CryptoJS</li>
+<li><strong>Password Verification</strong>: Client-side password verification before decryption</li>
+<li><strong>Salt Protection</strong>: Passwords are salted before hashing to prevent rainbow table attacks</li>
+<li><strong>No Plain Text</strong>: Passwords are never stored in plain text in the generated HTML</li>
+<li><strong>Fallback Protection</strong>: Falls back to content hiding if encryption fails</li>
+</ul>
+<h1 id="future-enhancements">Future Enhancements <a class="header-anchor" href="#future-enhancements"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<ul>
+<li><strong>REST Endpoint Support</strong>: Planned support for fetching passwords from external APIs</li>
+<li><strong>Multiple Password Support</strong>: Potential support for multiple passwords per post</li>
+<li><strong>Time-based Access</strong>: Potential support for time-limited access tokens</li>
+</ul>
+<h1 id="notes">Notes <a class="header-anchor" href="#notes"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<ul>
+<li>Uses SHA-256 hashing with salt for security</li>
+<li>No plaintext passwords stored in code</li>
+<li>Works with existing markdown content and build process</li>
+<li>Requires CryptoJS CDN for client-side hashing</li>
+<li>Password protection is client-side only (not server-side secure)</li>
+</ul>
+<hr />
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="_encrypt_content" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">_encrypt_content <em class="small">function</em></h2>
+<p>Encrypt content using AES encryption compatible with CryptoJS.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">_encrypt_content <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_encrypt_content</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encrypt content using AES encryption compatible with CryptoJS.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">HAS_CRYPTOGRAPHY</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;cryptography package required for content encryption. Install with: pip install cryptography&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Use a simple key derivation that matches CryptoJS expectations</span>
+    <span class="c1"># CryptoJS.AES.encrypt(content, password) uses this approach</span>
+    <span class="n">key</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">password</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+    
+    <span class="c1"># Generate random IV</span>
+    <span class="n">iv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+    
+    <span class="c1"># Pad content to AES block size</span>
+    <span class="n">padder</span> <span class="o">=</span> <span class="n">padding</span><span class="o">.</span><span class="n">PKCS7</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">padder</span><span class="p">()</span>
+    <span class="n">padded_content</span> <span class="o">=</span> <span class="n">padder</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+    <span class="n">padded_content</span> <span class="o">+=</span> <span class="n">padder</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+    
+    <span class="c1"># Encrypt</span>
+    <span class="n">cipher</span> <span class="o">=</span> <span class="n">Cipher</span><span class="p">(</span><span class="n">algorithms</span><span class="o">.</span><span class="n">AES</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">modes</span><span class="o">.</span><span class="n">CBC</span><span class="p">(</span><span class="n">iv</span><span class="p">),</span> <span class="n">backend</span><span class="o">=</span><span class="n">default_backend</span><span class="p">())</span>
+    <span class="n">encryptor</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">encryptor</span><span class="p">()</span>
+    <span class="n">encrypted</span> <span class="o">=</span> <span class="n">encryptor</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">padded_content</span><span class="p">)</span> <span class="o">+</span> <span class="n">encryptor</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+    
+    <span class="c1"># Return in format that CryptoJS can decrypt: base64(iv + encrypted)</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">iv</span> <span class="o">+</span> <span class="n">encrypted</span>
+    <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition class">
+<p class="admonition-title">Class</p>
+<h2 id="PasswordProtectionConfig" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">PasswordProtectionConfig <em class="small">class</em></h2>
+<p>Configuration for password protection plugin.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">PasswordProtectionConfig <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PasswordProtectionConfig</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for password protection plugin.&quot;&quot;&quot;</span>
+    <span class="c1"># Salt for password hashing (required for security)</span>
+    <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;blog_salt_2025&quot;</span>
+    <span class="c1"># Global default password (optional - can be overridden per post)</span>
+    <span class="c1"># Use either password_hash (pre-computed) or encryption_password (plain text)</span>
+    <span class="n">password_hash</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># SHA256(password + salt) - leave empty to use encryption_password</span>
+    <span class="n">encryption_password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>  <span class="c1"># Plain text password - will be hashed with salt</span>
+    
+    <span class="c1"># Internal constants (not configurable)</span>
+    <span class="n">protected_template_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;protected-post&quot;</span>  <span class="c1"># Always use this template key</span>
+    <span class="n">encrypt_content</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Always encrypt protected content</span>
+    
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">pydantic</span><span class="o">.</span><span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">validate_assignment</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">arbitrary_types_allowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;allow&quot;</span><span class="p">,</span>
+        <span class="n">str_strip_whitespace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">validate_default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">coerce_numbers_to_str</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">populate_by_name</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition class">
+<p class="admonition-title">Class</p>
+<h2 id="Config" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">Config <em class="small">class</em></h2>
+<p>Main config model.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">Config <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Config</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main config model.&quot;&quot;&quot;</span>
+    <span class="n">password_protection</span><span class="p">:</span> <span class="n">PasswordProtectionConfig</span> <span class="o">=</span> <span class="n">PasswordProtectionConfig</span><span class="p">()</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="config_model" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">config_model <em class="small">function</em></h2>
+<p>Register the configuration model.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">config_model <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">config_model</span><span class="p">(</span><span class="n">markata</span><span class="p">:</span> <span class="s2">&quot;Markata&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Register the configuration model.&quot;&quot;&quot;</span>
+    <span class="n">markata</span><span class="o">.</span><span class="n">config_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Config</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="post_render" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">post_render <em class="small">function</em></h2>
+<p>Protect post content in feeds and descriptions before they are used.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">post_render <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">post_render</span><span class="p">(</span><span class="n">markata</span><span class="p">:</span> <span class="s2">&quot;Markata&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Protect post content in feeds and descriptions before they are used.&quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">markata</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">password_protection</span>
+    
+    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[blue]Password protection: Sanitizing protected posts in feeds[/blue]&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">markata</span><span class="o">.</span><span class="n">articles</span><span class="p">:</span>
+        <span class="n">template_key_value</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;templateKey&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Only sanitize posts with the protected template key</span>
+        <span class="k">if</span> <span class="n">template_key_value</span> <span class="o">==</span> <span class="n">config</span><span class="o">.</span><span class="n">protected_template_key</span><span class="p">:</span>
+            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[yellow]Sanitizing protected post for feeds: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># Replace content fields that might leak in feeds</span>
+            <span class="n">protected_message</span> <span class="o">=</span> <span class="s2">&quot;🔒 This content is password protected.&quot;</span>
+            
+            <span class="c1"># Sanitize various content fields that could leak in feeds</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;description&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;excerpt&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">excerpt</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;summary&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">summary</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;article_html&#39;</span><span class="p">):</span>
+                <span class="c1"># Keep a backup of the original content for the save hook</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;_original_article_html&#39;</span><span class="p">):</span>
+                    <span class="n">post</span><span class="o">.</span><span class="n">_original_article_html</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">article_html</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">article_html</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&lt;p&gt;</span><span class="si">{</span><span class="n">protected_message</span><span class="si">}</span><span class="s2">&lt;/p&gt;&quot;</span>
+            
+            <span class="c1"># Sanitize metadata fields that could leak in link previews</span>
+            <span class="c1"># if hasattr(post, &#39;cover&#39;):</span>
+            <span class="c1">#     # Remove cover image to prevent content leakage in previews</span>
+            <span class="c1">#     post.cover = None</span>
+            <span class="c1"># if hasattr(post, &#39;image&#39;):</span>
+            <span class="c1">#     # Remove any other image fields</span>
+            <span class="c1">#     post.image = None</span>
+            <span class="c1"># if hasattr(post, &#39;featured_image&#39;):</span>
+            <span class="c1">#     post.featured_image = None</span>
+            <span class="c1"># if hasattr(post, &#39;thumbnail&#39;):</span>
+            <span class="c1">#     post.thumbnail = None</span>
+            
+            <span class="c1"># Sanitize tags that might reveal sensitive information</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="p">):</span>
+                <span class="c1"># Keep only generic tags, remove potentially sensitive ones</span>
+                <span class="k">if</span> <span class="n">post</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+                    <span class="c1"># Replace with generic &quot;protected&quot; tag</span>
+                    <span class="n">post</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;protected&quot;</span><span class="p">]</span>
+            
+            <span class="c1"># Sanitize any other fields that might leak content</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;subtitle&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">subtitle</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;lead&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">lead</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;intro&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">intro</span> <span class="o">=</span> <span class="n">protected_message</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;abstract&#39;</span><span class="p">):</span>
+                <span class="n">post</span><span class="o">.</span><span class="n">abstract</span> <span class="o">=</span> <span class="n">protected_message</span>
+            
+            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Protected post sanitized for feeds: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="save" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">save <em class="small">function</em></h2>
+<p>Add password protection to posts by modifying the generated HTML files.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">save <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="n">markata</span><span class="p">:</span> <span class="s2">&quot;Markata&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add password protection to posts by modifying the generated HTML files.&quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">markata</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">password_protection</span>
+    
+    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Password protection plugin running on </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">markata</span><span class="o">.</span><span class="n">articles</span><span class="p">)</span><span class="si">}</span><span class="s2"> posts[/blue]&quot;</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">post</span> <span class="ow">in</span> <span class="n">markata</span><span class="o">.</span><span class="n">articles</span><span class="p">:</span>
+        <span class="n">template_key_value</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;templateKey&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Only protect posts with the protected template key</span>
+        <span class="n">should_protect</span> <span class="o">=</span> <span class="n">template_key_value</span> <span class="o">==</span> <span class="n">config</span><span class="o">.</span><span class="n">protected_template_key</span>
+        
+        <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[yellow]Post </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">: templateKey=</span><span class="si">{</span><span class="n">template_key_value</span><span class="si">}</span><span class="s2">, should_protect=</span><span class="si">{</span><span class="n">should_protect</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">should_protect</span><span class="p">:</span>
+            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]PROTECTING POST: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># Get the output HTML file path</span>
+            <span class="n">output_file</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">output_html</span>
+            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Output file: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">[/cyan]&quot;</span><span class="p">)</span>
+            
+            <span class="c1"># Check if the HTML file exists and read its content</span>
+            <span class="k">if</span> <span class="n">output_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">html_content</span> <span class="o">=</span> <span class="n">output_file</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Read HTML file with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">html_content</span><span class="p">)</span><span class="si">}</span><span class="s2"> characters[/cyan]&quot;</span><span class="p">)</span>
+                    
+                    <span class="c1"># Extract the body content from the HTML for encryption</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+                    
+                    <span class="c1"># Check if content is already password protected (avoid recursive encryption)</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;password-prompt&#39;</span> <span class="ow">in</span> <span class="n">html_content</span> <span class="ow">or</span> 
+                        <span class="s1">&#39;encrypted-data&#39;</span> <span class="ow">in</span> <span class="n">html_content</span> <span class="ow">or</span> 
+                        <span class="s1">&#39;ENCRYPTED_DATA&#39;</span> <span class="ow">in</span> <span class="n">html_content</span> <span class="ow">or</span>
+                        <span class="s1">&#39;decryptAndShow&#39;</span> <span class="ow">in</span> <span class="n">html_content</span><span class="p">):</span>
+                        <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[yellow]Content already appears to be password protected, skipping...[/yellow]&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    
+                    <span class="c1"># Check if we have original content backed up from post_render hook</span>
+                    <span class="n">article_match</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Initialize to avoid UnboundLocalError</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span> <span class="s1">&#39;_original_article_html&#39;</span><span class="p">):</span>
+                        <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[cyan]Using original content backed up from post_render hook[/cyan]&quot;</span><span class="p">)</span>
+                        <span class="c1"># Use the original content for encryption, not the sanitized version</span>
+                        <span class="n">content_to_encrypt</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">_original_article_html</span>
+                        <span class="c1"># Look for article tags in the current HTML to maintain structure</span>
+                        <span class="n">article_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;article[^&gt;]*&gt;(.*?)&lt;/article&gt;&#39;</span><span class="p">,</span> <span class="n">html_content</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">article_match</span><span class="p">:</span>
+                            <span class="c1"># If no article tag found, we&#39;ll replace the entire content</span>
+                            <span class="n">article_match</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Look for the main article content (this is a simplified approach)</span>
+                        <span class="c1"># We&#39;ll encrypt everything between &lt;article&gt; tags or similar</span>
+                        <span class="n">article_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&lt;article[^&gt;]*&gt;(.*?)&lt;/article&gt;&#39;</span><span class="p">,</span> <span class="n">html_content</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">article_match</span><span class="p">:</span>
+                            <span class="n">content_to_encrypt</span> <span class="o">=</span> <span class="n">article_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Found article content with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">content_to_encrypt</span><span class="p">)</span><span class="si">}</span><span class="s2"> characters[/cyan]&quot;</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># Fallback: encrypt everything in the main content area</span>
+                            <span class="n">content_to_encrypt</span> <span class="o">=</span> <span class="n">html_content</span>
+                            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[cyan]Using full HTML content for encryption[/cyan]&quot;</span><span class="p">)</span>
+                            <span class="n">article_match</span> <span class="o">=</span> <span class="kc">None</span>
+                        
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error reading HTML file </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]HTML file does not exist: </span><span class="si">{</span><span class="n">output_file</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">encrypt_content</span> <span class="ow">and</span> <span class="n">content_to_encrypt</span><span class="p">:</span>
+                <span class="c1"># Get password and hash for this specific post</span>
+                <span class="n">post_password</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">post_password_hash</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password_hash&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                
+                <span class="c1"># TODO: Future enhancement - fetch password/hash from REST endpoint</span>
+                <span class="c1"># This would allow passwords to be stored securely outside the repo</span>
+                <span class="c1"># Example: password_endpoint = post.get(&#39;password_endpoint&#39;, &#39;&#39;)</span>
+                <span class="c1"># if password_endpoint:</span>
+                <span class="c1">#     password_hash = fetch_password_from_endpoint(password_endpoint, post.get(&#39;slug&#39;, &#39;&#39;))</span>
+                
+                <span class="c1"># Determine which password/hash to use</span>
+                <span class="k">if</span> <span class="n">post_password</span><span class="p">:</span>
+                    <span class="c1"># Use custom password from frontmatter</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                    <span class="n">encryption_password</span> <span class="o">=</span> <span class="n">post_password</span>
+                    <span class="c1"># Hash password with salt to match JavaScript logic: SHA256(password + salt)</span>
+                    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">post_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Using custom password from frontmatter for post: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/blue]&quot;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Password hash: </span><span class="si">{</span><span class="n">password_hash</span><span class="si">}</span><span class="s2">[/cyan]&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">post_password_hash</span><span class="p">:</span>
+                    <span class="c1"># Use custom password hash from frontmatter</span>
+                    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">post_password_hash</span>
+                    <span class="n">encryption_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="ow">or</span> <span class="s2">&quot;default_encryption_key&quot;</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Using custom password hash from frontmatter for post: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/blue]&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Use global config - prefer password_hash, fallback to encryption_password</span>
+                    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span><span class="p">:</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span>
+                        <span class="n">encryption_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="ow">or</span> <span class="s2">&quot;default_encryption_key&quot;</span>
+                    <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span><span class="p">:</span>
+                        <span class="c1"># Hash the global encryption password with salt</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                        <span class="n">encryption_password</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># No global password configured - this shouldn&#39;t happen but provide fallback</span>
+                        <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[yellow]Warning: No global password configured for post: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/yellow]&quot;</span><span class="p">)</span>
+                        <span class="n">encryption_password</span> <span class="o">=</span> <span class="s2">&quot;default_encryption_key&quot;</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">encryption_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Using global password config for post: </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/blue]&quot;</span><span class="p">)</span>
+                
+                <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Attempting encryption with password: </span><span class="si">{</span><span class="n">encryption_password</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">encryption_password</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">encryption_password</span><span class="si">}</span><span class="s2">...[/blue]&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">encrypted_content</span> <span class="o">=</span> <span class="n">_encrypt_content</span><span class="p">(</span>
+                        <span class="n">content_to_encrypt</span><span class="p">,</span> 
+                        <span class="n">encryption_password</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Create the protected content wrapper</span>
+                    <span class="n">protected_content</span> <span class="o">=</span> <span class="n">_wrap_with_encrypted_content</span><span class="p">(</span>
+                        <span class="n">encrypted_content</span><span class="p">,</span>
+                        <span class="n">password_hash</span><span class="p">,</span>
+                        <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span>
+                        <span class="n">encryption_password</span>
+                    <span class="p">)</span>
+                    
+                    <span class="c1"># Replace the content in the HTML file</span>
+                    <span class="k">if</span> <span class="n">article_match</span><span class="p">:</span>
+                        <span class="c1"># Replace just the article content</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">html_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">article_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&lt;article&gt;</span><span class="si">{</span><span class="n">protected_content</span><span class="si">}</span><span class="s2">&lt;/article&gt;&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Replace the entire HTML content or use full protected content</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">protected_content</span>
+                    
+                    <span class="c1"># Write the modified HTML back to the file</span>
+                    <span class="n">output_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Content encrypted successfully! Updated HTML file with </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">)</span><span class="si">}</span><span class="s2"> characters[/green]&quot;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Post template: </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;template&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/cyan]&quot;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]Post templateKey: </span><span class="si">{</span><span class="nb">getattr</span><span class="p">(</span><span class="n">post</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;templateKey&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">[/cyan]&quot;</span><span class="p">)</span>
+                    
+                    <span class="c1"># Show first 200 chars of encrypted content</span>
+                    <span class="n">preview_content</span> <span class="o">=</span> <span class="n">new_html_content</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[cyan]First 200 chars of new HTML: </span><span class="si">{</span><span class="n">preview_content</span><span class="si">}</span><span class="s2">...[/cyan]&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Encryption failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[yellow]Falling back to content hiding[/yellow]&quot;</span><span class="p">)</span>
+                    <span class="c1"># Fall back to simple content hiding</span>
+                    <span class="c1"># Use the same password logic for fallback</span>
+                    <span class="n">post_password</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">post_password_hash</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password_hash&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">post_password</span><span class="p">:</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                        <span class="c1"># Hash password with salt to match JavaScript logic: SHA256(password + salt)</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">post_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">post_password_hash</span><span class="p">:</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">post_password_hash</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Use global config - prefer password_hash, fallback to encryption_password</span>
+                        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span><span class="p">:</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span>
+                        <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span><span class="p">:</span>
+                            <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="s2">&quot;default_encryption_key&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    
+                    <span class="n">protected_content</span> <span class="o">=</span> <span class="n">_wrap_with_password_protection</span><span class="p">(</span>
+                        <span class="n">content_to_encrypt</span><span class="p">,</span> 
+                        <span class="n">password_hash</span><span class="p">,</span> 
+                        <span class="n">config</span><span class="o">.</span><span class="n">salt</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Replace content in HTML file</span>
+                    <span class="k">if</span> <span class="n">article_match</span><span class="p">:</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">html_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">article_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&lt;article&gt;</span><span class="si">{</span><span class="n">protected_content</span><span class="si">}</span><span class="s2">&lt;/article&gt;&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">protected_content</span>
+                    <span class="n">output_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Content hidden successfully! New length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">)</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Unexpected encryption error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[yellow]Falling back to content hiding[/yellow]&quot;</span><span class="p">)</span>
+                    <span class="c1"># Fall back to simple content hiding</span>
+                    <span class="c1"># Use the same password logic for fallback</span>
+                    <span class="n">post_password</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="n">post_password_hash</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password_hash&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    
+                    <span class="k">if</span> <span class="n">post_password</span><span class="p">:</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                        <span class="c1"># Hash password with salt to match JavaScript logic: SHA256(password + salt)</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">post_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    <span class="k">elif</span> <span class="n">post_password_hash</span><span class="p">:</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">post_password_hash</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Use global config - prefer password_hash, fallback to encryption_password</span>
+                        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span><span class="p">:</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span>
+                        <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span><span class="p">:</span>
+                            <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                            <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="s2">&quot;default_encryption_key&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    
+                    <span class="n">protected_content</span> <span class="o">=</span> <span class="n">_wrap_with_password_protection</span><span class="p">(</span>
+                        <span class="n">content_to_encrypt</span><span class="p">,</span> 
+                        <span class="n">password_hash</span><span class="p">,</span> 
+                        <span class="n">config</span><span class="o">.</span><span class="n">salt</span>
+                    <span class="p">)</span>
+                    <span class="c1"># Replace content in HTML file</span>
+                    <span class="k">if</span> <span class="n">article_match</span><span class="p">:</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">html_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">article_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&lt;article&gt;</span><span class="si">{</span><span class="n">protected_content</span><span class="si">}</span><span class="s2">&lt;/article&gt;&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">protected_content</span>
+                    <span class="n">output_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                    <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Content hidden successfully! New length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">)</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Simple content hiding without encryption</span>
+                <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;[blue]Using simple content hiding (no encryption)[/blue]&quot;</span><span class="p">)</span>
+                
+                <span class="c1"># Get password hash for this specific post</span>
+                <span class="n">post_password</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">post_password_hash</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;password_hash&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">post_password</span><span class="p">:</span>
+                    <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                    <span class="c1"># Hash password with salt to match JavaScript logic: SHA256(password + salt)</span>
+                    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">post_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">post_password_hash</span><span class="p">:</span>
+                    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">post_password_hash</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Use global config - prefer password_hash, fallback to encryption_password</span>
+                    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span><span class="p">:</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">password_hash</span>
+                    <span class="k">elif</span> <span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span><span class="p">:</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="n">config</span><span class="o">.</span><span class="n">encryption_password</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+                        <span class="n">password_hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">((</span><span class="s2">&quot;default_encryption_key&quot;</span> <span class="o">+</span> <span class="n">config</span><span class="o">.</span><span class="n">salt</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+                
+                <span class="n">protected_content</span> <span class="o">=</span> <span class="n">_wrap_with_password_protection</span><span class="p">(</span>
+                    <span class="n">content_to_encrypt</span><span class="p">,</span> 
+                    <span class="n">password_hash</span><span class="p">,</span> 
+                    <span class="n">config</span><span class="o">.</span><span class="n">salt</span>
+                <span class="p">)</span>
+                <span class="c1"># Replace content in HTML file</span>
+                <span class="k">if</span> <span class="n">article_match</span><span class="p">:</span>
+                    <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">html_content</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">article_match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;&lt;article&gt;</span><span class="si">{</span><span class="n">protected_content</span><span class="si">}</span><span class="s2">&lt;/article&gt;&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_html_content</span> <span class="o">=</span> <span class="n">protected_content</span>
+                <span class="n">output_file</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[green]Content hidden successfully! New length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">new_html_content</span><span class="p">)</span><span class="si">}</span><span class="s2">[/green]&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">markata</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[dim]Post </span><span class="si">{</span><span class="n">post</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Unknown&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2"> does not need protection[/dim]&quot;</span><span class="p">)</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="_wrap_with_encrypted_content" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">_wrap_with_encrypted_content <em class="small">function</em></h2>
+<p>Wrap encrypted content with password protection and decryption logic.</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">_wrap_with_encrypted_content <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_wrap_with_encrypted_content</span><span class="p">(</span><span class="n">encrypted_content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encryption_password</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default_encryption_key&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap encrypted content with password protection and decryption logic.&quot;&quot;&quot;</span>
+    
+    <span class="n">protection_html</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;!-- Password Protection with Content Encryption --&gt;</span>
+<span class="s2">&lt;div id=&quot;password-prompt&quot; style=&quot;max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-family: Arial, sans-serif;&quot;&gt;</span>
+<span class="s2">  &lt;h3&gt;🔒 Password Required&lt;/h3&gt;</span>
+<span class="s2">  &lt;p&gt;This post is encrypted. Enter the password to decrypt and view:&lt;/p&gt;</span>
+<span class="s2">  &lt;input type=&quot;password&quot; id=&quot;password-input&quot; placeholder=&quot;Enter password&quot; style=&quot;padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 4px; width: 200px;&quot;&gt;</span>
+<span class="s2">  &lt;br&gt;</span>
+<span class="s2">  &lt;button onclick=&quot;decryptAndShow()&quot; style=&quot;padding: 10px 20px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 10px;&quot;&gt;Decrypt&lt;/button&gt;</span>
+<span class="s2">  &lt;div id=&quot;error-message&quot; style=&quot;color: red; margin-top: 10px; display: none;&quot;&gt;Failed to decrypt. Check your password.&lt;/div&gt;</span>
+<span class="s2">&lt;/div&gt;</span>
+
+<span class="s2">&lt;div id=&quot;decrypted-content&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;</span>
+
+<span class="s2">&lt;!-- Encrypted content blob --&gt;</span>
+<span class="s2">&lt;div id=&quot;encrypted-data&quot; style=&quot;display: none;&quot; data-encrypted=&quot;</span><span class="si">{</span><span class="n">encrypted_content</span><span class="si">}</span><span class="s2">&quot;&gt;&lt;/div&gt;</span>
+
+<span class="s2">&lt;!-- Include CryptoJS for decryption --&gt;</span>
+<span class="s2">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js&quot;&gt;&lt;/script&gt;</span>
+
+<span class="s2">&lt;script&gt;</span>
+<span class="s2">// Password hash for authentication</span>
+<span class="s2">const PASSWORD_HASH = &#39;</span><span class="si">{</span><span class="n">password_hash</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">const SALT = &#39;</span><span class="si">{</span><span class="n">salt</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">// Store encrypted data persistently</span>
+<span class="s2">const ENCRYPTED_DATA = &#39;</span><span class="si">{</span><span class="n">encrypted_content</span><span class="si">}</span><span class="s2">&#39;;</span>
+
+<span class="s2">function decryptAndShow() </span><span class="se">{{</span>
+<span class="s2">  const password = document.getElementById(&#39;password-input&#39;).value;</span>
+<span class="s2">  const encryptedData = ENCRYPTED_DATA;</span>
+<span class="s2">  </span>
+<span class="s2">  console.log(&#39;Debug: Password entered:&#39;, password);</span>
+<span class="s2">  console.log(&#39;Debug: Encrypted data length:&#39;, encryptedData ? encryptedData.length : &#39;null&#39;);</span>
+<span class="s2">  console.log(&#39;Debug: Encrypted data preview:&#39;, encryptedData ? encryptedData.substring(0, 50) + &#39;...&#39; : &#39;null&#39;);</span>
+<span class="s2">  </span>
+<span class="s2">  if (!encryptedData) </span><span class="se">{{</span>
+<span class="s2">    console.error(&#39;Debug: No encrypted data found!&#39;);</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).textContent = &#39;No encrypted data found.&#39;;</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    return;</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="s2">  </span>
+<span class="s2">  // First verify password</span>
+<span class="s2">  const hashedInput = CryptoJS.SHA256(password + SALT).toString();</span>
+<span class="s2">  console.log(&#39;Debug: Expected password hash:&#39;, PASSWORD_HASH);</span>
+<span class="s2">  console.log(&#39;Debug: Computed password hash:&#39;, hashedInput);</span>
+<span class="s2">  console.log(&#39;Debug: Password verification:&#39;, hashedInput === PASSWORD_HASH);</span>
+<span class="s2">  </span>
+<span class="s2">  if (hashedInput !== PASSWORD_HASH) </span><span class="se">{{</span>
+<span class="s2">    console.log(&#39;Debug: Password verification failed!&#39;);</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).value = &#39;&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="s2">    return;</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="s2">  </span>
+<span class="s2">  console.log(&#39;Debug: Password verification passed, proceeding to decrypt...&#39;);</span>
+<span class="s2">  </span>
+<span class="s2">  // Password is correct, now decrypt content</span>
+<span class="s2">  try </span><span class="se">{{</span>
+<span class="s2">    // Decrypt using the same method as Python encryption</span>
+<span class="s2">    const encryptionPassword = &#39;</span><span class="si">{</span><span class="n">encryption_password</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">    </span>
+<span class="s2">    // Create key from password (matching Python SHA256 approach)</span>
+<span class="s2">    const key = CryptoJS.SHA256(encryptionPassword);</span>
+<span class="s2">    </span>
+<span class="s2">    // Decode base64 encrypted data</span>
+<span class="s2">    const encryptedBytes = CryptoJS.enc.Base64.parse(encryptedData);</span>
+<span class="s2">    </span>
+<span class="s2">    // Extract IV (first 16 bytes) and ciphertext (rest)</span>
+<span class="s2">    // Convert to Uint8Array for proper byte manipulation</span>
+<span class="s2">    const encryptedArray = new Uint8Array(encryptedBytes.sigBytes);</span>
+<span class="s2">    for (let i = 0; i &lt; encryptedBytes.sigBytes; i++) </span><span class="se">{{</span>
+<span class="s2">      encryptedArray[i] = (encryptedBytes.words[Math.floor(i / 4)] &gt;&gt;&gt; (24 - (i % 4) * 8)) &amp; 0xff;</span>
+<span class="s2">    </span><span class="se">}}</span>
+<span class="s2">    </span>
+<span class="s2">    // Extract IV (first 16 bytes) and ciphertext (remaining bytes)</span>
+<span class="s2">    const ivArray = encryptedArray.slice(0, 16);</span>
+<span class="s2">    const ciphertextArray = encryptedArray.slice(16);</span>
+<span class="s2">    </span>
+<span class="s2">    // Convert back to CryptoJS WordArrays</span>
+<span class="s2">    const iv = CryptoJS.lib.WordArray.create(ivArray);</span>
+<span class="s2">    const ciphertext = CryptoJS.lib.WordArray.create(ciphertextArray);</span>
+<span class="s2">    </span>
+<span class="s2">    // Decrypt</span>
+<span class="s2">    const decrypted = CryptoJS.AES.decrypt(</span>
+<span class="s2">      CryptoJS.lib.CipherParams.create(</span><span class="se">{{</span>
+<span class="s2">        ciphertext: ciphertext</span>
+<span class="s2">      </span><span class="se">}}</span><span class="s2">),</span>
+<span class="s2">      key,</span>
+<span class="s2">      </span><span class="se">{{</span>
+<span class="s2">        iv: iv,</span>
+<span class="s2">        mode: CryptoJS.mode.CBC,</span>
+<span class="s2">        padding: CryptoJS.pad.Pkcs7</span>
+<span class="s2">      </span><span class="se">}}</span>
+<span class="s2">    );</span>
+<span class="s2">    </span>
+<span class="s2">    const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);</span>
+<span class="s2">    </span>
+<span class="s2">    console.log(&#39;Debug: Decrypted text length:&#39;, decryptedText ? decryptedText.length : &#39;null&#39;);</span>
+<span class="s2">    console.log(&#39;Debug: Decrypted text preview:&#39;, decryptedText ? decryptedText.substring(0, 100) + &#39;...&#39; : &#39;null&#39;);</span>
+<span class="s2">    </span>
+<span class="s2">    if (decryptedText &amp;&amp; decryptedText.length &gt; 0) </span><span class="se">{{</span>
+<span class="s2">      console.log(&#39;Debug: Decryption successful, showing content&#39;);</span>
+<span class="s2">      // Hide password prompt and show decrypted content</span>
+<span class="s2">      document.getElementById(&#39;password-prompt&#39;).style.display = &#39;none&#39;;</span>
+<span class="s2">      </span>
+<span class="s2">      // Get post metadata from the page</span>
+<span class="s2">      const postTitle = document.title || &#39;Protected Post&#39;;</span>
+<span class="s2">      const postDate = document.querySelector(&#39;time&#39;)?.textContent || &#39;&#39;;</span>
+<span class="s2">      const postTags = Array.from(document.querySelectorAll(&#39;.tag, .badge&#39;)).map(tag =&gt; tag.textContent).join(&#39; &#39;);</span>
+<span class="s2">      </span>
+<span class="s2">      // Create properly structured content matching post_partial.html structure and CSS classes</span>
+<span class="s2">      // Add top margin to prevent overlap with search bar</span>
+<span class="s2">      const structuredContent = `</span>
+<span class="s2">        &lt;div class=&quot;mt-8 pt-4&quot;&gt;</span>
+<span class="s2">          &lt;article class=&quot;w-full pattern-card glow-card p-4 md:p-6 post-container&quot;&gt;</span>
+<span class="s2">            &lt;section class=&quot;post-header mb-8&quot;&gt;</span>
+<span class="s2">              &lt;h1 id=&quot;title&quot; style=&quot;font-size: 4rem; line-height: 1.1; font-weight: 800;&quot; class=&quot;text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large&quot;&gt;$</span><span class="se">{{</span><span class="s2">postTitle</span><span class="se">}}</span><span class="s2">&lt;/h1&gt;</span>
+<span class="s2">              $</span><span class="se">{{</span><span class="s2">postDate ? `&lt;div class=&quot;flex items-center text-sm text-text-main/80 mb-6&quot;&gt;&lt;time&gt;$</span><span class="se">{{</span><span class="s2">postDate</span><span class="se">}}</span><span class="s2">&lt;/time&gt;&lt;/div&gt;` : &#39;&#39;</span><span class="se">}}</span>
+<span class="s2">              $</span><span class="se">{{</span><span class="s2">postTags ? `&lt;div class=&quot;flex flex-wrap gap-2&quot;&gt;$</span><span class="se">{{</span><span class="s2">postTags</span><span class="se">}}</span><span class="s2">&lt;/div&gt;` : &#39;&#39;</span><span class="se">}}</span>
+<span class="s2">            &lt;/section&gt;</span>
+<span class="s2">            &lt;section class=&quot;article-content prose dark:prose-invert lg:prose-xl mx-auto mt-8&quot;&gt;</span>
+<span class="s2">              $</span><span class="se">{{</span><span class="s2">decryptedText</span><span class="se">}}</span>
+<span class="s2">            &lt;/section&gt;</span>
+<span class="s2">          &lt;/article&gt;</span>
+<span class="s2">        &lt;/div&gt;</span>
+<span class="s2">      `;</span>
+<span class="s2">      </span>
+<span class="s2">      document.getElementById(&#39;decrypted-content&#39;).innerHTML = structuredContent;</span>
+<span class="s2">      document.getElementById(&#39;decrypted-content&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">      console.log(&#39;Debug: Decryption failed - empty or null result&#39;);</span>
+<span class="s2">      document.getElementById(&#39;error-message&#39;).textContent = &#39;Failed to decrypt. Check your password.&#39;;</span>
+<span class="s2">      document.getElementById(&#39;error-message&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">      document.getElementById(&#39;password-input&#39;).value = &#39;&#39;;</span>
+<span class="s2">      document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="s2">    </span><span class="se">}}</span>
+<span class="s2">  </span><span class="se">}}</span><span class="s2"> catch (error) </span><span class="se">{{</span>
+<span class="s2">    console.error(&#39;Decryption error:&#39;, error);</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).textContent = &#39;Decryption failed: &#39; + error.message;</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).value = &#39;&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="se">}}</span>
+
+<span class="s2">// Allow Enter key to submit password</span>
+<span class="s2">document.getElementById(&#39;password-input&#39;).addEventListener(&#39;keypress&#39;, function(e) </span><span class="se">{{</span>
+<span class="s2">  if (e.key === &#39;Enter&#39;) </span><span class="se">{{</span>
+<span class="s2">    decryptAndShow();</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="se">}}</span><span class="s2">);</span>
+
+<span class="s2">// Focus on password input when page loads</span>
+<span class="s2">window.addEventListener(&#39;load&#39;, function() </span><span class="se">{{</span>
+<span class="s2">  document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="se">}}</span><span class="s2">);</span>
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">protection_html</span>
+</pre></div>
+
+</pre>
+
+</div>
+<div class="admonition function">
+<p class="admonition-title">Function</p>
+<h2 id="_wrap_with_password_protection" class="admonition-title" style="margin: 0; padding: .5rem 1rem;">_wrap_with_password_protection <em class="small">function</em></h2>
+<p>Wrap content with password protection HTML and JavaScript (content hiding only).</p>
+</div>
+<div class="admonition source is-collapsible collapsible-open">
+<p class="admonition-title">_wrap_with_password_protection <em class='small'>source</em></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_wrap_with_password_protection</span><span class="p">(</span><span class="n">content</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password_hash</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">salt</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Wrap content with password protection HTML and JavaScript (content hiding only).&quot;&quot;&quot;</span>
+    
+    <span class="c1"># Password protection HTML and JavaScript</span>
+    <span class="n">protection_html</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">&lt;!-- Password Protection --&gt;</span>
+<span class="s2">&lt;div id=&quot;password-prompt&quot; style=&quot;max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-family: Arial, sans-serif;&quot;&gt;</span>
+<span class="s2">  &lt;h3&gt;🔒 Password Required&lt;/h3&gt;</span>
+<span class="s2">  &lt;p&gt;This post is password protected. Please enter the password to continue:&lt;/p&gt;</span>
+<span class="s2">  &lt;input type=&quot;password&quot; id=&quot;password-input&quot; placeholder=&quot;Enter password&quot; style=&quot;padding: 10px; margin: 10px; border: 1px solid #ccc; border-radius: 4px; width: 200px;&quot;&gt;</span>
+<span class="s2">  &lt;br&gt;</span>
+<span class="s2">  &lt;button onclick=&quot;checkPassword()&quot; style=&quot;padding: 10px 20px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 10px;&quot;&gt;Submit&lt;/button&gt;</span>
+<span class="s2">  &lt;div id=&quot;error-message&quot; style=&quot;color: red; margin-top: 10px; display: none;&quot;&gt;Incorrect password. Please try again.&lt;/div&gt;</span>
+<span class="s2">&lt;/div&gt;</span>
+
+<span class="s2">&lt;div id=&quot;protected-content&quot; style=&quot;display: none;&quot;&gt;</span>
+
+<span class="si">{</span><span class="n">content</span><span class="si">}</span>
+
+<span class="s2">&lt;/div&gt;</span>
+
+<span class="s2">&lt;!-- Include CryptoJS for secure hashing --&gt;</span>
+<span class="s2">&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js&quot;&gt;&lt;/script&gt;</span>
+
+<span class="s2">&lt;script&gt;</span>
+<span class="s2">// Secure password hash (SHA-256 with salt)</span>
+<span class="s2">const PASSWORD_HASH = &#39;</span><span class="si">{</span><span class="n">password_hash</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">const SALT = &#39;</span><span class="si">{</span><span class="n">salt</span><span class="si">}</span><span class="s2">&#39;;</span>
+
+<span class="s2">function checkPassword() </span><span class="se">{{</span>
+<span class="s2">  const password = document.getElementById(&#39;password-input&#39;).value;</span>
+<span class="s2">  </span>
+<span class="s2">  // Hash the entered password with salt</span>
+<span class="s2">  const hashedInput = CryptoJS.SHA256(password + SALT).toString();</span>
+<span class="s2">  </span>
+<span class="s2">  // Compare with stored hash</span>
+<span class="s2">  if (hashedInput === PASSWORD_HASH) </span><span class="se">{{</span>
+<span class="s2">    document.getElementById(&#39;password-prompt&#39;).style.display = &#39;none&#39;;</span>
+<span class="s2">    document.getElementById(&#39;protected-content&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).style.display = &#39;none&#39;;</span>
+<span class="s2">  </span><span class="se">}}</span><span class="s2"> else </span><span class="se">{{</span>
+<span class="s2">    document.getElementById(&#39;error-message&#39;).style.display = &#39;block&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).value = &#39;&#39;;</span>
+<span class="s2">    document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="se">}}</span>
+
+<span class="s2">// Allow Enter key to submit password</span>
+<span class="s2">document.getElementById(&#39;password-input&#39;).addEventListener(&#39;keypress&#39;, function(e) </span><span class="se">{{</span>
+<span class="s2">  if (e.key === &#39;Enter&#39;) </span><span class="se">{{</span>
+<span class="s2">    checkPassword();</span>
+<span class="s2">  </span><span class="se">}}</span>
+<span class="se">}}</span><span class="s2">);</span>
+
+<span class="s2">// Focus on password input when page loads</span>
+<span class="s2">window.addEventListener(&#39;load&#39;, function() </span><span class="se">{{</span>
+<span class="s2">  document.getElementById(&#39;password-input&#39;).focus();</span>
+<span class="se">}}</span><span class="s2">);</span>
+
+<span class="s2">// Helper function to generate hash for a new password (for development)</span>
+<span class="s2">function generatePasswordHash(password) </span><span class="se">{{</span>
+<span class="s2">  return CryptoJS.SHA256(password + SALT).toString();</span>
+<span class="se">}}</span>
+<span class="s2">// Usage: console.log(generatePasswordHash(&#39;your_password_here&#39;));</span>
+<span class="s2">&lt;/script&gt;</span>
+<span class="s2">&quot;&quot;&quot;</span>
+    
+    <span class="k">return</span> <span class="n">protection_html</span>
+</pre></div>
+
+</pre>
+
+</div>
+
+    </section>
+</article>        </div>
+    </main>
+
+</div>
+     </body>
+</html>
