@@ -13,11 +13,13 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
-- wrapping up [[gotify-cli-for-notifying-me-of-nextcloud-uploads]]
-
 - [[thoughts-to-nostr]]
 - [[deuteronomy-6-and-the-shema]]
 - Migrating my homelab stuff to a mono repo
+  - 
+  - [kanboard ticket for skm backup](https://kanboard.paynepride.com/?controller=TaskViewController&action=show&task_id=247&project_id=8)
+  - [kanboard ticket for homelab mono migration](https://kanboard.paynepride.com/task/109)
+- [[quadtask]] notifications - starting with gotify
 
 ### Affine
 
@@ -36,6 +38,7 @@ other possible relationships whichi s fine, just need to be aware of it
 ## Warm
 
 - [Digital Harbor](https://mydigitalharbor.com) is my long standing "thing"... I'm not sure what it'll turn into
+- epub audiobooks for Amanda
 
 ## Cold
 
