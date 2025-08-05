@@ -53,7 +53,7 @@ If you're familiar with the `awscli` then maybe you've heard of a config option 
 
 ```yaml
 dbs:
-  - path: /path/to/my.db
+  - path: /home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db
     replicas:
       - type: s3
         bucket: litestream
