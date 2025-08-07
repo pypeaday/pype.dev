@@ -14,8 +14,11 @@ dev for myself to on-prem, including git and CI/CD. So for Quadtask I had a
 bunch of Github issues that I wanted to migrate to my kanboard instance, gpt-5
 did a bang-up job on this script
 
+It gets each issue, creates a tag for each label, creates the kanboard ticket, then closes the github issue
+
 ```bash
-!/bin/bash
+
+#!/bin/bash
 
 # GitHub to Kanboard Issue Migration Script
 # Uses GitHub CLI (gh) and curl to migrate issues
@@ -39,7 +42,7 @@ KANBOARD_API="$KANBOARD_URL/jsonrpc.php"
 
 # Get all open issues from GitHub
 echo "Fetching open issues from $GITHUB_REPO..."
-ISSUES_JSON=$(gh issue list --repo "$GITHUB_REPO" --state open --json number,title,body)
+ISSUES_JSON=$(gh issue list --repo "$GITHUB_REPO" --state open --limit 1000 --json number,title,body,labels)
 
 # Count issues
 ISSUE_COUNT=$(echo "$ISSUES_JSON" | jq '. | length')
@@ -51,6 +54,8 @@ echo "$ISSUES_JSON" | jq -c '.[]' | while read -r issue; do
     NUMBER=$(echo "$issue" | jq -r '.number')
     TITLE=$(echo "$issue" | jq -r '.title')
     BODY=$(echo "$issue" | jq -r '.body // ""')
+    # Extract label names as a JSON array
+    LABELS_JSON=$(echo "$issue" | jq -c '[.labels[]?.name] // []')
     
     # Prepare Kanboard task data
     REQUEST_DATA=$(jq -n \
@@ -86,6 +91,40 @@ echo "$ISSUES_JSON" | jq -c '.[]' | while read -r issue; do
         TASK_ID=$(echo "$RESPONSE" | jq -r '.result')
         echo "Created task ID: $TASK_ID"
 
+        # If there are labels, set them as Kanboard tags on the task
+        if [ "$(echo "$LABELS_JSON" | jq 'length')" -gt 0 ]; then
+            echo "Setting tags on task $TASK_ID: $(echo "$LABELS_JSON" | jq -r 'join(", ")')"
+            TAGS_REQUEST=$(jq -n \
+                --arg jsonrpc "2.0" \
+                --arg method "setTaskTags" \
+                --argjson id 2 \
+                --arg project_id "$QUADTASK_KANBOARD_PROJECT_ID" \
+                --arg task_id "$TASK_ID" \
+                --argjson tags "$LABELS_JSON" \
+                '{
+                    jsonrpc: $jsonrpc,
+                    method: $method,
+                    id: $id,
+                    params: {
+                        project_id: $project_id,
+                        task_id: $task_id,
+                        tags: $tags
+                    }
+                }')
+
+            TAGS_RESPONSE=$(curl -s -X POST \
+                -H "Content-Type: application/json" \
+                -u "jsonrpc:$KANBOARD_TOKEN" \
+                -d "$TAGS_REQUEST" \
+                "$KANBOARD_API")
+
+            if echo "$TAGS_RESPONSE" | jq -e '.error' > /dev/null; then
+                echo "Warning: Failed to set tags: $(echo "$TAGS_RESPONSE" | jq -r '.error.message')"
+            else
+                echo "Tags set successfully"
+            fi
+        fi
+
         # Close the corresponding GitHub issue to avoid duplicates
         TASK_URL="${KANBOARD_URL}/?controller=TaskViewController&action=show&task_id=${TASK_ID}"
         echo "Closing GitHub issue #$NUMBER with comment linking to Kanboard task..."
@@ -100,5 +139,4 @@ echo "$ISSUES_JSON" | jq -c '.[]' | while read -r issue; do
 done
 
 echo "Migration completed"
-
 ```
