@@ -13,13 +13,18 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
+- [[quadtask]]
+  - adding notification integration
+  - db clean up to get rid of my DDOS artifacts
+  - would like to deploy locally - so merging agent/develop -> develop and doing it locally would be good practice
+  - LITESTREAM - I've started this and need to rope it into the docker image still
+
 - [[thoughts-to-nostr]]
 - [[deuteronomy-6-and-the-shema]]
 - Migrating my homelab stuff to a mono repo
   - 
   - [kanboard ticket for skm backup](https://kanboard.paynepride.com/?controller=TaskViewController&action=show&task_id=247&project_id=8)
   - [kanboard ticket for homelab mono migration](https://kanboard.paynepride.com/task/109)
-- [[quadtask]] notifications - starting with gotify
 
 ### Affine
 
@@ -46,6 +51,5 @@ Haven't forgotten about [[cronicle]]
 
 or Soonish - event calendar and dashboard
 
-Working on [[quadtask]]
 
 I built a fun self-hosted weather app [[dad-can-i-wear-this]]
