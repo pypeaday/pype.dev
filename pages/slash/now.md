@@ -16,8 +16,14 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 - [[quadtask]]
   - adding notification integration
   - db clean up to get rid of my DDOS artifacts
-  - would like to deploy locally - so merging agent/develop -> develop and doing it locally would be good practice
+  - deploying locally to dev right now - can get off github anytime I'm motiviated
   - LITESTREAM - I've started this and need to rope it into the docker image still
+    - 1. install in docker
+    - 2. deploy to dev
+    - 3. ssh in and set env vars
+    - 4. test replication and restoration: fly -> minio -> babyblue-aurora
+    - 5. update fly env vars
+    - 6. ensure litestream runs as process in container
 
 - [[thoughts-to-nostr]]
 - [[deuteronomy-6-and-the-shema]]
