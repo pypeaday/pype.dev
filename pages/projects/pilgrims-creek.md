@@ -2,7 +2,7 @@
 date: 2025-07-09 08:00:25
 templateKey: project
 title: Pilgrims Creek
-published: False
+published: True
 tags:
   - projects
   - podcast

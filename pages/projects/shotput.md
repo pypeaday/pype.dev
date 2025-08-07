@@ -2,7 +2,7 @@
 date: 2025-07-16 06:18:00
 templateKey: project
 title: Shotput
-published: False
+published: True
 tags:
   - projects
   - blog
