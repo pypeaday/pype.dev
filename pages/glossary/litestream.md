@@ -8,4 +8,4 @@ tags:
 
 ---
 
-Litestream is a simple way to replicate SQLite databases
+[Litestream](https://litestream.io/) is a simple way to replicate SQLite databases
