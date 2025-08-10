@@ -22,6 +22,8 @@ but it's the app code. I also have a repo homelab-social-media-pipelines -
 which has been consolidated down into homelab-temporal. once that all works I
 can destroy the homelab-social-media-pipelines repo
 
+NOTE: everything is moving to homelab-mono
+
 ## Issue 01
 
 I am currently hitting a stupid python issue:
@@ -50,7 +52,7 @@ as of [[2025-07-11-notes]] I have the thoughts ordering correct - we post the ol
 
 ## TODOs
 
-[] - destroy the homelab-social-media-pipelines repo
+[x] - destroy the homelab-social-media-pipelines repo
 
 [] - think about how to structure things more... monorepo in homelab-temporal might be hard to manage with AI tools due to context management... unsure though
 
@@ -104,3 +106,9 @@ I think I wnt to dockerize my workers and workflows... build them out of the `ho
 I have things to think about though... for example the blog builder needs my ssh keys, or an ssh key for a user... also git is a little mess up anyways
 
 - temporal [link](https://temporal-ui.paynepride.com/namespaces/default/workflows/blog-build-ee488b69-6cdf-4819-bccd-df183cf8ec13/01981101-e48b-712a-96db-328ce720c13c/history)
+
+## Temporal
+
+I haev temporal workflows and stuff that all seem to work
+
+on [[ 2025-08-08-notes ]] I had issues with my nostr relay being too public, so I shut it down, reconfigured postiz and stuff and got it workign again, more restricted and in-memory database

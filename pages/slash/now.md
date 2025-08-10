@@ -13,6 +13,9 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
+- started [[autism-and-steadfast-faith]]
+- almost forgot about apprise
+
 - [[quadtask]]
   - adding notification integration
   - db clean up to get rid of my DDOS artifacts

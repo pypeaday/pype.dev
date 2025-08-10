@@ -12,9 +12,21 @@ tags:
 
 ## Intro
 
-I am starting to think through some patterns for replicating sqlite databases, exploring them, standardizing on schemas/models I use across projects, etc... Thanks to [Waylon](https://waylonwalker.com) I know about [[litestream]] and finally I started playing with it. Their [quickstart](https://litestream.io/getting-started/) is good, but it assumes you'll run MinIO on the same machine you run litestream on.
+I am starting to think through some patterns for replicating sqlite databases,
+exploring them, standardizing on schemas/models I use across projects, etc...
+Thanks to [Waylon](https://waylonwalker.com) I know about [[litestream]] and
+finally I started playing with it. Their
+[quickstart](https://litestream.io/getting-started/) is good, but it assumes
+you'll run MinIO on the same machine you run litestream on.
 
-I, however, have MinIO setup in my homelab with the api endpoint accessible via DNS - `s3.mydomain.com`.
+I, however, have MinIO setup in my homelab with the api endpoint accessible via
+DNS - `s3.mydomain.com`.
+
+Before starting - I realize I left the credential aspect out - Litestream
+explains how to setup API keys in MinIO for their application
+[here](https://litestream.io/getting-started/#setting-up-minio)
+
+Basically after generating the keys I set `LITESTREAM_ACCESS_KEY_ID` and `LITESTREAM_SECRET_ACCESS_KEY` as env vars
 
 So let's see what happens and then get to [the fix]
 
@@ -63,6 +75,10 @@ dbs:
         # access-key-id: <ACCESS-KEY-ID>
         # secret-access-key: <SECRET-ACCESS-KEY>
 ```
+
+???+ danger "UPDATE"
+
+    I added a `path` key to give the backups a folder basically on s3, so under "bucket: listream" I have "path: <my desired path>"
 
 So with that config in place we can actually JUST `litestream replicate` from anywhere...
 
