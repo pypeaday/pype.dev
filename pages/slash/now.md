@@ -13,20 +13,15 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
+- need to wrap up [[olivet-mens-group-august-2025]]
+
 - started [[autism-and-steadfast-faith]]
 - almost forgot about apprise
 
 - [[quadtask]]
   - adding notification integration
+  - QUE|ION: maybe quadtask should just support apprise... and soonish... maybe everything should just use apprise.
   - db clean up to get rid of my DDOS artifacts
-  - deploying locally to dev right now - can get off github anytime I'm motiviated
-  - LITESTREAM - I've started this and need to rope it into the docker image still
-    - 1. install in docker
-    - 2. deploy to dev
-    - 3. ssh in and set env vars
-    - 4. test replication and restoration: fly -> minio -> babyblue-aurora
-    - 5. update fly env vars
-    - 6. ensure litestream runs as process in container
 
 - [[thoughts-to-nostr]]
 - [[deuteronomy-6-and-the-shema]]
