@@ -95,7 +95,7 @@ times... at odd times as well.
 ## A Prayer
 
 Lord Jesus, help me to set my mind on things of the Spirit - to live in
-accordance with your will and righteousness. AI confess I run in ways I think
+accordance with your will and righteousness. I confess I run in ways I think
 are secret or hidden, I reject godly things daily, and yet in your
 compassionate love you have saved me from this body of sin and death. Praise be
 to God, guide my heart and mind today, just enough so that tomorrow I can ask
