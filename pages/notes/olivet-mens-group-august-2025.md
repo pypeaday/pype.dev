@@ -100,3 +100,8 @@ are secret or hidden, I reject godly things daily, and yet in your
 compassionate love you have saved me from this body of sin and death. Praise be
 to God, guide my heart and mind today, just enough so that tomorrow I can ask
 for what I need for the day
+
+!!! note "Romans 8:21-25"
+
+    21 Consequently, I find the principle with me, the one who wants to do good, that evil is present with me. 22 For I joyfully agree with the law of God in my inner person, 23 but I observe another law in my members, at war with the law of my mind and making me captive to the law of sin that exists in my members. 24 Wretched man that I am! Who will rescue me from this body of death? 25 Thanks be to God through Jesus Christ our Lord! So then, I myself with my mind am enslaved to the law of God, but with my flesh I am enslaved to the law of sin. 
+
