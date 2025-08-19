@@ -108,3 +108,49 @@ I certainly would make a lot of theological points about it—but is it really?
 That's my reflection this morning.
 
 I'm not as convicted over sin in my life, and so this reverse conscience searing needs to happen.
+
+---
+
+## Another Reflection
+
+As I come back here for a second day, I believe by the guidance of the Spirit,
+I trust God to encourage and teach me through Paul's words
+
+How do I know what is sin (lawlessness) and what is not sin (ie. not lawless, ie. _lawful_)? It's through the law as noted above. 
+
+What to do about this though? One day since some conviction settled into my heart certainly doesn't indicate anything about my life, but what else is relevant to this meditation?
+
+!!! note "Psalm 1:1-2" 
+
+    1 Blessed is the man who does not walk in the advice of the wicked;  nor does he stand in the way of sinners;  nor does he sit in the assembly of mockers.  2 Instead, in the law of Yahweh is his delight,  and on his law he meditates day and night.  
+
+The "law" is _torah_... generally this is referring to a code of holy living.
+Torah isn't "the law" how we understand the law, it's case-law for holy living.
+Torah describes the flight of an arrow towards its target - it's the direction
+of your life. 
+
+So the psalmist says that it's in the constant meditation of God's law (God's direction for holy living) that a man is "blessed". 
+
+> There's many words to use, but this word "blessed" is a Hebrew word used for when describing the good life of another person
+
+- Blessed is the man who meditates on the law of Yahweh
+- The law brings knowledge of sin
+- Furthermore, the law causes sin to "become sinful beyond measure"
+- How? Via the constant meditation of the law of Yahweh - which Psalm 1:3 says
+
+!!! note "Psalm 1:3" 
+
+    3 And so, he is like a tree planted by streams of water  that gives its fruit in its season;  its leaf also does not wither.  Therefore all that he does prospers.  
+
+Bible stuff is apart of my daily vocabulary with anyone. God's law is in my
+mind, and hopefully my heart, every day. At the same time, the callousness is
+present. It's Paul's lament about being the chief of sinners, and about the war
+in his members (Romans 7/8)... 
+
+The solution is this... day by day meditation - slightly more focused and
+directed... God's blessing is absolutely on my lie - and the word for "blessed"
+in Psalm 1 referring to _others_ describing the life of the blessed man as
+blessed is very true for me - people around me know God's been good to me. So I
+have every bit of faith that he will continue that goodness, and thankfully
+conviction this morning and week to take small steps towards a more devoted
+life to the meditation of God's law.
