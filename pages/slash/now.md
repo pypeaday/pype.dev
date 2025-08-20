@@ -13,8 +13,6 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
-- need to wrap up [[olivet-mens-group-august-2025]]
-
 - started [[autism-and-steadfast-faith]]
 - almost forgot about apprise
 
