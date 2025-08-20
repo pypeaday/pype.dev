@@ -154,3 +154,77 @@ blessed is very true for me - people around me know God's been good to me. So I
 have every bit of faith that he will continue that goodness, and thankfully
 conviction this morning and week to take small steps towards a more devoted
 life to the meditation of God's law.
+
+---
+
+## Round 3
+
+Today the Bible Project app brought me to Isaiah 61 which coincides with this
+extended reflection quite well as it's one of the places we get the image and
+phrase of "setting the captives free" which is a Biblical theme I see Paul
+leaning on at the end of Romans 7.
+
+!!! note "Isaiah 61"
+
+    1 The Spirit of the Lord Yahweh is upon me,
+    because Yahweh has anointed me,  he has sent me to bring good news to the
+    oppressed,  to bind up the brokenhearted,  to proclaim release to the captives
+    and liberation to those who are bound,  
+    2 to proclaim the year of Yahweh’s
+    favor,  and our God’s day of vengeance,  to comfort all those in mourning,
+    3 to give for those in mourning in Zion,  to give them a head wrap instead of
+    ashes,  the oil of joy instead of mourning,  a garment of praise instead of a
+    faint spirit.  And they will be called oaks of righteousness,  the planting of
+    Yahweh, to show his glory.  
+
+    4 And they shall build the ancient ruins,  they
+    shall erect the former deserted places.  And they shall restore the devastated
+    cities,  the deserted places of many generations.  
+    5 And strangers shall stand
+    and feed your flocks,  and foreigners shall be your farmers and vinedressers.
+    6 But you shall be called the priests of Yahweh,  you will be called servers of
+    our God.  You shall eat the wealth of the nations,  and you shall boast in
+    their riches.  
+    7 Instead of your shame, a double portion,  and instead of
+    insult, they will rejoice over their portion.  Therefore they will take a
+    double portion in their land;  they shall possess everlasting joy.  
+    8 For I, Yahweh, love justice,  hate robbery and injustice,  and I will
+    faithfully give
+    their reward,  and I will make an everlasting covenant with them.  
+    9 And their
+    descendants will be known among the nations,  and their offspring in the midst
+    of the peoples.  All those who see them shall recognize them,  that they are
+    descendants whom Yahweh has blessed.  
+
+    10 I will rejoice greatly in Yahweh;  my
+    being shall shout in exultation in my God.  For he has clothed me with garments
+    of salvation,  he has covered me with the robe of righteousness,  as a
+    bridegroom adorns himself with a head wrap like a priest,  and as a bride
+    adorns herself with her jewelry. 
+    11 For as the earth produces its sprout,  and
+    as a garden makes its plants sprout,  so the Lord Yahweh will make
+    righteousness sprout,  and praise before all the nations.  
+
+!!! warning ""
+
+    This isn't a reflection or study of Isaiah 61 - just a few notes as they pertain to my reflection on Romans 7 and 8 and the posture I have towards sin in my life
+
+This is a messianic prophecy delivered to the people of God in captivity to
+spur the remnant of the faithful to continue hoping in the promises of Yahweh.
+
+Israel was in captivity more or less as discipline for violating God's word
+pretty regularly... Consistent with my reflection so far - has "sin become sin
+beyond measure" to me yet? No, just as it wasn't for Israel, and God allowed
+His people to be enslaved multiple times as they turned to foreign gods... is
+callousness to sin any different than turning to a foreign god? No, it's
+exactly what it is.
+
+But thankfully the over-arching story is about Yahweh's faithfulness to His
+people, and this prophecy is for those who exercise faithfulness to Yahweh....
+that's the crux of my reflection on Romans 7, how can I claim the promises of
+God if sin is so present in my life? I think the answer is that it's only
+through the awakening of the Spirit that I can genuinely question my loyalty to
+Yahweh and also acknowledge his loyalty to the Promise He brought me into. By
+God's grace I'm just a guy who the Lord has grace on, and I pray through daily
+meditation my will becomes so conformed to the will of Jesus that I can
+faithfully say "sin has become beyond sin to me"
