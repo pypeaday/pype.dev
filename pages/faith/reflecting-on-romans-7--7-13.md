@@ -228,3 +228,9 @@ Yahweh and also acknowledge his loyalty to the Promise He brought me into. By
 God's grace I'm just a guy who the Lord has grace on, and I pray through daily
 meditation my will becomes so conformed to the will of Jesus that I can
 faithfully say "sin has become beyond sin to me"
+
+Praise God for Paul's words at the end of Romans 7
+
+!!! note "Romans 7:24-25"
+
+    24 Wretched man that I am! Who will deliver me from this body of death? 25 Thanks be to God through Jesus Christ our Lord! So then, I myself serve the law of God with my mind, but with my flesh I serve the law of sin.
