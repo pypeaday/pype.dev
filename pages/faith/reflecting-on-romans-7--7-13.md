@@ -234,3 +234,29 @@ Praise God for Paul's words at the end of Romans 7
 !!! note "Romans 7:24-25"
 
     24 Wretched man that I am! Who will deliver me from this body of death? 25 Thanks be to God through Jesus Christ our Lord! So then, I myself serve the law of God with my mind, but with my flesh I serve the law of sin.
+
+---
+
+## Round 4
+
+!!! note "Romans 7:13"
+
+    13 Did that which is good, then, bring death to me? By no means! It was sin, producing death in me through what is good, in order that sin might be shown to be sin, and through the commandment might become sinful beyond measure. 
+
+This morning I don't know if it was another translation or the direct explicit
+work of the Spirit but I feel like something clicked just a little bit here.
+The law didn't bring sin (lawlessness), God's law pre-exists Torah (Genesis,
+the trees), so the law says what is good and bad, and it's the brokenness of
+humanity (sin) producing death in us/me and the production of death shows sin
+to be what it is - sinful beyond measure
+
+So as I reflect here on Paul, Romans, and myself - what am I missing or what is
+God recovering in me? This week has been pretty good concerning the areas of my
+mind and life where I feel callous and hardened. The daily meditation can't NOT
+be the reason - devotion in the morning, however minimal and before anything else,
+is producing in me the will to do God's good work in my own life. I don't mean
+giving money and doing charity - but in the privacy of my mind and day, do I
+honor the Lord with every thought?
+
+The cliche but honest answer is no but I feel God's working in my heart, the
+tug towards Heaven and away from the hellish pit of my own desires
