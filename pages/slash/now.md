@@ -15,6 +15,7 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 - started [[autism-and-steadfast-faith]]
 - almost forgot about apprise
+- [[self-hosting-a-code-forge-with-forgejo]]
 
 - [[quadtask]]
   - adding notification integration
