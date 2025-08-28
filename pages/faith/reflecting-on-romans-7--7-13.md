@@ -260,3 +260,73 @@ honor the Lord with every thought?
 
 The cliche but honest answer is no but I feel God's working in my heart, the
 tug towards Heaven and away from the hellish pit of my own desires
+
+---
+
+## Round 5
+
+Verse 8b "For apart from the law, sin lies dead."
+
+> This reflection was done audibly and the transcription was modified slightly for this post
+
+I think there's quite a few interesting perspectives, maybe two that come to mind pretty quickly.
+
+For context, the rest of the verse is 
+
+!!! note "Romanas 7:8"
+
+    but sin seizing an opportunity through the commandment produced in me all kinds of covetousness, for apart from the law, sin lies dead.
+
+So the first observation is sin gets its life and its effect (effectual power) through the conduit of the law.
+And so the law says don't do X. That means we now have knowledge to not do X. 
+
+And then it's like the existence of sin has to be presupposed because it's the very same sin as in Genesis three.
+God's rule of the land said not to eat of the tree of the knowledge of good and bad, and sin seizing the opportunity through that commandment produced in Eve all kinds of covetousness.
+
+But it wasn't really __actually__ the command of God.
+It was the snake.
+So in that sense, depending on our interpretation of Genesis 3, which I will forego...
+The snake is the embodiment of sin, and so we're not so concerned with the ontological origins of sin, but rather with processing its effect and consequences in our daily life.
+And so that first perspective is to say that - for me, by God's grace, I know the law.
+It means that by God's grace, sin has the opportunity to produce __things__ in me, and in that same breath of grace -
+Jesus saves me.
+That's the end of chapter seven.
+
+!!! note "Romans 7:24-25"
+
+    24 Wretched man that I am! Who will deliver me from this body of death? 25 Thanks be to God through Jesus Christ our Lord! So then, I myself serve the law of God with my mind, but with my flesh I serve the law of sin.
+
+The other perspective that I have on this right now is not inward looking, and so I don't want to harp on it and meditate much on other people.
+But Christians certainly have internal (internal to the community of faith) conversations about the morality of non-Christians and what should be expected of non-believers.
+As far as a moral life is concerned and there's various theological opinions and various worldviews, even within Christianity through which we can filter reality and people's actions and their moralities.
+And so in that vein, perhaps something I see here is to read it almost backwards (transposed is a better word), 
+
+> sin lies dead apart from the law.
+
+And you think, I think, about our culture's hedonistic posture towards being a slave to our own desires.
+American culture largely celebrates, or Western culture rather, largely celebrates the individual decision to do what the individual wants.
+And we live in a culture where to shame others is itself shamed.
+It is unacceptable to call people to higher standards of living.
+But why should we (Christians) be surprised and why is this news and why do Christians spend time talking about it?
+I think Paul gives us the answer.
+"Apart from the law" (and the law is the direction in which we strive for holiness)
+And so "apart from that, sin lies dead" meaning sin doesn't seize an opportunity through any commandment.
+Because apart from the law sin can't be shown to be sinfulness.
+That's verse 13.
+
+!!! note "Romans 7:13"
+
+    13 Did that which is good, then, bring death to me? By no
+    means! It was sin, producing death in me through what is good, in order that
+    sin might be shown to be sin, and through the commandment might become sinful
+    beyond measure.
+
+So that last thought, it isn't so much that non-believers don't have the knowledge of good and bad.
+The Bible says that God has written eternity on our hearts.
+And we have moral discussions in the public square all the time, so people
+certainly are aware of opinions about morality, and it is in the rebellion
+against the good and moral positions where I'm right now actually finding
+security in **my** position as a __chosen child of God__ because honestly, I love debauchery, but (thankfully)
+part of me hates it, and it's that part of me that hates it, that is the Spirit
+in me, that is the grace of the Lord Jesus, saving me from this body of sin and death.
+
