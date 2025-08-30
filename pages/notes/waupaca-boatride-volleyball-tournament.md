@@ -31,3 +31,6 @@ tags:
   - trail running shoes were PERFECT
   - Epoch sunnies or similar
   - UV hoodie
+  - anker solix power bank
+    - 3 outlets
+    - usb
