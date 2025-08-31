@@ -6,7 +6,7 @@ published: True
 cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250816113250_ef33ac8f.png"
 tags:
   - runescape
-  - tech
+  - gaming
 
 ---
 
