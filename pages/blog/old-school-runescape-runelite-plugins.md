@@ -52,6 +52,16 @@ As you can see you just type the name of the items you want the default
 left-click to `drop` and I have `willow logs` etc. in here from a few leveling
 sessions recently
 
+## Screenshot
+
+I JUST found this one! There's a screenshot plugin to give you more standardized screenshots of in-game activity...
+
+![20250831113238_04accffb.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113238_04accffb.png)
+
+And then an example of that plugin's screenshot:
+
+![20250831113350_7049366c.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113350_7049366c.png)
+
 ## Others
 
 Some noteable others are:
