@@ -52,6 +52,22 @@ As you can see you just type the name of the items you want the default
 left-click to `drop` and I have `willow logs` etc. in here from a few leveling
 sessions recently
 
+### Example
+
+By default take this example of `wear Zammorak monk bottom`
+
+![20250831113557_5da3dbac.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113557_5da3dbac.png)
+
+![20250831113653_3acbcb94.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113653_3acbcb94.png)
+
+I would never actually want to default drop this item, but let's say I did!
+
+![20250831113747_9d846f0c.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113747_9d846f0c.png)
+
+![20250831113815_4e9b7ca2.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250831113815_4e9b7ca2.png)
+
+Now the default left-click is `drop` - super easy
+
 ## Screenshot
 
 I JUST found this one! There's a screenshot plugin to give you more standardized screenshots of in-game activity...
