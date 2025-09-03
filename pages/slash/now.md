@@ -13,10 +13,15 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
+- [[homelab-as-a-service]] -- product idea
 - started [[autism-and-steadfast-faith]]
 - almost forgot about apprise
 - [[self-hosting-a-code-forge-with-forgejo]]
   - add repoflow post/writing in this same stream
+
+
+- [[event-details-updates-via-notifications-as-a-service]]
+- [[compose-stack-example-repo-x-package-manager]]
 
 - [[quadtask]]
   - adding notification integration
