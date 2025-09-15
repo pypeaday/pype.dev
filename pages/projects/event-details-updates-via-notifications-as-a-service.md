@@ -8,6 +8,8 @@ tags:
   - digital-harbor
 ---
 
+I've moved these notes to [[soonish]]
+
 The idea here might be something like a simple site where people plan events.
 Events have managers and subscribers
 
