@@ -14,3 +14,7 @@ This is a simple FastAPI web app you can `docker compose up` alongside ollama an
 ![20250614121103_997fe18d.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614121103_997fe18d.png)
 
 ![20250614121122_39376fa1.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614121122_39376fa1.png)
+
+## Version 2
+
+![20250919212136_319c1006.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250919212136_319c1006.png)
