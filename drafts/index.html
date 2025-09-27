@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>drafts</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="drafts | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/drafts" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="drafts | Nic Payne" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class='flex flex-row w-full min-h-screen bg-pattern-gradient text-text-main'>
+    <main class="flex-grow fade-in overflow-visible">
+        <div class='container flex-grow p-2 sm:p-6 mx-auto bg-content-blend overflow-visible'>
+<header class='py-4'>
+
+    <nav class='flex flex-wrap justify-center sm:justify-start items-center'>
+        <a class="nav-link accent-glow"
+            href='/'>Home</a>
+        <a class="nav-link accent-glow"
+            href='https://github.com/pypeaday/pype.dev'>GitHub</a>
+        <a class="nav-link accent-glow"
+            href='https://mydigitalharbor.com/pypeaday'>DigitalHarbor</a>
+        <a class="nav-link accent-glow"
+            href='/slash'>Start Here</a>
+        <a class="nav-link accent-glow"
+            href='/my-thoughts'>My Thoughts</a>
+    </nav>
+
+    <!-- <div>
+        <label id="theme-switch" class="theme-switch" for="checkbox-theme" title="light/dark mode toggle">
+            <input type="checkbox" id="checkbox-theme" />
+            <div class="slider round"></div>
+        </label>
+    </div> -->
+</header><article>
+    <header class='sticky top-0 py-4 bg-primary-light/80 backdrop-blur-sm z-10 px-6'>
+        <h1 class='text-3xl font-semibold text-text-heading'></h1>
+        <div class='mt-4'>
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-pink-500"
+               placeholder="'/' Search for a page">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+    </header>
+    <div class='py-4'>
+        <ul id='feed' class='list-none'>
+<li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Index
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Welcome to Pype.dev 👋 Hi, I&#x27;m **Nic Payne**. This is my digital space where I share my thoughts, learnings, and explorations. Consider this my mental datal
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/scripts/dall-e"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            dall-e.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            None
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/scripts/generate-password-hash"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            generate_password_hash.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Password Hash Generator for Markata Password Protection Plugin This script generates secure SHA-256 password hashes with salt for use with
+the password protecti
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/scripts/sync-thoughts"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            sync-thoughts.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Sync thoughts from the web to local markdown files. !!! function
+    &lt;h2 id=&quot;clean_title&quot; class=&quot;admonition-title&quot; style=&quot;margin: 0;
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/plugins/analytics"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            analytics.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Analytics plugin for Markata
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/plugins/password-protection"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            password_protection.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Password Protection Plugin for Markata Adds client-side password protection to posts using secure hash-based authentication.
+This plugin encrypts post content a
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/plugins/wikilinks-hover"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            wikilinks_hover.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            None
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/plugins/build-thoughts"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            build_thoughts.py
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            None
+        </p>
+
+
+        <time datetime="2025-09-27" class='text-sm text-accent-cool'>
+            September 27, 2025
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/compose-stack-example-repo-x-package-manager"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Compose Stack Example Repo x Package Manager
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            The idea is something like the AUR, which is ultimately a pointer to a repo with a script that does some setup... Perhaps my [[homelab-as-a-service]] idea could
+        </p>
+
+
+        <time datetime="2025-09-02" class='text-sm text-accent-cool'>
+            September 02, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #projects
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #digital-harbor
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/event-details-updates-via-notifications-as-a-service"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Event Details Updates via Notifications as a Service
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I&#x27;ve moved these notes to [[soonish]] The idea here might be something like a simple site where people plan events.
+Events have managers and subscribers Ma
+        </p>
+
+
+        <time datetime="2025-09-02" class='text-sm text-accent-cool'>
+            September 02, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #projects
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #digital-harbor
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/homelab-as-a-service"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Homelab As A Service
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            $HOME I don&#x27;t know what to call my opinionated homelab distribution yet but I will try to have some goals for today or tomorrow for simple steps drawing up
+        </p>
+
+
+        <time datetime="2025-09-01" class='text-sm text-accent-cool'>
+            September 01, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #projects
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #product
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/litestream"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Litestream
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            [Litestream](https://litestream.io/) is a simple way to replicate SQLite databases
+        </p>
+
+
+        <time datetime="2025-08-05" class='text-sm text-accent-cool'>
+            August 05, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #glossary
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/grapheneos"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            GrapheneOS
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            GrapheneOS is a de-googled version of Android OS you can run on Android devices. They coincidentally recommend Pixel phones for the sake of the hardware
+        </p>
+
+
+        <time datetime="2025-08-04" class='text-sm text-accent-cool'>
+            August 04, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #glossary
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/jellyfin"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Jellyfin
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Jellyfin is the media server software I run at home
+        </p>
+
+
+        <time datetime="2025-07-11" class='text-sm text-accent-cool'>
+            July 11, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #note
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/thoughts-to-nostr"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Thoughts To Nostr
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I am trying to use [[temporal]] at home for running automated pipelines. It&#x27;s
+definitely overkill for my use case but this is America... So my first projec
+        </p>
+
+
+        <time datetime="2025-07-08" class='text-sm text-accent-cool'>
+            July 08, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #projects
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #nostr
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #pipelines
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/pilgrims-creek-about-me"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Pilgrim's Creek - About Me
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Hello This is my snippet for [website]() for [[pilgrims-creek]] I need to write a little intro
+about myself so I&#x27;ll mind-dump some things here and then org
+        </p>
+
+
+        <time datetime="2025-07-02" class='text-sm text-accent-cool'>
+            July 02, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #pilgrims-creek
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #faith
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/temporal"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            temporal
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            [Temporal](https://temporal.io/) is a workflow orchestrator that I&#x27;m interested in
+        </p>
+
+
+        <time datetime="2025-06-24" class='text-sm text-accent-cool'>
+            June 24, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #temporal
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/stable-diffusion-qr-codes-for-josh"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Stable Diffusion QR Codes for Josh
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            After my blunder ![20250627111955_e86d5db2.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250627111955_e86d5db2.png) (fjords of Fi
+        </p>
+
+
+        <time datetime="2025-06-17" class='text-sm text-accent-cool'>
+            June 17, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #digital-harbor
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #qr
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #stable-diffusion
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/cronicle"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Cronicle
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I use [hcio](https://healthchecks.io) to monitor a few of my backup scripts and when LLMs hit the scene I got interested to try to build my own. I have a pretty
+        </p>
+
+
+        <time datetime="2025-06-13" class='text-sm text-accent-cool'>
+            June 13, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #projects
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cronicle
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/athalia-s-stable-diffusion-pictures"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Athalia's Stable Diffusion Pictures
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            ![Unicorn Riding Bike](https://dropper.wayl.one/api/file/9d74262d-3584-4b2f-a9ce-41c5ca7c0a73.png) ![Santa Claus](https://dropper.wayl.one/api/file/fb0b4f4a-a65
+        </p>
+
+
+        <time datetime="2025-06-06" class='text-sm text-accent-cool'>
+            June 06, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #athalia
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #stable-diffusion
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/travel-entertainment-for-kids"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Travel Entertainment For Kids
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            We are quickly becomming a Great Wolf Lodge family... we&#x27;ve got several times
+over the last couple years, and I only forsee more going forward for the next
+        </p>
+
+
+        <time datetime="2025-06-01" class='text-sm text-accent-cool'>
+            June 01, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #travel
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #family
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #vacation
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/homelab-computer-vision-pipelines"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            homelab-computer-vision-pipelines
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Done in 11 seconds! Subtitle and audio files are in the outputs folder. I wanted to talk through an idea I have for some computer vision pipelines at home.
+I he
+        </p>
+
+
+        <time datetime="2025-05-31" class='text-sm text-accent-cool'>
+            May 31, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #computer-vision
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/the-importance-of-nostr-according-to-chatgpt"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            The Importance of Nostr According to ChatGPT
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Disclaimer This was written by ChatGPT with zero oversight from me. There are a few things that are not 100% accurate, but the main idea is there... I am hoping
+        </p>
+
+
+        <time datetime="2025-01-24" class='text-sm text-accent-cool'>
+            January 24, 2025
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #nostr
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Interesting IPs between Jellyfin clients and server depending on tailscale and server address
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            When connecting from my phone to jellyfin I&#x27;m seeing some interesting patterns. Scenarios Tailscale IP of phone is listed as local network to jellyfin Wifi
+        </p>
+
+
+        <time datetime="2024-07-12" class='text-sm text-accent-cool'>
+            July 12, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/kanboard-to-keep-me-focused-on-my-own-ideas"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Kanboard to keep me focused on my own ideas
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            TL;DR I&#x27;ve been using kanboard as a self-hosted kanban board. It&#x27;s keeping me focused on [Digital Harbor](https://myditialharbor.com) when I&#x27;d ra
+        </p>
+
+
+        <time datetime="2024-04-20" class='text-sm text-accent-cool'>
+            April 20, 2024
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/stable-diffusion-notes"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Stable Diffusion Notes
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            ChatGPT Prompt: Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some prompts for generating art with Stable Diffusion. Example: A gh
+        </p>
+
+
+        <time datetime="2023-01-28" class='text-sm text-accent-cool'>
+            January 28, 2023
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #data
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/modal-labs"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Modal Labs
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Playing around with Modal Labs One of the first things I tried was a regular cron job... This can get deployed with `modal deploy --name &lt;app name&gt; &lt;pa
+        </p>
+
+
+        <time datetime="2022-12-28" class='text-sm text-accent-cool'>
+            December 28, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/nextcloud-docker-upgrade-error"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Nextcloud Docker Upgrade Error
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error
+        </p>
+
+
+        <time datetime="2022-12-28" class='text-sm text-accent-cool'>
+            December 28, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/suddenly-ssh-requires-a-password"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Suddenly SSH requires a password
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            ssh -v -i ~/.ssh/id_rsa nic@hogwarts THen we can look at print outs cat /var/log/auth.log  also showed me that I had too wide permissions on files in ~/.ssh -&g
+        </p>
+
+
+        <time datetime="2022-10-07" class='text-sm text-accent-cool'>
+            October 07, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/trick-to-login-to-web-server-on-another-box-on-lan"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Trick to login to web server on another box on lan
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            TODO: change title - add --listen or --host or something as 0.0.0.0... that way it listens not on localhost or 127.0.0.1, but on all addresses!
+        </p>
+
+
+        <time datetime="2022-09-12" class='text-sm text-accent-cool'>
+            September 12, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/playing-with-mdformat"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Playing with mdformat
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-08-23" class='text-sm text-accent-cool'>
+            August 23, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #vim
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/setup-kvm-to-boot-from-local-pxe-server"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Setup KVM to boot from local PXE server
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Assuming you have a PXE server running you only need small edits to the virt-manager config
+        </p>
+
+
+        <time datetime="2022-07-06" class='text-sm text-accent-cool'>
+            July 06, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/self-hosted-docker-registry-with-proxy-pull-through"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Self-hosted Docker registry with proxy pull through
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I decided that I want to self-host all my docker images for the purposes of
+regularly rebuilding and security scanning. The first step is to set up a
+registry, 
+        </p>
+
+
+        <time datetime="2022-07-06" class='text-sm text-accent-cool'>
+            July 06, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #zfs
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/samba-on-ubuntu-22-needs-inherit-permissions-set"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Samba on Ubuntu 22 needs "inherit permissions" set
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            see samba config on hogwarts
+        </p>
+
+
+        <time datetime="2022-05-31" class='text-sm text-accent-cool'>
+            May 31, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/tdarr-worker-nodes-share-the-cache"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Tdarr worker nodes share the cache!
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            When working with tdarr remote nodes, they need to have access not only to the
+same libraries but also the same transcode cache as the server otherwise the
+tran
+        </p>
+
+
+        <time datetime="2022-05-25" class='text-sm text-accent-cool'>
+            May 25, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/configure-bridge-network-on-ubuntu-22-04-with-netplan"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Configure bridge network on Ubuntu 22.04 with Netplan
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            See 02-....yaml in ansible-nas
+        </p>
+
+
+        <time datetime="2022-05-22" class='text-sm text-accent-cool'>
+            May 22, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/subset-a-list-based-on-values-in-another-list-with-itertools-compress"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Subset a list based on values in another list with itertools.compress
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I have list [True, False, False, True] and another list [1, 2, 3, 4] and a use
+case where I want to filter list 2 based on list 1 to remove values that line
+up 
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/see-git-history-about-one-file"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            See git history about one file
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            In vim `G clog %` does a `git clog {current file}`. You get every commit that the target file is apart of (so there might be info in those commits unrelated)
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #vim
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #git
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/deleting-files-on-remote-storage-from-ubuntu-might-not-do-what-you-think"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Deleting files on remote storage from Ubuntu might not do what you think
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            From my daily driver Ubuntu machine I often open nautilus, dolphin, etc. and delete a file here or there on my NAS... turns out Ubuntu sends thse file to `.Tras
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #linux
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #cli
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/how-i-use-nextcloud-for-safe-central-storage"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            How I use Nextcloud for safe central storage
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Setup admin External Storage extension Add my nas zfs dataset chown -R www-data:www-data on anything nextcloud uploads to.
+        </p>
+
+
+        <time datetime="2022-05-19" class='text-sm text-accent-cool'>
+            May 19, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #zfs
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/fastapi-jinja-forms"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Forms with FastAPI and Jinja
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I just started using FastAPI for a home project and needed to pass back a
+dynamic number of values from a form rendered with jinja... Dynamic Values The jinja t
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/forms-with-fast-api-and-jinja.png" 
+                    alt="Forms with FastAPI and Jinja cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-05-15" class='text-sm text-accent-cool'>
+            May 15, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/dynamic-form-values-with-jinja-and-fastapi"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Dynamic-Form-Values-With-Jinja-And-Fastapi
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            I&#x27;m currently working on a self-hostable wish list app using FastAPI so we can
+finally drop Amazon forever. (The lists funcionality has been super handy fo
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/dynamic-form-values-with-jinja-and-fastapi.png" 
+                    alt="Dynamic-Form-Values-With-Jinja-And-Fastapi cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-05-15" class='text-sm text-accent-cool'>
+            May 15, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/python-eval"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Python-Eval
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            TODO
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/python-eval.png" 
+                    alt="Python-Eval cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-05-12" class='text-sm text-accent-cool'>
+            May 12, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #python
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #til
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/tdarr"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Tdarr
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/tdarr.png" 
+                    alt="Tdarr cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-04-28" class='text-sm text-accent-cool'>
+            April 28, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #blog
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #homelab
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/home-server-refactor"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Home-Server-Refactor
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            My current homelab setup is not great but it works... Proxmox on PowerEdge R610 I boot off an SD card and have 1 SSD and 5 HDDs configured as a JBOD array using
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/home-server-refactor.png" 
+                    alt="Home-Server-Refactor cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-04-10" class='text-sm text-accent-cool'>
+            April 10, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #blog
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/git-worktrees-01"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            Git-Worktrees-01
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Git Hopefully if you write code you are using git, if not go learn the basics of `commit`, `pull`, `push`, and `pull request`/`merge request` like... right now.
+        </p>
+
+        <style>
+            /* Enhanced card cover image styling */
+            .card-cover-container {
+                position: relative;
+                height: 220px; /* Taller for better presence */
+                width: calc(100% + 3rem); /* Extend beyond card boundaries */
+                margin: 1.5rem 0 2rem -1.5rem; /* Adjusted margins */
+                overflow: visible;
+                z-index: 5;
+            }
+            
+            .card-image-frame {
+                position: relative;
+                height: 100%;
+                width: 100%;
+                border-radius: 10px;
+                padding: 0.4rem;
+                background: rgba(255, 255, 255, 0.1); /* Subtle frame background */
+                backdrop-filter: blur(4px); /* Frosted glass effect */
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                transform: translateZ(0); /* Create stacking context */
+                z-index: 10;
+            }
+            
+            /* Hover effect for the entire frame */
+            .card-image-frame:hover {
+                transform: translateY(-5px) scale(1.02);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            }
+            
+            .card-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 7px;
+                border: 4px solid white;
+                box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.5);
+                transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+            }
+            
+            /* Enhanced glow effect */
+            .card-cover-glow {
+                position: absolute;
+                top: -15px;
+                left: -15px;
+                right: -15px;
+                bottom: -15px;
+                background: linear-gradient(45deg, 
+                    rgba(211, 124, 95, 0.6),  /* accent-warm */
+                    rgba(96, 138, 159, 0.6),  /* accent-cool */
+                    rgba(106, 138, 130, 0.6)  /* accent-green */
+                );
+                filter: blur(25px);
+                border-radius: 15px;
+                opacity: 0.7;
+                z-index: 1;
+                animation: card-glow-pulse 4s infinite alternate;
+                pointer-events: none;
+            }
+            
+            @keyframes card-glow-pulse {
+                0% { opacity: 0.5; filter: blur(20px); }
+                100% { opacity: 0.8; filter: blur(30px); }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
+                .card-cover-container {
+                    height: 180px;
+                    width: calc(100% + 2rem);
+                    margin-left: -1rem;
+                }
+                
+                .card-image-frame {
+                    padding: 0.25rem;
+                }
+                
+                .card-image {
+                    border-width: 3px;
+                }
+            }
+        </style>
+        
+        <div class="card-cover-container">
+            <div class="card-cover-glow"></div>
+            <div class="card-image-frame">
+                <img 
+                    src="/media/git-worktrees-01.png" 
+                    alt="Git-Worktrees-01 cover image" 
+                    class="card-image"
+                >
+            </div>
+        </div>
+
+        <time datetime="2022-03-11" class='text-sm text-accent-cool'>
+            March 11, 2022
+        </time>
+        <div class="mt-3">
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #git
+                </span>
+                <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                    #tech
+                </span>
+            <span class="inline-block bg-secondary-light/20 text-secondary-dark text-xs font-medium mr-1 px-2 py-0.5 rounded-full">
+                False
+            </span>
+        </div>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/hero"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Hero
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Who am I I write about things I find find interesting in tech and theology Let&#x27;s connect: 🌱  [My Digital Harbor](https://mydigitalharbor.com/pypeaday/) is 
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/announce"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Announce
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/comments"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Comments
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Comments
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/references"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _References
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/404"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _404
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            Not Found
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/markdown-footer"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Markdown_Footer
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/sidebar-example"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Sidebar.Example
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            {% set groups = [&#x27;tag&#x27;, &#x27;archive&#x27;, &#x27;author&#x27;, &#x27;stream&#x27;] %}
+{% for group in groups %} {{group}}s {% for name, items in gro
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li><li class='my-6 list-none overflow-x-hidden hover-lift'>
+    <a class='block w-full p-6 no-underline rounded-lg pattern-card glow-card bg-primary-light border border-accent-cool/20 shadow-lg shadow-primary-dark/50 transition-all duration-200 ease-in-out hover:bg-primary-light/80 hover:shadow-xl hover:scale-[1.01] hover:border-accent-green'
+        href="/markdown-header"
+>
+        <h2 class='mt-0 mb-2 text-2xl font-bold text-text-heading break-all'>
+            _Markdown_Header
+        </h2>
+        <p class='mb-3 text-text-main break-all'>
+            
+        </p>
+
+
+        <time datetime="2022-03-09" class='text-sm text-accent-cool'>
+            March 09, 2022
+        </time>
+    </a>
+</li>        </ul>
+    </div>
+
+    <div class="flex justify-between items-center mt-8 px-6 pb-6">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</article>
+        </div>
+    </main>
+
+</div>
+     </body>
+</html>
