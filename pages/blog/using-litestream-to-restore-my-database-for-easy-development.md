@@ -7,7 +7,6 @@ cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20
 tags:
   - litestream
   - tech
-
 ---
 
 # Litestream
@@ -31,10 +30,10 @@ My entrypoint script now looks like:
 set -euo pipefail
 # Restore the database if it does not already exist.
 if [ -f /app/data/quadtask.db ]; then
-	echo "Database already exists, skipping restore"
+ echo "Database already exists, skipping restore"
 else
-	echo "No database found, restoring from replica if exists"
-	litestream restore -v /app/data/quadtask.db
+ echo "No database found, restoring from replica if exists"
+ litestream restore -v /app/data/quadtask.db
 fi
 # Run litestream with your app as the subprocess.
 exec litestream replicate -exec "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug"
@@ -70,7 +69,6 @@ dbs:
         endpoint: s3.example.com
         skip-verify: false
         region: us-east-1
-
 ```
 
 So on my desktop if I `litestream replicate` then basically I'm taking the
@@ -89,17 +87,41 @@ we can do something like this:
 
 ```yaml
 dbs:
-- path: /app/data/quadtask.db
-  replicas:
-  - name: quadtask
-    type: s3
-    bucket: litestream
-    path: quadtask-${ENVIRONMENT}
-    endpoint: s3.example.com
-    skip-verify: false
-    region: us-east-1
+  - path: /app/data/quadtask.db
+    replicas:
+      - name: quadtask
+        type: s3
+        bucket: litestream
+        path: quadtask-${ENVIRONMENT}
+        endpoint: s3.example.com
+        skip-verify: false
+        region: us-east-1
 ```
 
 And so wherever I spin up quadtask: local, dev, or prod - the replication will
 happen to and from a different path in my litestream bucket!
 
+# Update
+
+I updated the `docker-entrypoint.sh` of my quadtask container to look like this now:
+
+```bash
+
+# Restore the database if it does not already exist.
+if [ -f /app/data/quadtask.db ]; then
+ echo "Database already exists, skipping restore"
+else
+ echo "No database found, restoring from replica"
+ ENVIRONMENT="prod" litestream restore -v /app/data/quadtask.db
+fi
+# Run litestream with your app as the subprocess.
+exec litestream replicate -exec "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --log-level debug"
+
+```
+
+The `if` block checks if there's a db at the filepath it should be in in the continer - if it's not there is the little bit of magic to me right now...
+
+My litestream config has a parameterized `ENVIRONMENT` variable in the db path,
+so by overwritting it for just the `restore` command, I can very simply always
+pull a fresh copy of the prod database into an ephemeral container to test
+things against real data in a very convenient way
