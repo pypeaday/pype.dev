@@ -18,9 +18,13 @@ What is it to me to hear and know that **Yahweh gives grace and honor**? I'm ask
 
 > The little conjunction “and” in this verse is a diamond rivet binding the present with the future: grace and glory always go together.
 
-The translation he was using has "glory", I quoted "honor". The word is `כָּבוֹד` (kabod) which generally basically means "weight".
+The translation he was using has "glory", I quoted "honor". The word is `כָּבוֹד`
+(kabod) which generally basically means "weight".
 
-I got very distracted this morning unfortunately and therefore my reflection will be cut short... I know meditating on these things opens my day up to go in a better direction... May Yahweh give grace to me today, to live in a glorified and honorable way... one worthy of the gospel of Christ.
+I got very distracted this morning unfortunately and therefore my reflection
+will be cut short... I know meditating on these things opens my day up to go in
+a better direction... May Yahweh give grace to me today, to live in a glorified
+and honorable way... one worthy of the gospel of Christ.
 
 !!! note "Philippians 1:27"
 
