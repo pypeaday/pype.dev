@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Write In To The Hybrid Cloud Show</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="🔒 This content is password protected." />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Protected post meta tags -->
+<meta property="og:title" content="🔒 Write In To The Hybrid Cloud Show - Pype.dev" />
+<meta property="og:description" content="🔒 This content is password protected." />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/write-in-to-the-hybrid-cloud-show" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="🔒 Write In To The Hybrid Cloud Show - Pype.dev" />
+<meta name="twitter:description" content="🔒 This content is password protected." />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class='flex flex-row w-full min-h-screen bg-pattern-gradient text-text-main'>
+    <main class="flex-grow fade-in overflow-visible">
+        <div class='container flex-grow p-2 sm:p-6 mx-auto bg-content-blend overflow-visible'>
+<header class='py-4'>
+
+    <nav class='flex flex-wrap justify-center sm:justify-start items-center'>
+        <a class="nav-link accent-glow"
+            href='/'>Home</a>
+        <a class="nav-link accent-glow"
+            href='https://github.com/pypeaday/pype.dev'>GitHub</a>
+        <a class="nav-link accent-glow"
+            href='https://mydigitalharbor.com/pypeaday'>DigitalHarbor</a>
+        <a class="nav-link accent-glow"
+            href='/slash'>Start Here</a>
+        <a class="nav-link accent-glow"
+            href='/my-thoughts'>My Thoughts</a>
+    </nav>
+
+    <!-- <div>
+        <label id="theme-switch" class="theme-switch" for="checkbox-theme" title="light/dark mode toggle">
+            <input type="checkbox" id="checkbox-theme" />
+            <div class="slider round"></div>
+        </label>
+    </div> -->
+</header><div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-pink-500"
+               placeholder="'/' Search for a page">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    <!-- Content is handled by the password protection plugin -->
+    <p>I really enjoyed the podcast, and it resonated with my experience building the
+'rada platform' at my employer. This email turned out a little longer than I
+anticipated and if you do take the time to read it fully then awesome, but the
+TLDR is this episode brought me down memory lane in a very emotional way...</p>
+<p>Gary started the episode by basically describing what my job has been the last
+several years - I became a DevOps person and then, via a manager seeing value
+in a reorg, my now-boss and I were given the opportunity to build a platform.
+We were both data scientists along with 7 other folks, but we naturally
+gravitated towards devops/home-labbing/sys adminy kind of things. We were given
+the chance to become a support team for the data scientists rather than “do”
+the data science anymore. Now, our “business” isn’t all of our entire
+organization… The “Enterprise” is a fortune 100 company with 100k employees -
+we are a small analytics team embedded in the highest-profit generating
+division of the business. We don’t have several app teams, we have a handful of
+data scientists who all do a handful of things. Primarily they write data
+pipelines in python - a process we’ve sense templated and containerized pretty
+beautifully. They also sometimes create web apps (specifically with streamlit,
+but that's not necessarily relevant at a high level). We have a k3s cluster and
+set of helm charts for using ArgoCD to manage their web app deployments - it’s
+all apart of our centralized CI/CD process. We refer to everything stitched
+together as the “rada platform” (rada is in internal name). We are the “team
+who builds [the platform] and has great relationship with the developers but
+aren’t necessarily doing the work for them” (1:31 in the episode).</p>
+<p>The Platform Product Owner idea is very interesting - it’s coincidentally how I
+had started referring to myself in relationship to rada as the development
+transitioned from the CLI and CI/CD framework towards a desirable web frontend
+to give the devs a centralized place to go for info. I didn’t code as much as
+when putting the CLI and CI/CD branches together, but felt like I was driving
+the features and design and architecture along with Waylon (my boss). I recall
+last year or so saying that I felt more like a product owner than a developer
+(in some ways).</p>
+<p>Sean bringing up “shift left” was another particularly relevant note, or
+anti-relevant perhaps… Rada strived in the beginning to be a “hyper developer
+focused” experience. Our goal with rada was to make a data scientist’s job in
+our team an absolute dream - and we’ve mostly accomplished that goal, and
+continue to accomplish it with daily continual improvement. What I mean is that
+the data scientist doesn’t care about ops AT ALL (or very little). To them,
+they clone a template repo and write python code. Data connections, pipelines
+deployment and everything surrounding the operational side of things is done by
+sets of tooling within the rada platform. The genesis for this focus was that
+our entire team was spending multiple hours per person per week, every week,
+scheduling and configuring things in the AWS and Azure DevOps consoles. That
+was the first thing I personally did - was automate and centralize those
+configuration workloads. So in a sense I implemented DevOps by focusing on
+taking Ops away from the developers but providing a way that is laser-focused
+on this small group’s use cases.</p>
+<p>Gary’s memory of the UK client with a few EKS clusters is very in-step with the
+actual platform side of rada. We have some helm charts and a self-managed k3s
+node along with some automation around cert and domain requesting that makes it
+possible for our data scientists to have a streamlit app deployed with a nice
+https://myapp.our_team.corp.com in our walled-off corporate intranet, but
+furthermore - that node helps us navigate the Border Patrol Team, GIS security,
+and multiple cloud teams required to connect to data in the cloud from on prem
+resources… the rada platform conveniently takes advantage of existing
+corporate-approved pathways to bring relevant data right to the data scientists
+through common interfaces. It’s not much in the way of supporting a
+million-user app, but it’s a beautiful, albeit scrappy setup to give our
+developers a very smooth path to deploying something for their customers
+(internal engineers usually) that would otherwise be literally impossible to
+navigate fresh for every app. Honestly, the way our team is setup makes me
+think it’s the way every data analytics team should be setup - with a small set
+of dedicated resources to manage their operations so they can focus on data.
+Now “small set of dedicated resources” looks different at different scales of
+enterprise certainly, but I’ve been in several data-related groups within my
+employer (Fortune 100 company since forever, 100k employees) and every one of
+them has terrible deployment and operational experiences for the data
+scientist. The idea of offloading that onto someone whose actual responsibility
+it was to manage and be accountable for made sense and I don’t know why more
+groups weren’t setup how ours got to be.</p>
+<blockquote>
+<p>Yeah, I think the position we’re in now is fundamentally better than whatever
+has gone before, right? And I guess that’s partly human nature because we
+always want to make things better and improve on things. But I think by and
+large, companies who do this well have developers that are more productive.
+ops people who are happier and hopefully have shifted left still in the ways
+that made sense. (8:54)</p>
+</blockquote>
+<p>This is so true for our group (not the company necessarily) - our data
+scientists are very productive, and happy. And as the ops guy - my job rocks...</p>
+<blockquote>
+<p>And although our developers did have full admin access to Azure and the
+console and the CLI and everything else, what they didn't have the kind of
+underlying knowledge of is what does our network look like on-premises? How
+does the routing work to get back to our data center? What data center even
+is the database that I want to talk to sitting in? So there’s a whole bunch
+of context that I don’t think it’s reasonable to expect a developer to know
+or understand. (17:27)</p>
+</blockquote>
+<p>This quote from Gary rang very true to me as well. The data scientists I work
+with are smart guys for sure, with varying levels of technical curiosity. But
+ultimately, even the most curious one was miles away for understanding
+networking, firewall rules, proxies, Logical Technical Architecture diagrams,
+etc. These were things I don’t necessarily have a passion for, but things I
+came to understand to (apparently) significantly deeper degrees than my
+co-workers, but that skill distinction is one of the things that opened the
+door to our own little platform in-house. It’s been awesome and this episode
+let me relive a lot of good times.</p>
+<p>I will wrap up my message to y’all out of respect for everyone’s time if you
+read this far… I said above that my job rocks, which is true and it’s one
+reason this episode has been such a whirlwind for me, because my employer
+created a remote role for me to take 4 years ago. I took it, moved away, and in
+this role is where I created rada from inception and became familiar with
+platform engineering as a concept. Well, due to their RTO (return to office)
+mandates it looks like I’m going to lose the thing I created and love because
+they want me to now uproot the life I was told I could go build, to come back
+to an office. I won’t rant much more about that - I’ve excelled in reviews all
+4 years in this role and, not to brag, but I have a great reputation. I’m very
+upset - not about losing my job, there's more work out there, but about having
+rada taken from me for the most unreasonable reason I could think of... This
+episode allowed me to remember a lot of the good things about what I built. I
+have fond memories of development and problem solving with Waylon as well as
+the data scientists as we built out features of the platform (and continue to).
+It’s something I will certainly miss but Hybrid Cloud Show EP 37 is bookmarked
+forever if I want to relive those memories via your conversation again.</p>
+
+        </div>
+    </main>
+
+</div>
+     </body>
+</html>
