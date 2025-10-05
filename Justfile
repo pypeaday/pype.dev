@@ -3,10 +3,14 @@ default:
 
 clean:
     rm -rf markout || echo "markout directory not found"
+    # make sure to re-encode from plain text file to b64 file so as to not reset the file during build
+    @just encode-private
     @just decode-private
     uv run markata clean
 
 build:
+    # make sure to re-encode from plain text file to b64 file so as to not reset the file during build
+    @just encode-private
     @just decode-private
     uv run markata build
     @just encode-private
