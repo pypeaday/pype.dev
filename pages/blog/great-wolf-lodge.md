@@ -9,6 +9,10 @@ tags:
 cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250703021442_bb4e0f9b.png"
 ---
 
+# IDK WHEN
+
+- walkie-talkies!
+
 # 2025 (Gurnee)
 
 We returned to Gurnee in June of 2025 (so a summer trip) and had a great time.
