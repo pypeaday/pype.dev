@@ -21,14 +21,19 @@ tags:
 
 1. apprise server/library
 2. CMS with users and roles + a database
-  - updates need to POST to apprise
+
+- updates need to POST to apprise
+
 3. notification backbone
-  - SMS
-  - email (requires domain to offer a real service)
-    - maybe managers could bring their own email server?
-    - no, just make it configurable - people setup the whole thing or they pay me
+
+- SMS
+- email (requires domain to offer a real service)
+  - maybe managers could bring their own email server?
+  - no, just make it configurable - people setup the whole thing or they pay me
+
 4. infra
-  - Temporal instead of webserver patterns may lead to easier scaling
+
+- Temporal instead of webserver patterns may lead to easier scaling
 
 ## Drafting
 
@@ -41,4 +46,3 @@ tags:
 - remind.notifiq.net/<url> as a usecase for soonish
   - configured reading times, so just get reminded at the next one
   - phase 2 of this idea might be grabbing the content of the url and sending the notification with some of that content
-
