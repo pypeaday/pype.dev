@@ -68,4 +68,4 @@ there's more but the only thing worth gaining is Jesus.
 
 I hope I don't have to suffer the loss of all things in order to more fully
 grasp the gravity of my King. But his will be done on earth as it is in heaven,
-whatever that may mean for my life. Ane may it be that I gain Christ.
+whatever that may mean for my life. And may it be that I gain Christ.
