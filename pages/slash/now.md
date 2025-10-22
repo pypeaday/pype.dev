@@ -13,7 +13,7 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
-- [[event-details-updates-via-notifications-as-a-service]]
+- [[soonish]]
 
 - [[quadtask]]
 
