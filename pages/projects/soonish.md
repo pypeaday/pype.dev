@@ -46,3 +46,12 @@ tags:
 - remind.notifiq.net/<url> as a usecase for soonish
   - configured reading times, so just get reminded at the next one
   - phase 2 of this idea might be grabbing the content of the url and sending the notification with some of that content
+
+## Message Priority
+
+- Events should have a priority of some kind so that business hours can be considered easily
+- Should channels have similar types of preferences? I suppose I need to think about the different user flows
+  - automated event makes critical ticket outside business hours - force update subscribers based on.... whatever they're subscribed with/desired channels
+  - event update is critical - all subscribers need to know on their desired channels
+  - those above 2 are the same
+  - event update is not critical - do the signal to everyone but channels take into consideration that it's info only, so respect a business hours/quiet hours and notify during appropriate time.
