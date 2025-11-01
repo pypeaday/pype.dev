@@ -2,7 +2,7 @@
 date: 2025-11-01 06:27:33
 templateKey: note
 title: Facism and Heresy - Words Matter
-published: True
+published: False
 cover: ""
 tags:
   - politics
