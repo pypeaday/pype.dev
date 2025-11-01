@@ -2,8 +2,8 @@
 date: 2025-11-01 06:27:33
 templateKey: note
 title: Facism and Heresy - Words Matter
-published: False
-cover: ""
+published: True
+cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251101122351_4d1fc33a.png"
 tags:
   - politics
   - note
