@@ -13,6 +13,8 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Hot
 
+> NOTE: check the pages for updates to each project
+
 - [[soonish]]
 
 - [[quadtask]]
@@ -22,12 +24,32 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
   - db clean up to get rid of my DDOS artifacts
 
 - [[thoughts-to-nostr]]
-- [[deuteronomy-6-and-the-shema]]
 
 - ## Migrating my homelab stuff to a mono repo
 
   - [kanboard ticket for skm backup](https://kanboard.paynepride.com/?controller=TaskViewController&action=show&task_id=247&project_id=8)
   - [kanboard ticket for homelab mono migration](https://kanboard.paynepride.com/task/109)
+
+- [[self-hosting-a-code-forge-with-forgejo]]
+
+  - moved homelab-mono to fogrejo
+
+- Started thinking about a reusable forgejo action to do docker builds for
+  projects. I want to self host [iron calc](https://github.com/ironcalc/IronCalc)
+  but need to manage the build. I should do this for more things anyways so
+  here's to starting a new CI workflow at home
+
+  - got forgejo setup with traefik now
+  - [x] getting a docker action setup
+  - [ ] fork iron calc to forgejo or grist!
+  - [ ] push docker image
+    - can just use my action now!
+  - [ ] NOTE: consider how/when to drop registry and use repoflow... maybe I already have it going too?
+
+## Auth
+
+- [LLDAP github repo](https://github.com/lldap/lldap/blob/main/docs/install.md#with-docker)
+- authelia?
 
 ## Warm
 
@@ -36,7 +58,6 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 - [[homelab-as-a-service]] -- product idea
 - started [[autism-and-steadfast-faith]]
-- [[self-hosting-a-code-forge-with-forgejo]]
 
   - add repoflow post/writing in this same stream
 

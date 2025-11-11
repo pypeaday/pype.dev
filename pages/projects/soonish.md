@@ -55,3 +55,9 @@ tags:
   - event update is critical - all subscribers need to know on their desired channels
   - those above 2 are the same
   - event update is not critical - do the signal to everyone but channels take into consideration that it's info only, so respect a business hours/quiet hours and notify during appropriate time.
+
+## Frontends
+
+- Use NiceGUI for a default events front end as a toy example to demonstrate notifiq use cases
+
+- Use react for something like pager duty maybe - just to see what kind of things windsurf can do with it
