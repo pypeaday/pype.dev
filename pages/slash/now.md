@@ -11,19 +11,19 @@ cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20
 
 Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the projects you're touching"
 
+## Runescape
+
+- [Monkey Madness 1](https://oldschool.runescape.wiki/w/Monkey_Madness_I)
+  - post on this?
+  - post on runelite plugins again
+
 ## Hot
 
 > NOTE: check the pages for updates to each project
 
 - [[soonish]]
 
-- [[quadtask]]
-
-  - adding notification integration
-  - QUE|ION: maybe quadtask should just support apprise... and soonish... maybe everything should just use apprise.
-  - db clean up to get rid of my DDOS artifacts
-
-- [[thoughts-to-nostr]]
+- [[should-data-models-be-fat]]
 
 - ## Migrating my homelab stuff to a mono repo
 
@@ -45,6 +45,14 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
   - [ ] push docker image
     - can just use my action now!
   - [ ] NOTE: consider how/when to drop registry and use repoflow... maybe I already have it going too?
+
+- [[quadtask]]
+
+  - adding notification integration
+  - QUE|ION: maybe quadtask should just support apprise... and soonish... maybe everything should just use apprise.
+  - db clean up to get rid of my DDOS artifacts
+
+- [[thoughts-to-nostr]]
 
 ## Auth
 
