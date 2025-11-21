@@ -13,6 +13,8 @@ cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20
 
     This blog was fully orated and transcribed. I edited the transcript with some links and formatting
 
+![You can listen now!](https://dropper.wayl.one/file/a014f1f5-0ea6-46b7-94cd-c2c6f02ad9a6.mp3)
+
 Okay, so I had this thought about, honestly, just like what I would say. If
 somebody asked me, why do I say the phrase "by God's grace" so often? And it's
 related to a [thought I had a while back](/reflection-psalm-9-1) where my

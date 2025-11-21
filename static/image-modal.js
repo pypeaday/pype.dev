@@ -14,8 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const modalImg = modal.querySelector('.modal-image');
   const closeBtn = modal.querySelector('.close-modal');
 
-  // Add click event to all article images
+  // Add click event to all article images (excluding audio/video sources)
   document.querySelectorAll('.article-content img').forEach(img => {
+    // Skip images that are actually audio/video files
+    const src = img.src.toLowerCase();
+    const audioVideoExtensions = ['.mp3', '.wav', '.ogg', '.m4a', '.mp4', '.avi', '.webm'];
+    const isMediaFile = audioVideoExtensions.some(ext => src.endsWith(ext));
+    
+    if (isMediaFile) {
+      return; // Skip this image
+    }
+    
     img.classList.add('clickable-image');
     
     // Add click event
