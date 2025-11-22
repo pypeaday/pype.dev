@@ -11,6 +11,11 @@ cover: "https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20
 
 Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the projects you're touching"
 
+## Writing
+
+- [[reflection-psalm-93]]
+- [[self-hosting-a-code-forge-with-forgejo]]
+
 ## Runescape
 
 - [Monkey Madness 1](https://oldschool.runescape.wiki/w/Monkey_Madness_I)
@@ -30,23 +35,9 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
   - [kanboard ticket for skm backup](https://kanboard.paynepride.com/?controller=TaskViewController&action=show&task_id=247&project_id=8)
   - [kanboard ticket for homelab mono migration](https://kanboard.paynepride.com/task/109)
 
-- [[self-hosting-a-code-forge-with-forgejo]]
-
-  - moved homelab-mono to fogrejo
-
-- Started thinking about a reusable forgejo action to do docker builds for
-  projects. I want to self host [iron calc](https://github.com/ironcalc/IronCalc)
-  but need to manage the build. I should do this for more things anyways so
-  here's to starting a new CI workflow at home
-
-  - got forgejo setup with traefik now
-  - [x] getting a docker action setup
-  - [ ] fork iron calc to forgejo or grist!
-  - [ ] push docker image
-    - can just use my action now!
-  - [ ] NOTE: consider how/when to drop registry and use repoflow... maybe I already have it going too?
-
 - [[quadtask]]
+
+  - just rebuild quadtask as a notifiq app
 
   - adding notification integration
   - QUE|ION: maybe quadtask should just support apprise... and soonish... maybe everything should just use apprise.
@@ -74,7 +65,5 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 ## Cold
 
 Haven't forgotten about [[cronicle]]
-
-or Soonish - event calendar and dashboard
 
 I built a fun self-hosted weather app [[dad-can-i-wear-this]]
