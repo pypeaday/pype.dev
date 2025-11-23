@@ -11,6 +11,8 @@ tags:
 
 > Note: this began in [[event-details-updates-via-notifications-as-a-service]] and is the first iteration of this idea
 
+# Notes
+
 ## Use Cases
 
 - Event Details and updates
@@ -61,3 +63,11 @@ tags:
 - Use NiceGUI for a default events front end as a toy example to demonstrate notifiq use cases
 
 - Use react for something like pager duty maybe - just to see what kind of things windsurf can do with it
+
+# Progress
+
+## November 22 2025
+
+- added auto-sub of creator to event (visibility)
+  - auto subscription_selector made for autosub:default
+  - subscription_selector for event.tag == channel.tag as well
