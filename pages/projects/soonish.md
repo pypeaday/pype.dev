@@ -64,6 +64,10 @@ tags:
 
 - Use react for something like pager duty maybe - just to see what kind of things windsurf can do with it
 
+## Competitors
+
+- [zenduty](https://zenduty.com/pricing/)
+
 # Progress
 
 ## November 22 2025

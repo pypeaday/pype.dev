@@ -1,6 +1,7 @@
 ---
 date: 2025-11-22 20:58:00
-templateKey: slashPage
+# templateKey: slashPage
+templateKey: protected-post
 title: Ebenezer
 published: False
 tags:
