@@ -20,8 +20,8 @@ somebody asked me, why do I say the phrase "by God's grace" so often? And it's
 related to a [thought I had a while back](/reflection-psalm-9-1) where my
 best friend would, where Michael would say, "praise God", out of like forced
 habit. And it developed into a great point of spiritual maturity to say by reflex
-"praise god" in you know our slightly older age here, in our young parenthood.
-And so it's really related to that - I also say "by god's grace" a lot
+"praise God" in you know our slightly older age here, in our young parenthood.
+And so it's really related to that - I also say "by God's grace" a lot
 and why do I say that?
 
 I think it's related to these central themes that have been a part of my
