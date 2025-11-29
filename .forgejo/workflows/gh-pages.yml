@@ -1,0 +1,94 @@
+name: Build and Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      ssh_private_key:
+        description: "SSH private key for mirror bot"
+        required: true
+
+  push:
+    branches: [main]
+
+jobs:
+  build-push-pages:
+    runs-on: docker
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve inputs from workflow_dispatch or defaults
+        id: vars
+        shell: bash
+        run: |
+          # Forgejo quirk: workflow_dispatch inputs only exist when manually triggered.
+          REMOVE="pages/private"
+          GH_REPO="pypeaday/pype.dev-mirror"
+          SSH_KEY="${{ github.event.inputs.ssh_private_key || secrets.SSH_PRIVATE_KEY_FORGEJO_MIRROR_BOT }}"
+
+          echo "remove=$REMOVE" >> $GITHUB_OUTPUT
+          echo "github_repo=$GH_REPO" >> $GITHUB_OUTPUT
+          echo "ssh_key<<EOF" >> $GITHUB_OUTPUT
+          echo "$SSH_KEY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Install SSH key
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ steps.vars.outputs.ssh_key }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Configure git identity
+        shell: bash
+        run: |
+          git config user.name "Forgejo Mirror Bot"
+          git config user.email "forgejo-mirror-bot@pype.dev"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "<0.7"
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install just
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+
+      - name: Build site
+        run: just build
+
+      - name: Copy nostr to markout
+        run: cp -r .well-known markout/
+
+      - name: Remove the JSON file
+        run: rm markout/markata.json
+
+      - name: Remove folders (sanitization)
+        shell: bash
+        run: |
+          for path in $(echo "${{ steps.vars.outputs.remove }}" | tr ',' '\n'); do
+            echo "Removing $path"
+            rm -rf "$path"
+          done
+
+      - name: Cleanup empty dirs
+        shell: bash
+        run: find . -type d -empty -delete
+
+      - name: Replace entire history with fresh commit
+        shell: bash
+        run: |
+          git checkout --orphan pages
+          git add .
+          git add site --force
+          git commit -m "GH Pages build"
+
+      - name: Push to GitHub via SSH
+        shell: bash
+        run: |
+          git remote add github "git@github.com:${{ steps.vars.outputs.github_repo }}.git"
+          git push github HEAD:pages --force
