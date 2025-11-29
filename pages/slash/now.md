@@ -13,7 +13,6 @@ Started on [[2025-07-16-notes]] using this page for my "don't lose sight of the 
 
 ## Writing
 
-- [[reflection-psalm-93]]
 - [[self-hosting-a-code-forge-with-forgejo]]
 
 ## Runescape
