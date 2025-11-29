@@ -6,7 +6,7 @@ clean:
     # make sure to re-encode from plain text file to b64 file so as to not reset the file during build
     @just encode-private
     @just decode-private
-    uv run -p 3.10 markata clean
+    uv run markata clean
 
 build:
     # make sure to re-encode from plain text file to b64 file so as to not reset the file during build
