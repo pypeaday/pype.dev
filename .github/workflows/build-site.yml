@@ -1,0 +1,58 @@
+# NOTE: Old from when GH did everythin
+name: GH Pages Deploy
+
+on:
+  # push:
+  #   branches: ["main"]
+  # pull_request:
+  #   branches: [main]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎
+        uses: actions/checkout@v4
+
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          version: "<0.7"
+      # - name: Install marmite 🫙
+      #   # run: curl -s https://i.paynepride.com/rochacbruno/marmite! | bash
+      #   run: cargo install marmite
+      #
+      #   # put site in markout to stay consistent with existing pages/cloudflare configuration
+      # - name: Build site 🏗️
+      #   run: marmite pype.dev markout
+      #
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Install just
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+
+      - name: Build site
+        run: just build
+
+      - name: Copy nostr to markout
+        run: cp -r .well-known markout/
+
+      - name: rm the json file
+        run: rm markout/markata.json
+
+      - name: Github Pages
+        uses: crazy-max/ghaction-github-pages@v3.0.0
+        with:
+          target_branch: markout
+          build_dir: markout
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
