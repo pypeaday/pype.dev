@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>My reflections</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="My reflections | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/reflections" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="My reflections | Nic Payne" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/reflections</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: developer // infra</span>
+        <span>favorite tools: tmux · kubectl · nix · ansible</span>
+    </div>
+</header><section class="terminal-feed">
+    <div class="terminal-feed__chrome">
+        <header class="terminal-feed__header">
+            <div class="terminal-feed__lights">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-feed__path">
+                <span class="terminal-feed__prompt">nic@pype</span>
+                <span class="terminal-feed__dir">~/feeds/</span>
+            </div>
+            <div class="terminal-feed__meta">35 entries · rendered just now</div>
+        </header>
+        <div class="terminal-feed__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full p-2 border rounded-md bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-pink-500"
+               placeholder="'/' Search for a page">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+        <div class="terminal-feed__body">
+            <ul id="feed" class="feed-grid" role="list">
+
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-ecclesiastes-9-10">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-11-26">2025-11-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Ecclesiastes 9:10</h2>
+                    <p class="feed-card__description">!!! note &quot;Ecclesiastes 9:10&quot; !!! warning &quot;Reflection vs Hermeneutics&quot; Finding **Whatever your hand finds to do**... The beginning assumes a </p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-psalm-93">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-11-19">2025-11-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Psalm 93</h2>
+                    <p class="feed-card__description">Yahweh is king !!! note &quot;Psalm 93&quot; Observations Yahweh is king; **he clothes himself** with majesty. **Yahweh clothes
+himself**; he girds himself with</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/by-gods-grace">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-11-18">2025-11-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">By God's Grace</h2>
+                    <p class="feed-card__description">!!! note &quot;Style&quot; ![You can listen now!](https://dropper.wayl.one/file/a014f1f5-0ea6-46b7-94cd-c2c6f02ad9a6.mp3) Okay, so I had this thought about, hon</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251119115557_a4cb69e4.png" alt="By God's Grace cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-go-forward-only-thing-to-do">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-11-05">2025-11-05</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Go Forward - Only Thing To Do</h2>
+                    <p class="feed-card__description">Reflection Today I am thinking about the blessings in my life... In my opinion, I have a
+lot going for me - God has been so utterly good to me that finding faul</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251105120947_beeb2992.png" alt="Reflection - Go Forward - Only Thing To Do cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-psalm-9-1">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-30">2025-10-30</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Psalm 9:1</h2>
+                    <p class="feed-card__description">!!! note &quot;Psalm 9:1&quot; Praise God The phrase &quot;praise God&quot; has become a common phrase in my life. I&#x27;m blessed to
+have my best friend, Mich</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-mark-4-1-20">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-21">2025-10-21</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Mark 4:1-20</h2>
+                    <p class="feed-card__description">The Soils I am in the middle of reprocessing the soils&#x27; parable - I heard a very
+interesting interpretation the other day that I&#x27;m following up on. BU</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-john-21-12">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-17">2025-10-17</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - John 21:12</h2>
+                    <p class="feed-card__description">!!! note &quot;John 21:12&quot; Come and eat Jesus offers this communion with himself every day, and to very believer...
+Sharing a meal with someone is a pretty</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-philippians-3-8">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-14">2025-10-14</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Philippians 3:8</h2>
+                    <p class="feed-card__description">!!! note &quot;Philippians 3:8&quot; Loss Paul&#x27;s words are convicting this morning... **I even consider all things to be loss**. !!! danger &quot;&quot; Do</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-psalm-119-15">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-12">2025-10-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Psalm 119:15</h2>
+                    <p class="feed-card__description">!!! note &quot;Psalm 119:15&quot; Meditate Spurgeon had a good thought here... It is not the act of eating that actually
+nourishes our bodies, it is digestion..</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251012123608_7bb097f8.png" alt="Reflection - Psalm 119:15 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-jude-24">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-10">2025-10-10</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Jude 24</h2>
+                    <p class="feed-card__description">!!! note &quot;Jude 24-25&quot; make you to stand before his glory blameless with exultation The ultimate hope of the one called to Jesus - to be made blameless</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251010113057_fa552f5d.png" alt="Reflection - Jude 24 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-numbers-11-11">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-07">2025-10-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Numbers 11:11</h2>
+                    <p class="feed-card__description">As if the Lord orchestrated Spurgeon&#x27;s meditation to give me a spring board to what I need for the third day in a row... [[reflection-1-kings-19-8]] He sho</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251007104842_e3855e2b.png" alt="Reflection - Numbers 11:11 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-john-4-14">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-06">2025-10-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - John 4:14</h2>
+                    <p class="feed-card__description">Today Spurgeon&#x27;s &quot;Morning and Evening&quot; was on John 4:14 !!! note &quot;John 4:14&quot; Being autistic and growing up in the Church led to a few a</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251006114632_0f7eac97.png" alt="Reflection - John 4:14 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-1-kings-19-8">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-05">2025-10-05</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - 1 Kings 19:8</h2>
+                    <p class="feed-card__description">Spurgeon picked 1 Kings 19:8 this morning and his meditation was encouraging at
+a meta-level. Highlighting to me that we (Christians) in maturity can be
+refresh</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251005192819_240c7617.png" alt="Reflection - 1 Kings 19:8 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-psalm-84-11">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-01">2025-10-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Psalm 84:11</h2>
+                    <p class="feed-card__description">Spurgeon&#x27;s Morning and Evening today (actually the evening one) is for [Psalm 84:11](https://www.biblegateway.com/passage/?search=Psalm+84%3A11&amp;version</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-deuteronomy-33-29">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-09-27">2025-09-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Deuteronomy 33:29</h2>
+                    <p class="feed-card__description">Note reflections are not theological study Spurgeon&#x27;s Morning and Evening today starts with: !!! note &quot;Deuteronomy 33:29&quot; What is it to be saved </p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250927191007_afe510e5.png" alt="Reflection - Deuteronomy 33:29 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-romans-3-26">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-09-24">2025-09-24</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Romans 3:26</h2>
+                    <p class="feed-card__description">From Morning and Evening today, Spurgeon has thoughts on Romans 3:26. I need
+more context personally, so here&#x27;s a newer translation of 3:25-26 !!! note &qu</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250924112220_7eeeed33.png" alt="Reflection - Romans 3:26 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-galatians-5-1">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-09-19">2025-09-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Galatians 5:1</h2>
+                    <p class="feed-card__description">Spurgeon&#x27;s &quot;Morning and Evening&quot; today is about the freedom we have in Christ.
+Freedom is a core concept of Christianity, and one no doubt bastar</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250919112143_f187860e.png" alt="Reflection - Galatians 5:1 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-galatians-5-24-25">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-09-18">2025-09-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Galatians 5:24-25</h2>
+                    <p class="feed-card__description">!!! note &quot;Galatians 5:24-25&quot; Spurgeon&#x27;s &quot;Morning and Evening&quot; is a mediation on living in and following the Spirit. He says this: You w</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-on-philippians-2-14-18">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-09-06">2025-09-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection on Philippians 2:14-18</h2>
+                    <p class="feed-card__description">!!! note &quot;Philippians 2:15-18&quot; &quot;Do all things without grumbling and disputing&quot;... now, taking verses out of
+context is one of my biggest pet</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-morning-august-31-2025">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-08-31">2025-08-31</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Reflection - Morning August 31 2025</h2>
+                    <p class="feed-card__description">Morning, August 31 “On mine arm shall they trust.&quot;
+—Isaiah 51:5 !!! note &quot;Spurgeon: Morning and Evening&quot; Reflection By God&#x27;s grace, I was le</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-ai-work-and-adhd">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-08-27">2025-08-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // adhd</p>
+                <h2 class="feed-card__title">Reflection - AI Work and ADHD</h2>
+                    <p class="feed-card__description">Reflection It&#x27;s time to be more devoted to my work... AI has been a cool technology to
+watch and experience but one thing I&#x27;m allowing it to do to me </p>
+                <div class="feed-card__tags">
+                        <span>#adhd</span>
+                        <span>#tech</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250827125949_5f9ed179.png" alt="Reflection - AI Work and ADHD cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/thoughts-on-august-21-2025">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-08-21">2025-08-21</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Thoughts On August 21 2025</h2>
+                    <p class="feed-card__description">Intro Been struggling more with work - what matters? I can&#x27;t help but feel like
+nothing... As a Christian I want to do my work &quot;for an audience of 1&q</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/knowledge-and-faith">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-07-31">2025-07-31</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Knowledge and Faith</h2>
+                    <p class="feed-card__description">A Question What does it mean to be &quot;faithful&quot;? I wrestle with this question in various
+contexts pretty regularly - mostly because God has been so ridi</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250731115409_7e902b85.png" alt="Knowledge and Faith cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/what-is-a-right">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-07-28">2025-07-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">What Is A Right?</h2>
+                    <p class="feed-card__description">Intro I saw something this morning that kind of irk&#x27;d me so I thought I&#x27;d write some
+thoughts on it... It was one of those maps of countries and the r</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250728115021_0be69c8e.png" alt="What Is A Right? cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/god-provides-when-he-takes-away">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-07-25">2025-07-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">God Provides When He Takes Away</h2>
+                    <p class="feed-card__description">This post is meant to serve as a reminder that God&#x27;s provision is about more
+than the chronology of things happening... For example he brought me a job whe</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250725110258_3d229606.png" alt="God Provides When He Takes Away cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-720">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-25">2025-06-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">{'username': 'Nic', 'full_name': 'Nicholas Payne', 'email': 'thoughts.confusion898@aleeas.com', 'disabled': False} // reflection</p>
+                <h2 class="feed-card__title">💭 Genesis 1 and Its ANE Polemic, Part 2 - Dr. Michael Heiser</h2>
+                    <p class="feed-card__description">I'm preparing for a conversation on Genesis 1 this morning, and so I of course wanted to read through a few of Mike's ol</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#heiser</span>
+                        <span>#ane</span>
+                        <span>#genesis</span>
+                        <span>#todo</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/what-are-the-rewards-in-heaven">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-20">2025-06-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">What Are The Rewards In Heaven?</h2>
+                    <p class="feed-card__description">Intro I came across an article on the Bible Project on what it means to &quot;store up
+treasures in Heaven&quot; and it brought some clarity to the meaning of t</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250620114115_cef07d4c.png" alt="What Are The Rewards In Heaven? cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-709">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-20">2025-06-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">{'username': 'Nic', 'full_name': 'Nicholas Payne', 'email': 'thoughts.confusion898@aleeas.com', 'disabled': False} // homelab</p>
+                <h2 class="feed-card__title">💭 pypeaday/whose-turn-is-it: Simple uv webapp to determine order...</h2>
+                    <p class="feed-card__description">We pray together as a family every night, but every single flipping night my daughter's fight about the order we go in..</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                        <span>#reflection</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflecting-on-bp-article-on-james-faith-and-works">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-18">2025-06-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Reflecting on BP Article on James - Faith and Works</h2>
+                    <p class="feed-card__description">Intro This started as one of [[my-thoughts]] and got long enough to warrant putting right in the blog Faith and works is a common point of conversation for Chri</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250618111235_bd7d5698.png" alt="Reflecting on BP Article on James - Faith and Works cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/father-s-day-2025">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-15">2025-06-15</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Father's Day 2025</h2>
+                    <p class="feed-card__description">Intro I just wanted to capture some thoughts on Father&#x27;s
+Day and how becoming a dad and raising two beautiful kids has affected my view
+on, or matured my v</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#fathers-day</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250615181154_a21e920b.png" alt="Father's Day 2025 cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/i-love-an-expert-in-their-craft">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-06">2025-06-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">I love an expert in their craft</h2>
+                    <p class="feed-card__description">Presence of an Expert Our AC died, or has been showing signs of dying recently, and regardless of the
+finality of its death, our house hasn&#x27;t been getting </p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/autism-adhd-and-the-doshas">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-05">2025-06-05</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">Autism ADHD and the Doshas</h2>
+                    <p class="feed-card__description">Introduction I was recently diagnosed with Autism Spectrum Disorder Level 1 and ADHD, the inattentive
+type. I suppose, AuDHD for short.
+There are many reasons w</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#health</span>
+                        <span>#mental-health</span>
+                        <span>#autism</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614145712_e33ac670.png" alt="Autism ADHD and the Doshas cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/i-hate-corporate-america">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-05-27">2025-05-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">I Hate Corporate America</h2>
+                    <p class="feed-card__description">Rant The longer I&#x27;m in corporate America - and the longer I homelab and listen to
+podcasts - a cliché truth becomes more and more apparent to me, which
+is </p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#rant</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/a-new-perspective-on-being-god-s-child">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-05-18">2025-05-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // faith</p>
+                <h2 class="feed-card__title">A New Perspective on Being God's Child</h2>
+                    <p class="feed-card__description">Intro I was in men&#x27;s group the other day, and one of the things that came up almost inevitably
+is a debate between God&#x27;s sovereignty and predestinatio</p>
+                <div class="feed-card__tags">
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                        <span>#free-will</span>
+                        <span>#sovereignty</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250614184824_22e1d8af.png" alt="A New Perspective on Being God's Child cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-wisdom-in-relationships">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-10-12">2024-10-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Reflection - Wisdom in Relationships</h2>
+                    <p class="feed-card__description">This morning I finally felt some motivation for a short Bible Project video.
+The app is great (💯 would recommend) and gives me daily reminders that are
+unobtrus</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-pagination">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</section>
+        </div>
+    </main>
+</div>
+     </body>
+</html>
