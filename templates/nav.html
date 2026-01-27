@@ -1,0 +1,36 @@
+<header class="site-terminal">
+    {% if post.sidebar %}
+    <details class='absolute top-0 left-0 z-50 m-0 xl:hidden group open:min-h-screen bg-neutral-800'>
+        <summary class='py-2 px-4 list-none'>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="w-6 h-6 rotate-90">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+        </summary>
+        {% include "sidebar.html" %}
+    </details>
+    {% endif %}
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/{{ post.slug if post and post.slug else 'feed' }}</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        {% set _path_prefix = markata.config.get('path_prefix', '') %}
+        {% set _path_prefix = _path_prefix.strip('/') + '/' if _path_prefix else '' %}
+        {% for text, link in markata.config.nav.items() %}
+        {% set resolved = link if '://' in link else '/' + _path_prefix + link.lstrip('/') %}
+        <a class="site-terminal__link" href="{{ resolved }}">{{ text }}</a>
+        {% endfor %}
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>
