@@ -1,0 +1,55 @@
+{% extends "content_base.html" %}
+
+{% block content %}
+<section class="terminal-feed">
+    <div class="terminal-feed__chrome">
+        <header class="terminal-feed__header">
+            <div class="terminal-feed__lights">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-feed__path">
+                <span class="terminal-feed__prompt">nic@pype</span>
+                <span class="terminal-feed__dir">~/feeds/{{ title | lower | replace(' ', '-') }}</span>
+            </div>
+            <div class="terminal-feed__meta">{{ feed.posts|length }} entries · rendered just now</div>
+        </header>
+        <div class="terminal-feed__search">
+            {% include "didyoumean_partial.html" %}
+        </div>
+        <div class="terminal-feed__body">
+            <ul id="feed" class="feed-grid" role="list">
+            {% set stack_keys = ['dailynote', 'daily-note', 'daily_note', 'thought', 'thoughts', 'note', 'notes'] %}
+            {% set til_keys = ['til', 'today-i-learned'] %}
+            {% for post in feed.posts %}
+                {% set template_key = (post.templateKey | default('')) | lower %}
+                {% if template_key in stack_keys %}
+                    {% set card_size = 'card-stack' %}
+                {% elif template_key in til_keys %}
+                    {% set card_size = 'card-til' %}
+                {% else %}
+                    {% set card_size = 'card-full' %}
+                {% endif %}
+                {% include 'card.html' %}
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-pagination">
+        <div>
+            {% if feed.prev_page_slug %}
+                <a href="/{{ markata.config.path_prefix }}{{ feed.prev_page_slug }}/" class="terminal-button" data-variant="ghost">
+                    <span class="terminal-button__prompt">&gt;_</span> newer posts
+                </a>
+            {% endif %}
+        </div>
+        <div>
+            {% if feed.next_page_slug %}
+                <a href="/{{ markata.config.path_prefix }}{{ feed.next_page_slug }}/" class="terminal-button">
+                    older posts <span class="terminal-button__prompt">&gt;_</span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,116 @@
+name: Build and Push
+
+on:
+  push:
+    branches: ["*"]
+
+jobs:
+  build-push-pages:
+    runs-on: docker
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install SSH key
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY_FORGEJO_MIRROR_BOT }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Configure git identity
+        shell: bash
+        run: |
+          git config user.name "Forgejo Mirror Bot"
+          git config user.email "forgejo-mirror-bot@pype.dev"
+
+      # - name: Install uv
+      #   uses: astral-sh/setup-uv@v6
+      #   with:
+      #     version: "<0.7"
+      - run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        shell: bash
+        name: Install uv
+
+      - name: Install dependencies
+        run: uv sync
+
+      # - name: Install just
+      #   shell: bash
+      #   run: |
+      #     curl -L --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+      - name: Install just
+        shell: bash
+        run: |
+          # curl -L --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+          #
+          # curl -s https://i.paynepride.com/casey/just | bash
+
+          curl -sSL "$(curl -s https://api.github.com/repos/casey/just/releases/latest \
+            | grep \"browser_download_url.*x86_64-unknown-linux-musl.tar.gz\" \
+            | cut -d '"' -f 4)" \
+            -o just.tar.gz
+          tar -xzf just.tar.gz
+          mv just /usr/local/bin/just
+          chmod +x /usr/local/bin/just
+          rm just.tar.gz
+          rm just.1 || echo "just.1 not found"
+
+      - name: Build site
+        shell: bash
+        run: just clean-build
+        # run: uv run markata build
+
+        # handled in justcipe
+      # - name: Copy nostr to markout
+      #   shell: bash
+      #   run: cp -r .well-known markout/
+
+      # handled in justcipe
+      # - name: Remove the JSON file
+      #   shell: bash
+      #   run: rm markout/markata.json
+
+      - name: Remove folders (sanitization)
+        shell: bash
+        run: |
+          for path in $(echo "pages/private" | tr ',' '\n'); do
+            echo "Removing $path"
+            rm -rf "$path"
+          done
+
+      - name: Cleanup empty dirs
+        shell: bash
+        run: find . -type d -empty -delete
+
+      - name: Replace entire history with fresh commit
+        shell: bash
+        run: |
+          git checkout --orphan sanitized-local-branch
+
+          # reset index and clean working tree while keeping .git
+          git reset --hard
+
+          # delete everything except markout/ and .git/
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name markout \
+            ! -name .git \
+            -exec rm -rf {} +
+
+          # move final build into root
+          cp -r markout/* .
+
+          git add .
+          git commit -m "GH Pages build"
+
+      # if `main` branch, push to `markout` branch
+      - name: Push to GitHub via SSH
+        shell: bash
+        run: |
+          git remote add github "git@github.com:pypeaday/pype.dev.git"
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            git push github HEAD:markout --force
+          else
+            git push github HEAD:dev --force
+          fi

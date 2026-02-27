@@ -1,0 +1,60 @@
+{% set card_size = card_size | default('card-large') %}
+{% set template_key = post.templateKey | default('general') %}
+{% set descriptor = post.short_description or post.description or post.summary or post.excerpt %}
+{% set descriptor = descriptor or '—' %}
+{% set is_faith = 'faith' in (post.tags or []) or 'reflection' in (post.tags or []) %}
+{% set is_til = template_key == 'til' %}
+{% set is_thoughts = template_key in ['dailyNote', 'thoughts'] %}
+{% set actual_slug = post.slug or '' %}
+{% set path_prefix = markata.config.get('path_prefix', '') %}
+{% if actual_slug in ['/', '', 'index', 'index.html'] %}
+    {% set href = '/' %}
+{% else %}
+    {% if path_prefix %}
+        {% set href = '/' + path_prefix.strip('/') + '/' + actual_slug.lstrip('/') %}
+    {% else %}
+        {% set href = '/' + actual_slug.lstrip('/') %}
+    {% endif %}
+{% endif %}
+
+<li class="feed-card {{ card_size }} {{ 'feed-card--faith' if is_faith else '' }} {{ 'feed-card--til' if is_til else '' }} {{ 'feed-card--thoughts' if is_thoughts else '' }}" data-template="{{ template_key }}">
+    <a class="feed-card__link" href="{{ href }}">
+        <header class="feed-card__header">
+            <span class="feed-card__status {{ 'feed-card__status--draft' if not post.published else '' }}" aria-hidden="true"></span>
+            <span class="feed-card__prompt">{{ template_key or 'post' }}</span>
+            <time datetime="{{ post.date.isoformat() if post.date else '' }}">{{ post.date.strftime('%Y-%m-%d') if post.date else 'undated' }}</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">{{ post.author or 'nic' }} // {{ post.tags[0] if post.tags and post.tags|length > 0 else 'log' }}</p>
+                <h2 class="feed-card__title">{{ post.title }}</h2>
+                {% if descriptor %}
+                    <p class="feed-card__description">{{ descriptor }}</p>
+                {% endif %}
+                {% if post.tags and post.tags|length > 0 %}
+                <div class="feed-card__tags">
+                    {% for tag in post.tags[:5] %}
+                        <span>#{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if post.cover and card_size == 'card-full' %}
+                {% set cover_url = post.cover %}
+                {% if not cover_url.startswith('http') %}
+                    {% if path_prefix %}
+                        {% set cover_url = '/' + path_prefix.strip('/') + '/' + cover_url.lstrip('/') %}
+                    {% else %}
+                        {% set cover_url = '/' + cover_url.lstrip('/') %}
+                    {% endif %}
+                {% endif %}
+                <figure class="feed-card__media">
+                    <img src="{{ cover_url }}" alt="{{ post.title }} cover" loading="lazy">
+                </figure>
+            {% endif %}
+        </div>
+
+    </a>
+</li>
