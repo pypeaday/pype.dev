@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>drafts</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="drafts | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/drafts" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="drafts | Nic Payne" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/drafts</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header><section class="terminal-feed">
+    <div class="terminal-feed__chrome">
+        <header class="terminal-feed__header">
+            <div class="terminal-feed__lights">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-feed__path">
+                <span class="terminal-feed__prompt">nic@pype</span>
+                <span class="terminal-feed__dir">~/feeds/</span>
+            </div>
+            <div class="terminal-feed__meta">48 entries · rendered just now</div>
+        </header>
+        <div class="terminal-feed__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+        <div class="terminal-feed__body">
+            <ul id="feed" class="feed-grid" role="list">
+
+<li class="feed-card card-full   " data-template="general">
+    <a class="feed-card__link" href="/">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">general</span>
+            <time datetime="2026-02-27">2026-02-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // log</p>
+                <h2 class="feed-card__title">Index</h2>
+                    <p class="feed-card__description">Welcome to Pype.dev 👋 Hi, I&#x27;m **Nic Payne**. This is my digital space where I share my thoughts, learnings, and explorations. Consider this my mental datal</p>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/premarital-session-1-feb-2026">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2026-02-26">2026-02-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // marriage</p>
+                <h2 class="feed-card__title">Premarital Session 1 - Feb 2026</h2>
+                    <p class="feed-card__description">Covenant, Calling, and Friendship Purpose To establish a biblical vision of marriage that shapes expectations, priorities, and endurance. Key Scriptures Genesis</p>
+                <div class="feed-card__tags">
+                        <span>#marriage</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/cannalyze">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-12-27">2025-12-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Cannalyze</h2>
+                    <p class="feed-card__description">A self-hostable habit tracker with special attention given to gardening habits</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/qr-harbor">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-12-26">2025-12-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">QR Harbor</h2>
+                    <p class="feed-card__description">The QR side of [Digital Harbor](https://mydigitalharbor.com) Features self-service QR code generator frames colors brandingicons dynamic link resolution analyti</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#digitalharbor</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/notifiq">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-12-26">2025-12-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Notifiq</h2>
+                    <p class="feed-card__description">Note: this began in [[event-details-updates-via-notifications-as-a-service]] and is the first iteration of this idea Projects [[soonish]] [[mindful]] Docs Consi</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#notifiq</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/mindful">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-12-26">2025-12-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Mindful</h2>
+                    <p class="feed-card__description">Reminder and alarm app Features quick templates works everywhere (mobile, desktop) TODOs premium sign-up test password reset</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#notifiq</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="protected-post">
+    <a class="feed-card__link" href="/i-saw-a-ufo">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">protected-post</span>
+            <time datetime="2025-12-07">2025-12-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // protected</p>
+                <h2 class="feed-card__title">I Saw A UFO</h2>
+                    <p class="feed-card__description">🔒 This content is password protected.</p>
+                <div class="feed-card__tags">
+                        <span>#protected</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   " data-template="note">
+    <a class="feed-card__link" href="/advent-2025-calendar">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">note</span>
+            <time datetime="2025-12-01">2025-12-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // advent</p>
+                <h2 class="feed-card__title">Advent 2025 Calendar</h2>
+                    <p class="feed-card__description">Sunday [[advent-isaiah-8-17]] Monday [[advent-psalm-39-7]] Tuesday [[advent-psalm-130-7]] Wednesday Thursday Friday Saturday Sunday Monday Tuesday Wednesday Thu</p>
+                <div class="feed-card__tags">
+                        <span>#advent</span>
+                        <span>#note</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="protected-post">
+    <a class="feed-card__link" href="/ebenezer">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">protected-post</span>
+            <time datetime="2025-11-22">2025-11-22</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // protected</p>
+                <h2 class="feed-card__title">Ebenezer</h2>
+                    <p class="feed-card__description">🔒 This content is password protected.</p>
+                <div class="feed-card__tags">
+                        <span>#protected</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   " data-template="note">
+    <a class="feed-card__link" href="/homelabbing-realization-configs-and-git">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">note</span>
+            <time datetime="2025-11-13">2025-11-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Homelabbing Realization - Configs and Git</h2>
+                    <p class="feed-card__description">Realization I&#x27;m back to brainstorming migrations away from Docker Compose to something that
+solves multi-node networking and secrets but I don&#x27;t want </p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#note</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/chili-notes">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-10-04">2025-10-04</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // cooking</p>
+                <h2 class="feed-card__title">Chili Notes</h2>
+                    <p class="feed-card__description">I could&#x27;ve sworn I had a chili list going but alas... 2025-10-04 2 lbs ground beef
+1 big can of pinto beans
+3 small cans of black beans
+3 cans diced tomato</p>
+                <div class="feed-card__tags">
+                        <span>#cooking</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/soonish">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-09-13">2025-09-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Soonish</h2>
+                    <p class="feed-card__description">Personal events tracker dashboard Features share events with other users grid/calendar view create/edit events notified about any updated to events you&#x27;re </p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#soonish</span>
+                        <span>#notifiq</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/compose-stack-example-repo-x-package-manager">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-09-02">2025-09-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Compose Stack Example Repo x Package Manager</h2>
+                    <p class="feed-card__description">The idea is something like the AUR, which is ultimately a pointer to a repo with a script that does some setup... Perhaps my [[homelab-as-a-service]] idea could</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#digital-harbor</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/event-details-updates-via-notifications-as-a-service">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-09-02">2025-09-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Event Details Updates via Notifications as a Service</h2>
+                    <p class="feed-card__description">I&#x27;ve moved these notes to [[soonish]]</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#digital-harbor</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/homelab-as-a-service">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-09-01">2025-09-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Homelab As A Service</h2>
+                    <p class="feed-card__description">$HOME I don&#x27;t know what to call my opinionated homelab distribution yet but I will try to have some goals for today or tomorrow for simple steps drawing up</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#product</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   " data-template="note">
+    <a class="feed-card__link" href="/jellyfin">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">note</span>
+            <time datetime="2025-07-11">2025-07-11</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Jellyfin</h2>
+                    <p class="feed-card__description">Jellyfin is the media server software I run at home</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#note</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="project">
+    <a class="feed-card__link" href="/thoughts-to-nostr">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">project</span>
+            <time datetime="2025-07-08">2025-07-08</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Thoughts To Nostr</h2>
+                    <p class="feed-card__description">I am trying to use [[temporal]] at home for running automated pipelines. It&#x27;s
+definitely overkill for my use case but this is America... So my first projec</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#nostr</span>
+                        <span>#homelab</span>
+                        <span>#pipelines</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  " data-template="note">
+    <a class="feed-card__link" href="/pilgrims-creek-about-me">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">note</span>
+            <time datetime="2025-07-02">2025-07-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // pilgrims-creek</p>
+                <h2 class="feed-card__title">Pilgrim's Creek - About Me</h2>
+                    <p class="feed-card__description">Hello This is my snippet for [website]() for [[pilgrims-creek]] I need to write a little intro
+about myself so I&#x27;ll mind-dump some things here and then org</p>
+                <div class="feed-card__tags">
+                        <span>#pilgrims-creek</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/temporal">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-24">2025-06-24</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">temporal</h2>
+                    <p class="feed-card__description">[Temporal](https://temporal.io/) is a workflow orchestrator that I&#x27;m interested in</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                        <span>#temporal</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/stable-diffusion-qr-codes-for-josh">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-17">2025-06-17</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Stable Diffusion QR Codes for Josh</h2>
+                    <p class="feed-card__description">After my blunder ![20250627111955_e86d5db2.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250627111955_e86d5db2.png) (fjords of Fi</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                        <span>#digital-harbor</span>
+                        <span>#qr</span>
+                        <span>#stable-diffusion</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/cronicle">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-13">2025-06-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // projects</p>
+                <h2 class="feed-card__title">Cronicle</h2>
+                    <p class="feed-card__description">I use [hcio](https://healthchecks.io) to monitor a few of my backup scripts and when LLMs hit the scene I got interested to try to build my own. I have a pretty</p>
+                <div class="feed-card__tags">
+                        <span>#projects</span>
+                        <span>#cronicle</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/athalia-s-stable-diffusion-pictures">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-06">2025-06-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // athalia</p>
+                <h2 class="feed-card__title">Athalia's Stable Diffusion Pictures</h2>
+                    <p class="feed-card__description">![Unicorn Riding Bike](https://dropper.wayl.one/api/file/9d74262d-3584-4b2f-a9ce-41c5ca7c0a73.png) ![Santa Claus](https://dropper.wayl.one/api/file/fb0b4f4a-a65</p>
+                <div class="feed-card__tags">
+                        <span>#athalia</span>
+                        <span>#stable-diffusion</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/travel-entertainment-for-kids">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-01">2025-06-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // travel</p>
+                <h2 class="feed-card__title">Travel Entertainment For Kids</h2>
+                    <p class="feed-card__description">We are quickly becomming a Great Wolf Lodge family... we&#x27;ve got several times
+over the last couple years, and I only forsee more going forward for the next</p>
+                <div class="feed-card__tags">
+                        <span>#travel</span>
+                        <span>#family</span>
+                        <span>#vacation</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/homelab-computer-vision-pipelines">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-05-31">2025-05-31</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tech</p>
+                <h2 class="feed-card__title">homelab-computer-vision-pipelines</h2>
+                    <p class="feed-card__description">Done in 11 seconds! Subtitle and audio files are in the outputs folder. I wanted to talk through an idea I have for some computer vision pipelines at home.
+I he</p>
+                <div class="feed-card__tags">
+                        <span>#tech</span>
+                        <span>#homelab</span>
+                        <span>#computer-vision</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/the-importance-of-nostr-according-to-chatgpt">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-01-24">2025-01-24</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // nostr</p>
+                <h2 class="feed-card__title">The Importance of Nostr According to ChatGPT</h2>
+                    <p class="feed-card__description">Disclaimer This was written by ChatGPT with zero oversight from me. There are a few things that are not 100% accurate, but the main idea is there... I am hoping</p>
+                <div class="feed-card__tags">
+                        <span>#nostr</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-07-12">2024-07-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Interesting IPs between Jellyfin clients and server depending on tailscale and server address</h2>
+                    <p class="feed-card__description">When connecting from my phone to jellyfin I&#x27;m seeing some interesting patterns. Scenarios Tailscale IP of phone is listed as local network to jellyfin Wifi</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#linux</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/kanboard-to-keep-me-focused-on-my-own-ideas">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-04-20">2024-04-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Kanboard to keep me focused on my own ideas</h2>
+                    <p class="feed-card__description">TL;DR I&#x27;ve been using kanboard as a self-hosted kanban board. It&#x27;s keeping me focused on [Digital Harbor](https://myditialharbor.com) when I&#x27;d ra</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/stable-diffusion-notes">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2023-01-28">2023-01-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Stable Diffusion Notes</h2>
+                    <p class="feed-card__description">ChatGPT Prompt: Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some prompts for generating art with Stable Diffusion. Example: A gh</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#data</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/modal-labs">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-12-28">2022-12-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">Modal Labs</h2>
+                    <p class="feed-card__description">Playing around with Modal Labs One of the first things I tried was a regular cron job... This can get deployed with `modal deploy --name &lt;app name&gt; &lt;pa</p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#cli</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/nextcloud-docker-upgrade-error">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-12-28">2022-12-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Nextcloud Docker Upgrade Error</h2>
+                    <p class="feed-card__description">https://nicolasbouliane.com/blog/nextcloud-docker-upgrade-error</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#linux</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/suddenly-ssh-requires-a-password">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-10-07">2022-10-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // linux</p>
+                <h2 class="feed-card__title">Suddenly SSH requires a password</h2>
+                    <p class="feed-card__description">ssh -v -i ~/.ssh/id_rsa nic@hogwarts THen we can look at print outs cat /var/log/auth.log  also showed me that I had too wide permissions on files in ~/.ssh -&g</p>
+                <div class="feed-card__tags">
+                        <span>#linux</span>
+                        <span>#cli</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/trick-to-login-to-web-server-on-another-box-on-lan">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-09-12">2022-09-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Trick to login to web server on another box on lan</h2>
+                    <p class="feed-card__description">TODO: change title - add --listen or --host or something as 0.0.0.0... that way it listens not on localhost or 127.0.0.1, but on all addresses!</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#cli</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/playing-with-mdformat">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-08-23">2022-08-23</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">Playing with mdformat</h2>
+                    <p class="feed-card__description">—</p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#vim</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/setup-kvm-to-boot-from-local-pxe-server">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-07-06">2022-07-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Setup KVM to boot from local PXE server</h2>
+                    <p class="feed-card__description">Assuming you have a PXE server running you only need small edits to the virt-manager config</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#linux</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/self-hosted-docker-registry-with-proxy-pull-through">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-07-06">2022-07-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Self-hosted Docker registry with proxy pull through</h2>
+                    <p class="feed-card__description">I decided that I want to self-host all my docker images for the purposes of
+regularly rebuilding and security scanning. The first step is to set up a
+registry, </p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#zfs</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/samba-on-ubuntu-22-needs-inherit-permissions-set">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-31">2022-05-31</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Samba on Ubuntu 22 needs "inherit permissions" set</h2>
+                    <p class="feed-card__description">see samba config on hogwarts</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#linux</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/tdarr-worker-nodes-share-the-cache">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-25">2022-05-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Tdarr worker nodes share the cache!</h2>
+                    <p class="feed-card__description">When working with tdarr remote nodes, they need to have access not only to the
+same libraries but also the same transcode cache as the server otherwise the
+tran</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/configure-bridge-network-on-ubuntu-22-04-with-netplan">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-22">2022-05-22</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">Configure bridge network on Ubuntu 22.04 with Netplan</h2>
+                    <p class="feed-card__description">See 02-....yaml in ansible-nas</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#linux</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/see-git-history-about-one-file">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-19">2022-05-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // cli</p>
+                <h2 class="feed-card__title">See git history about one file</h2>
+                    <p class="feed-card__description">In vim `G clog %` does a `git clog {current file}`. You get every commit that the target file is apart of (so there might be info in those commits unrelated)</p>
+                <div class="feed-card__tags">
+                        <span>#cli</span>
+                        <span>#vim</span>
+                        <span>#git</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/subset-a-list-based-on-values-in-another-list-with-itertools-compress">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-19">2022-05-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">Subset a list based on values in another list with itertools.compress</h2>
+                    <p class="feed-card__description">I have list [True, False, False, True] and another list [1, 2, 3, 4] and a use
+case where I want to filter list 2 based on list 1 to remove values that line
+up </p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/deleting-files-on-remote-storage-from-ubuntu-might-not-do-what-you-think">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-19">2022-05-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // linux</p>
+                <h2 class="feed-card__title">Deleting files on remote storage from Ubuntu might not do what you think</h2>
+                    <p class="feed-card__description">From my daily driver Ubuntu machine I often open nautilus, dolphin, etc. and delete a file here or there on my NAS... turns out Ubuntu sends thse file to `.Tras</p>
+                <div class="feed-card__tags">
+                        <span>#linux</span>
+                        <span>#cli</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/how-i-use-nextcloud-for-safe-central-storage">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-05-19">2022-05-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">How I use Nextcloud for safe central storage</h2>
+                    <p class="feed-card__description">Setup admin External Storage extension Add my nas zfs dataset chown -R www-data:www-data on anything nextcloud uploads to.</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#zfs</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/fastapi-jinja-forms">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-15">2022-05-15</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">Forms with FastAPI and Jinja</h2>
+                    <p class="feed-card__description">I just started using FastAPI for a home project and needed to pass back a
+dynamic number of values from a form rendered with jinja... Dynamic Values The jinja t</p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#tech</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/dynamic-form-values-with-jinja-and-fastapi">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-05-15">2022-05-15</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">Dynamic-Form-Values-With-Jinja-And-Fastapi</h2>
+                    <p class="feed-card__description">I&#x27;m currently working on a self-hostable wish list app using FastAPI so we can
+finally drop Amazon forever. (The lists funcionality has been super handy fo</p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-til  feed-card--til " data-template="til">
+    <a class="feed-card__link" href="/python-eval">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">til</span>
+            <time datetime="2022-05-12">2022-05-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tech</p>
+                <h2 class="feed-card__title">Python-Eval</h2>
+                    <p class="feed-card__description">TODO</p>
+                <div class="feed-card__tags">
+                        <span>#tech</span>
+                        <span>#python</span>
+                        <span>#til</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/tdarr">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-04-28">2022-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // blog</p>
+                <h2 class="feed-card__title">Tdarr</h2>
+                    <p class="feed-card__description">—</p>
+                <div class="feed-card__tags">
+                        <span>#blog</span>
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/home-server-refactor">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-04-10">2022-04-10</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // blog</p>
+                <h2 class="feed-card__title">Home-Server-Refactor</h2>
+                    <p class="feed-card__description">My current homelab setup is not great but it works... Proxmox on PowerEdge R610 I boot off an SD card and have 1 SSD and 5 HDDs configured as a JBOD array using</p>
+                <div class="feed-card__tags">
+                        <span>#blog</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/git-worktrees-01">
+        <header class="feed-card__header">
+            <span class="feed-card__status feed-card__status--draft" aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-03-11">2022-03-11</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // git</p>
+                <h2 class="feed-card__title">Git-Worktrees-01</h2>
+                    <p class="feed-card__description">Git Hopefully if you write code you are using git, if not go learn the basics of `commit`, `pull`, `push`, and `pull request`/`merge request` like... right now.</p>
+                <div class="feed-card__tags">
+                        <span>#git</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-pagination">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</section>
+        </div>
+    </main>
+</div>
+     </body>
+</html>

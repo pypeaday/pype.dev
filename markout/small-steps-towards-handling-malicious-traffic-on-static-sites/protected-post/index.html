@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Small Steps Towards Handling Malicious Traffic on Static Sites</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Today I saw a random IP hitting an app server I had open via `tailscale funnel`
+and it got me thinking that I need to take some precautions against these real
+w" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Small Steps Towards Handling Malicious Traffic on Static Sites | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251205120700_20ff5870.png" />
+<meta property="og:url" content="https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Small Steps Towards Handling Malicious Traffic on Static Sites | Nic Payne" />
+<meta name="twitter:description" content="Today I saw a random IP hitting an app server I had open via `tailscale funnel`
+and it got me thinking that I need to take some precautions against these real
+w" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251205120700_20ff5870.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/small-steps-towards-handling-malicious-traffic-on-static-sites</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <!-- Content is handled by the password protection plugin -->
+    <p>Today I saw a random IP hitting an app server I had open via <code>tailscale funnel</code>
+and it got me thinking that I need to take some precautions against these real
+world threats. So I'm starting with my blog... basically you can reference <a href="https://blog.jim-nielsen.com/2025/malicious-traffic-on-static-sites/">Jim
+Nielson's Blog on Malicious
+Traffic</a>
+and then I more or less put similar files in similar places on this site to
+waste malicious actors' time</p>
+<h2 id="the-files">The Files <a class="header-anchor" href="#the-files"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Note that some are empty, we just need them to exist since this is all for a bit of fun and low-effort internet tomfoolery</p>
+<p>These get shipped with my site at <code>/public/...</code></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>&gt;&gt;&gt;&gt; backup/config-backup.zip.txt
+PK     !!This is not a real ZIP file!!
+PK     But bots will try to download it anyway
+PK
+PK     Wasting bandwidth and CPU cycles...
+PK
+PK     Here are some fake credentials to keep you busy:
+PK
+PK     FTP_HOST=ftp.example.com
+PK     FTP_USER=admin
+PK     FTP_PASS=P@ssw0rd123!
+PK
+PK     SSH_HOST=192.168.1.100
+PK     SSH_USER=root
+PK     SSH_KEY=-----BEGIN RSA PRIVATE KEY-----
+PK     MIIEpAIBAAKCAQEA1234567890FAKE
+PK     -----END RSA PRIVATE KEY-----
+PK
+PK     MYSQL_HOST=localhost
+PK     MYSQL_USER=root
+PK     MYSQL_PASS=rootpassword123
+PK     MYSQL_DB=production_db
+PK
+PK     REDIS_HOST=127.0.0.1:6379
+PK     REDIS_PASS=redis_secret_2024
+PK
+PK     JWT_SECRET=super_secret_jwt_key_do_not_share
+PK     ENCRYPTION_KEY=AES256_ENCRYPTION_KEY_HERE
+PK
+PK     STRIPE_PUBLISHABLE=pk_live_FAKE123456789
+PK     STRIPE_SECRET=sk_live_FAKE987654321
+PK
+PK     SENDGRID_API_KEY=SG.FAKE_API_KEY_HERE
+PK
+PK     This file is intentionally malformed to waste bot parsing time
+PK     PK     PK     PK     PK     PK     PK     PK
+&gt;&gt;&gt;&gt; backup/database-backup-2024-12-01.sql
+-- MySQL Database Backup
+-- Host: localhost
+-- Database: wordpress_prod
+-- Generated: 2024-12-01 03:14:15
+-- WARNING: This file contains sensitive data
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Table structure for wp_users
+DROP TABLE IF EXISTS `wp_users`;
+CREATE TABLE `wp_users` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(60) NOT NULL DEFAULT &#39;&#39;,
+  `user_pass` varchar(255) NOT NULL DEFAULT &#39;&#39;,
+  `user_email` varchar(100) NOT NULL DEFAULT &#39;&#39;,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Dumping data for table wp_users
+INSERT INTO `wp_users` VALUES
+(1,&#39;admin&#39;,&#39;$P$BZlPX7NIx8MYpXokBW2AGsN7i.aUOt0&#39;,&#39;admin@example.com&#39;),
+(2,&#39;webmaster&#39;,&#39;$P$B4RKwF8zqRnNu9cV5fGg7wgT2sY9Pl1&#39;,&#39;webmaster@example.com&#39;);
+
+-- API Keys and Secrets
+-- AWS_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
+-- AWS_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+-- STRIPE_SECRET: sk_test_4eC39HqLyjWDarjtT1zdp7dc
+-- DATABASE_PASSWORD: MyS3cr3tP@ssw0rd!2024
+
+-- Infinite loop to waste bot resources
+DELIMITER $$
+CREATE PROCEDURE infinite_loop()
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  WHILE i &lt; 999999999 DO
+    SET i = i + 1;
+    SELECT CONCAT(&#39;Processing row &#39;, i, &#39; of 999999999...&#39;) AS status;
+  END WHILE;
+END$$
+DELIMITER ;
+
+-- More fake sensitive data
+INSERT INTO wp_options VALUES
+(1,&#39;siteurl&#39;,&#39;http://localhost&#39;,&#39;yes&#39;),
+(2,&#39;admin_email&#39;,&#39;admin@localhost.local&#39;,&#39;yes&#39;),
+(3,&#39;secret_api_key&#39;,&#39;sk_live_51HqLyjWDarjtT1zdp7dcEXAMPLE&#39;,&#39;yes&#39;);
+
+-- This backup continues for 50MB... [TRUNCATED FOR DISPLAY]
+&gt;&gt;&gt;&gt; backup/db_dump_final.2023.zip
+
+&gt;&gt;&gt;&gt; backup/site.sql
+
+&gt;&gt;&gt;&gt; backup/wp_backup.tar.gz
+
+&gt;&gt;&gt;&gt; private/admin-credentials.txt
+CONFIDENTIAL - ADMIN CREDENTIALS
+==================================
+
+Production Server Access:
+-------------------------
+Server: prod-server-01.example.com
+Username: administrator
+Password: Admin2024!Secure
+SSH Port: 22
+
+Database Credentials:
+--------------------
+Host: db.internal.example.com
+Port: 3306
+Username: db_admin
+Password: DbP@ssw0rd!2024
+Database: production_main
+
+API Keys:
+---------
+OpenAI API Key: sk-proj-FAKE1234567890abcdefghijklmnopqrstuvwxyz
+Stripe Secret: sk_live_FAKE_51HqLyjWDarjtT1zdp7dc
+AWS Access Key: AKIAFAKEEXAMPLE123456
+AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYFAKEKEY
+SendGrid API: SG.FAKE_SENDGRID_KEY_HERE_123456789
+
+WordPress Admin:
+---------------
+URL: https://example.com/wp-admin
+Username: admin
+Password: WP_Admin_2024!
+Security Key: put your unique phrase here
+
+FTP Access:
+-----------
+Host: ftp.example.com
+Username: ftpuser
+Password: FtpP@ss123!
+Port: 21
+
+IMPORTANT: Keep this file secure!
+Last Updated: 2024-12-01
+Next Password Rotation: 2025-01-01
+
+&lt;!-- Hidden comment: This is a honeypot. All credentials are fake. --&gt;
+&gt;&gt;&gt;&gt; private/config.php
+&lt;?php
+// Database Configuration
+define(&#39;DB_HOST&#39;, &#39;localhost&#39;);
+define(&#39;DB_NAME&#39;, &#39;wordpress_production&#39;);
+define(&#39;DB_USER&#39;, &#39;wp_admin&#39;);
+define(&#39;DB_PASSWORD&#39;, &#39;MyS3cr3tP@ssw0rd!2024&#39;);
+define(&#39;DB_CHARSET&#39;, &#39;utf8mb4&#39;);
+
+// Security Keys - DO NOT SHARE
+define(&#39;AUTH_KEY&#39;,         &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;SECURE_AUTH_KEY&#39;,  &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;LOGGED_IN_KEY&#39;,    &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;NONCE_KEY&#39;,        &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;AUTH_SALT&#39;,        &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;SECURE_AUTH_SALT&#39;, &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;LOGGED_IN_SALT&#39;,   &#39;put your unique phrase here - this is fake&#39;);
+define(&#39;NONCE_SALT&#39;,       &#39;put your unique phrase here - this is fake&#39;);
+
+// API Keys
+define(&#39;STRIPE_SECRET_KEY&#39;, &#39;sk_live_FAKE123456789abcdefghijklmnop&#39;);
+define(&#39;STRIPE_PUBLIC_KEY&#39;, &#39;pk_live_FAKE987654321zyxwvutsrqponml&#39;);
+define(&#39;SENDGRID_API_KEY&#39;, &#39;SG.FAKE_API_KEY_1234567890&#39;);
+define(&#39;AWS_ACCESS_KEY&#39;, &#39;AKIAIOSFODNN7EXAMPLE&#39;);
+define(&#39;AWS_SECRET_KEY&#39;, &#39;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&#39;);
+
+// Admin Settings
+define(&#39;ADMIN_EMAIL&#39;, &#39;admin@example.com&#39;);
+define(&#39;SITE_URL&#39;, &#39;https://example.com&#39;);
+define(&#39;WP_DEBUG&#39;, false);
+define(&#39;WP_DEBUG_LOG&#39;, true);
+
+// FTP Credentials
+define(&#39;FTP_HOST&#39;, &#39;ftp.example.com&#39;);
+define(&#39;FTP_USER&#39;, &#39;ftpadmin&#39;);
+define(&#39;FTP_PASS&#39;, &#39;FtpS3cur3P@ss!&#39;);
+
+// Redis Cache
+define(&#39;REDIS_HOST&#39;, &#39;127.0.0.1&#39;);
+define(&#39;REDIS_PORT&#39;, 6379);
+define(&#39;REDIS_PASSWORD&#39;, &#39;redis_secret_password_2024&#39;);
+
+// JWT Secret
+define(&#39;JWT_SECRET&#39;, &#39;super_secret_jwt_key_for_authentication&#39;);
+
+// Infinite loop to waste bot CPU
+while(true) {
+    $random = bin2hex(random_bytes(1024));
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; private/index.html
+&lt;!doctype html&gt;
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Private Area&lt;/h1&gt;
+
+    &lt;pre&gt;
+&lt;!-- ~1MB lorem ipsum for bandwidth drain --&gt;
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+&lt;!-- repeat this block until ~1MB --&gt;
+&lt;/pre&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+&gt;&gt;&gt;&gt; private/ssh_keys.txt
+SSH PRIVATE KEYS - PRODUCTION SERVERS
+======================================
+
+Server: prod-web-01.example.com
+--------------------------------
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm
+nopqrstuvwxyz0123456789+/FAKE_KEY_DATA_HERE_NOT_REAL_AT_ALL_JUST_WASTING
+BOT_TIME_AND_RESOURCES_HAHAHAHA_THIS_IS_A_HONEYPOT_TRAP_FOR_SCRAPERS_12345
+67890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+FAKE_KEY_DATA_CONTINUES_FOR_MANY_LINES_TO_WASTE_BANDWIDTH_AND_STORAGE_SPACE
+MIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm
+nopqrstuvwxyz0123456789+/MORE_FAKE_DATA_HERE_BOTS_LOVE_SSH_KEYS_RIGHT
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/END
+-----END RSA PRIVATE KEY-----
+
+Server: prod-db-01.example.com
+-------------------------------
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAQEA1234567890FAKE_OPENSSH_KEY_DATA_HERE_NOT_REAL_JUST_A
+_TRAP_FOR_BOTS_AND_SCRAPERS_WASTING_THEIR_TIME_AND_RESOURCES_HAHA_12345678
+90ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789FAKE
+DATA_CONTINUES_HERE_TO_MAKE_IT_LOOK_LEGITIMATE_BUT_ITS_ALL_GARBAGE_123456
+-----END OPENSSH PRIVATE KEY-----
+
+Server: prod-app-01.example.com
+--------------------------------
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIFAKE0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop
+qrstuvwxyz0123456789FAKE_EC_KEY_DATA_HERE_ELLIPTIC_CURVE_KEYS_ARE_COOL
+BUT_THIS_ONE_IS_FAKE_JUST_WASTING_BOT_RESOURCES_HAHAHAHA_123456789ABC
+-----END EC PRIVATE KEY-----
+
+IMPORTANT NOTES:
+- These keys provide root access to production servers
+- Never commit to version control
+- Rotate every 90 days
+- Last rotation: 2024-11-01
+- Next rotation: 2025-02-01
+
+Contact: security@example.com for key rotation
+
+&lt;!-- This is a honeypot. All keys are fake and invalid. --&gt;
+&gt;&gt;&gt;&gt; robots.txt
+User-agent: *
+Disallow: /private/
+Disallow: /admin/
+Disallow: /backup/
+Disallow: /.env
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+
+&gt;&gt;&gt;&gt; sitemap.xml
+
+&lt;urlset&gt;
+  &lt;url&gt;&lt;loc&gt;/debug/alpha&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/debug/beta&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/admin/backup-2024.zip&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/.env&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/wp-admin/install.php&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/wp-content/plugins/wp-super-cache/readme.txt&lt;/loc&gt;&lt;/url&gt;
+&lt;/urlset&gt;
+
+&gt;&gt;&gt;&gt; trap/a/index.html
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/b/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/api.php
+&lt;?php
+/**
+ * Fake API Endpoint
+ * Designed to trap and waste bot resources
+ */
+
+header(&#39;Content-Type: application/json&#39;);
+header(&#39;X-Powered-By: PHP/8.2.0&#39;);
+header(&#39;X-Debug-Mode: enabled&#39;);
+
+// Fake API response with sensitive data
+$api_response = [
+    &#39;success&#39; =&gt; true,
+    &#39;api_version&#39; =&gt; &#39;2.1.0&#39;,
+    &#39;endpoints&#39; =&gt; [
+        &#39;/api/users&#39; =&gt; &#39;GET, POST&#39;,
+        &#39;/api/auth&#39; =&gt; &#39;POST&#39;,
+        &#39;/api/admin&#39; =&gt; &#39;GET, POST, DELETE&#39;,
+        &#39;/api/database&#39; =&gt; &#39;GET&#39;,
+        &#39;/api/backup&#39; =&gt; &#39;POST&#39;
+    ],
+    &#39;authentication&#39; =&gt; [
+        &#39;type&#39; =&gt; &#39;Bearer Token&#39;,
+        &#39;example_token&#39; =&gt; &#39;Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_JWT_TOKEN&#39;,
+        &#39;api_key&#39; =&gt; &#39;sk_live_FAKE123456789abcdefghijklmnop&#39;,
+        &#39;api_secret&#39; =&gt; &#39;secret_FAKE987654321zyxwvutsrqponmlk&#39;
+    ],
+    &#39;database_config&#39; =&gt; [
+        &#39;host&#39; =&gt; &#39;localhost&#39;,
+        &#39;port&#39; =&gt; 3306,
+        &#39;username&#39; =&gt; &#39;api_user&#39;,
+        &#39;password&#39; =&gt; &#39;ApiP@ssw0rd!2024&#39;,
+        &#39;database&#39; =&gt; &#39;api_production&#39;
+    ],
+    &#39;admin_credentials&#39; =&gt; [
+        &#39;username&#39; =&gt; &#39;api_admin&#39;,
+        &#39;password&#39; =&gt; &#39;Admin2024!Secure&#39;,
+        &#39;email&#39; =&gt; &#39;admin@api.example.com&#39;,
+        &#39;role&#39; =&gt; &#39;superadmin&#39;
+    ],
+    &#39;external_services&#39; =&gt; [
+        &#39;stripe&#39; =&gt; [
+            &#39;public_key&#39; =&gt; &#39;pk_live_FAKE123&#39;,
+            &#39;secret_key&#39; =&gt; &#39;sk_live_FAKE456&#39;
+        ],
+        &#39;aws&#39; =&gt; [
+            &#39;access_key&#39; =&gt; &#39;AKIAIOSFODNN7EXAMPLE&#39;,
+            &#39;secret_key&#39; =&gt; &#39;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&#39;
+        ],
+        &#39;sendgrid&#39; =&gt; [
+            &#39;api_key&#39; =&gt; &#39;SG.FAKE_SENDGRID_KEY&#39;
+        ]
+    ],
+    &#39;debug_info&#39; =&gt; [
+        &#39;server_ip&#39; =&gt; &#39;192.168.1.100&#39;,
+        &#39;php_version&#39; =&gt; &#39;8.2.0&#39;,
+        &#39;mysql_version&#39; =&gt; &#39;8.0.35&#39;,
+        &#39;redis_host&#39; =&gt; &#39;127.0.0.1:6379&#39;,
+        &#39;redis_password&#39; =&gt; &#39;redis_secret_2024&#39;
+    ]
+];
+
+// Waste CPU cycles
+for ($i = 0; $i &lt; 50000; $i++) {
+    $temp = json_encode($api_response);
+    $decoded = json_decode($temp, true);
+    $hash = hash(&#39;sha256&#39;, $temp);
+}
+
+// Output response
+echo json_encode($api_response, JSON_PRETTY_PRINT);
+
+// Infinite loop trap
+set_time_limit(0);
+while(true) {
+    $waste = [];
+    for ($i = 0; $i &lt; 10000; $i++) {
+        $waste[] = random_bytes(1024);
+    }
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; trap/b/index.html
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/c/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/c/index.html
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/a/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/data.json
+{
+  &quot;status&quot;: &quot;success&quot;,
+  &quot;message&quot;: &quot;API endpoint active&quot;,
+  &quot;data&quot;: {
+    &quot;credentials&quot;: {
+      &quot;api_key&quot;: &quot;sk_live_FAKE123456789abcdefghijklmnopqrstuvwxyz&quot;,
+      &quot;api_secret&quot;: &quot;secret_FAKE987654321zyxwvutsrqponmlkjihgfedcba&quot;,
+      &quot;jwt_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_TOKEN_DATA_HERE.SIGNATURE&quot;,
+      &quot;oauth_token&quot;: &quot;ya29.FAKE_OAUTH_TOKEN_1234567890&quot;,
+      &quot;refresh_token&quot;: &quot;1//FAKE_REFRESH_TOKEN_ABCDEFGHIJKLMNOP&quot;
+    },
+    &quot;database&quot;: {
+      &quot;host&quot;: &quot;db.internal.example.com&quot;,
+      &quot;port&quot;: 3306,
+      &quot;username&quot;: &quot;db_admin&quot;,
+      &quot;password&quot;: &quot;DbP@ssw0rd!2024&quot;,
+      &quot;database&quot;: &quot;production_db&quot;,
+      &quot;connection_string&quot;: &quot;mysql://db_admin:DbP@ssw0rd!2024@db.internal.example.com:3306/production_db&quot;
+    },
+    &quot;aws&quot;: {
+      &quot;access_key_id&quot;: &quot;AKIAIOSFODNN7EXAMPLE&quot;,
+      &quot;secret_access_key&quot;: &quot;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&quot;,
+      &quot;region&quot;: &quot;us-east-1&quot;,
+      &quot;bucket&quot;: &quot;production-backups-2024&quot;,
+      &quot;cloudfront_id&quot;: &quot;E1234FAKE567890&quot;
+    },
+    &quot;stripe&quot;: {
+      &quot;publishable_key&quot;: &quot;pk_live_FAKE123456789&quot;,
+      &quot;secret_key&quot;: &quot;sk_live_FAKE987654321&quot;,
+      &quot;webhook_secret&quot;: &quot;whsec_FAKE_webhook_secret_here&quot;
+    },
+    &quot;email&quot;: {
+      &quot;sendgrid_api_key&quot;: &quot;SG.FAKE_SENDGRID_KEY_1234567890&quot;,
+      &quot;smtp_host&quot;: &quot;smtp.example.com&quot;,
+      &quot;smtp_port&quot;: 587,
+      &quot;smtp_user&quot;: &quot;noreply@example.com&quot;,
+      &quot;smtp_pass&quot;: &quot;SmtpP@ss2024!&quot;
+    },
+    &quot;servers&quot;: [
+      {
+        &quot;name&quot;: &quot;prod-web-01&quot;,
+        &quot;ip&quot;: &quot;192.168.1.100&quot;,
+        &quot;ssh_user&quot;: &quot;root&quot;,
+        &quot;ssh_key&quot;: &quot;-----BEGIN RSA PRIVATE KEY-----\nFAKE_KEY_DATA_HERE\n-----END RSA PRIVATE KEY-----&quot;
+      },
+      {
+        &quot;name&quot;: &quot;prod-db-01&quot;,
+        &quot;ip&quot;: &quot;192.168.1.101&quot;,
+        &quot;ssh_user&quot;: &quot;admin&quot;,
+        &quot;ssh_pass&quot;: &quot;SshP@ssw0rd!2024&quot;
+      }
+    ],
+    &quot;internal_urls&quot;: [
+      &quot;http://admin.internal.example.com&quot;,
+      &quot;http://api.internal.example.com&quot;,
+      &quot;http://db.internal.example.com&quot;,
+      &quot;http://cache.internal.example.com&quot;
+    ],
+    &quot;waste_bot_resources&quot;: {
+      &quot;large_array&quot;: [],
+      &quot;nested_data&quot;: {}
+    }
+  },
+  &quot;metadata&quot;: {
+    &quot;generated_at&quot;: &quot;2024-12-01T12:00:00Z&quot;,
+    &quot;expires_at&quot;: &quot;2025-12-01T12:00:00Z&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;
+  }
+}
+&gt;&gt;&gt;&gt; trap/index.html
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+    &lt;title&gt;Loading...&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: monospace;
+            background: #000;
+            color: #0f0;
+            padding: 20px;
+            overflow: hidden;
+        }
+        .matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        .message {
+            text-align: center;
+            margin-top: 20%;
+            font-size: 24px;
+        }
+        .spinner {
+            border: 4px solid #0f0;
+            border-top: 4px solid transparent;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;canvas class=&quot;matrix&quot;&gt;&lt;/canvas&gt;
+    &lt;div class=&quot;message&quot;&gt;
+        &lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;
+        &lt;p&gt;Initializing secure connection...&lt;/p&gt;
+        &lt;p id=&quot;status&quot;&gt;Processing...&lt;/p&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // Matrix rain effect to waste GPU
+        const canvas = document.querySelector(&#39;.matrix&#39;);
+        const ctx = canvas.getContext(&#39;2d&#39;);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&amp;*()&#39;;
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = &#39;rgba(0, 0, 0, 0.05)&#39;;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = &#39;#0f0&#39;;
+            ctx.font = fontSize + &#39;px monospace&#39;;
+
+            for (let i = 0; i &lt; drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize &gt; canvas.height &amp;&amp; Math.random() &gt; 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
+
+        // CPU tarpit - massive computation
+        console.log(&quot;Initializing bot trap...&quot;);
+
+        let trapData = &quot;&quot;;
+        let iteration = 0;
+
+        function wasteResources() {
+            for (let i = 0; i &lt; 10_000_000; i++) {
+                trapData += Math.random().toString(36).substring(2, 15);
+
+                if (i % 1000000 === 0) {
+                    document.getElementById(&#39;status&#39;).textContent =
+                        `Processing: ${Math.floor(i / 100000)}%`;
+                }
+            }
+
+            // Recursive waste
+            iteration++;
+            if (iteration &lt; 100) {
+                setTimeout(wasteResources, 100);
+            }
+        }
+
+        wasteResources();
+
+        // Memory leak
+        let memoryLeak = [];
+        setInterval(() =&gt; {
+            for (let i = 0; i &lt; 10000; i++) {
+                memoryLeak.push(new Array(1000).fill(Math.random()));
+            }
+        }, 100);
+
+        // Fake network requests
+        setInterval(() =&gt; {
+            fetch(&#39;/trap/data.json?t=&#39; + Date.now())
+                .catch(() =&gt; {});
+        }, 50);
+
+        console.log(&quot;You&#39;ve been trapped! This page wastes bot resources.&quot;);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&gt;&gt;&gt;&gt; wp-admin/admin-ajax.php
+&lt;?php
+/**
+ * WordPress AJAX Handler
+ * Handles all AJAX requests for WordPress admin
+ */
+
+header(&#39;Content-Type: application/json&#39;);
+
+// Fake admin AJAX endpoint with credentials
+$response = array(
+    &#39;success&#39; =&gt; false,
+    &#39;data&#39; =&gt; array(
+        &#39;message&#39; =&gt; &#39;Authentication required&#39;,
+        &#39;debug_info&#39; =&gt; array(
+            &#39;db_host&#39; =&gt; &#39;localhost&#39;,
+            &#39;db_name&#39; =&gt; &#39;wordpress_prod&#39;,
+            &#39;db_user&#39; =&gt; &#39;wp_admin&#39;,
+            &#39;db_pass&#39; =&gt; &#39;MyS3cr3tP@ssw0rd!2024&#39;,
+            &#39;admin_user&#39; =&gt; &#39;administrator&#39;,
+            &#39;admin_pass&#39; =&gt; &#39;Admin2024!Secure&#39;,
+            &#39;api_keys&#39; =&gt; array(
+                &#39;stripe_secret&#39; =&gt; &#39;sk_live_FAKE123456789&#39;,
+                &#39;aws_access&#39; =&gt; &#39;AKIAIOSFODNN7EXAMPLE&#39;,
+                &#39;aws_secret&#39; =&gt; &#39;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&#39;,
+                &#39;sendgrid&#39; =&gt; &#39;SG.FAKE_API_KEY_HERE&#39;
+            ),
+            &#39;jwt_secret&#39; =&gt; &#39;super_secret_jwt_key_2024&#39;,
+            &#39;encryption_key&#39; =&gt; &#39;AES256_KEY_HERE_FAKE&#39;,
+        ),
+        &#39;server_info&#39; =&gt; array(
+            &#39;php_version&#39; =&gt; &#39;8.2.0&#39;,
+            &#39;mysql_version&#39; =&gt; &#39;8.0.35&#39;,
+            &#39;wordpress_version&#39; =&gt; &#39;6.4.2&#39;,
+            &#39;server_ip&#39; =&gt; &#39;192.168.1.100&#39;,
+            &#39;document_root&#39; =&gt; &#39;/var/www/html&#39;
+        )
+    )
+);
+
+// Waste bot CPU with JSON encoding/decoding loops
+for ($i = 0; $i &lt; 10000; $i++) {
+    $temp = json_encode($response);
+    $temp = json_decode($temp, true);
+    $temp[&#39;iteration&#39;] = $i;
+}
+
+// Output fake response
+echo json_encode($response, JSON_PRETTY_PRINT);
+
+// Infinite loop to trap bots
+while(true) {
+    $waste = hash(&#39;sha256&#39;, random_bytes(1024));
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; wp-admin/index.php
+&lt;?php
+/**
+ * WordPress Admin Dashboard
+ * Redirects to login if not authenticated
+ */
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+    &lt;title&gt;Dashboard - WordPress Admin&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;
+            background: #f0f0f1;
+            margin: 0;
+            padding: 0;
+        }
+        .admin-bar {
+            background: #23282d;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo { font-size: 20px; font-weight: bold; }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .widget {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .credentials {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;admin-bar&quot;&gt;
+        &lt;div class=&quot;logo&quot;&gt;WordPress Admin&lt;/div&gt;
+        &lt;div&gt;Welcome, admin&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;widget&quot;&gt;
+            &lt;h2&gt;Dashboard&lt;/h2&gt;
+            &lt;p&gt;Welcome to WordPress Admin Dashboard&lt;/p&gt;
+
+            &lt;div class=&quot;credentials&quot;&gt;
+                &lt;h3&gt;Debug Information (Remove in production!)&lt;/h3&gt;
+                &lt;pre&gt;
+Database Configuration:
+  Host: localhost
+  Name: wordpress_prod
+  User: wp_admin
+  Pass: MyS3cr3tP@ssw0rd!2024
+
+Admin Credentials:
+  Username: administrator
+  Password: Admin2024!Secure
+  Email: admin@example.com
+
+API Keys:
+  Stripe Secret: sk_live_FAKE123456789abcdef
+  AWS Access: AKIAIOSFODNN7EXAMPLE
+  AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  SendGrid: SG.FAKE_SENDGRID_KEY_123456
+
+Server Info:
+  IP: 192.168.1.100
+  PHP: 8.2.0
+  MySQL: 8.0.35
+  WordPress: 6.4.2
+                &lt;/pre&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;widget&quot;&gt;
+            &lt;h3&gt;Recent Activity&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Admin login from 192.168.1.50&lt;/li&gt;
+                &lt;li&gt;Database backup completed&lt;/li&gt;
+                &lt;li&gt;Plugin updated: WP Super Cache&lt;/li&gt;
+                &lt;li&gt;New user registered: testuser&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // CPU tarpit for bots
+        console.log(&quot;Loading WordPress admin dashboard...&quot;);
+
+        let data = &quot;&quot;;
+        for (let i = 0; i &lt; 75_000_000; i++) {
+            data += Math.random().toString(36);
+            if (i % 5000000 === 0) {
+                console.log(&quot;Loading dashboard widgets... &quot; + Math.floor(i / 750000) + &quot;%&quot;);
+            }
+        }
+
+        // Fake AJAX calls that waste more resources
+        function fakeAjaxCall() {
+            fetch(&#39;/wp-admin/admin-ajax.php?action=get_stats&#39;)
+                .then(response =&gt; response.json())
+                .catch(err =&gt; console.log(&#39;Loading...&#39;));
+        }
+
+        setInterval(fakeAjaxCall, 100);
+
+        console.log(&quot;Dashboard loaded. Data size: &quot; + data.length + &quot; bytes&quot;);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&gt;&gt;&gt;&gt; wp-admin/install.php
+&lt;?php
+/**
+ * WordPress Installation Script
+ * Version: 6.4.2
+ *
+ * WARNING: This file should be deleted after installation!
+ */
+
+// Fake WordPress installation page
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+    &lt;title&gt;WordPress Installation&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;
+            background: #f1f1f1;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+        }
+        h1 { color: #23282d; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input[type=&quot;text&quot;], input[type=&quot;password&quot;] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background: #2271b1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fcf8e3;
+            border: 1px solid #faebcc;
+            color: #8a6d3b;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;h1&gt;WordPress Installation&lt;/h1&gt;
+
+        &lt;div class=&quot;warning&quot;&gt;
+            &lt;strong&gt;Warning:&lt;/strong&gt; This installation script is publicly accessible.
+            Please secure your site after installation.
+        &lt;/div&gt;
+
+        &lt;form method=&quot;post&quot; action=&quot;install.php&quot;&gt;
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_name&quot;&gt;Database Name&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_name&quot; name=&quot;db_name&quot; value=&quot;wordpress_db&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_user&quot;&gt;Database Username&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_user&quot; name=&quot;db_user&quot; value=&quot;wp_admin&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_pass&quot;&gt;Database Password&lt;/label&gt;
+                &lt;input type=&quot;password&quot; id=&quot;db_pass&quot; name=&quot;db_pass&quot; value=&quot;MyS3cr3tP@ss!&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_host&quot;&gt;Database Host&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_host&quot; name=&quot;db_host&quot; value=&quot;localhost&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_user&quot;&gt;Admin Username&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;admin_user&quot; name=&quot;admin_user&quot; value=&quot;admin&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_pass&quot;&gt;Admin Password&lt;/label&gt;
+                &lt;input type=&quot;password&quot; id=&quot;admin_pass&quot; name=&quot;admin_pass&quot; value=&quot;Admin2024!&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_email&quot;&gt;Admin Email&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;admin_email&quot; name=&quot;admin_email&quot; value=&quot;admin@example.com&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;button type=&quot;submit&quot; class=&quot;btn&quot;&gt;Install WordPress&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // CPU tarpit - infinite loop to waste bot resources
+        console.log(&quot;Initializing WordPress installation...&quot;);
+
+        let wasteTime = &quot;&quot;;
+        for (let i = 0; i &lt; 100_000_000; i++) {
+            wasteTime += Math.random().toString(36).substring(2, 15);
+            if (i % 1000000 === 0) {
+                console.log(&quot;Processing installation step &quot; + (i / 1000000) + &quot; of 100...&quot;);
+            }
+        }
+
+        // More CPU waste
+        function fibonacci(n) {
+            if (n &lt;= 1) return n;
+            return fibonacci(n - 1) + fibonacci(n - 2);
+        }
+
+        console.log(&quot;Calculating security checksums...&quot;);
+        for (let i = 0; i &lt; 35; i++) {
+            fibonacci(i);
+        }
+
+        console.log(&quot;Installation data: &quot; + wasteTime.substring(0, 100));
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&gt;&gt;&gt;&gt; wp-admin/readme.html
+WordPress 6.2 — Readme (Just kidding, it&#39;s all fake.)
+
+&gt;&gt;&gt;&gt; wp-login.php
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Login&lt;/title&gt;
+  &lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;
+  &lt;style&gt;
+    body { font-family: sans-serif; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Login&lt;/h1&gt;
+&lt;p&gt;Loading…&lt;/p&gt;
+
+&lt;script&gt;
+// JS tarpit: burns bot CPU
+let s = &quot;&quot;;
+for (let i = 0; i &lt; 50_000_000; i++) {
+  s += Math.random().toString(36).substring(2);
+}
+document.body.innerHTML += &quot;&lt;pre&gt;&quot; + s + &quot;&lt;/pre&gt;&quot;;
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+
+</pre>
+
+
+        </div>
+    </main>
+</div>
+     </body>
+</html>
