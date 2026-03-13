@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Notes from The Bible Project</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Notes from The Bible Project | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/bible-project" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Notes from The Bible Project | Nic Payne" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/bible-project</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header><section class="terminal-feed">
+    <div class="terminal-feed__chrome">
+        <header class="terminal-feed__header">
+            <div class="terminal-feed__lights">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-feed__path">
+                <span class="terminal-feed__prompt">nic@pype</span>
+                <span class="terminal-feed__dir">~/feeds/</span>
+            </div>
+            <div class="terminal-feed__meta">20 entries · rendered just now</div>
+        </header>
+        <div class="terminal-feed__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+        <div class="terminal-feed__body">
+            <ul id="feed" class="feed-grid" role="list">
+
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/what-are-the-rewards-in-heaven">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-20">2025-06-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">What Are The Rewards In Heaven?</h2>
+                    <p class="feed-card__description">Intro I came across an article on the Bible Project on what it means to &quot;store up
+treasures in Heaven&quot; and it brought some clarity to the meaning of t</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250620114115_cef07d4c.png" alt="What Are The Rewards In Heaven? cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflecting-on-bp-article-on-james-faith-and-works">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-18">2025-06-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Reflecting on BP Article on James - Faith and Works</h2>
+                    <p class="feed-card__description">Intro This started as one of [[my-thoughts]] and got long enough to warrant putting right in the blog Faith and works is a common point of conversation for Chri</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250618111235_bd7d5698.png" alt="Reflecting on BP Article on James - Faith and Works cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-687">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-12">2025-06-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // wealth</p>
+                <h2 class="feed-card__title">💭 The Meaning of “Mammon” in the Bible | Matthew 6:24</h2>
+                    <p class="feed-card__description">I spend a fair amount of time thinking about the future, planning and saving, making sure to the best of my ability and</p>
+                <div class="feed-card__tags">
+                        <span>#wealth</span>
+                        <span>#faith</span>
+                        <span>#bible-project</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/the-design-of-genesis-1-11">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-01-18">2025-01-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">The Design of Genesis 1-11 pt 1</h2>
+                    <p class="feed-card__description">Genesis 1 There is a cyclical pattern of Genesis 1-11. Introduction 1:1 may be a summary heading rather than the first &quot;verse&quot;. Chaos The narrative be</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#design-of-genesis-1-11</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/the-flood-story-quilt-analogy">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-12-14">2024-12-14</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">The Flood Story - Quilt Analogy</h2>
+                    <p class="feed-card__description">The Flood Story in the Hebrew Bible I&#x27;m slowly making my way through some Bible Project classes online because Tim
+Mackie is a fantastic teacher and BP has</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#flood-story</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/the-flood-story-types-and-baptism">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-12-14">2024-12-14</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">The Flood Story - Types and Baptism</h2>
+                    <p class="feed-card__description">The Flood Story and Jesus Jesus brings up the Flood story from Genesis just one time (in the recorded teachings we have). First to set the scene, Jesus and his </p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#flood-story</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/how-to-survive-the-flood">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-12-04">2024-12-04</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">How To Survive The Flood</h2>
+                    <p class="feed-card__description">There a lot of flood stories throughout the history of the world, and the Bible
+is no different in this regard. God warns Noah of a de-creation event, whereby
+h</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/the-two-houses">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-11-27">2024-11-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">The Two Houses</h2>
+                    <p class="feed-card__description">The Two Houses Context Reflection From the visual commentary Tim calls out a few things: `the rock` is supposed to first call us back to earlier in the sermon w</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/bp-the-golden-rule">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-11-06">2024-11-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">BP - The Golden Rule</h2>
+                    <p class="feed-card__description">Matthew 7:12 What do I desire that people &quot;do to [me]&quot;? Help if I need it - I want to live in a world where humans are helpful Listen to me and unders</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-wisdom-in-relationships-2">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-10-14">2024-10-14</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Reflection - Wisdom in Relationships 2</h2>
+                    <p class="feed-card__description">Passage Reflection James builds on this with `if any of you lacks wisdom then ask for wisdom it
+will be given to you`. James is arming us with some specifics fr</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/reflection-wisdom-in-relationships">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-10-12">2024-10-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Reflection - Wisdom in Relationships</h2>
+                    <p class="feed-card__description">This morning I finally felt some motivation for a short Bible Project video.
+The app is great (💯 would recommend) and gives me daily reminders that are
+unobtrus</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                        <span>#reflection</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/on-earth-as-it-is-in-heaven">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2024-01-02">2024-01-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">On Earth as It Is in Heaven</h2>
+                    <p class="feed-card__description">On Earth as It Is in Heaven [Video](https://bibleproject.com/explore/video/on-earth-as-it-is-in-heaven/) Sermon on the Mount 3 chapters filled with phrases that</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/chaos-dragon">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2023-12-20">2023-12-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Chaos Dragon</h2>
+                    <p class="feed-card__description">Dragons are metaphorical images in the Bible Goliath -&gt; armor descriptions
+Leviathan Dragon slayers can be enticed to become dragons themselves Jesus is the </p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/hebrew-bible-full-class">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-11-05">2022-11-05</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Hebrew Bible Full Class</h2>
+                    <p class="feed-card__description">[Class link](https://bibleproject.com/classroom-alpha/education-videos/session-1-what-earth-hebrew-bible/)
+[Classroom notes (Must be on home network)](http://pa</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/faithful">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-10-21">2022-10-21</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Faithful</h2>
+                    <p class="feed-card__description">[Link](https://bibleproject.com/bible-studies/faithful/) Notes !!! Exodusds 34:6 Faithfulness - Emet (can be translated &#x27;Truth&#x27;)
+Related to &quot;Amen</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/sabbath">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-10-13">2022-10-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Sabbath</h2>
+                    <p class="feed-card__description">[Link to study](https://bibleproject.com/bible-studies/sabbath/) Creation Brougt to completion on the seventh day in Genesis 1. It is the only day that
+does not</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/chara-joy">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-10-07">2022-10-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Chara-Joy</h2>
+                    <p class="feed-card__description">[link](https://bibleprojectz.com/bible-studies/chara-joy/) Chara / Joy There are several words for similar feelings - example like `joy` has several synonyms. S</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/abraham-and-melchizedek">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-09-23">2022-09-23</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Abraham and Melchizedek</h2>
+                    <p class="feed-card__description">[link to study](https://bibleproject.com/bible-studies/abraham-and-melchizedek/) Video Priests God creates Eden in which he places humans to be his royal image </p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/tree-of-life">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-09-21">2022-09-21</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Tree of Life</h2>
+                    <p class="feed-card__description">Video Eden Biblical story begins in a garden, which is presented as a type of Temple. The
+top (center) is the Tree of Life, which represents God&#x27;s life and</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full feed-card--faith  " data-template="blog-post">
+    <a class="feed-card__link" href="/shalom-and-peace">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2022-09-18">2022-09-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // bible-project</p>
+                <h2 class="feed-card__title">Shalom and Peace</h2>
+                    <p class="feed-card__description">[study link](https://bibleproject.com/bible-studies/shalom-peace/) Peace !!! note &quot;&quot; In Hebrew the word is `Shalom` (Greek: Eirene). Basic biblical me</p>
+                <div class="feed-card__tags">
+                        <span>#bible-project</span>
+                        <span>#faith</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-pagination">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</section>
+        </div>
+    </main>
+</div>
+     </body>
+</html>

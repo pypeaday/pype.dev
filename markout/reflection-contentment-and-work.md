@@ -1,0 +1,709 @@
+---
+content: "!!! note \"Philippians 4:11\"\n\n    Not that I speak from need, for I have
+  learned to be content in whatever circumstances I am.\n\n## Context\n\nThis verse
+  showing up in Spurgeon's **Morning and Evening** is a divine\ngrace to me. Today
+  is a significant day in a journey God has had me on towards\ncontentment. The circumstances
+  of that journey, the specifics, are known to\nsome but I can still speak generally
+  enough about it in this reflection because\nthe generalities are not unique to me
+  - anymore than the requirement to\n**learn** contentment, for it's not a natural
+  state for a man.\n\nFor me, like a lot of others, it's about money right now. Over
+  the last few\nyears I've been able to make a pretty significant income and God has
+  blessed me\nthrough the work I've done, but something I have noticed is the work
+  itself has\nfelt less and less blessed, and more like a burden as the goal became
+  money. I want\nto be a billionaire and never concern myself with a financial struggle
+  - but\nthis is childish thinking. The last few years have shown me that I can work,
+  a\nlot, and make money, also a lot (relatively speaking). I don't feel as though\nI've
+  wasted time necessarily, the _amount_ of work and the _time_ the work\ntakes are
+  different things. But where I may have recovered some of the time in\noverworking,
+  I certainly gave up other things: fulfilment and excellence to\nname the top 2.
+  As I've not been content, and have striven for more it's become\nclear that **wanting
+  more** is itself a burden.\n\nToday marks the end of some income that I've been
+  able to work for - not all of\nit, I'm extremely blessed in [[cat-autonomy-2-0]].
+  The facts are though that\nthrough the circumstances God has brought me recently,
+  I'll be making less than\n50% of what I've been able to make over the last couple
+  years... By God's grace\nwe still have more than enough, and by his grace again
+  today is a significant\nday for me to step through a doorway of contentment and
+  officially realign my\nwork priorities with the worldview Jesus has called me into.\n\n##
+  Contentment and Work\n\nI have been sort of fighting off a belief that I'm on a
+  literal mission from\nGod in Caterpillar Autonomy... If someone could see my inner-monologue
+  play out\nthey'd certainly get Blues Brothers vibes...\n\n![On A Mission From God.mp4](https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif)\n\nI
+  hope I'm not just reaching for some grand facetious meaning for the work I'm\nnow
+  doing to distract myself from the changes coming to my paycheck. It really\nfeels
+  to me like God has prepared me in many ways for the work that's in front\nme. I'm
+  thankful for that preparation and now it seems like it's time to give\nup the desires
+  for riches and focus on doing something more than closing\ntickets and supporting
+  a small team of people.\n\nAs God calls me to contentment in my personal life, I
+  think he's also planning\non blessing the work I'm doing. Earlier I said I have
+  been very blessed by the\nwork I have been able to do, but I don't know that God
+  has blessed\nthe work itself - much of what I've done was filled with mistakes you
+  only\nlearn by doing something the first time... Certainly in some ways he has\nblessed
+  those things, but I see something \"just bigger\" in Cat Autonomy, and I\nthink
+  I'm here to play a real role in it\n\n!!! danger \"maybe like Joseph in Egypt\"\n\n
+  \   like I said - literal mission from God\n\nI've had to give-up some pay to play
+  that role, but the Lord has taught (and is\nteaching) me that there's much more
+  to work than a paycheck, more to life than money.\n\nIt is easy, very easy, for
+  me to roll out of this line-of-thinking, I've done\nit several times even while
+  writing this... but I am sure contentment is\nsomething the Lord has for me. Today's
+  significance is just a temporal\nmilestone, a date that was approaching at a constant
+  rate of change... The day\nis here, today's meditation is on contentment, and the
+  Lord is doing a work in\nand through me. Amen."
+date: 2026-02-16
+description: '!!! note &quot;Philippians 4:11&quot; Context This verse showing up
+  in Spurgeon&#x27;s **Morning and Evening** is a divine
+
+  grace to me. Today is a significant d'
+html:
+  index: "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n<title>Reflection - Contentment
+    and Work</title>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width,
+    initial-scale=1\" />\n<meta name=\"description\" content=\"!!! note &quot;Philippians
+    4:11&quot; Context This verse showing up in Spurgeon&#x27;s **Morning and Evening**
+    is a divine\ngrace to me. Today is a significant d\" />\n <link href=\"/favicon.ico\"
+    rel=\"icon\" type=\"image/png\" />\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link
+    rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap\"
+    rel=\"stylesheet\">\n\n<link rel=\"stylesheet\" href=\"/post.css\" />\n<link rel=\"stylesheet\"
+    href=\"/app.css\" />\n<link rel=\"stylesheet\" href=\"/patterns.css\" />\n<link
+    rel=\"stylesheet\" href=\"/title-override.css\" />\n<link rel=\"stylesheet\" href=\"/terminal-ui.css\"
+    />\n<script src=\"/theme.js\"></script>\n<script src=\"/image-modal.js\"></script>\n\n<!--
+    Open Graph and Twitter Card meta tags -->\n<!-- Regular post meta tags -->\n<meta
+    property=\"og:title\" content=\"Reflection - Contentment and Work | Nic Payne\"
+    />\n<meta property=\"og:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<meta property=\"og:url\" content=\"https://pype.dev/reflection-contentment-and-work\"
+    />\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<meta name=\"twitter:title\"
+    content=\"Reflection - Contentment and Work | Nic Payne\" />\n<meta name=\"twitter:description\"
+    content=\"!!! note &quot;Philippians 4:11&quot; Context This verse showing up
+    in Spurgeon&#x27;s **Morning and Evening** is a divine\ngrace to me. Today is
+    a significant d\" />\n<meta name=\"twitter:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<!-- Common Twitter meta tags -->\n<meta name=\"twitter:creator\" content=\"@pypeaday\">\n<meta
+    name=\"twitter:site\" content=\"@pypeaday\">\n\n\n        <meta property=\"og:author_email\"
+    content=\"nic@pype.dev\" />\n\n        <script>\n            document.addEventListener(\"DOMContentLoaded\",
+    () => {\n                const collapsibleElements = document.querySelectorAll('.is-collapsible');\n
+    \               collapsibleElements.forEach(el => {\n                    const
+    summary = el.querySelector('.admonition-title');\n                    if (summary)
+    {\n                        summary.style.cursor = 'pointer';\n                        summary.addEventListener('click',
+    () => {\n                            el.classList.toggle('collapsible-open');\n
+    \                       });\n                    }\n                });\n            });\n
+    \       </script>\n\n        <style>\n\n            .admonition.source {\n                padding-bottom:
+    0;\n            }\n            .admonition.source pre.wrapper {\n                margin:
+    0;\n                padding: 0;\n            }\n            .is-collapsible {\n
+    \               overflow: hidden;\n                transition: max-height 0.3s
+    ease;\n            }\n            .is-collapsible:not(.collapsible-open) {\n                max-height:
+    0;\n                padding-bottom: 2.5rem;\n            }\n            .admonition-title
+    {\n                font-weight: bold;\n                margin-bottom: 8px;\n            }\n
+    \       </style>\n    </head>\n    <body class=\"font-sans\">\n<div class=\"terminal-page\">\n
+    \   <main class=\"terminal-page__main\">\n        <div class=\"terminal-page__content\">\n<header
+    class=\"site-terminal\">\n\n    <div class=\"site-terminal__bar\">\n        <div
+    class=\"site-terminal__lights\" aria-hidden=\"true\"><span></span><span></span><span></span></div>\n
+    \       <div class=\"site-terminal__path\">\n            <span class=\"site-terminal__prompt\">nic@pype</span>\n
+    \           <span class=\"site-terminal__dir\">~/reflection-contentment-and-work</span>\n
+    \       </div>\n        <div class=\"site-terminal__meta\">infra \xB7 automation
+    \xB7 writing</div>\n    </div>\n\n    <nav class=\"site-terminal__links\" aria-label=\"Primary\">\n
+    \       <a class=\"site-terminal__link\" href=\"/\">Home</a>\n        <a class=\"site-terminal__link\"
+    href=\"/slash\">Start Here</a>\n        <a class=\"site-terminal__link\" href=\"/my-thoughts\">My
+    Thoughts</a>\n        <a class=\"site-terminal__link\" href=\"https://github.com/pypeaday/pype.dev\">GitHub</a>\n
+    \       <a class=\"site-terminal__link\" href=\"https://mydigitalharbor.com/pypeaday\">DigitalHarbor</a>\n
+    \   </nav>\n\n    <div class=\"site-terminal__status\">\n        <span>role: Disciple
+    \xB7 Husband \xB7 Father \xB7 Developer</span>\n        <!-- <span>favorite tools:
+    nvim \xB7 tmux \xB7 k9s \xB7 nix \xB7 ansible</span> -->\n    </div>\n</header>
+    \   <div class=\"post-terminal__search\">\n<div id='didyoumean'>\n    <div class=\"mb-0\">\n
+    \       <!-- <label for=\"search\" class=\"block text-sm font-medium mb-2\">Search
+    for a page</label> -->\n        <input type=\"text\" id=\"search\"\n               class=\"w-full
+    px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text
+    placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors\"\n
+    \              placeholder=\"'/' search...\">\n    </div>\n\n    <!-- <div id=\"didyoumean_results\"
+    class=\"grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3\"> -->\n    <ul id=\"didyoumean_results\"
+    class='grid gap-4'>\n        <!-- Results will be populated here -->\n    </ul>\n</div>\n<script
+    type='module'>\n// All available pages from Markata\n    // const pages =  markata.map(\"{'slug':slug,'title':title,'description':description,'tags':tags}\",
+    filter=config.didyoumean_filter, sort='True')|tojson;\n    // fetch pages from
+    config.output_dir / didyoumean.json\n\n    const pages = await fetch('/didyoumean.json').then(response
+    => response.json());\n    const populate_search_input = false\n    const search_hotkey
+    = \"/\"\n\n// Get current path from URL, removing leading/trailing slashes\n    if
+    (populate_search_input) {\n        const currentPath = window.location.pathname.replace(/^\\/|\\/$/g,
+    '');\n        document.getElementById('search').value = currentPath;\n    }\n\n//
+    Search across all fields in an object\n    function searchObject(needle, obj)
+    {\n        needle = needle.toLowerCase();\n        let score = 0;\n\n    // Helper
+    to search a single field\n        const searchField = (value) => {\n            if
+    (!value) return 0;\n            value = String(value).toLowerCase();\n\n            //
+    Exact matches\n            if (value === needle) return 15;\n\n            //
+    Word boundary matches (complete words)\n            if (value.match(new RegExp(`\\\\b${needle}\\\\b`)))
+    return 10;\n\n            // Contains full search term\n            if (value.includes(needle))
+    return 8;\n\n            // Most parts match (for multi-word searches)\n            const
+    needleParts = needle.split(/\\W+/).filter(p => p.length > 2);\n            const
+    valueParts = value.split(/\\W+/).filter(p => p.length > 2);\n\n            if
+    (needleParts.length === 0) return 0;\n\n            let matchCount = 0;\n            for
+    (const part of needleParts) {\n                for (const valuePart of valueParts)
+    {\n                    if (valuePart.includes(part) || part.includes(valuePart))
+    {\n                        matchCount++;\n                        break;\n                    }\n
+    \               }\n            }\n\n            // Only count if most parts match\n
+    \           const matchRatio = matchCount / needleParts.length;\n            if
+    (matchRatio >= 0.75) {\n                return matchRatio * 6;\n            }\n\n
+    \           return 0;\n        };\n\n    // Search each field with different weights\n
+    \       const slugScore = searchField(obj.slug) * 3;  // Slug is most important\n
+    \       const titleScore = searchField(obj.title) * 2;  // Title is next\n        const
+    descScore = searchField(obj.description) * 1;  // Description\n        const tagScore
+    = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags\n\n
+    \       score = slugScore + titleScore + descScore + tagScore;\n\n    // Path
+    segment matches for slug (only if we have some other match)\n        if (score
+    > 0 && obj.slug) {\n            const inputParts = needle.split('/').filter(p
+    => p.length > 0);\n            const slugParts = obj.slug.toLowerCase().split('/');\n\n
+    \           // Bonus for matching path structure\n            for (let i = 0;
+    i < inputParts.length && i < slugParts.length; i++) {\n                if (slugParts[i].includes(inputParts[i]))
+    {\n                    score += 5;  // Matching segments in order is valuable\n
+    \               }\n            }\n        }\n\n        return score;\n    }\n\n//
+    Find similar pages\n    function findSimilar(input) {\n        if (!input || input.length
+    < 2) return [];\n        const normalizedInput = input.toLowerCase().trim();\n\n
+    \   // Score each page\n        const scored = pages.map(page => ({\n            ...page,\n
+    \           score: searchObject(normalizedInput, page)\n        }));\n\n    //
+    Sort by score (higher is better) and take top matches\n        return scored\n
+    \           .sort((a, b) => b.score - a.score)\n            .slice(0, 12)  //
+    Show more results in the grid\n            .filter(item => item.score > 15); //
+    Only show strong matches\n    }\n\n// Update results in the DOM\n    function
+    updateResults(results) {\n        const resultsDiv = document.getElementById('didyoumean_results');\n\n
+    \       if (results.length === 0) {\n            resultsDiv.innerHTML = '<p class=\"text-gray-500
+    col-span-full text-center py-8\">No similar pages found.</p>';\n            return;\n
+    \       }\n\n        const html = results.map(page => `\n        <li class=\"p-4
+    bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4\">\n
+    \           <a href=\"/${page.slug}\" class=\"block\">\n                <h3 class=\"text-lg
+    font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300
+    mb-2\">\n                    ${page.title || page.slug}\n                </h3>\n
+    \               ${page.description ? `\n            <p class=\"text-sm text-gray-600
+    dark:text-gray-300 mb-3 line-clamp-2\">\n            ${page.description}\n            </p>\n
+    \           ` : ''}\n                <div class=\"flex flex-wrap gap-2 text-xs
+    text-gray-500 dark:text-gray-400\">\n                </div>\n                ${page.tags
+    && page.tags.length > 0 ? `\n            <div class=\"mt-3 flex flex-wrap gap-2\">\n
+    \           ${page.tags.map(tag => `\n                            <span class=\"px-2
+    py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs\">\n                                ${tag}\n
+    \                           </span>\n                        `).join('')}\n            </div>\n
+    \           ` : ''}\n            </a>\n        </li>\n    `).join('');\n\n        resultsDiv.innerHTML
+    = html;\n    }\n\n// Set up hotkey for search if configured\n    if (search_hotkey)
+    {\n        document.addEventListener('keydown', (e) => {\n            // Don't
+    trigger if user is typing in an input or textarea\n            if (e.target.tagName
+    === 'INPUT' || e.target.tagName === 'TEXTAREA') {\n                return;\n            }\n\n
+    \           // Check if the pressed key matches the hotkey\n            if (e.key
+    === search_hotkey) {\n                e.preventDefault();  // Prevent the '/'
+    from being typed\n                const searchInput = document.getElementById('search');\n
+    \               searchInput.focus();\n                searchInput.select();  //
+    Select any existing text\n            }\n        });\n    }\n\n// Set up search
+    input handler with debounce\n    let debounceTimeout;\n    const searchInput =
+    document.getElementById('search');\n    searchInput.addEventListener('input',
+    (e) => {\n        clearTimeout(debounceTimeout);\n        debounceTimeout = setTimeout(()
+    => {\n            const results = findSimilar(e.target.value);\n            updateResults(results);\n
+    \       }, 100);\n    });\n\n// Initial search with current path\n    if (populate_search_input)
+    {\n        updateResults(findSimilar(currentPath));\n    }\n</script>    </div>\n<section
+    class=\"post-terminal post-terminal--faith  \">\n    <figure class=\"post-terminal__media\">\n
+    \       <div class=\"post-terminal__media-frame\">\n            <img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    alt=\"Reflection - Contentment and Work cover image\">\n        </div>\n    </figure>\n\n
+    \   <article class=\"post-terminal__article\">\n<section class=\"post-header mb-8\">\n
+    \   <h1 id=\"title\" style=\"font-size: 4rem; line-height: 1.1; font-weight: 800;\"
+    class=\"text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large\">Reflection
+    - Contentment and Work</h1>\n    <div class=\"flex items-center text-sm text-text-main/80
+    mb-6\">\n        <time datetime=\"2026-02-16\">\n            February 16, 2026\n
+    \       </time>\n    </div>\n    <div class=\"flex flex-wrap gap-2\">\n            <a
+    href=\"https://pype.dev//tags/contentment/\" class=\"inline-block bg-primary-light
+    text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #contentment\n
+    \           </a>\n            <a href=\"https://pype.dev//tags/faith/\" class=\"inline-block
+    bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #faith\n
+    \           </a>\n            <a href=\"https://pype.dev//tags/work/\" class=\"inline-block
+    bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #work\n
+    \           </a>\n    </div>\n</section>        <section class=\"post-terminal__body
+    prose dark:prose-invert\">\n            <div class=\"admonition note\">\n<p class=\"admonition-title\">Philippians
+    4:11</p>\n<p>Not that I speak from need, for I have learned to be content in whatever
+    circumstances I am.</p>\n</div>\n<h2 id=\"context\">Context <a class=\"header-anchor\"
+    href=\"#context\"><svg class=\"heading-permalink\" aria-hidden=\"true\" fill=\"currentColor\"
+    focusable=\"false\" height=\"1em\" viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>This verse showing up
+    in Spurgeon's <strong>Morning and Evening</strong> is a divine\ngrace to me. Today
+    is a significant day in a journey God has had me on towards\ncontentment. The
+    circumstances of that journey, the specifics, are known to\nsome but I can still
+    speak generally enough about it in this reflection because\nthe generalities are
+    not unique to me - anymore than the requirement to\n<strong>learn</strong> contentment,
+    for it's not a natural state for a man.</p>\n<p>For me, like a lot of others,
+    it's about money right now. Over the last few\nyears I've been able to make a
+    pretty significant income and God has blessed me\nthrough the work I've done,
+    but something I have noticed is the work itself has\nfelt less and less blessed,
+    and more like a burden as the goal became money. I want\nto be a billionaire and
+    never concern myself with a financial struggle - but\nthis is childish thinking.
+    The last few years have shown me that I can work, a\nlot, and make money, also
+    a lot (relatively speaking). I don't feel as though\nI've wasted time necessarily,
+    the <em>amount</em> of work and the <em>time</em> the work\ntakes are different
+    things. But where I may have recovered some of the time in\noverworking, I certainly
+    gave up other things: fulfilment and excellence to\nname the top 2. As I've not
+    been content, and have striven for more it's become\nclear that <strong>wanting
+    more</strong> is itself a burden.</p>\n<p>Today marks the end of some income that
+    I've been able to work for - not all of\nit, I'm extremely blessed in <a class=\"wikilink\"
+    href=\"/cat-autonomy-2-0\">cat-autonomy-2-0</a>. The facts are though that\nthrough
+    the circumstances God has brought me recently, I'll be making less than\n50% of
+    what I've been able to make over the last couple years... By God's grace\nwe still
+    have more than enough, and by his grace again today is a significant\nday for
+    me to step through a doorway of contentment and officially realign my\nwork priorities
+    with the worldview Jesus has called me into.</p>\n<h2 id=\"contentment-and-work\">Contentment
+    and Work <a class=\"header-anchor\" href=\"#contentment-and-work\"><svg class=\"heading-permalink\"
+    aria-hidden=\"true\" fill=\"currentColor\" focusable=\"false\" height=\"1em\"
+    viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>I have been sort of
+    fighting off a belief that I'm on a literal mission from\nGod in Caterpillar Autonomy...
+    If someone could see my inner-monologue play out\nthey'd certainly get Blues Brothers
+    vibes...</p>\n<p><img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif\"
+    alt=\"On A Mission From God.mp4\" /></p>\n<p>I hope I'm not just reaching for
+    some grand facetious meaning for the work I'm\nnow doing to distract myself from
+    the changes coming to my paycheck. It really\nfeels to me like God has prepared
+    me in many ways for the work that's in front\nme. I'm thankful for that preparation
+    and now it seems like it's time to give\nup the desires for riches and focus on
+    doing something more than closing\ntickets and supporting a small team of people.</p>\n<p>As
+    God calls me to contentment in my personal life, I think he's also planning\non
+    blessing the work I'm doing. Earlier I said I have been very blessed by the\nwork
+    I have been able to do, but I don't know that God has blessed\nthe work itself
+    - much of what I've done was filled with mistakes you only\nlearn by doing something
+    the first time... Certainly in some ways he has\nblessed those things, but I see
+    something &quot;just bigger&quot; in Cat Autonomy, and I\nthink I'm here to play
+    a real role in it</p>\n<div class=\"admonition danger\">\n<p class=\"admonition-title\">maybe
+    like Joseph in Egypt</p>\n<p>like I said - literal mission from God</p>\n</div>\n<p>I've
+    had to give-up some pay to play that role, but the Lord has taught (and is\nteaching)
+    me that there's much more to work than a paycheck, more to life than money.</p>\n<p>It
+    is easy, very easy, for me to roll out of this line-of-thinking, I've done\nit
+    several times even while writing this... but I am sure contentment is\nsomething
+    the Lord has for me. Today's significance is just a temporal\nmilestone, a date
+    that was approaching at a constant rate of change... The day\nis here, today's
+    meditation is on contentment, and the Lord is doing a work in\nand through me.
+    Amen.</p>\n\n        </section>\n    </article>\n</section>        </div>\n    </main>\n</div>\n
+    \    </body>\n</html>"
+  og: "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n<title>Reflection - Contentment
+    and Work</title>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\" content=\"width=device-width,
+    initial-scale=1\" />\n<meta name=\"description\" content=\"!!! note &quot;Philippians
+    4:11&quot; Context This verse showing up in Spurgeon&#x27;s **Morning and Evening**
+    is a divine\ngrace to me. Today is a significant d\" />\n <link href=\"/favicon.ico\"
+    rel=\"icon\" type=\"image/png\" />\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link
+    rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap\"
+    rel=\"stylesheet\">\n\n<link rel=\"stylesheet\" href=\"/post.css\" />\n<link rel=\"stylesheet\"
+    href=\"/app.css\" />\n<link rel=\"stylesheet\" href=\"/patterns.css\" />\n<link
+    rel=\"stylesheet\" href=\"/title-override.css\" />\n<link rel=\"stylesheet\" href=\"/terminal-ui.css\"
+    />\n<script src=\"/theme.js\"></script>\n<script src=\"/image-modal.js\"></script>\n\n<!--
+    Open Graph and Twitter Card meta tags -->\n<!-- Regular post meta tags -->\n<meta
+    property=\"og:title\" content=\"Reflection - Contentment and Work | Nic Payne\"
+    />\n<meta property=\"og:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<meta property=\"og:url\" content=\"https://pype.dev/reflection-contentment-and-work\"
+    />\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<meta name=\"twitter:title\"
+    content=\"Reflection - Contentment and Work | Nic Payne\" />\n<meta name=\"twitter:description\"
+    content=\"!!! note &quot;Philippians 4:11&quot; Context This verse showing up
+    in Spurgeon&#x27;s **Morning and Evening** is a divine\ngrace to me. Today is
+    a significant d\" />\n<meta name=\"twitter:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<!-- Common Twitter meta tags -->\n<meta name=\"twitter:creator\" content=\"@pypeaday\">\n<meta
+    name=\"twitter:site\" content=\"@pypeaday\">\n\n\n        <meta property=\"og:author_email\"
+    content=\"nic@pype.dev\" />\n\n        <script>\n            document.addEventListener(\"DOMContentLoaded\",
+    () => {\n                const collapsibleElements = document.querySelectorAll('.is-collapsible');\n
+    \               collapsibleElements.forEach(el => {\n                    const
+    summary = el.querySelector('.admonition-title');\n                    if (summary)
+    {\n                        summary.style.cursor = 'pointer';\n                        summary.addEventListener('click',
+    () => {\n                            el.classList.toggle('collapsible-open');\n
+    \                       });\n                    }\n                });\n            });\n
+    \       </script>\n\n        <style>\n\n            .admonition.source {\n                padding-bottom:
+    0;\n            }\n            .admonition.source pre.wrapper {\n                margin:
+    0;\n                padding: 0;\n            }\n            .is-collapsible {\n
+    \               overflow: hidden;\n                transition: max-height 0.3s
+    ease;\n            }\n            .is-collapsible:not(.collapsible-open) {\n                max-height:
+    0;\n                padding-bottom: 2.5rem;\n            }\n            .admonition-title
+    {\n                font-weight: bold;\n                margin-bottom: 8px;\n            }\n
+    \       </style>\n    </head>\n    <body class=\"font-sans\">\n<article style=\"text-align:
+    center;\">\n    <style>\n        section {\n            font-size: 200%;\n        }\n\n\n
+    \       .edit {\n            display: none;\n        }\n    </style>\n<section
+    class=\"post-header mb-8\">\n    <h1 id=\"title\" style=\"font-size: 4rem; line-height:
+    1.1; font-weight: 800;\" class=\"text-6xl md:text-7xl font-extrabold gradient-text
+    mb-4 post-title-large\">Reflection - Contentment and Work</h1>\n    <div class=\"flex
+    items-center text-sm text-text-main/80 mb-6\">\n        <time datetime=\"2026-02-16\">\n
+    \           February 16, 2026\n        </time>\n    </div>\n    <div class=\"flex
+    flex-wrap gap-2\">\n            <a href=\"https://pype.dev//tags/contentment/\"
+    class=\"inline-block bg-primary-light text-accent-cool text-xs font-medium px-3
+    py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20
+    hover-lift\">\n                #contentment\n            </a>\n            <a
+    href=\"https://pype.dev//tags/faith/\" class=\"inline-block bg-primary-light text-accent-cool
+    text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors
+    border border-accent-cool/20 hover-lift\">\n                #faith\n            </a>\n
+    \           <a href=\"https://pype.dev//tags/work/\" class=\"inline-block bg-primary-light
+    text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #work\n
+    \           </a>\n    </div>\n</section></article>\n     </body>\n</html>"
+  partial: "<section class=\"post-terminal post-terminal--faith  \">\n    <figure
+    class=\"post-terminal__media\">\n        <div class=\"post-terminal__media-frame\">\n
+    \           <img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    alt=\"Reflection - Contentment and Work cover image\">\n        </div>\n    </figure>\n\n
+    \   <article class=\"post-terminal__article\">\n<section class=\"post-header mb-8\">\n
+    \   <h1 id=\"title\" style=\"font-size: 4rem; line-height: 1.1; font-weight: 800;\"
+    class=\"text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large\">Reflection
+    - Contentment and Work</h1>\n    <div class=\"flex items-center text-sm text-text-main/80
+    mb-6\">\n        <time datetime=\"2026-02-16\">\n            February 16, 2026\n
+    \       </time>\n    </div>\n    <div class=\"flex flex-wrap gap-2\">\n            <a
+    href=\"https://pype.dev//tags/contentment/\" class=\"inline-block bg-primary-light
+    text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #contentment\n
+    \           </a>\n            <a href=\"https://pype.dev//tags/faith/\" class=\"inline-block
+    bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #faith\n
+    \           </a>\n            <a href=\"https://pype.dev//tags/work/\" class=\"inline-block
+    bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80
+    transition-colors border border-accent-cool/20 hover-lift\">\n                #work\n
+    \           </a>\n    </div>\n</section>        <section class=\"post-terminal__body
+    prose dark:prose-invert\">\n            <div class=\"admonition note\">\n<p class=\"admonition-title\">Philippians
+    4:11</p>\n<p>Not that I speak from need, for I have learned to be content in whatever
+    circumstances I am.</p>\n</div>\n<h2 id=\"context\">Context <a class=\"header-anchor\"
+    href=\"#context\"><svg class=\"heading-permalink\" aria-hidden=\"true\" fill=\"currentColor\"
+    focusable=\"false\" height=\"1em\" viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>This verse showing up
+    in Spurgeon's <strong>Morning and Evening</strong> is a divine\ngrace to me. Today
+    is a significant day in a journey God has had me on towards\ncontentment. The
+    circumstances of that journey, the specifics, are known to\nsome but I can still
+    speak generally enough about it in this reflection because\nthe generalities are
+    not unique to me - anymore than the requirement to\n<strong>learn</strong> contentment,
+    for it's not a natural state for a man.</p>\n<p>For me, like a lot of others,
+    it's about money right now. Over the last few\nyears I've been able to make a
+    pretty significant income and God has blessed me\nthrough the work I've done,
+    but something I have noticed is the work itself has\nfelt less and less blessed,
+    and more like a burden as the goal became money. I want\nto be a billionaire and
+    never concern myself with a financial struggle - but\nthis is childish thinking.
+    The last few years have shown me that I can work, a\nlot, and make money, also
+    a lot (relatively speaking). I don't feel as though\nI've wasted time necessarily,
+    the <em>amount</em> of work and the <em>time</em> the work\ntakes are different
+    things. But where I may have recovered some of the time in\noverworking, I certainly
+    gave up other things: fulfilment and excellence to\nname the top 2. As I've not
+    been content, and have striven for more it's become\nclear that <strong>wanting
+    more</strong> is itself a burden.</p>\n<p>Today marks the end of some income that
+    I've been able to work for - not all of\nit, I'm extremely blessed in <a class=\"wikilink\"
+    href=\"/cat-autonomy-2-0\">cat-autonomy-2-0</a>. The facts are though that\nthrough
+    the circumstances God has brought me recently, I'll be making less than\n50% of
+    what I've been able to make over the last couple years... By God's grace\nwe still
+    have more than enough, and by his grace again today is a significant\nday for
+    me to step through a doorway of contentment and officially realign my\nwork priorities
+    with the worldview Jesus has called me into.</p>\n<h2 id=\"contentment-and-work\">Contentment
+    and Work <a class=\"header-anchor\" href=\"#contentment-and-work\"><svg class=\"heading-permalink\"
+    aria-hidden=\"true\" fill=\"currentColor\" focusable=\"false\" height=\"1em\"
+    viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>I have been sort of
+    fighting off a belief that I'm on a literal mission from\nGod in Caterpillar Autonomy...
+    If someone could see my inner-monologue play out\nthey'd certainly get Blues Brothers
+    vibes...</p>\n<p><img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif\"
+    alt=\"On A Mission From God.mp4\" /></p>\n<p>I hope I'm not just reaching for
+    some grand facetious meaning for the work I'm\nnow doing to distract myself from
+    the changes coming to my paycheck. It really\nfeels to me like God has prepared
+    me in many ways for the work that's in front\nme. I'm thankful for that preparation
+    and now it seems like it's time to give\nup the desires for riches and focus on
+    doing something more than closing\ntickets and supporting a small team of people.</p>\n<p>As
+    God calls me to contentment in my personal life, I think he's also planning\non
+    blessing the work I'm doing. Earlier I said I have been very blessed by the\nwork
+    I have been able to do, but I don't know that God has blessed\nthe work itself
+    - much of what I've done was filled with mistakes you only\nlearn by doing something
+    the first time... Certainly in some ways he has\nblessed those things, but I see
+    something &quot;just bigger&quot; in Cat Autonomy, and I\nthink I'm here to play
+    a real role in it</p>\n<div class=\"admonition danger\">\n<p class=\"admonition-title\">maybe
+    like Joseph in Egypt</p>\n<p>like I said - literal mission from God</p>\n</div>\n<p>I've
+    had to give-up some pay to play that role, but the Lord has taught (and is\nteaching)
+    me that there's much more to work than a paycheck, more to life than money.</p>\n<p>It
+    is easy, very easy, for me to roll out of this line-of-thinking, I've done\nit
+    several times even while writing this... but I am sure contentment is\nsomething
+    the Lord has for me. Today's significance is just a temporal\nmilestone, a date
+    that was approaching at a constant rate of change... The day\nis here, today's
+    meditation is on contentment, and the Lord is doing a work in\nand through me.
+    Amen.</p>\n\n        </section>\n    </article>\n</section>"
+  protected-post: "<!DOCTYPE html>\n<html lang=\"en\">\n    <head>\n<title>Reflection
+    - Contentment and Work</title>\n<meta charset=\"UTF-8\" />\n<meta name=\"viewport\"
+    content=\"width=device-width, initial-scale=1\" />\n<meta name=\"description\"
+    content=\"!!! note &quot;Philippians 4:11&quot; Context This verse showing up
+    in Spurgeon&#x27;s **Morning and Evening** is a divine\ngrace to me. Today is
+    a significant d\" />\n <link href=\"/favicon.ico\" rel=\"icon\" type=\"image/png\"
+    />\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"preconnect\"
+    href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap\"
+    rel=\"stylesheet\">\n\n<link rel=\"stylesheet\" href=\"/post.css\" />\n<link rel=\"stylesheet\"
+    href=\"/app.css\" />\n<link rel=\"stylesheet\" href=\"/patterns.css\" />\n<link
+    rel=\"stylesheet\" href=\"/title-override.css\" />\n<link rel=\"stylesheet\" href=\"/terminal-ui.css\"
+    />\n<script src=\"/theme.js\"></script>\n<script src=\"/image-modal.js\"></script>\n\n<!--
+    Open Graph and Twitter Card meta tags -->\n<!-- Regular post meta tags -->\n<meta
+    property=\"og:title\" content=\"Reflection - Contentment and Work | Nic Payne\"
+    />\n<meta property=\"og:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<meta property=\"og:url\" content=\"https://pype.dev/reflection-contentment-and-work\"
+    />\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<meta name=\"twitter:title\"
+    content=\"Reflection - Contentment and Work | Nic Payne\" />\n<meta name=\"twitter:description\"
+    content=\"!!! note &quot;Philippians 4:11&quot; Context This verse showing up
+    in Spurgeon&#x27;s **Morning and Evening** is a divine\ngrace to me. Today is
+    a significant d\" />\n<meta name=\"twitter:image\" content=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"
+    />\n<!-- Common Twitter meta tags -->\n<meta name=\"twitter:creator\" content=\"@pypeaday\">\n<meta
+    name=\"twitter:site\" content=\"@pypeaday\">\n\n\n        <meta property=\"og:author_email\"
+    content=\"nic@pype.dev\" />\n\n        <script>\n            document.addEventListener(\"DOMContentLoaded\",
+    () => {\n                const collapsibleElements = document.querySelectorAll('.is-collapsible');\n
+    \               collapsibleElements.forEach(el => {\n                    const
+    summary = el.querySelector('.admonition-title');\n                    if (summary)
+    {\n                        summary.style.cursor = 'pointer';\n                        summary.addEventListener('click',
+    () => {\n                            el.classList.toggle('collapsible-open');\n
+    \                       });\n                    }\n                });\n            });\n
+    \       </script>\n\n        <style>\n\n            .admonition.source {\n                padding-bottom:
+    0;\n            }\n            .admonition.source pre.wrapper {\n                margin:
+    0;\n                padding: 0;\n            }\n            .is-collapsible {\n
+    \               overflow: hidden;\n                transition: max-height 0.3s
+    ease;\n            }\n            .is-collapsible:not(.collapsible-open) {\n                max-height:
+    0;\n                padding-bottom: 2.5rem;\n            }\n            .admonition-title
+    {\n                font-weight: bold;\n                margin-bottom: 8px;\n            }\n
+    \       </style>\n    </head>\n    <body class=\"font-sans\">\n<div class=\"terminal-page\">\n
+    \   <main class=\"terminal-page__main\">\n        <div class=\"terminal-page__content\">\n<header
+    class=\"site-terminal\">\n\n    <div class=\"site-terminal__bar\">\n        <div
+    class=\"site-terminal__lights\" aria-hidden=\"true\"><span></span><span></span><span></span></div>\n
+    \       <div class=\"site-terminal__path\">\n            <span class=\"site-terminal__prompt\">nic@pype</span>\n
+    \           <span class=\"site-terminal__dir\">~/reflection-contentment-and-work</span>\n
+    \       </div>\n        <div class=\"site-terminal__meta\">infra \xB7 automation
+    \xB7 writing</div>\n    </div>\n\n    <nav class=\"site-terminal__links\" aria-label=\"Primary\">\n
+    \       <a class=\"site-terminal__link\" href=\"/\">Home</a>\n        <a class=\"site-terminal__link\"
+    href=\"/slash\">Start Here</a>\n        <a class=\"site-terminal__link\" href=\"/my-thoughts\">My
+    Thoughts</a>\n        <a class=\"site-terminal__link\" href=\"https://github.com/pypeaday/pype.dev\">GitHub</a>\n
+    \       <a class=\"site-terminal__link\" href=\"https://mydigitalharbor.com/pypeaday\">DigitalHarbor</a>\n
+    \   </nav>\n\n    <div class=\"site-terminal__status\">\n        <span>role: Disciple
+    \xB7 Husband \xB7 Father \xB7 Developer</span>\n        <!-- <span>favorite tools:
+    nvim \xB7 tmux \xB7 k9s \xB7 nix \xB7 ansible</span> -->\n    </div>\n</header>
+    \   <!-- Content is handled by the password protection plugin -->\n    <div class=\"admonition
+    note\">\n<p class=\"admonition-title\">Philippians 4:11</p>\n<p>Not that I speak
+    from need, for I have learned to be content in whatever circumstances I am.</p>\n</div>\n<h2
+    id=\"context\">Context <a class=\"header-anchor\" href=\"#context\"><svg class=\"heading-permalink\"
+    aria-hidden=\"true\" fill=\"currentColor\" focusable=\"false\" height=\"1em\"
+    viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>This verse showing up
+    in Spurgeon's <strong>Morning and Evening</strong> is a divine\ngrace to me. Today
+    is a significant day in a journey God has had me on towards\ncontentment. The
+    circumstances of that journey, the specifics, are known to\nsome but I can still
+    speak generally enough about it in this reflection because\nthe generalities are
+    not unique to me - anymore than the requirement to\n<strong>learn</strong> contentment,
+    for it's not a natural state for a man.</p>\n<p>For me, like a lot of others,
+    it's about money right now. Over the last few\nyears I've been able to make a
+    pretty significant income and God has blessed me\nthrough the work I've done,
+    but something I have noticed is the work itself has\nfelt less and less blessed,
+    and more like a burden as the goal became money. I want\nto be a billionaire and
+    never concern myself with a financial struggle - but\nthis is childish thinking.
+    The last few years have shown me that I can work, a\nlot, and make money, also
+    a lot (relatively speaking). I don't feel as though\nI've wasted time necessarily,
+    the <em>amount</em> of work and the <em>time</em> the work\ntakes are different
+    things. But where I may have recovered some of the time in\noverworking, I certainly
+    gave up other things: fulfilment and excellence to\nname the top 2. As I've not
+    been content, and have striven for more it's become\nclear that <strong>wanting
+    more</strong> is itself a burden.</p>\n<p>Today marks the end of some income that
+    I've been able to work for - not all of\nit, I'm extremely blessed in <a class=\"wikilink\"
+    href=\"/cat-autonomy-2-0\">cat-autonomy-2-0</a>. The facts are though that\nthrough
+    the circumstances God has brought me recently, I'll be making less than\n50% of
+    what I've been able to make over the last couple years... By God's grace\nwe still
+    have more than enough, and by his grace again today is a significant\nday for
+    me to step through a doorway of contentment and officially realign my\nwork priorities
+    with the worldview Jesus has called me into.</p>\n<h2 id=\"contentment-and-work\">Contentment
+    and Work <a class=\"header-anchor\" href=\"#contentment-and-work\"><svg class=\"heading-permalink\"
+    aria-hidden=\"true\" fill=\"currentColor\" focusable=\"false\" height=\"1em\"
+    viewBox=\"0 0 24 24\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path
+    d=\"M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992
+    5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242
+    6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985
+    3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005
+    3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201
+    13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995
+    2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0
+    0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836
+    19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997
+    0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632
+    1.563 1 1 0 0 0 1.602-1.198z\"></path></svg></a></h2>\n<p>I have been sort of
+    fighting off a belief that I'm on a literal mission from\nGod in Caterpillar Autonomy...
+    If someone could see my inner-monologue play out\nthey'd certainly get Blues Brothers
+    vibes...</p>\n<p><img src=\"https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif\"
+    alt=\"On A Mission From God.mp4\" /></p>\n<p>I hope I'm not just reaching for
+    some grand facetious meaning for the work I'm\nnow doing to distract myself from
+    the changes coming to my paycheck. It really\nfeels to me like God has prepared
+    me in many ways for the work that's in front\nme. I'm thankful for that preparation
+    and now it seems like it's time to give\nup the desires for riches and focus on
+    doing something more than closing\ntickets and supporting a small team of people.</p>\n<p>As
+    God calls me to contentment in my personal life, I think he's also planning\non
+    blessing the work I'm doing. Earlier I said I have been very blessed by the\nwork
+    I have been able to do, but I don't know that God has blessed\nthe work itself
+    - much of what I've done was filled with mistakes you only\nlearn by doing something
+    the first time... Certainly in some ways he has\nblessed those things, but I see
+    something &quot;just bigger&quot; in Cat Autonomy, and I\nthink I'm here to play
+    a real role in it</p>\n<div class=\"admonition danger\">\n<p class=\"admonition-title\">maybe
+    like Joseph in Egypt</p>\n<p>like I said - literal mission from God</p>\n</div>\n<p>I've
+    had to give-up some pay to play that role, but the Lord has taught (and is\nteaching)
+    me that there's much more to work than a paycheck, more to life than money.</p>\n<p>It
+    is easy, very easy, for me to roll out of this line-of-thinking, I've done\nit
+    several times even while writing this... but I am sure contentment is\nsomething
+    the Lord has for me. Today's significance is just a temporal\nmilestone, a date
+    that was approaching at a constant rate of change... The day\nis here, today's
+    meditation is on contentment, and the Lord is doing a work in\nand through me.
+    Amen.</p>\n\n        </div>\n    </main>\n</div>\n     </body>\n</html>"
+  raw.md: "---\ndate: 2026-02-16 05:42:13\ntemplateKey: blog-post\ntitle: Reflection
+    - Contentment and Work\npublished: True\ntags:\n  - contentment\n  - faith\n  -
+    work\ncover: \"https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260216134050_0462b7d1.png\"\n---\n\n!!!
+    note \"Philippians 4:11\"\n\n    Not that I speak from need, for I have learned
+    to be content in whatever circumstances I am.\n\n## Context\n\nThis verse showing
+    up in Spurgeon's **Morning and Evening** is a divine\ngrace to me. Today is a
+    significant day in a journey God has had me on towards\ncontentment. The circumstances
+    of that journey, the specifics, are known to\nsome but I can still speak generally
+    enough about it in this reflection because\nthe generalities are not unique to
+    me - anymore than the requirement to\n**learn** contentment, for it's not a natural
+    state for a man.\n\nFor me, like a lot of others, it's about money right now.
+    Over the last few\nyears I've been able to make a pretty significant income and
+    God has blessed me\nthrough the work I've done, but something I have noticed is
+    the work itself has\nfelt less and less blessed, and more like a burden as the
+    goal became money. I want\nto be a billionaire and never concern myself with a
+    financial struggle - but\nthis is childish thinking. The last few years have shown
+    me that I can work, a\nlot, and make money, also a lot (relatively speaking).
+    I don't feel as though\nI've wasted time necessarily, the _amount_ of work and
+    the _time_ the work\ntakes are different things. But where I may have recovered
+    some of the time in\noverworking, I certainly gave up other things: fulfilment
+    and excellence to\nname the top 2. As I've not been content, and have striven
+    for more it's become\nclear that **wanting more** is itself a burden.\n\nToday
+    marks the end of some income that I've been able to work for - not all of\nit,
+    I'm extremely blessed in [[cat-autonomy-2-0]]. The facts are though that\nthrough
+    the circumstances God has brought me recently, I'll be making less than\n50% of
+    what I've been able to make over the last couple years... By God's grace\nwe still
+    have more than enough, and by his grace again today is a significant\nday for
+    me to step through a doorway of contentment and officially realign my\nwork priorities
+    with the worldview Jesus has called me into.\n\n## Contentment and Work\n\nI have
+    been sort of fighting off a belief that I'm on a literal mission from\nGod in
+    Caterpillar Autonomy... If someone could see my inner-monologue play out\nthey'd
+    certainly get Blues Brothers vibes...\n\n![On A Mission From God.mp4](https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif)\n\nI
+    hope I'm not just reaching for some grand facetious meaning for the work I'm\nnow
+    doing to distract myself from the changes coming to my paycheck. It really\nfeels
+    to me like God has prepared me in many ways for the work that's in front\nme.
+    I'm thankful for that preparation and now it seems like it's time to give\nup
+    the desires for riches and focus on doing something more than closing\ntickets
+    and supporting a small team of people.\n\nAs God calls me to contentment in my
+    personal life, I think he's also planning\non blessing the work I'm doing. Earlier
+    I said I have been very blessed by the\nwork I have been able to do, but I don't
+    know that God has blessed\nthe work itself - much of what I've done was filled
+    with mistakes you only\nlearn by doing something the first time... Certainly in
+    some ways he has\nblessed those things, but I see something \"just bigger\" in
+    Cat Autonomy, and I\nthink I'm here to play a real role in it\n\n!!! danger \"maybe
+    like Joseph in Egypt\"\n\n    like I said - literal mission from God\n\nI've had
+    to give-up some pay to play that role, but the Lord has taught (and is\nteaching)
+    me that there's much more to work than a paycheck, more to life than money.\n\nIt
+    is easy, very easy, for me to roll out of this line-of-thinking, I've done\nit
+    several times even while writing this... but I am sure contentment is\nsomething
+    the Lord has for me. Today's significance is just a temporal\nmilestone, a date
+    that was approaching at a constant rate of change... The day\nis here, today's
+    meditation is on contentment, and the Lord is doing a work in\nand through me.
+    Amen.\n"
+published: true
+slug: reflection-contentment-and-work
+title: Reflection - Contentment and Work
+
+
+---
+
+!!! note "Philippians 4:11"
+
+    Not that I speak from need, for I have learned to be content in whatever circumstances I am.
+
+## Context
+
+This verse showing up in Spurgeon's **Morning and Evening** is a divine
+grace to me. Today is a significant day in a journey God has had me on towards
+contentment. The circumstances of that journey, the specifics, are known to
+some but I can still speak generally enough about it in this reflection because
+the generalities are not unique to me - anymore than the requirement to
+**learn** contentment, for it's not a natural state for a man.
+
+For me, like a lot of others, it's about money right now. Over the last few
+years I've been able to make a pretty significant income and God has blessed me
+through the work I've done, but something I have noticed is the work itself has
+felt less and less blessed, and more like a burden as the goal became money. I want
+to be a billionaire and never concern myself with a financial struggle - but
+this is childish thinking. The last few years have shown me that I can work, a
+lot, and make money, also a lot (relatively speaking). I don't feel as though
+I've wasted time necessarily, the _amount_ of work and the _time_ the work
+takes are different things. But where I may have recovered some of the time in
+overworking, I certainly gave up other things: fulfilment and excellence to
+name the top 2. As I've not been content, and have striven for more it's become
+clear that **wanting more** is itself a burden.
+
+Today marks the end of some income that I've been able to work for - not all of
+it, I'm extremely blessed in [[cat-autonomy-2-0]]. The facts are though that
+through the circumstances God has brought me recently, I'll be making less than
+50% of what I've been able to make over the last couple years... By God's grace
+we still have more than enough, and by his grace again today is a significant
+day for me to step through a doorway of contentment and officially realign my
+work priorities with the worldview Jesus has called me into.
+
+## Contentment and Work
+
+I have been sort of fighting off a belief that I'm on a literal mission from
+God in Caterpillar Autonomy... If someone could see my inner-monologue play out
+they'd certainly get Blues Brothers vibes...
+
+![On A Mission From God.mp4](https://cdn.statically.io/gh/pypeaday/images.pype.dev@main/blog-media/On%20A%20Mission%20From%20God%20%5BMKZSqd5Y8nA%5D.gif)
+
+I hope I'm not just reaching for some grand facetious meaning for the work I'm
+now doing to distract myself from the changes coming to my paycheck. It really
+feels to me like God has prepared me in many ways for the work that's in front
+me. I'm thankful for that preparation and now it seems like it's time to give
+up the desires for riches and focus on doing something more than closing
+tickets and supporting a small team of people.
+
+As God calls me to contentment in my personal life, I think he's also planning
+on blessing the work I'm doing. Earlier I said I have been very blessed by the
+work I have been able to do, but I don't know that God has blessed
+the work itself - much of what I've done was filled with mistakes you only
+learn by doing something the first time... Certainly in some ways he has
+blessed those things, but I see something "just bigger" in Cat Autonomy, and I
+think I'm here to play a real role in it
+
+!!! danger "maybe like Joseph in Egypt"
+
+    like I said - literal mission from God
+
+I've had to give-up some pay to play that role, but the Lord has taught (and is
+teaching) me that there's much more to work than a paycheck, more to life than money.
+
+It is easy, very easy, for me to roll out of this line-of-thinking, I've done
+it several times even while writing this... but I am sure contentment is
+something the Lord has for me. Today's significance is just a temporal
+milestone, a date that was approaching at a constant rate of change... The day
+is here, today's meditation is on contentment, and the Lord is doing a work in
+and through me. Amen.
