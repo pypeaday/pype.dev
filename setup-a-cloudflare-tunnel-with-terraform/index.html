@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Setup A Cloudflare Tunnel With Terraform</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="I am cooking up some stuff at home and want to put it on the interwebs, but I
+don&#x27;t want it on the same infra as my homelab. Now... I only have a server or" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Setup A Cloudflare Tunnel With Terraform | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251213115609_2fc160d8.png" />
+<meta property="og:url" content="https://pype.dev/setup-a-cloudflare-tunnel-with-terraform" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Setup A Cloudflare Tunnel With Terraform | Nic Payne" />
+<meta name="twitter:description" content="I am cooking up some stuff at home and want to put it on the interwebs, but I
+don&#x27;t want it on the same infra as my homelab. Now... I only have a server or" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251213115609_2fc160d8.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/setup-a-cloudflare-tunnel-with-terraform</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <div class="post-terminal__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    </div>
+<section class="post-terminal   ">
+    <figure class="post-terminal__media">
+        <div class="post-terminal__media-frame">
+            <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251213115609_2fc160d8.png" alt="Setup A Cloudflare Tunnel With Terraform cover image">
+        </div>
+    </figure>
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Setup A Cloudflare Tunnel With Terraform</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2025-12-12">
+            December 12, 2025
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/tofu/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tofu
+            </a>
+            <a href="https://pype.dev//tags/terraform/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #terraform
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>I am cooking up some stuff at home and want to put it on the interwebs, but I
+don't want it on the same infra as my homelab. Now... I only have a server or
+2, so to some degree it will be, but networking-wise I didn't want to funnel
+extra traffic through my reverse proxy.</p>
+<p>So, I'd heard about Cloudflare Tunnels - they sound like P2P VPN to me, but I
+know there's layers of the networking stack I'm blatantly ignoring. &quot;What the
+tunnel is&quot; isn't much the point - I'm here to show you how to set one up and
+get yourself a fancy <a href="https://app.mydomain.com">https://app.mydomain.com</a> for your web app running
+kind of wherever you want</p>
+<blockquote>
+<p>Example Repo linked at the bottom</p>
+</blockquote>
+<h2 id="requirements">Requirements <a class="header-anchor" href="#requirements"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<ol start="0">
+<li>Terraform or open-tofu. I currently use open-tofu but either would be fine.
+<code>brew install open-tofu</code> is a simple way to get going</li>
+<li>Cloudflare account with a domain</li>
+<li>API token with permissions:
+<ul>
+<li><code>Account:Cloudflare Tunnel:Edit</code></li>
+<li><code>Zone:DNS:Edit</code></li>
+</ul>
+</li>
+<li><code>cloudflared</code> (the example repo runs cloudflared in a docker compose stack)</li>
+</ol>
+<h2 id="tunnel">Tunnel <a class="header-anchor" href="#tunnel"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>The module is simple and has just a few resources:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>❯<span class="w"> </span>tofu<span class="w"> </span>state<span class="w"> </span>list
+module.tunnel.cloudflare_record.tunnel
+module.tunnel.cloudflare_tunnel_config.this
+module.tunnel.cloudflare_zero_trust_tunnel_cloudflared.this
+module.tunnel.random_id.tunnel_secret
+</pre></div>
+
+</pre>
+
+<p>We see there will be the a DNS record that tofu references by the key &quot;tunnel&quot;.
+There is a tunnel configuration resource, the tunnel resource itself, and
+finally the associated secret required for the cloudflared daemon that will run
+alongside your webapp.</p>
+<p>To get started you'll need to fill out the example <code>terraform.tfvars</code> file with
+your info:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="c1"># Copy to terraform.tfvars and fill in values</span>
+<span class="c1"># DO NOT commit terraform.tfvars to git</span>
+
+<span class="na">cloudflare_api_token</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-api-token-here&quot;</span>
+<span class="na">cloudflare_account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-account-id&quot;</span>
+<span class="na">cloudflare_zone_id</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;your-zone-id&quot;</span>
+<span class="na">domain</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;example.com&quot;</span>
+<span class="na">subdomain</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;app&quot;</span>
+<span class="na">tunnel_name</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;my-tunnel&quot;</span>
+<span class="na">origin_service</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://localhost:8000&quot;</span>
+</pre></div>
+
+</pre>
+
+<p>You can grab your account id and zone id from Cloudflare's dashboard for your
+domain. It's near the bottom of the Overview page</p>
+<p><img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251213113332_0e0f09b8.png" alt="20251213113332_0e0f09b8.png" /></p>
+<p>Then I presume you have a domain already, but if not hop over to namecheap to
+snag one and then register it with cloudflare so they can manage your DNS. I
+have terraform for this as well, a future blog post will combine this with a
+fuller terraform'd cloudflare setup for simple domain use cases</p>
+<p>Once you fill those out, hit it with the <code>tofu init</code> and <code>tofu plan</code> to see what's up</p>
+<blockquote>
+<p>NOTE: <code>terraform.tfvars</code> is automatically sourced by terraform/tofu, you can name the file differently and then pass <code>-var-file=myvars.tfvars</code> to the commands</p>
+</blockquote>
+<p>The initial plan should look something like this:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>OpenTofu<span class="w"> </span>used<span class="w"> </span>the<span class="w"> </span>selected<span class="w"> </span>providers<span class="w"> </span>to<span class="w"> </span>generate<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>execution<span class="w"> </span>plan.<span class="w"> </span>Resource<span class="w"> </span>actions<span class="w"> </span>are<span class="w"> </span>indicated<span class="w"> </span>with<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>symbols:
+<span class="w">  </span>+<span class="w"> </span>create
+
+OpenTofu<span class="w"> </span>will<span class="w"> </span>perform<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>actions:
+
+<span class="w">  </span><span class="c1"># module.tunnel.cloudflare_record.tunnel will be created</span>
+<span class="w">  </span>+<span class="w"> </span>resource<span class="w"> </span><span class="s2">&quot;cloudflare_record&quot;</span><span class="w"> </span><span class="s2">&quot;tunnel&quot;</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">allow_overwrite</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">comment</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Managed by Terraform - soonish-tunnel&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">content</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">created_on</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">hostname</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">id</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">metadata</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">modified_on</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">name</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;app&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">proxiable</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">proxied</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">ttl</span><span class="w">             </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nb">type</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;CNAME&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">value</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">zone_id</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;REDACTED&gt;&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">  </span><span class="c1"># module.tunnel.cloudflare_tunnel_config.this will be created</span>
+<span class="w">  </span>+<span class="w"> </span>resource<span class="w"> </span><span class="s2">&quot;cloudflare_tunnel_config&quot;</span><span class="w"> </span><span class="s2">&quot;this&quot;</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">account_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;REDACTED&gt;&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">id</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">tunnel_id</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+
+<span class="w">      </span>+<span class="w"> </span>config<span class="w"> </span><span class="o">{</span>
+<span class="w">          </span>+<span class="w"> </span>ingress_rule<span class="w"> </span><span class="o">{</span>
+<span class="w">              </span>+<span class="w"> </span><span class="nv">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;app.notifiq.net&quot;</span>
+<span class="w">              </span>+<span class="w"> </span><span class="nv">service</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http://localhost:8000&quot;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">          </span>+<span class="w"> </span>ingress_rule<span class="w"> </span><span class="o">{</span>
+<span class="w">              </span>+<span class="w"> </span><span class="nv">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;http_status:404&quot;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">  </span><span class="c1"># module.tunnel.cloudflare_zero_trust_tunnel_cloudflared.this will be created</span>
+<span class="w">  </span>+<span class="w"> </span>resource<span class="w"> </span><span class="s2">&quot;cloudflare_zero_trust_tunnel_cloudflared&quot;</span><span class="w"> </span><span class="s2">&quot;this&quot;</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">account_id</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;REDACTED&gt;&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">cname</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">id</span><span class="w">           </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;soonish-tunnel&quot;</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">secret</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>sensitive<span class="w"> </span>value<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">tunnel_token</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>sensitive<span class="w"> </span>value<span class="o">)</span>
+<span class="w">    </span><span class="o">}</span>
+
+<span class="w">  </span><span class="c1"># module.tunnel.random_id.tunnel_secret will be created</span>
+<span class="w">  </span>+<span class="w"> </span>resource<span class="w"> </span><span class="s2">&quot;random_id&quot;</span><span class="w"> </span><span class="s2">&quot;tunnel_secret&quot;</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">b64_std</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">b64_url</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">byte_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">32</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">dec</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">hex</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">      </span>+<span class="w"> </span><span class="nv">id</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="o">(</span>known<span class="w"> </span>after<span class="w"> </span>apply<span class="o">)</span>
+<span class="w">    </span><span class="o">}</span>
+
+Plan:<span class="w"> </span><span class="m">4</span><span class="w"> </span>to<span class="w"> </span>add,<span class="w"> </span><span class="m">0</span><span class="w"> </span>to<span class="w"> </span>change,<span class="w"> </span><span class="m">0</span><span class="w"> </span>to<span class="w"> </span>destroy.
+</pre></div>
+
+</pre>
+
+<p>As long as that looks good you to, then we <code>tofu apply</code> next (type <code>yes</code> when
+asked or pass <code>-auto-approve</code>)</p>
+<p>Afterwards <code>tofu state list</code> should show you the 4 resources, and if you go to
+your cloudflare zone's dashboard you should see the CNAME associated with the
+tunnel address</p>
+<p><img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20251213120004_d199e5fd.png" alt="20251213120004_d199e5fd.png" /></p>
+<h2 id="daemon">Daemon <a class="header-anchor" href="#daemon"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Run the compose stack or the binary itself. Get the token from terraform state with <code>tofu output -raw tunnel_token</code>.</p>
+<p><code>TUNNEL_TOKEN=$(tofu output -raw tunnel_token) docker compose up -d</code> will do you nicely</p>
+<p>Enjoy your tunnel!</p>
+<p><a href="https://github.com/pypeaday/example-terraform-cloudflare-tunnel">example repo</a></p>
+
+        </section>
+    </article>
+</section>        </div>
+    </main>
+</div>
+     </body>
+</html>
