@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Setup Remote MinIO S3 Backend Target for Litestream</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Intro I am starting to think through some patterns for replicating sqlite databases,
+exploring them, standardizing on schemas/models I use across projects, etc." />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Setup Remote MinIO S3 Backend Target for Litestream | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250805141839_ec0fa2fc.png" />
+<meta property="og:url" content="https://pype.dev/setup-remote-minio-s3-backend-target-for-litestream" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Setup Remote MinIO S3 Backend Target for Litestream | Nic Payne" />
+<meta name="twitter:description" content="Intro I am starting to think through some patterns for replicating sqlite databases,
+exploring them, standardizing on schemas/models I use across projects, etc." />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250805141839_ec0fa2fc.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/setup-remote-minio-s3-backend-target-for-litestream</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <div class="post-terminal__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    </div>
+<section class="post-terminal   ">
+    <figure class="post-terminal__media">
+        <div class="post-terminal__media-frame">
+            <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250805141839_ec0fa2fc.png" alt="Setup Remote MinIO S3 Backend Target for Litestream cover image">
+        </div>
+    </figure>
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Setup Remote MinIO S3 Backend Target for Litestream</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2025-08-05">
+            August 05, 2025
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/litestream/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #litestream
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <h2 id="intro">Intro <a class="header-anchor" href="#intro"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>I am starting to think through some patterns for replicating sqlite databases,
+exploring them, standardizing on schemas/models I use across projects, etc...
+Thanks to <a href="https://waylonwalker.com">Waylon</a> I know about <a class="wikilink" href="/litestream">litestream</a> and
+finally I started playing with it. Their
+<a href="https://litestream.io/getting-started/">quickstart</a> is good, but it assumes
+you'll run MinIO on the same machine you run litestream on.</p>
+<p>I, however, have MinIO setup in my homelab with the api endpoint accessible via
+DNS - <code>s3.mydomain.com</code>.</p>
+<p>Before starting - I realize I left the credential aspect out - Litestream
+explains how to setup API keys in MinIO for their application
+<a href="https://litestream.io/getting-started/#setting-up-minio">here</a></p>
+<p>Basically after generating the keys I set <code>LITESTREAM_ACCESS_KEY_ID</code> and <code>LITESTREAM_SECRET_ACCESS_KEY</code> as env vars</p>
+<p>So let's see what happens and then get to [the fix]</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>⬢ [devbox] ❯ litestream replicate quadtask-prod.db s3://s3.example.com/litestream/qt.db    
+2025/08/05 08:50:09 INFO litestream version=v0.3.13
+2025/08/05 08:50:09 INFO initialized db path=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db
+2025/08/05 08:50:09 INFO replicating to name=s3 type=s3 sync-interval=1s bucket=s3.example.com path=litestream/qt.db region=&quot;&quot; endpoint=&quot;&quot;
+2025/08/05 08:50:10 INFO sync: new generation db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db generation=209692854ccd85d5 reason=&quot;no generation exists&quot;
+2025/08/05 08:50:10 ERROR monitor error db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=s3 error=&quot;cannot lookup bucket region: InvalidAccessKeyId: The AWS Access Key Id you provided does not exist in our records.\n\tstatus code: 403, request id: ERHZD4RD61Y8ADMD, host id: dOjPn5j8Oa+mkwOqROXDvCdKNxzxG0B8JJOPtGXDZA7qKxwAWqaSXhGYzK2mkoJQV7hJhaoJcag=&quot;
+</pre></div>
+
+</pre>
+
+<p>So that <code>403</code> is pretty simple... my login is wrong... but wait...</p>
+<p><code>2025/08/05 08:50:09 INFO replicating to name=s3 type=s3 sync-interval=1s bucket=s3.example.com path=litestream/qt.db region=&quot;&quot; endpoint=&quot;&quot;</code></p>
+<p>Notice this line - <code>endpoint=&quot;&quot;</code>... so <code>s3://s3.example.com</code> was not the right replacement for <code>s3://mybkt.localhost:9000/target.db</code>. Also the inferred <code>bucket</code> is the entire <code>s3.example.com</code>...</p>
+<p>Oh! Well I didn't specify a bucket in the subdomain - I did it with a route on the URL...</p>
+<p>ok let's try <code>litestream replicate quadtask-prod.db s3://litestream.example.com/qt.db</code></p>
+<p>We got the same kind of error...</p>
+<p><code>2025/08/05 08:53:45 INFO replicating to name=s3 type=s3 sync-interval=1s bucket=litestream.example.com path=qt.db region=&quot;&quot; endpoint=&quot;&quot;</code></p>
+<p>This time the inferred bucket was <code>litestream.example.com</code>... ok that's consistent with above as well - so the endpoint is still wrong/null and the bucket inference is wrong...</p>
+<p>Turns out for Litestream, and probably many other tools that use s3-compatible storage, that there's an inference problem if the configuration leans on the shorthand <code>s3://</code> - <a href="https://github.com/benbjohnson/litestream/issues/398">see this GitHub issue</a> and <a href="https://github.com/benbjohnson/litestream/issues/219">this one about localhost</a>. There's a few options for using your own <code>s3.mydomain.example</code>.</p>
+<h2 id="the-fix">The Fix <a class="header-anchor" href="#the-fix"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>If you're familiar with the <code>awscli</code> then maybe you've heard of a config option <code>AWS_S3_ENDPOINT_URL</code> which allows you to use the boto sdk with s3-compatibile resources while still using the <code>s3://</code> shorthand. Litestream has a way to set this configuration right on config:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="nt">dbs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db</span>
+<span class="w">    </span><span class="nt">replicas</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3</span>
+<span class="w">        </span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">litestream</span>
+<span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s3.example.com</span><span class="w">  </span><span class="c1"># &lt;---- right here!</span>
+<span class="w">        </span><span class="nt">skip-verify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span><span class="w">  </span><span class="c1"># set to false if you have TLS and want more security</span>
+<span class="w">        </span><span class="c1"># note you acn set these sensitive values as env vars per the Litestream Quickstart</span>
+<span class="w">        </span><span class="c1"># access-key-id: &lt;ACCESS-KEY-ID&gt;</span>
+<span class="w">        </span><span class="c1"># secret-access-key: &lt;SECRET-ACCESS-KEY&gt;</span>
+</pre></div>
+
+</pre>
+
+<div class="admonition danger is-collapsible collapsible-open">
+<p class="admonition-title">UPDATE</p>
+<p>I added a <code>path</code> key to give the backups a folder basically on s3, so under &quot;bucket: listream&quot; I have &quot;path: <my desired path>&quot;</p>
+</div>
+<p>So with that config in place we can actually JUST <code>litestream replicate</code> from anywhere...</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>⬢<span class="w"> </span><span class="o">[</span>devbox<span class="o">]</span><span class="w"> </span>❯<span class="w"> </span>litestream<span class="w"> </span>replicate<span class="w">                                                      </span>
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:11.353-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span>litestream<span class="w"> </span><span class="nv">version</span><span class="o">=</span>v0.3.13
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:11.353-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;initialized db&quot;</span><span class="w"> </span><span class="nv">path</span><span class="o">=</span>/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:11.353-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;replicating to&quot;</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span>s3<span class="w"> </span><span class="nv">type</span><span class="o">=</span>s3<span class="w"> </span>sync-interval<span class="o">=</span>1s<span class="w"> </span><span class="nv">bucket</span><span class="o">=</span>litestream<span class="w"> </span><span class="nv">path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="nv">region</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span><span class="nv">endpoint</span><span class="o">=</span>s3.example.com
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:12.399-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;write snapshot&quot;</span><span class="w"> </span><span class="nv">db</span><span class="o">=</span>/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db<span class="w"> </span><span class="nv">replica</span><span class="o">=</span>s3<span class="w"> </span><span class="nv">position</span><span class="o">=</span>209692854ccd85d5/00000000:4152
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:12.489-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;snapshot written&quot;</span><span class="w"> </span><span class="nv">db</span><span class="o">=</span>/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db<span class="w"> </span><span class="nv">replica</span><span class="o">=</span>s3<span class="w"> </span><span class="nv">position</span><span class="o">=</span>209692854ccd85d5/00000000:4152<span class="w"> </span><span class="nv">elapsed</span><span class="o">=</span><span class="m">89</span>.994626ms<span class="w"> </span><span class="nv">sz</span><span class="o">=</span><span class="m">909437</span>
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:12.492-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;write wal segment&quot;</span><span class="w"> </span><span class="nv">db</span><span class="o">=</span>/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db<span class="w"> </span><span class="nv">replica</span><span class="o">=</span>s3<span class="w"> </span><span class="nv">position</span><span class="o">=</span>209692854ccd85d5/00000000:0
+<span class="nv">time</span><span class="o">=</span><span class="m">2025</span>-08-05T08:56:12.510-05:00<span class="w"> </span><span class="nv">level</span><span class="o">=</span>INFO<span class="w"> </span><span class="nv">msg</span><span class="o">=</span><span class="s2">&quot;wal segment written&quot;</span><span class="w"> </span><span class="nv">db</span><span class="o">=</span>/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db<span class="w"> </span><span class="nv">replica</span><span class="o">=</span>s3<span class="w"> </span><span class="nv">position</span><span class="o">=</span>209692854ccd85d5/00000000:0<span class="w"> </span><span class="nv">elapsed</span><span class="o">=</span><span class="m">17</span>.572784ms<span class="w"> </span><span class="nv">sz</span><span class="o">=</span><span class="m">4152</span>
+</pre></div>
+
+</pre>
+
+<div class="admonition success">
+<p class="admonition-title">It works!</p>
+<p>Notice that the endpoint is properly <a href="http://s3.example.com">s3.example.com</a>, and the bucket is litestream (the name of my taret bucket in MinIO)</p>
+</div>
+<blockquote>
+<p>You can use a local config with <code>-c config.yaml</code> or something if you want to avoid the global <code>/etc/litestream.yml</code></p>
+</blockquote>
+<h2 id="what-about-restore">What About Restore? <a class="header-anchor" href="#what-about-restore"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Should work just fine... Let's move the database on my host and see if I can use litestream to restore it</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>nic in quadtask/litestream   database-clean-up   ×21  ×2  ×9 via   v3.11.10(quadtask)   (dev) 󰒄 
+⬢ [devbox] ❯ mv ./source/quadtask-prod.db ./source/quadtask-prod.db.backup                 
+
+nic in quadtask/litestream   database-clean-up   ×21  ×2  ×9 via   v3.11.10(quadtask)   (dev) 󰒄 
+⬢ [devbox] ❯ litestream restore ./source/quadtask-prod.db              
+time=2025-08-05T09:06:25.826-05:00 level=INFO msg=&quot;restoring snapshot&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 path=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db.tmp
+time=2025-08-05T09:06:25.843-05:00 level=INFO msg=&quot;restoring wal files&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index_min=0 index_max=0
+time=2025-08-05T09:06:25.845-05:00 level=INFO msg=&quot;downloaded wal&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 elapsed=2.103514ms
+time=2025-08-05T09:06:25.856-05:00 level=INFO msg=&quot;applied wal&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 elapsed=10.871034ms
+time=2025-08-05T09:06:25.856-05:00 level=INFO msg=&quot;renaming database from temporary location&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod
+</pre></div>
+
+</pre>
+
+<p>The command <code>litestream restore &lt;db path&gt;</code> was confusing at first because I was trying to replicate to a new place, but couldn't get the config to line up. The general understanding here is DR I believe - so the configuration is relatively static and when you <code>restore</code> you are restoring a specific database, not just standing up a copy from a backup...</p>
+<div class="admonition note">
+<p class="admonition-title">But would we setup a copy from a backup?</p>
+<p>ie. restore to a different file?</p>
+</div>
+<p>Yes, but it's confusing - at least it was to me... it looks to me like litestream uses the path of a db as the identifier in the config, and you reference the config not by an object's name (if it has one) but by the <code>path</code>...</p>
+<p>So the command is <code>litestream restore -o &lt;output path&gt; &lt;db path&gt;</code>. This makes sense in light of the fact that the configuration is relative to this host - so <code>&lt;db path&gt;</code> being the path of the source db whose backup you are restoring from to <code>&lt;output path&gt;</code> makes some amount of sense... if I wanted to replicate to another machine, then THAT machine would need <code>/etc/litestream.yaml</code> and if the filesystem hierarchy was different then an appropriate <code>path</code> for the &quot;source&quot; of the db to replicate back to.</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>⬢ [devbox] ❯ litestream restore -o /tmp/db ./source/quadtask-prod.db          
+time=2025-08-05T09:09:04.784-05:00 level=INFO msg=&quot;restoring snapshot&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 path=/tmp/db.tmp
+time=2025-08-05T09:09:04.797-05:00 level=INFO msg=&quot;restoring wal files&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index_min=0 index_max=0
+time=2025-08-05T09:09:04.799-05:00 level=INFO msg=&quot;downloaded wal&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 elapsed=2.128594ms
+time=2025-08-05T09:09:04.800-05:00 level=INFO msg=&quot;applied wal&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod generation=209692854ccd85d5 index=0 elapsed=610.75µs
+time=2025-08-05T09:09:04.800-05:00 level=INFO msg=&quot;renaming database from temporary location&quot; db=/home/nic/projects/personal/quadtask/litestream/source/quadtask-prod.db replica=quadtask-prod
+</pre></div>
+
+</pre>
+
+
+        </section>
+    </article>
+</section>        </div>
+    </main>
+</div>
+     </body>
+</html>
