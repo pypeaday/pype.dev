@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Learning How To Agent</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Introduction &amp; Background I&#x27;ve been using AI tools for codegen for a few years now, but not super
+heavily. I either use the in-line copilot stuff, whic" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Learning How To Agent | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260203122549_4aa1f66d.png" />
+<meta property="og:url" content="https://pype.dev/learning-how-to-agent" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Learning How To Agent | Nic Payne" />
+<meta name="twitter:description" content="Introduction &amp; Background I&#x27;ve been using AI tools for codegen for a few years now, but not super
+heavily. I either use the in-line copilot stuff, whic" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260203122549_4aa1f66d.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/learning-how-to-agent</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <div class="post-terminal__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    </div>
+<section class="post-terminal   ">
+    <figure class="post-terminal__media">
+        <div class="post-terminal__media-frame">
+            <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260203122549_4aa1f66d.png" alt="Learning How To Agent cover image">
+        </div>
+    </figure>
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Learning How To Agent</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2026-02-03">
+            February 03, 2026
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/genai/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #genai
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <h2 id="introduction--background">Introduction &amp; Background <a class="header-anchor" href="#introduction--background"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>I've been using AI tools for codegen for a few years now, but not super
+heavily. I either use the in-line copilot stuff, which is like LSP on
+seteroids, or I have gone all the way to the other side of full on vibecoding
+with Windsurf. That's been fun enough, but not super fulfilling and at the end
+of that I either have a simple webapp that does what I want but I don't
+understand, or else a half-broken thing I tried to understand but couldn't
+prompt in the right direction.</p>
+<div class="admonition note">
+<p class="admonition-title">One Caveat</p>
+<p>My one caveat with Windsurf, which is a full IDE that I don't have a lot of comfortable navigation in due to all the Cascade keybindings clobbaring my own keymaps - is that with a HEAVY spec, it's done will with the Claude models at implementing a real idea I have. It's closer to vibe-engineering than vibe-coding, but that's my only instance, the rest of my Windsurf usage is &quot;make me a cool app - no mistakes&quot;</p>
+</div>
+<p>This year it feels like some tools exploded and
+I mentioned this in <a class="wikilink" href="/new-job-caterpillar-autonomy">new-job-caterpillar-autonomy</a>. I've been using
+<a href="https://opencode.ai">opencode</a> a lot over the last few weeks and have iterated
+many times already on a system of work that I'm trying to lean into for
+improving my efficiency.</p>
+<h2 id="the-problem-space">The Problem Space <a class="header-anchor" href="#the-problem-space"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>My desire for a great Developer Experience is years old now, shout out to
+ThePrimeagen for his <a href="https://frontendmasters.com/courses/developer-productivity-v2/">FEM
+course</a> and
+<a href="https://waylonwalker.com">Waylon Walker</a> for being a constant source of
+encouragement to be the best developer I can be. I sometimes (often) get
+tunnel-visioned on developer-productivity initiatives and lose the forest
+through the trees when ironing out a workflow - generally to find out I way
+over complicated the solution OR worse, started solving a problem I don't even
+have.</p>
+<h2 id="first-attempt-local-progress-tracker">First Attempt: Local Progress Tracker <a class="header-anchor" href="#first-attempt-local-progress-tracker"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Well that's where I've been for a few weeks... I'm building Nexus, my
+second-brain at work to collaborate with agents on the truckload of stuff I'm
+expected to get done. For a while now I've had a &quot;working-notes&quot; repo, which is
+basically a blog, built with markata and navigated via markdown-lsp, where I do
+like what I do here - take daily notes, track projects and status, and it gets
+built into a nice little website I can reference with my boss.</p>
+<p>Now that we have copilot in full-swing, I'm trying to integrate agents a bit
+more. Opencode has made this so nice - so many tools and modes of interaction,
+highly customizable interface but also an amazing default experience... So I
+was trying to lean into using agents and subagents for more work I started down
+the path of building out a progress tracker. I started with a simple &quot;skill&quot;
+that told the agent to put some info into a sqlite file, and even create the
+file and schema based on the work. This worked fine, but was specific to each
+repo (and actually each worktree I was in) and it was hard for me to get
+visibility into all the work my fleet of agents was doing. Now that's actually
+problem 1 - I don't have a fleet of agents, I had some terminal sessions going
+with opencode, but I got it in my head that I was going to have an army of
+Claude's on my computer, constantly and autonomously knocking out tickets and I
+needed to know who was doing what, where, when, and why..</p>
+<h2 id="nexus-v1--v2-the-over-engineering-phase">Nexus V1 &amp; V2: The Over-Engineering Phase <a class="header-anchor" href="#nexus-v1--v2-the-over-engineering-phase"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>So, I dropped the local &quot;progress tracker&quot; and jumped into a huge FastAPI
+project that I called Nexus. It was a python cli + api, with a server for
+centralized management. It presented a kanban board, had policy gates on
+&quot;plans&quot; being approved before work could start on an Epic (and therefore any
+child tickets). It has worktree tracking and automation, etc. It had a lot...
+it didn't all work, and it was hard to build the autonomous system... I wanted
+agentic feedback loops where <code>voidshaper</code> and I made epic plans for Epics (see the pun?) and then once the Plan was approved <code>star-commander</code> comes on the scene and makes tickets or checks tickets, depending on what's already ready to go it farmed out the work to <code>starsmith</code> (and variants for complexity) to build and then automatically calls in <code>recon-officer</code> and <code>qa-engineer</code> and at the end of it <code>gatekeeper</code> came in and
+approved or denied the changes. If denied - automatically start the loop again,
+tracking the work in Nexus, if approved - rebase and merge the branch, clean up
+the worktree, update the ticket, close it, and get working on the next thing
+that opens up. Ticket dependencies were in there, tracking stale agent
+sessions, clever routing of tasks to smaller models where appropriate.... you
+can see that I went too far too fast too hard.</p>
+<p><img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260203124603_d5948740.png" alt="20260203124603_d5948740.png" /></p>
+<p>Nexus went through 2 or 3 iterations of this feature set. I was building it with several constraints in mind - specifically at work. 1. rate-limiting on large models (so not just using opus for everything), 2. good stewardship (not burning down cities for docstrings - farm out that work to haiku or a -mini model), 3. Copilot support - even though I like to use opencode, I wanted to supper copilot cli and in vscode as a means to share this with my coworkers who were mostly using vscode, 4. agent sessions were dying so I needed some kind of liveness probe for manual intervention in sessions where maybe the vpn died and the agent lost network... stuff like this was on my mind - but you know what wasn't? actually doing some work... I was solving problems I don't have, but were fun to think about.</p>
+<h2 id="the-reality-check">The Reality Check <a class="header-anchor" href="#the-reality-check"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>So, what are my problems? I boiled them down to a few things...</p>
+<ol>
+<li>I want to manage my workstreams in workspaces - folders on my computer where I put git worktrees</li>
+<li>I want varying levels of ai automation in my workflows... some things could be handled by an agent fully autonmously, but most things I'm at least paired up, reviewing diffs still, doing research while working, etc.</li>
+<li>In those varying levels of automation, I wanted the same amount of task tracking to a centralized location</li>
+</ol>
+<p>And after 2 weeks of ADHD-driven hyper focus, and many iterations on Nexus,
+then Nexus V2.... what happened is that Nexus V2 died, and we say long live
+Nexus V3!</p>
+<h2 id="nexus-v3-the-pragmatic-pivot">Nexus V3: The Pragmatic Pivot <a class="header-anchor" href="#nexus-v3-the-pragmatic-pivot"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Nexus V3 is the same idea, but different approach... I'm leaning into opencode
+tooling specifically, dropping my care to support copilot given the lack of
+features. I'm using a few opencode <a href="https://opencode.ai/docs/plugins/">plugins</a>
+(<a href="https://github.com/kdcokenny/opencode-notify">opencode-notify</a> and
+<a href="https://github.com/kdcokenny/opencode-background-agents">opencode-background-agents</a>
+and a few <a href="https://opencode.ai/docs/commands/">commands</a>. Instead of building
+my own tracker, I'm using <a href="https://kanboard.org/">kanboard</a> because it's
+basically a feature-complete agile/sprint/kanban board that I use at home, has
+a simple plugin ecosystem for light customization, and solves practically every
+status-tracking problem I tried to build from the ground up initially - ticket
+dependencies/linkages, actions to change ticket colors for a simple intuitive
+UI based on state, easy columns and tagging configuration, a simple API and
+there's even an <a href="https://github.com/bivex/kanboard-mcp">mcp server</a>.</p>
+<p>So, I've given up on the full automation for now, although
+<a href="https://github.com/athal7/opencode-pilot">opencode-pilot</a> looks VERY PROMISING
+for this in the future. Today though, through some simple commands to give to
+agents for updating kanboard, I manually put them in worktrees, and they get to
+work - the tracking and human-in-the-loop model is going well for the work I
+need done.</p>
+<h2 id="lessons-learned">Lessons Learned <a class="header-anchor" href="#lessons-learned"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>I learned and relearned plenty of lessons on this over the last 2 weeks... Data
+models matter more than almost anything, well-defined workflows are required if
+you want agents to help you iterate, and not everything has to be a product...
+That last one's personal, but every time I have an idea I <strong>think</strong> is good,
+I'm sure it'll be something to share, but a good lesson for me is to just build
+the things I need for me, and <strong>eventually</strong> maybe it can be cleaned up to
+share, but when I start building something with anyone other than <strong>me</strong> in
+mind, I'm in for a long hard journey</p>
+<h2 id="current-state--future">Current State &amp; Future <a class="header-anchor" href="#current-state--future"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>So what's the summary? I don't think I know how to agent super well yet - but
+I'm trying to get better to stay on the forefront of my co-workers who I see
+using AI in simple and sometimes scary ways</p>
+<div class="admonition danger">
+<p class="admonition-title">Copilot x sudo</p>
+<p>Do not give copilot <code>sudo</code> on your CI server and say &quot;fix my problem&quot;... are you retarded???</p>
+</div>
+<p>I am not going hardcore with <a href="https://awesomeclaude.ai/ralph-wiggum">ralph
+wiggum</a> or
+<a href="https://github.com/steveyegge/gastown">gastown</a> - although those inspired
+Nexus v1 and v2, but I am dialing in my agentic workflow with some simple
+specialized agents, farming out work to subagents for context management,
+planning ahead of time to put appropriate context in a ticket, and getting
+close to having agents check out tickets, make worktrees, and do simple work by
+themselves (this was working in Nexus V2 but only intermittenly).</p>
+<p>Someday I'll open-source Nexus and share the configuration and workflow, for
+now it's private as I'm actually using it to build out what I want rather than
+trying to recreate gastown with a cool space theme.</p>
+
+        </section>
+    </article>
+</section>        </div>
+    </main>
+</div>
+     </body>
+</html>

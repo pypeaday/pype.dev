@@ -1,0 +1,115 @@
+<section class="post-terminal   ">
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Data Loading is a Huge Deal</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2026-04-08">
+            April 08, 2026
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/forge/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #forge
+            </a>
+            <a href="https://pype.dev//tags/rada/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #rada
+            </a>
+            <a href="https://pype.dev//tags/kedro/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #kedro
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>I've been thinking about the work I am doing and have to do in my role at Cat,
+in Cat Autonomy, building Forge (see <a class="wikilink" href="/forge-ahead">forge-ahead</a>). I feel like I have
+little revelations almost every day now, not that it means I'm writing
+something amazing and producing it really fast but there's just a whole suite
+of problems that different technologies solve at different levels and the more
+I become aware of the problems that exist, the more the existence of some
+solutions makes sense.</p>
+<div class="admonition note">
+<p class="admonition-title">The Problem Perspective</p>
+<p>I don't know if this is a real thinking technique or if I'm onto something
+novel(doubt) but I think a lot in terms of problems - &quot;what problem needs
+solving?&quot; and that's how I've come to prioritize my work, it's only been very
+recently that I've realized I do this and I think I should highlight it's very
+important to document the problem, otherwise every day you might try to solve a
+different problem but be working on the same code</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Problem Space</p>
+<p>Kedro solves a lot of these problems, so when making rada in Reman the problem
+space was already more contained and narrow, Forge's problem-space is much more
+vast</p>
+</div>
+<p>The one problem I'm really fixated on right now is data loading, the problem I
+need to solve is accessing data from a wide-variety of scripts/tools, without a
+framework or standard method/library of accessing data in the first place. I've
+seen lots of projects on GitHub claim to make data loading easier and I didn't
+quite understand what problem they were solving... one example to name is <a href="https://dlthub.com/">Data
+Load Tool</a>. I've seen similar ones I don't have the name
+for right now that claim to make it easy/fast to load data from s3, or ways to
+make s3 and a database both abstract in the user-experience for loading data.
+But I hadn't really understood why these tools existed. I have a lot of
+experience with <a href="https://dlthub.com/">Kedro</a> and their
+<a href="https://docs.kedro.org/en/latest/catalog-data/introduction/">DataCatalog</a>
+which provides a python object over a set of yamlfiles that makes it pretty
+simple to load and save data in a way that isolates I/O from the business
+logic. But what I didn't realize at the time how powerful that catalog was, the
+power of standard patterns and shared libraries. Now that I don't have it
+available to me, I'm quite aware of the absence.</p>
+<p>In my new role something I'm realizing is that for all the developers my team
+now supports, there isn't a canonical way to access data. When I was in Reman
+and working with kedro, the DataCatalog was the access pattern and so when I
+was developing a platform I never really had to think about it - it was an
+established pattern that I treated as a constraint and then built processes
+around it. I've been battling some mental block for weeks on Forge because of
+the lack of that canonical pattern, and as I've talked with other engineers it
+seems like the baseline assumption is that data is just available on a
+filesystem, but everyone's code loads data in different ways. On my small Reman
+team, with common patterns to build on, it was easy to make things cloud-native
+or shim in some devops to improve people's lives. But when everyone's doing
+their own thing, and everyone's &quot;own thing&quot; is very much built-on some rigid tribal
+patterns then it's hard to really move fast cause everyone isn't already moving
+in the same direction.</p>
+<p>That made me realize that the first problem Forge needed to solve was in
+providing a way for engineers to have filesystem-native data access in the
+Cloud, where we are S3-first in our storage philosophy. I didn't need to figure
+out a way for everyone to name a dataset, define the dataset in the first
+place, and give a nice <code>my_dataset.load</code> that worked in python, bash, cpp, and
+who knows what else.... I reframed the problem from &quot;how do engineers load up
+the data&quot; to &quot;how do engineers have access to the data&quot;. The requirements of
+the Cat Autonomy group was pretty simple: POSIX-compliant storage.</p>
+<p>My pathway to solving this problem is initially underway, I can't imagine it'll
+be too difficult to setup for FSx instances for teams and give them an api to
+run a Batch Job with the FSx mounted. From there, their code can load data from
+<code>/mnt/fsx/&lt;whatever&gt;</code> just like they otherwise could be doing locally. Or maybe
+FSx will let us setup mounts to very flexible mount points and their local
+scripts will &quot;just work&quot; :shrugs:. I don't know the exact shape, but after
+realizing the loading data is a big deal, I'm thankful I have a narrower
+problem to solve first.</p>
+<div class="admonition note">
+<p class="admonition-title">S3 Files</p>
+<p>Literally yesterday, AWS launched &quot;S3 Files&quot; offering an NFS filesystem service over buckets. I'm not sure if NFS is going to be a viable filesystem protocol for all of our use cases, but looks like we're not the only people who need the filesystem access patterns over S3.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">A Future Problem - Canonical Reference</p>
+<p>Another high-value thing Forge needs to solve is &quot;what is data&quot;. The data
+formats we have are not super simple, it's not just a set of SQL tables. We
+have files that relate to each other based on hard-filepath patterns, and those
+patterns are full of tribal knowledge and distributed processes. So a simple
+question like &quot;How do I use forge to access my data&quot; is hard. In Reman a data
+scientist would ask &quot;how do I use rada to access my data?&quot; and the answer is
+&quot;We use Kedro, and Kedro solved that problem for us via the Catalog&quot; but
+without Kedro, without 100% being in python (devs are also in embedded systems,
+cpp code, and more), without even consistent practices in the existing &quot;how do
+I access my data&quot; workflows, it's really impossible to systemetize and codify
+it. It is my next challenge to tackle though...</p>
+</div>
+
+        </section>
+    </article>
+</section>

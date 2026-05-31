@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Thoughts</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="My thoughts and streams of consciousness organized into barely coherent posts about things" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Thoughts | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/my-thoughts" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Thoughts | Nic Payne" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/my-thoughts</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header><section class="terminal-feed">
+    <div class="terminal-feed__chrome">
+        <header class="terminal-feed__header">
+            <div class="terminal-feed__lights">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="terminal-feed__path">
+                <span class="terminal-feed__prompt">nic@pype</span>
+                <span class="terminal-feed__dir">~/feeds/</span>
+            </div>
+            <div class="terminal-feed__meta">83 entries · rendered just now</div>
+        </header>
+        <div class="terminal-feed__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>        </div>
+        <div class="terminal-feed__body">
+            <ul id="feed" class="feed-grid" role="list">
+
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-878">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-12-03">2025-12-03</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // dev</p>
+                <h2 class="feed-card__title">💭 COLUMNS env var</h2>
+                    <p class="feed-card__description">Awesome awesome TIL with COLUMNS for some nicer terminal printouts for READMEs and such</p>
+                <div class="feed-card__tags">
+                        <span>#dev</span>
+                        <span>#terminal</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-871">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-11-22">2025-11-22</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">💭 Docker | Atuin Docs</h2>
+                    <p class="feed-card__description">A 2-fer... So I want to host atuin and share shell history across my machines on my tailnet I think... it's such a nice</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#upgrades</span>
+                        <span>#docker</span>
+                        <span>#ssh</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-856">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-10-28">2025-10-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // git</p>
+                <h2 class="feed-card__title">💭 You already have a git server: (Maurycy's blog)</h2>
+                    <p class="feed-card__description">Using my server's filesystem + ssh + git-hooks for the simplest self-hosted CI pipelines ever sounds like a pretty cool</p>
+                <div class="feed-card__tags">
+                        <span>#git</span>
+                        <span>#dev</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-831">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-09-08">2025-09-08</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // uv</p>
+                <h2 class="feed-card__title">💭 uv script management</h2>
+                    <p class="feed-card__description">Dang Waylon! Love these few lines... uv is great, been using it for environment and project requirements management bu</p>
+                <div class="feed-card__tags">
+                        <span>#uv</span>
+                        <span>#python</span>
+                        <span>#dev</span>
+                        <span>#tech</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-830">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-09-06">2025-09-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // engineering</p>
+                <h2 class="feed-card__title">💭 Engineering excellence starts on edge</h2>
+                    <p class="feed-card__description">I have become a huge DHH fan, maybe that means I'm just a basic bish but as I've become aware of who he has I haven't ye</p>
+                <div class="feed-card__tags">
+                        <span>#engineering</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-812">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-26">2025-08-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // swarm</p>
+                <h2 class="feed-card__title">💭 Docker Swarm Still Rocks</h2>
+                    <p class="feed-card__description">Apparently docker swarm is still a thing and now I have to try it</p>
+                <div class="feed-card__tags">
+                        <span>#swarm</span>
+                        <span>#containers</span>
+                        <span>#docker</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-804">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-19">2025-08-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // pages</p>
+                <h2 class="feed-card__title">💭 Codeberg Pages | Codeberg Documentation</h2>
+                    <p class="feed-card__description">Forgejo has a github pages like feature... this might be nice to use sometime as I try to lean into forgejo, but the las</p>
+                <div class="feed-card__tags">
+                        <span>#pages</span>
+                        <span>#website</span>
+                        <span>#static-site</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-803">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-19">2025-08-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // static-site</p>
+                <h2 class="feed-card__title">💭 Use Traefik 2 with Nginx, Apache, or CaddyServer to Serve Stat...</h2>
+                    <p class="feed-card__description">Looks like a nice way to use git to back static sites, which I already do with my blog but this would be a simple way to</p>
+                <div class="feed-card__tags">
+                        <span>#static-site</span>
+                        <span>#traefik</span>
+                        <span>#website</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-797">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-14">2025-08-14</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // forjeo</p>
+                <h2 class="feed-card__title">💭 Setting up a Self-Hosted Forgejo Actions Runner with Docker Co...</h2>
+                    <p class="feed-card__description">As I explore forgjeo this post has a title that sounds very promising! I would like everything to be a docker compose st</p>
+                <div class="feed-card__tags">
+                        <span>#forjeo</span>
+                        <span>#self-host</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-781">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-05">2025-08-05</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // fly.ip</p>
+                <h2 class="feed-card__title">💭 Static egress IPs for machines - Fresh Produce - Fly.io</h2>
+                    <p class="feed-card__description">I'm starting to setup litestream for replicating sqlite dbs of my apps to my self-hosted MinIO instance... only issue is</p>
+                <div class="feed-card__tags">
+                        <span>#fly.ip</span>
+                        <span>#egress</span>
+                        <span>#reverse-proxy</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-778">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-04">2025-08-04</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // notifications</p>
+                <h2 class="feed-card__title">💭 caronc/apprise-api: A lightweight REST framework that wraps th...</h2>
+                    <p class="feed-card__description">I just stood this up and I am very excited about how easy it was to setup and get a message through my gotify instance a</p>
+                <div class="feed-card__tags">
+                        <span>#notifications</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-777">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-08-03">2025-08-03</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // software</p>
+                <h2 class="feed-card__title">💭 The Remarkable Incompetence At The Heart Of Tech</h2>
+                    <p class="feed-card__description">What a great post... the majority of my tech experience has been at a large non-tech company and this just couldn't be m</p>
+                <div class="feed-card__tags">
+                        <span>#software</span>
+                        <span>#teams</span>
+                        <span>#salesforce</span>
+                        <span>#snowflake</span>
+                        <span>#saas</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-770">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-31">2025-07-31</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // productivity</p>
+                <h2 class="feed-card__title">💭 Kinopio</h2>
+                    <p class="feed-card__description">kinopio is a pretty sweet map-mapping type of application. It's localfirst, you can run it for free with state kept loca</p>
+                <div class="feed-card__tags">
+                        <span>#productivity</span>
+                        <span>#mind-map</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-764">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-25">2025-07-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">💭 My Ultimate Self-hosting Setup</h2>
+                    <p class="feed-card__description">great post on self-hosting. I think in a lot of similar ways and had a siar journey. There's things I want to accomplish</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-758">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-21">2025-07-21</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // ai</p>
+                <h2 class="feed-card__title">💭 It's rude to show AI output to people | Alex Martsinovich</h2>
+                    <p class="feed-card__description">Great read on LLM output, and the slop that's already been dumped into the internet. I've become a pretty heavy AI user</p>
+                <div class="feed-card__tags">
+                        <span>#ai</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-757">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-19">2025-07-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // llm</p>
+                <h2 class="feed-card__title">💭 Anthropic Is Bleeding Out</h2>
+                    <p class="feed-card__description">Ah... so things are rough on the business side according to Edward Zitron An intere|ing note is that anthropic models m</p>
+                <div class="feed-card__tags">
+                        <span>#llm</span>
+                        <span>#anthropic</span>
+                        <span>#ai</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-753">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-18">2025-07-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // windsurf</p>
+                <h2 class="feed-card__title">💭 Thread by @windsurf_ai on Thread Reader App – Thread Reader App</h2>
+                    <p class="feed-card__description">Claude 4 is pretty impressive, I'm enjoying using it at work and now I'll certainly burn some credits at home. Also I l</p>
+                <div class="feed-card__tags">
+                        <span>#windsurf</span>
+                        <span>#rss</span>
+                        <span>#threadreader</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-752">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-17">2025-07-17</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // ai</p>
+                <h2 class="feed-card__title">💭 AI INTERVIEWS ARE HERE!! SO I TROLLED ONE TO SHOW YOU... - You...</h2>
+                    <p class="feed-card__description">AI has provided a lot of value in my life for sure... but it's still not my favorite piece of technology, and the nearis</p>
+                <div class="feed-card__tags">
+                        <span>#ai</span>
+                        <span>#josh-fluke</span>
+                        <span>#interview</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-749">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-13">2025-07-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // agile</p>
+                <h2 class="feed-card__title">💭 Agile Was Never Your Problem Pt 1/2 | The Cynical Developer</h2>
+                    <p class="feed-card__description">Love this post - feels like it vindicates a lot of my opinions (that I've been pretty loud about professionally). I love</p>
+                <div class="feed-card__tags">
+                        <span>#agile</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-748">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-12">2025-07-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // windsurf</p>
+                <h2 class="feed-card__title">💭 OpenAI’s Windsurf deal is off — and Windsurf’s CEO is going to...</h2>
+                    <p class="feed-card__description">Welp I'm not upset the OpenAI deal fell through (I mean probably not great for those at Codeium, but I don't want these</p>
+                <div class="feed-card__tags">
+                        <span>#windsurf</span>
+                        <span>#ai</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-746">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-11">2025-07-11</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // docker</p>
+                <h2 class="feed-card__title">💭 Docker Brings Compose to the AI Agent Era | Docker</h2>
+                    <p class="feed-card__description">Seems like docker is leaning harder into compose - which is great for me as a heavy compose user. I had heard about some</p>
+                <div class="feed-card__tags">
+                        <span>#docker</span>
+                        <span>#ai</span>
+                        <span>#homelab</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-745">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-11">2025-07-11</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // systemd</p>
+                <h2 class="feed-card__title">💭 Tyblog | systemd has been a complete, utter, unmitigated success</h2>
+                    <p class="feed-card__description">I found this post on systemd this morning, and although I've been a Linux user for around 6 years now, there's some leve</p>
+                <div class="feed-card__tags">
+                        <span>#systemd</span>
+                        <span>#linux</span>
+                        <span>#blog</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-740">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-08">2025-07-08</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // nas</p>
+                <h2 class="feed-card__title">💭 restic · Backups done right!</h2>
+                    <p class="feed-card__description">Welp, I need to be backing up my desktop home directory, specifically a directory of docker volume data... I thought dup</p>
+                <div class="feed-card__tags">
+                        <span>#nas</span>
+                        <span>#homelab</span>
+                        <span>#backups</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-739">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-08">2025-07-08</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // lazygit</p>
+                <h2 class="feed-card__title">💭 Add confirmation for hard reset by stefanhaller · Pull Request...</h2>
+                    <p class="feed-card__description">I float between lazygit and gitui still for my terminal-based git flow and I want to lean into lazygit more fully. One i</p>
+                <div class="feed-card__tags">
+                        <span>#lazygit</span>
+                        <span>#git</span>
+                        <span>#github</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-737">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-07">2025-07-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">💭 HomeBox</h2>
+                    <p class="feed-card__description">I stumbled onto homebox this morning scrolling a newsletter and it looks like something I've been lightly thinking about</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#asset-management</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-736">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-06">2025-07-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // k8s</p>
+                <h2 class="feed-card__title">💭 postmarketOS // v24.06: The One With Over 250 Devices</h2>
+                    <p class="feed-card__description">This is the OS you can install onto an old phone to run linux on it - using this OS you could set-up a cluster of phones</p>
+                <div class="feed-card__tags">
+                        <span>#k8s</span>
+                        <span>#mobile</span>
+                        <span>#</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-735">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-06">2025-07-06</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // k8s</p>
+                <h2 class="feed-card__title">💭 Self-Hosting A Cluster On Old Phones | Hackaday</h2>
+                    <p class="feed-card__description">Came across a blog and article on using a mobile OS to self-host a cluster on old phones... I happen to keep several old</p>
+                <div class="feed-card__tags">
+                        <span>#k8s</span>
+                        <span>#linux</span>
+                        <span>#android</span>
+                        <span>#homelab</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-732">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-04">2025-07-04</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // uv</p>
+                <h2 class="feed-card__title">💭 Build backend | uv</h2>
+                    <p class="feed-card__description">uv build backend ready for production! Dang... I need to visit my hatch builds, I love hatch's simplicity specifically w</p>
+                <div class="feed-card__tags">
+                        <span>#uv</span>
+                        <span>#python</span>
+                        <span>#dev</span>
+                        <span>#tech</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-730">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-02">2025-07-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // kanboard</p>
+                <h2 class="feed-card__title">💭 TimoStahl/kanboard_plugin_bigboard: A Kanboard that can displa...</h2>
+                    <p class="feed-card__description">I use kanboard to keep myself focused at home - it's great because it's simple enough but does have complex features (th</p>
+                <div class="feed-card__tags">
+                        <span>#kanboard</span>
+                        <span>#productivity</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-729">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-02">2025-07-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // blog</p>
+                <h2 class="feed-card__title">💭 { TechDufus } | Blog</h2>
+                    <p class="feed-card__description">Just came across TechDufus today... love his blog style... it's beautiful... definitely not gonna potentially rip this o</p>
+                <div class="feed-card__tags">
+                        <span>#blog</span>
+                        <span>#todo</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-728">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-02">2025-07-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // todo</p>
+                <h2 class="feed-card__title">💭 { TechDufus } | Building a Talos Kubernetes Homelab with Terra...</h2>
+                    <p class="feed-card__description">Caught this blog post from Waylon - I added this guy to my RSS feed to star this post. I have tried talos with terraform</p>
+                <div class="feed-card__tags">
+                        <span>#todo</span>
+                        <span>#review</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-727">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-07-02">2025-07-02</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // second-brain</p>
+                <h2 class="feed-card__title">💭 Also done with second braining</h2>
+                    <p class="feed-card__description">Oddly enough I am just now really getting into the second brain idea... a zettlekasten has been taking shape in my life</p>
+                <div class="feed-card__tags">
+                        <span>#second-brain</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-722">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-27">2025-06-27</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // python</p>
+                <h2 class="feed-card__title">💭 Switching pip to uv in a Dockerized Flask / Django App — Nick ...</h2>
+                    <p class="feed-card__description">It's nice to see uv gaining popularity in so many places - and replacing vanilla pip with uv in containerized environmen</p>
+                <div class="feed-card__tags">
+                        <span>#python</span>
+                        <span>#pip</span>
+                        <span>#uv</span>
+                        <span>#dev</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-721">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-26">2025-06-26</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // webdev</p>
+                <h2 class="feed-card__title">💭 Containers are available in public beta for simple, global, an...</h2>
+                    <p class="feed-card__description">I've been learning a lot just about basic web-development as I work on my blog. I'm not actively learning the ins and ou</p>
+                <div class="feed-card__tags">
+                        <span>#webdev</span>
+                        <span>#cloudflare</span>
+                        <span>#containers</span>
+                        <span>#todo</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-720">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-25">2025-06-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // reflection</p>
+                <h2 class="feed-card__title">💭 Genesis 1 and Its ANE Polemic, Part 2 - Dr. Michael Heiser</h2>
+                    <p class="feed-card__description">I'm preparing for a conversation on Genesis 1 this morning, and so I of course wanted to read through a few of Mike's ol</p>
+                <div class="feed-card__tags">
+                        <span>#reflection</span>
+                        <span>#heiser</span>
+                        <span>#ane</span>
+                        <span>#genesis</span>
+                        <span>#todo</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-719">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-25">2025-06-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // ai</p>
+                <h2 class="feed-card__title">💭 Notes – 06:11 Sun 22 Jun 2025 – David Bushell – Web Dev (UK)</h2>
+                    <p class="feed-card__description">I see that most of the tech world, at least in public, leans left... which is fine. I think politically I'd have leaned</p>
+                <div class="feed-card__tags">
+                        <span>#ai</span>
+                        <span>#politics</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-713">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-23">2025-06-23</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // ai</p>
+                <h2 class="feed-card__title">💭 Copilot Instructions</h2>
+                    <p class="feed-card__description">I have tried a few different cursorrules/windsurfrules with windsurf, but I didn't even know you could give copilot cust</p>
+                <div class="feed-card__tags">
+                        <span>#ai</span>
+                        <span>#copilot</span>
+                        <span>#prompt</span>
+                        <span>#agentic</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-712">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-22">2025-06-22</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // firefox</p>
+                <h2 class="feed-card__title">💭 You asked, we built it: Firefox tab groups are here</h2>
+                    <p class="feed-card__description">I stumbled into tab groups today when rearranging my tabs in firefox while bouncing between a few different things this</p>
+                <div class="feed-card__tags">
+                        <span>#firefox</span>
+                        <span>#organization</span>
+                        <span>#browser</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-711">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-22">2025-06-22</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // n8n</p>
+                <h2 class="feed-card__title">💭 Control Your n8n Instance Remotely with Telegram Bot Commands ...</h2>
+                    <p class="feed-card__description">I'm doing a lot of thinking and brainstorming about how I want to run some pipelines I have in my head, at home... thing</p>
+                <div class="feed-card__tags">
+                        <span>#n8n</span>
+                        <span>#homelab</span>
+                        <span>#todo</span>
+                        <span>#telegram</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-710">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-20">2025-06-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // k8s</p>
+                <h2 class="feed-card__title">💭 matduggan.com/what-would-a-kubernetes-2-0-look-like/</h2>
+                    <p class="feed-card__description">This article was longer than I had time to really consume but a heading caught my eye that I wanted to agree with - the</p>
+                <div class="feed-card__tags">
+                        <span>#k8s</span>
+                        <span>#tech</span>
+                        <span>#devops</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-709">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-20">2025-06-20</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">💭 pypeaday/whose-turn-is-it: Simple uv webapp to determine order...</h2>
+                    <p class="feed-card__description">We pray together as a family every night, but every single flipping night my daughter's fight about the order we go in..</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#tech</span>
+                        <span>#reflection</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-707">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-19">2025-06-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // layoffs</p>
+                <h2 class="feed-card__title">💭 Microsoft planning thousands of job cuts aimed at salespeople,...</h2>
+                    <p class="feed-card__description">more cuts for the sake of AI investment... this is getting out of hand. I'm thankful that I don't work in a field that w</p>
+                <div class="feed-card__tags">
+                        <span>#layoffs</span>
+                        <span>#microsoft</span>
+                        <span>#tech</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-706">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-19">2025-06-19</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // github</p>
+                <h2 class="feed-card__title">💭 microsandbox/microsandbox: Self-Hosted Plaform for Secure Exec...</h2>
+                    <p class="feed-card__description">There's a ton of AI related tools I want to play with, and there are several I run in docker pretty willy nilly. However</p>
+                <div class="feed-card__tags">
+                        <span>#github</span>
+                        <span>#ai</span>
+                        <span>#llm</span>
+                        <span>#security</span>
+                        <span>#sandbox</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-705">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-18">2025-06-18</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // just</p>
+                <h2 class="feed-card__title">💭 neverjust</h2>
+                    <p class="feed-card__description">Your "just" comes from seeing only the surface of the problem. Like an iceberg, what's visible is just a fraction This</p>
+                <div class="feed-card__tags">
+                        <span>#just</span>
+                        <span>#dev</span>
+                        <span>#tech</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-701">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-17">2025-06-17</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // digital-garden</p>
+                <h2 class="feed-card__title">💭 A Brief History & Ethos of the Digital Garden</h2>
+                    <p class="feed-card__description">I am interested in the topic of "digital gardening", and I didn't realize how long the term has been around. As a relati</p>
+                <div class="feed-card__tags">
+                        <span>#digital-garden</span>
+                        <span>#blog</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-700">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-16">2025-06-16</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // aws</p>
+                <h2 class="feed-card__title">💭 Cross Account AWS Security Group ID Reference</h2>
+                    <p class="feed-card__description">I needed to update some ingress rules across several AWS accounts and ran into an issue when I had to reference a securi</p>
+                <div class="feed-card__tags">
+                        <span>#aws</span>
+                        <span>#infrastructure</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-699">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-16">2025-06-16</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // spacelift</p>
+                <h2 class="feed-card__title">💭 Failed to load state: unsupported checkable object kind var - ...</h2>
+                    <p class="feed-card__description">I have spacelift stacks managed with open tofu and stacks managed with terraform... Due to this very issue I think, I ra</p>
+                <div class="feed-card__tags">
+                        <span>#spacelift</span>
+                        <span>#terraform</span>
+                        <span>#infrastructure</span>
+                        <span>#open-tofu</span>
+                        <span>#tofu</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-698">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-16">2025-06-16</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // snowflake</p>
+                <h2 class="feed-card__title">💭 Snowflake Status - Certificate Authority Update for AWS Regions</h2>
+                    <p class="feed-card__description">A recent Snowflake issue borked some old pipelines - thankfully it appears to be a simple fix. Just goes to show you tha</p>
+                <div class="feed-card__tags">
+                        <span>#snowflake</span>
+                        <span>#tech</span>
+                        <span>#python</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-697">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-16">2025-06-16</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // blog</p>
+                <h2 class="feed-card__title">💭 Visualizing My Blog’s Internal Links - Jim Nielsen’s Blog</h2>
+                    <p class="feed-card__description">Someday I will build a thing to see the relationship in my posts and notes. Right now I'm working on writing consistentl</p>
+                <div class="feed-card__tags">
+                        <span>#blog</span>
+                        <span>#mindmap</span>
+                        <span>#links</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-696">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-16">2025-06-16</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // stable-diffusion</p>
+                <h2 class="feed-card__title">💭 Stable Diffusion QR Code 101</h2>
+                    <p class="feed-card__description">My brother asked me to generate some QR codes for his link page that I manage. It's been a long time since I've used SD</p>
+                <div class="feed-card__tags">
+                        <span>#stable-diffusion</span>
+                        <span>#qr</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-691">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-13">2025-06-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // dhh</p>
+                <h2 class="feed-card__title">💭 Normal boyhood is ADHD</h2>
+                    <p class="feed-card__description">I may want to write a longer post about this or just capture some quick thoughts but I appreciate DHH's take here.... AD</p>
+                <div class="feed-card__tags">
+                        <span>#dhh</span>
+                        <span>#adhd</span>
+                        <span>#mental-health</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-690">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-13">2025-06-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // proton</p>
+                <h2 class="feed-card__title">💭 "We would be less confidential than Google" – Proton threatens...</h2>
+                    <p class="feed-card__description">I've been a proton user for several years now, and pay a decently hefty subscription fee for some of their services that</p>
+                <div class="feed-card__tags">
+                        <span>#proton</span>
+                        <span>#email</span>
+                        <span>#security</span>
+                        <span>#privacy</span>
+                        <span>#tech</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-689">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-13">2025-06-13</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // security</p>
+                <h2 class="feed-card__title">💭 Exploiting Copilot AI for SharePoint | Pen Test Partners</h2>
+                    <p class="feed-card__description">In hindsight this vulnerability isn't even that clever, hopefully the share holders of the companies that rushed to thro</p>
+                <div class="feed-card__tags">
+                        <span>#security</span>
+                        <span>#infosec</span>
+                        <span>#sharepoint</span>
+                        <span>#microsoft</span>
+                        <span>#ai</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-688">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-12">2025-06-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // blog</p>
+                <h2 class="feed-card__title">💭 slash pages</h2>
+                    <p class="feed-card__description">Waylon's mentioned slash pages before, but as I work on building my blog again and writing more regularly thanks to "tho</p>
+                <div class="feed-card__tags">
+                        <span>#blog</span>
+                        <span>#slash-pages</span>
+                        <span>#til</span>
+                        <span>#todo</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-687">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-12">2025-06-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // wealth</p>
+                <h2 class="feed-card__title">💭 The Meaning of “Mammon” in the Bible | Matthew 6:24</h2>
+                    <p class="feed-card__description">I spend a fair amount of time thinking about the future, planning and saving, making sure to the best of my ability and</p>
+                <div class="feed-card__tags">
+                        <span>#wealth</span>
+                        <span>#faith</span>
+                        <span>#bible-project</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack feed-card--faith  feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-686">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-12">2025-06-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // faith</p>
+                <h2 class="feed-card__title">💭 N.T. Wright on The Unseen Realm & Heiser - YouTube</h2>
+                    <p class="feed-card__description">I don't write enough short thoughts on theology stuff, I'm usually trying to have some longer thought to unpack or to su</p>
+                <div class="feed-card__tags">
+                        <span>#faith</span>
+                        <span>#heiser</span>
+                        <span>#nt-wright</span>
+                        <span>#divine-council</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-685">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-11">2025-06-11</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // llm</p>
+                <h2 class="feed-card__title">💭 qwen3</h2>
+                    <p class="feed-card__description">I really don't know much about every self-hostable LLM out there... so much as happened. I am blessed at home with a pre</p>
+                <div class="feed-card__tags">
+                        <span>#llm</span>
+                        <span>#ollama</span>
+                        <span>#homelab</span>
+                        <span>#qwen</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-full   " data-template="blog-post">
+    <a class="feed-card__link" href="/thoughts">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">blog-post</span>
+            <time datetime="2025-06-09">2025-06-09</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // thoughts</p>
+                <h2 class="feed-card__title">Thoughts</h2>
+                    <p class="feed-card__description">Thoughts My thoughts are found at [my thoughts feed](/my-thoughts) [thoughts](https://thoughts.waylonwalker.com) was built by Waylon and is a place where I drop</p>
+                <div class="feed-card__tags">
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+                <figure class="feed-card__media">
+                    <img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20250703143637_a75cf485.png" alt="Thoughts cover" loading="lazy">
+                </figure>
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-682">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-09">2025-06-09</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // zsa</p>
+                <h2 class="feed-card__title">💭 daily challenge leaderboard | typ.ing</h2>
+                    <p class="feed-card__description">typ.ing is like monkeytype to a degree. it's made by ZSA, who makes my keyboard, and I love the idea of a simple trainin</p>
+                <div class="feed-card__tags">
+                        <span>#zsa</span>
+                        <span>#typing</span>
+                        <span>#keyboard</span>
+                        <span>#challenge</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-680">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-09">2025-06-09</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // rss</p>
+                <h2 class="feed-card__title">💭 News - Apps - App Store - Nextcloud</h2>
+                    <p class="feed-card__description">I just started using FreshRSS to get familiar with subscribing to RSS feeds and leaning into that as opposed to social m</p>
+                <div class="feed-card__tags">
+                        <span>#rss</span>
+                        <span>#news</span>
+                        <span>#nextcloud</span>
+                        <span>#homelab</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-679">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-09">2025-06-09</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // podcast</p>
+                <h2 class="feed-card__title">💭 ELEMENT.FM - unlimited podcast hosting</h2>
+                    <p class="feed-card__description">I heard about element.fm as a possible self-hosted podcast solution. They also have a service that looks pretty nice and</p>
+                <div class="feed-card__tags">
+                        <span>#podcast</span>
+                        <span>#self-hosted</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-678">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-08">2025-06-08</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // pycon</p>
+                <h2 class="feed-card__title">💭 Keynote Speaker - Cory Doctorow - YouTube</h2>
+                    <p class="feed-card__description">What a great talk - will pull this thought into a post someday but the guy hits like 9 out of 10 on this one, great stuf</p>
+                <div class="feed-card__tags">
+                        <span>#pycon</span>
+                        <span>#keynote</span>
+                        <span>#economics</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-670">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-07">2025-06-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // linux</p>
+                <h2 class="feed-card__title">💭 Linux Explained: What is The Linux Kernel? - YouTube</h2>
+                    <p class="feed-card__description">I'm getting sucked into the Linux is a kernel not an operating system crowd because tonight I realized I couldn't descri</p>
+                <div class="feed-card__tags">
+                        <span>#linux</span>
+                        <span>#youtube</span>
+                        <span>#kernel</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-669">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-06-07">2025-06-07</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 What are these 100.x.y.z addresses? · Tailscale Docs</h2>
+                    <p class="feed-card__description">I have had serious issues with a whitelist I set in my traefik config and then reaching some services on my tailnet... t</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-643">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-05-25">2025-05-25</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // open-webui</p>
+                <h2 class="feed-card__title">💭 SearXNG | Open WebUI</h2>
+                    <p class="feed-card__description">I've been meaning to set searxng for a while - it comes out of the box with khoj but I want an instance for open-webui a</p>
+                <div class="feed-card__tags">
+                        <span>#open-webui</span>
+                        <span>#search</span>
+                        <span>#ai</span>
+                        <span>#self-hosted</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-607">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-606">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-605">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-604">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-603">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-602">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-601">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-600">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-599">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-04-28">2025-04-28</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // tailscale</p>
+                <h2 class="feed-card__title">💭 Installing Tailscale on JetKVM | Medium</h2>
+                    <p class="feed-card__description">My jetKVM is a flipping dream - plug and play kvm that worked out of the box. I want to put tailscale on it so I can hit</p>
+                <div class="feed-card__tags">
+                        <span>#tailscale</span>
+                        <span>#jetkvm</span>
+                        <span>#kvm</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-528">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-01-12">2025-01-12</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // self-host</p>
+                <h2 class="feed-card__title">💭 Self-Hosting selfh.st/icons With Git-Sync</h2>
+                    <p class="feed-card__description">I like a nice icon for dashboards I've put together and having a convenient way to load them up off line would be nice</p>
+                <div class="feed-card__tags">
+                        <span>#self-host</span>
+                        <span>#icons</span>
+                        <span>#dashboard</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-504">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-01-04">2025-01-04</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // argocd k8s</p>
+                <h2 class="feed-card__title">💭 Mastering Argo CD image updater with Helm: a complete configur...</h2>
+                    <p class="feed-card__description">image updater is a great little tool that I'm using at work and I want to use it in the best way. I'll come back to this</p>
+                <div class="feed-card__tags">
+                        <span>#argocd k8s</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-498">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-01-03">2025-01-03</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // pilgrims-creek</p>
+                <h2 class="feed-card__title">💭 Craig</h2>
+                    <p class="feed-card__description">Craig is a discord bot to do multi-track recording, seems like a super easy way to get started with a podcast where the</p>
+                <div class="feed-card__tags">
+                        <span>#pilgrims-creek</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-491">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-01-01">2025-01-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // linux.swap</p>
+                <h2 class="feed-card__title">💭 memory - Check which processes are eating swap on Linux? - Sup...</h2>
+                    <p class="feed-card__description">I often max my swap on all my machines, and I still have no idea what I'm dong different than anyone else. But using to</p>
+                <div class="feed-card__tags">
+                        <span>#linux.swap</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-490">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2025-01-01">2025-01-01</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // llm</p>
+                <h2 class="feed-card__title">💭 🏡 Home | Open WebUI</h2>
+                    <p class="feed-card__description">I've been using openwebui at home, mostly with llama3.2, to do some basic things - meal planning and short script genera</p>
+                <div class="feed-card__tags">
+                        <span>#llm</span>
+                        <span>#ai</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-480">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2024-12-30">2024-12-30</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // k8s</p>
+                <h2 class="feed-card__title">💭 Do you really need Kubernetes?</h2>
+                    <p class="feed-card__description">The other shoe just dropped</p>
+                <div class="feed-card__tags">
+                        <span>#k8s</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-479">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2024-12-29">2024-12-29</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // homelab</p>
+                <h2 class="feed-card__title">💭 audiobookshelf</h2>
+                    <p class="feed-card__description">Audiobookshelf looks like a solid competitor for booksonic. I've liked the simple subsonic api driven nature of booksoni</p>
+                <div class="feed-card__tags">
+                        <span>#homelab</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-477">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2024-12-29">2024-12-29</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // ai</p>
+                <h2 class="feed-card__title">💭 Assistants API overview - OpenAI API</h2>
+                    <p class="feed-card__description">OpenAI assistants seem like a sweet idea... I wonder if I could use one as a project manager that manages my issues and</p>
+                <div class="feed-card__tags">
+                        <span>#ai</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>
+<li class="feed-card card-stack   feed-card--thoughts" data-template="thoughts">
+    <a class="feed-card__link" href="/thoughts-476">
+        <header class="feed-card__header">
+            <span class="feed-card__status " aria-hidden="true"></span>
+            <span class="feed-card__prompt">thoughts</span>
+            <time datetime="2024-12-29">2024-12-29</time>
+        </header>
+
+        <div class="feed-card__body">
+            <div class="feed-card__main">
+                <p class="feed-card__eyebrow">nic // k8s</p>
+                <h2 class="feed-card__title">💭 Do you need Kubernetes?</h2>
+                    <p class="feed-card__description">do you though?</p>
+                <div class="feed-card__tags">
+                        <span>#k8s</span>
+                        <span>#thoughts</span>
+                </div>
+            </div>
+
+        </div>
+
+    </a>
+</li>            </ul>
+        </div>
+    </div>
+
+    <div class="terminal-pagination">
+        <div>
+        </div>
+        <div>
+        </div>
+    </div>
+</section>
+        </div>
+    </main>
+</div>
+     </body>
+</html>

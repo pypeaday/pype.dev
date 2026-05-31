@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Stable Diffusion Notes</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="ChatGPT Prompt: Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some prompts for generating art with Stable Diffusion. Example: A gh" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Stable Diffusion Notes | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/stable-diffusion-notes" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stable Diffusion Notes | Nic Payne" />
+<meta name="twitter:description" content="ChatGPT Prompt: Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some prompts for generating art with Stable Diffusion. Example: A gh" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/stable-diffusion-notes</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <div class="post-terminal__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    </div>
+<section class="post-terminal   ">
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Stable Diffusion Notes</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2023-01-28">
+            January 28, 2023
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/homelab/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #homelab
+            </a>
+            <a href="https://pype.dev//tags/data/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #data
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <h2 id="chatgpt-prompt">ChatGPT Prompt: <a class="header-anchor" href="#chatgpt-prompt"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some prompts for generating art with Stable Diffusion.</p>
+<p>Example:</p>
+<ul>
+<li>A ghostly apparition drifting through a haunted mansion's grand ballroom, illuminated by flickering candlelight. Eerie, ethereal, moody lighting.</li>
+<li>portait of a homer simpson archer shooting arrow at forest monster, front game card, drark, marvel comics, dark, smooth</li>
+<li>pirate, deep focus, fantasy, matte, sharp focus</li>
+<li>red dead redemption 2, cinematic view, epic sky, detailed, low angle, high detail, warm lighting, volumetric, godrays, vivid, beautiful</li>
+<li>a fantasy style portrait painting of rachel lane / alison brie hybrid in the style of francois boucher oil painting, rpg portrait</li>
+<li>athena, greek goddess, claudia black, bronze greek armor, owl crown, d &amp; d, fantasy, portrait, headshot, sharp focus</li>
+<li>closeup portrait shot of a large strong female biomechanic woman in a scenic scifi environment, elegant, smooth, sharp focus, warframe</li>
+<li>ultra realistic illustration of steve urkle as the hulk, elegant, smooth, sharp focus</li>
+<li>portrait of beautiful happy young ana de armas, ethereal, realistic anime, clean lines, sharp lines, crisp lines, vibrant color scheme</li>
+<li>A highly detailed and hyper realistic portrait of a gorgeous young ana de armas, lisa frank, butterflies, floral, sharp focus</li>
+<li>lots of delicious tropical fruits with drops of moisture on table, floating colorful water, mysterious expression, in a modern and abstract setting, with bold and colorful abstract art, blurred background, bright lighting</li>
+<li>1girl, The most beautiful form of chaos, Fauvist design, Flowing colors, Vivid colors, dynamic angle, fantasy world</li>
+<li>solo, sitting, close-up, girl in the hourglass, Sand is spilling out of the broken hourglass, flowing sand, huge hourglass art, hologram, particles, nebula, magic circle</li>
+<li>geometric abstract background, 1girl, depth of field, zentangle, mandala, tangle, entangle, beautiful and aesthetic, dynamic angle, glowing skin, floating colorful sparkles the most beautiful form of chaos, elegant, a brutalist designed, vivid colours, romanticism</li>
+</ul>
+<p>The prompt should adhere to and include all of the following rules:</p>
+<ul>
+<li>Prompt should always be written in English, regardless of the input language. Please provide the prompts in English.</li>
+<li>Each prompt should consist of a description of the scene followed by modifiers divided by commas.</li>
+<li>When generating descriptions, focus on portraying the visual elements rather than delving into abstract psychological and emotional aspects. Provide clear and concise details that vividly depict the scene and its composition, capturing the tangible elements that make up the setting.</li>
+<li>The modifiers should alter the mood, style, lighting, and other aspects of the scene.</li>
+<li>Multiple modifiers can be used to provide more specific details.</li>
+</ul>
+<p>I want you to write me a list of detailed prompts exactly about the IDEA follow the rule at least 6 every time.</p>
+<p>Ready for my idea?</p>
+<h2 id="chatgpt-prompt-for-rpg-v4">ChatGPT Prompt for RPG V4: <a class="header-anchor" href="#chatgpt-prompt-for-rpg-v4"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Stable Diffusion is an AI art generation model similar to DALLE-2.
+Here are some pairs of positive and negative prompts for generating art with Stable Diffusion.</p>
+<p>Example:</p>
+<ol>
+<li></li>
+</ol>
+<p>Positive: A (full body:1.3) shot at 8k resolution, splash art, fantastic comic book style, photorealistic, intense look, anatomical photorealistic digital painting portrait of a (old male:1.3) human (warrior:1.3) in black and gold intricate (heavy armor:1.3) in a (dark and moody universe:1.3), light particle, very detailed skin,samurai, very detailed eyes, (elden ring style:1.3), (warhammer style:1.1), concept artist, global illumination, depth of field, splash art, art by artgerm and greg rutkowski and viktoria gavrilenko
+Negative: (symmetry:1.2), facial marking, crown, horn, (helmet:1.3), (hoodie:1.1), clock, Female, visible hand, asian, two face, big hair, open mouth, cartoon, high contrast, poorly drawn, Scribbles, Low quality, Low rated, Mediocre, Screenshot, Software, UI, watermark, text, overlay, getty images, cropped, low quality</p>
+<ol start="2">
+<li></li>
+</ol>
+<p>Positive: close-up head, facing camera, beautiful satanic female necromancer blood queen, ritualistic (neck tattoo:1.3), (insanely detailed:1.5), ((solo)), (highest quality, Alessandro Casagrande, Greg Rutkowski, Sally Mann, concept art, 4k), (colourful), (high sharpness), ((detailed pupils)), ((painting:1.1)), (digital painting:1.1), detailed face and eyes,Masterpiece, best quality, highly detailed photo:1, 8k, detailed face,photorealistic, (black long Hair:1.1),(young woman),By jeremy mann, by sandra chevrier, by maciej kuciara, smoke and shadow, night, sharp, ((perfect body)), realistic, real shadow, 3d, ((full body)), ((dark and gloomy universe)), (by Michelangelo)
+Negative: crown, (facial marking:1.2), cloth gem, jewel, jewelry, (flower:1.3), (cloak:1.1), (bad art, low detail, pencil drawing, old, mature:1.6), (grainy, low quality, mutated hands and fingers:1.5), (watermark, thin lines:1.3), (deformed, signature:1.2), (big nipples, blurry, ugly, bad anatomy, extra limbs, undersaturated, low resolution), disfigured, deformations, out of frame, amputee, bad proportions, extra limb, missing limbs, distortion, floating limbs, out of frame, poorly drawn face, poorly drawn hands, text, malformed, error, missing fingers, cropped, jpeg artifacts, teeth, unsharp</p>
+<ol start="3">
+<li></li>
+</ol>
+<p>Positive: (Painting:1.3) of (Detailed illustration:1.3) A (full body:1.3) shot at 8k resolution, splash art, fantastic comic book style, photorealistic, intense look, anatomical photorealistic digital painting portrait of a (old male:1.3) human (warrior:1.3) in black and gold intricate (heavy armor:1.3) in a (dark and moody universe:1.3), light particle, very detailed skin,samurai, very detailed eyes, (elden ring style:1.3), (warhammer style:1.1), concept artist, global illumination, depth of field, splash art, art by artgerm and greg rutkowski and viktoria gavrilenko
+Negative:  (symmetry:1.2), facial marking, crown, (horn:1.1), (helmet:1.3), (hoodie:1.1), clock, Female, visible hand, asian, two face, big hair, open mouth, cartoon, high contrast, poorly drawn, Scribbles, Low quality, Low rated, Mediocre, Screenshot, Software, UI, watermark, text, overlay, getty images, cropped, low qualityLow quality,Bad composition,Faded,(Photo:1.5),(Frame:1.3),watermark,signa ture</p>
+<ol start="4">
+<li></li>
+</ol>
+<p>Positive: sci-fi, space rogue thief girl, (smirk:1.1), short hair, black hood, light armor, big grey eyes, beautiful detailed eyes, drawn by Greg Rutkowski, Yoji Shinkawa:0.6
+Negative: open mouth, facial marking, flower, bad-hands-5, lipstick, text, watermark</p>
+<p>The prompt should adhere to and include all of the following rules:</p>
+<ul>
+<li>Each prompt should consist of a description of the scene followed by modifiers divided by commas.</li>
+<li>When generating descriptions, focus on portraying the visual elements rather than delving into abstract psychological and emotional aspects. Provide clear and concise details that vividly depict the scene and its composition, capturing the tangible elements that make up the setting.</li>
+<li>The modifiers should alter the mood, style, lighting, and other aspects of the scene.</li>
+<li>Multiple modifiers can be used to provide more specific details.</li>
+</ul>
+<p>I want you to write me a list of detailed prompts exactly about the IDEA follow the rule at least 6 every time.</p>
+<p>Ready for my idea?</p>
+<h3>IDEAS</h3>
+<p>IDEA: A slice of pie that is filled with a futuristic city</p>
+<h2 id="artists-i-like">Artists I like <a class="header-anchor" href="#artists-i-like"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p><a href="https://stablediffusion.fr/artists">Examples</a></p>
+<ul>
+<li>J. M. W. Turner</li>
+<li>Jean-Baptiste Monge</li>
+<li>John Lasseter</li>
+<li>John Martin</li>
+<li>Raymond Swanland</li>
+</ul>
+<h3>Anime styles</h3>
+<ul>
+<li>Krenz Cushart</li>
+<li>Kyoto Animation</li>
+<li>Yoshiyuki Sadamoto</li>
+<li>Yuumei</li>
+</ul>
+<h3>Scenic</h3>
+<ul>
+<li>Ted Nasmith</li>
+<li>Terry Redlin</li>
+<li>Thomas Kinkade</li>
+<li>Thomas Moran</li>
+<li>Thomas W Schaller</li>
+</ul>
+<h3>Cityscapes</h3>
+<ul>
+<li>Marc Simonetti</li>
+<li>Wadim Kashin</li>
+</ul>
+<h3>Abstract</h3>
+<ul>
+<li>Scott Naismith</li>
+</ul>
+<h2 id="settings-notes">Settings notes <a class="header-anchor" href="#settings-notes"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>I tend to like cfg at least on the higher end</p>
+<h2 id="good-prompts">Good prompts <a class="header-anchor" href="#good-prompts"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Angel of death, shadows and mist, skelletol feathered wings, highly detailed, amazing details, intriciate lines, purple haze, styles Yuumei and Krenz Cushart, UHD, HDR, upscale, 8K photo, concept art</p>
+<h3>Unicorns</h3>
+<p>positive: unicorn, <a href="lora:Unicorns:0.9">lora:Unicorns:0.9</a>, portrait, professional photography, 35mm, highly detailed, incredibly realistic, best quality, high quality, highres, purple, <a href="lora:mossbeast:0.3">lora:mossbeast:0.3</a></p>
+<p>negative: (two tails:1.2),FastNegativeV2,(bad-artist:1.0), (loli:1.2), (worst quality, low quality:1.4), (bad_prompt_version2:0.8), bad-hands-5,lowres, bad anatomy, bad hands, ((text)), (watermark), error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, ((username)), blurry, (extra limbs), bad-artist-anime, badhandv4, EasyNegative, ng_deepnegative_v1_75t, verybadimagenegative_v1.3, BadDream,(three hands:1.1),(three legs:1.1),(more than two hands:1.4),(more than two legs,:1.2),</p>
+
+        </section>
+    </article>
+</section>        </div>
+    </main>
+</div>
+     </body>
+</html>
