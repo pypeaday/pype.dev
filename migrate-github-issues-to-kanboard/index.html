@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+<title>Migrate Github Issues to Kanboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="I am working on shifting everything, or as much as I reasonably can, related to
+dev for myself to on-prem, including git and CI/CD. So for Quadtask I had a
+bunc" />
+ <link href="/favicon.ico" rel="icon" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/post.css" />
+<link rel="stylesheet" href="/app.css" />
+<link rel="stylesheet" href="/patterns.css" />
+<link rel="stylesheet" href="/title-override.css" />
+<link rel="stylesheet" href="/terminal-ui.css" />
+<script src="/theme.js"></script>
+<script src="/image-modal.js"></script>
+
+<!-- Open Graph and Twitter Card meta tags -->
+<!-- Regular post meta tags -->
+<meta property="og:title" content="Migrate Github Issues to Kanboard | Nic Payne" />
+<meta property="og:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<meta property="og:url" content="https://pype.dev/migrate-github-issues-to-kanboard" />
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Migrate Github Issues to Kanboard | Nic Payne" />
+<meta name="twitter:description" content="I am working on shifting everything, or as much as I reasonably can, related to
+dev for myself to on-prem, including git and CI/CD. So for Quadtask I had a
+bunc" />
+<meta name="twitter:image" content="https://cdn.statically.io/gh/pypeaday/pype.dev/main/pages/media/og-02.png" />
+<!-- Common Twitter meta tags -->
+<meta name="twitter:creator" content="@pypeaday">
+<meta name="twitter:site" content="@pypeaday">
+
+
+        <meta property="og:author_email" content="nic@pype.dev" />
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const collapsibleElements = document.querySelectorAll('.is-collapsible');
+                collapsibleElements.forEach(el => {
+                    const summary = el.querySelector('.admonition-title');
+                    if (summary) {
+                        summary.style.cursor = 'pointer';
+                        summary.addEventListener('click', () => {
+                            el.classList.toggle('collapsible-open');
+                        });
+                    }
+                });
+            });
+        </script>
+
+        <style>
+
+            .admonition.source {
+                padding-bottom: 0;
+            }
+            .admonition.source pre.wrapper {
+                margin: 0;
+                padding: 0;
+            }
+            .is-collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+            }
+            .is-collapsible:not(.collapsible-open) {
+                max-height: 0;
+                padding-bottom: 2.5rem;
+            }
+            .admonition-title {
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+        </style>
+    </head>
+    <body class="font-sans">
+<div class="terminal-page">
+    <main class="terminal-page__main">
+        <div class="terminal-page__content">
+<header class="site-terminal">
+
+    <div class="site-terminal__bar">
+        <div class="site-terminal__lights" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="site-terminal__path">
+            <span class="site-terminal__prompt">nic@pype</span>
+            <span class="site-terminal__dir">~/migrate-github-issues-to-kanboard</span>
+        </div>
+        <div class="site-terminal__meta">infra · automation · writing</div>
+    </div>
+
+    <nav class="site-terminal__links" aria-label="Primary">
+        <a class="site-terminal__link" href="/">Home</a>
+        <a class="site-terminal__link" href="/slash">Start Here</a>
+        <a class="site-terminal__link" href="/my-thoughts">My Thoughts</a>
+        <a class="site-terminal__link" href="https://github.com/pypeaday/pype.dev">GitHub</a>
+        <a class="site-terminal__link" href="https://mydigitalharbor.com/pypeaday">DigitalHarbor</a>
+    </nav>
+
+    <div class="site-terminal__status">
+        <span>role: Disciple · Husband · Father · Developer</span>
+        <!-- <span>favorite tools: nvim · tmux · k9s · nix · ansible</span> -->
+    </div>
+</header>    <div class="post-terminal__search">
+<div id='didyoumean'>
+    <div class="mb-0">
+        <!-- <label for="search" class="block text-sm font-medium mb-2">Search for a page</label> -->
+        <input type="text" id="search"
+               class="w-full px-4 py-2 bg-transparent border-b-2 border-terminal-border text-terminal-text placeholder-terminal-text/40 focus:outline-none focus:border-terminal-accent transition-colors"
+               placeholder="'/' search...">
+    </div>
+
+    <!-- <div id="didyoumean_results" class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"> -->
+    <ul id="didyoumean_results" class='grid gap-4'>
+        <!-- Results will be populated here -->
+    </ul>
+</div>
+<script type='module'>
+// All available pages from Markata
+    // const pages =  markata.map("{'slug':slug,'title':title,'description':description,'tags':tags}", filter=config.didyoumean_filter, sort='True')|tojson;
+    // fetch pages from config.output_dir / didyoumean.json
+
+    const pages = await fetch('/didyoumean.json').then(response => response.json());
+    const populate_search_input = false
+    const search_hotkey = "/"
+
+// Get current path from URL, removing leading/trailing slashes
+    if (populate_search_input) {
+        const currentPath = window.location.pathname.replace(/^\/|\/$/g, '');
+        document.getElementById('search').value = currentPath;
+    }
+
+// Search across all fields in an object
+    function searchObject(needle, obj) {
+        needle = needle.toLowerCase();
+        let score = 0;
+
+    // Helper to search a single field
+        const searchField = (value) => {
+            if (!value) return 0;
+            value = String(value).toLowerCase();
+
+            // Exact matches
+            if (value === needle) return 15;
+
+            // Word boundary matches (complete words)
+            if (value.match(new RegExp(`\\b${needle}\\b`))) return 10;
+
+            // Contains full search term
+            if (value.includes(needle)) return 8;
+
+            // Most parts match (for multi-word searches)
+            const needleParts = needle.split(/\W+/).filter(p => p.length > 2);
+            const valueParts = value.split(/\W+/).filter(p => p.length > 2);
+
+            if (needleParts.length === 0) return 0;
+
+            let matchCount = 0;
+            for (const part of needleParts) {
+                for (const valuePart of valueParts) {
+                    if (valuePart.includes(part) || part.includes(valuePart)) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+
+            // Only count if most parts match
+            const matchRatio = matchCount / needleParts.length;
+            if (matchRatio >= 0.75) {
+                return matchRatio * 6;
+            }
+
+            return 0;
+        };
+
+    // Search each field with different weights
+        const slugScore = searchField(obj.slug) * 3;  // Slug is most important
+        const titleScore = searchField(obj.title) * 2;  // Title is next
+        const descScore = searchField(obj.description) * 1;  // Description
+        const tagScore = (obj.tags || []).reduce((sum, tag) => sum + searchField(tag), 0);  // Tags
+
+        score = slugScore + titleScore + descScore + tagScore;
+
+    // Path segment matches for slug (only if we have some other match)
+        if (score > 0 && obj.slug) {
+            const inputParts = needle.split('/').filter(p => p.length > 0);
+            const slugParts = obj.slug.toLowerCase().split('/');
+
+            // Bonus for matching path structure
+            for (let i = 0; i < inputParts.length && i < slugParts.length; i++) {
+                if (slugParts[i].includes(inputParts[i])) {
+                    score += 5;  // Matching segments in order is valuable
+                }
+            }
+        }
+
+        return score;
+    }
+
+// Find similar pages
+    function findSimilar(input) {
+        if (!input || input.length < 2) return [];
+        const normalizedInput = input.toLowerCase().trim();
+
+    // Score each page
+        const scored = pages.map(page => ({
+            ...page,
+            score: searchObject(normalizedInput, page)
+        }));
+
+    // Sort by score (higher is better) and take top matches
+        return scored
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 12)  // Show more results in the grid
+            .filter(item => item.score > 15); // Only show strong matches
+    }
+
+// Update results in the DOM
+    function updateResults(results) {
+        const resultsDiv = document.getElementById('didyoumean_results');
+
+        if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-gray-500 col-span-full text-center py-8">No similar pages found.</p>';
+            return;
+        }
+
+        const html = results.map(page => `
+        <li class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg hover:shadow-lg transition-shadow first:mt-4">
+            <a href="/${page.slug}" class="block">
+                <h3 class="text-lg font-semibold text-pink-500 hover:text-pink-600 dark:text-pink-400 dark:hover:text-pink-300 mb-2">
+                    ${page.title || page.slug}
+                </h3>
+                ${page.description ? `
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+            ${page.description}
+            </p>
+            ` : ''}
+                <div class="flex flex-wrap gap-2 text-xs text-gray-500 dark:text-gray-400">
+                </div>
+                ${page.tags && page.tags.length > 0 ? `
+            <div class="mt-3 flex flex-wrap gap-2">
+            ${page.tags.map(tag => `
+                            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                                ${tag}
+                            </span>
+                        `).join('')}
+            </div>
+            ` : ''}
+            </a>
+        </li>
+    `).join('');
+
+        resultsDiv.innerHTML = html;
+    }
+
+// Set up hotkey for search if configured
+    if (search_hotkey) {
+        document.addEventListener('keydown', (e) => {
+            // Don't trigger if user is typing in an input or textarea
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+
+            // Check if the pressed key matches the hotkey
+            if (e.key === search_hotkey) {
+                e.preventDefault();  // Prevent the '/' from being typed
+                const searchInput = document.getElementById('search');
+                searchInput.focus();
+                searchInput.select();  // Select any existing text
+            }
+        });
+    }
+
+// Set up search input handler with debounce
+    let debounceTimeout;
+    const searchInput = document.getElementById('search');
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            const results = findSimilar(e.target.value);
+            updateResults(results);
+        }, 100);
+    });
+
+// Initial search with current path
+    if (populate_search_input) {
+        updateResults(findSimilar(currentPath));
+    }
+</script>    </div>
+<section class="post-terminal  post-terminal--til ">
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Migrate Github Issues to Kanboard</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2025-08-07">
+            August 07, 2025
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/kanboard/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #kanboard
+            </a>
+            <a href="https://pype.dev//tags/til/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #til
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>I am working on shifting everything, or as much as I reasonably can, related to
+dev for myself to on-prem, including git and CI/CD. So for Quadtask I had a
+bunch of Github issues that I wanted to migrate to my kanboard instance, gpt-5
+did a bang-up job on this script</p>
+<p>It gets each issue, creates a tag for each label, creates the kanboard ticket, then closes the github issue</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+<span class="c1"># GitHub to Kanboard Issue Migration Script</span>
+<span class="c1"># Uses GitHub CLI (gh) and curl to migrate issues</span>
+
+<span class="c1"># Exit on error</span>
+<span class="nb">set</span><span class="w"> </span>-e
+
+<span class="c1"># Check required environment variables</span>
+<span class="k">for</span><span class="w"> </span>var<span class="w"> </span><span class="k">in</span><span class="w"> </span>KANBOARD_URL<span class="w"> </span>KANBOARD_TOKEN<span class="w"> </span>GH_TOKEN<span class="w"> </span>QUADTASK_KANBOARD_PROJECT_ID<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-z<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="p">!var</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Error: </span><span class="nv">$var</span><span class="s2"> is not set&quot;</span>
+<span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="k">done</span>
+
+<span class="c1"># GitHub repository (default: pypeaday/quadtask)</span>
+<span class="nv">GITHUB_REPO</span><span class="o">=</span><span class="si">${</span><span class="nv">GITHUB_REPO</span><span class="k">:-</span><span class="s2">&quot;pypeaday/quadtask&quot;</span><span class="si">}</span>
+
+<span class="c1"># Kanboard API endpoint</span>
+<span class="nv">KANBOARD_API</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$KANBOARD_URL</span><span class="s2">/jsonrpc.php&quot;</span>
+
+<span class="c1"># Get all open issues from GitHub</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Fetching open issues from </span><span class="nv">$GITHUB_REPO</span><span class="s2">...&quot;</span>
+<span class="nv">ISSUES_JSON</span><span class="o">=</span><span class="k">$(</span>gh<span class="w"> </span>issue<span class="w"> </span>list<span class="w"> </span>--repo<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GITHUB_REPO</span><span class="s2">&quot;</span><span class="w"> </span>--state<span class="w"> </span>open<span class="w"> </span>--limit<span class="w"> </span><span class="m">1000</span><span class="w"> </span>--json<span class="w"> </span>number,title,body,labels<span class="k">)</span>
+
+<span class="c1"># Count issues</span>
+<span class="nv">ISSUE_COUNT</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ISSUES_JSON</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;. | length&#39;</span><span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Found </span><span class="nv">$ISSUE_COUNT</span><span class="s2"> open issues&quot;</span>
+
+<span class="c1"># Process each issue</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$ISSUES_JSON</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;.[]&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>issue<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="c1"># Extract issue details</span>
+<span class="w">    </span><span class="nv">NUMBER</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$issue</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.number&#39;</span><span class="k">)</span>
+<span class="w">    </span><span class="nv">TITLE</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$issue</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.title&#39;</span><span class="k">)</span>
+<span class="w">    </span><span class="nv">BODY</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$issue</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.body // &quot;&quot;&#39;</span><span class="k">)</span>
+<span class="w">    </span><span class="c1"># Extract label names as a JSON array</span>
+<span class="w">    </span><span class="nv">LABELS_JSON</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$issue</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;[.labels[]?.name] // []&#39;</span><span class="k">)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1"># Prepare Kanboard task data</span>
+<span class="w">    </span><span class="nv">REQUEST_DATA</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-n<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--arg<span class="w"> </span>method<span class="w"> </span><span class="s2">&quot;createTask&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--argjson<span class="w"> </span>id<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--arg<span class="w"> </span>jsonrpc<span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--arg<span class="w"> </span>title<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TITLE</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--arg<span class="w"> </span>description<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$BODY</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>--arg<span class="w"> </span>project_id<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$QUADTASK_KANBOARD_PROJECT_ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="s1">&#39;{</span>
+<span class="s1">            &quot;jsonrpc&quot;: $jsonrpc,</span>
+<span class="s1">            &quot;method&quot;: $method,</span>
+<span class="s1">            &quot;id&quot;: $id,</span>
+<span class="s1">            &quot;params&quot;: {</span>
+<span class="s1">                &quot;title&quot;: $title,</span>
+<span class="s1">                &quot;description&quot;: $description,</span>
+<span class="s1">                &quot;project_id&quot;: $project_id</span>
+<span class="s1">            }</span>
+<span class="s1">        }&#39;</span><span class="k">)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1"># Create task in Kanboard</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Creating task: </span><span class="nv">$TITLE</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nv">RESPONSE</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-u<span class="w"> </span><span class="s2">&quot;jsonrpc:</span><span class="nv">$KANBOARD_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$REQUEST_DATA</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="s2">&quot;</span><span class="nv">$KANBOARD_API</span><span class="s2">&quot;</span><span class="k">)</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="c1"># Check for errors</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RESPONSE</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.error&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Error creating task: </span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RESPONSE</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.error.message&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nv">TASK_ID</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$RESPONSE</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.result&#39;</span><span class="k">)</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Created task ID: </span><span class="nv">$TASK_ID</span><span class="s2">&quot;</span>
+
+<span class="w">        </span><span class="c1"># If there are labels, set them as Kanboard tags on the task</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LABELS_JSON</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;length&#39;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>-gt<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Setting tags on task </span><span class="nv">$TASK_ID</span><span class="s2">: </span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LABELS_JSON</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;join(&quot;, &quot;)&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="nv">TAGS_REQUEST</span><span class="o">=</span><span class="k">$(</span>jq<span class="w"> </span>-n<span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--arg<span class="w"> </span>jsonrpc<span class="w"> </span><span class="s2">&quot;2.0&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--arg<span class="w"> </span>method<span class="w"> </span><span class="s2">&quot;setTaskTags&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--argjson<span class="w"> </span>id<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--arg<span class="w"> </span>project_id<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$QUADTASK_KANBOARD_PROJECT_ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--arg<span class="w"> </span>task_id<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TASK_ID</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>--argjson<span class="w"> </span>tags<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$LABELS_JSON</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span><span class="s1">&#39;{</span>
+<span class="s1">                    jsonrpc: $jsonrpc,</span>
+<span class="s1">                    method: $method,</span>
+<span class="s1">                    id: $id,</span>
+<span class="s1">                    params: {</span>
+<span class="s1">                        project_id: $project_id,</span>
+<span class="s1">                        task_id: $task_id,</span>
+<span class="s1">                        tags: $tags</span>
+<span class="s1">                    }</span>
+<span class="s1">                }&#39;</span><span class="k">)</span>
+
+<span class="w">            </span><span class="nv">TAGS_RESPONSE</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-u<span class="w"> </span><span class="s2">&quot;jsonrpc:</span><span class="nv">$KANBOARD_TOKEN</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span>-d<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TAGS_REQUEST</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">                </span><span class="s2">&quot;</span><span class="nv">$KANBOARD_API</span><span class="s2">&quot;</span><span class="k">)</span>
+
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TAGS_RESPONSE</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-e<span class="w"> </span><span class="s1">&#39;.error&#39;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">                </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Warning: Failed to set tags: </span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TAGS_RESPONSE</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.error.message&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+<span class="w">            </span><span class="k">else</span>
+<span class="w">                </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Tags set successfully&quot;</span>
+<span class="w">            </span><span class="k">fi</span>
+<span class="w">        </span><span class="k">fi</span>
+
+<span class="w">        </span><span class="c1"># Close the corresponding GitHub issue to avoid duplicates</span>
+<span class="w">        </span><span class="nv">TASK_URL</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">KANBOARD_URL</span><span class="si">}</span><span class="s2">/?controller=TaskViewController&amp;action=show&amp;task_id=</span><span class="si">${</span><span class="nv">TASK_ID</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Closing GitHub issue #</span><span class="nv">$NUMBER</span><span class="s2"> with comment linking to Kanboard task...&quot;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span>gh<span class="w"> </span>issue<span class="w"> </span>close<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$NUMBER</span><span class="s2">&quot;</span><span class="w"> </span>--repo<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$GITHUB_REPO</span><span class="s2">&quot;</span><span class="w"> </span>--comment<span class="w"> </span><span class="s2">&quot;Migrated to Kanboard task </span><span class="nv">$TASK_ID</span><span class="s2">: </span><span class="nv">$TASK_URL</span><span class="s2">&quot;</span><span class="w"> </span>&gt;/dev/null<span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Closed GitHub issue #</span><span class="nv">$NUMBER</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">else</span>
+<span class="w">            </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Warning: Failed to close GitHub issue #</span><span class="nv">$NUMBER</span><span class="s2">&quot;</span>
+<span class="w">        </span><span class="k">fi</span>
+<span class="w">    </span><span class="k">fi</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;----------------------------------------&quot;</span>
+<span class="k">done</span>
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Migration completed&quot;</span>
+</pre></div>
+
+</pre>
+
+
+        </section>
+    </article>
+</section>        </div>
+    </main>
+</div>
+     </body>
+</html>

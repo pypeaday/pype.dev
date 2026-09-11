@@ -1,0 +1,170 @@
+<section class="post-terminal  post-terminal--til ">
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Git-Bisect</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2022-05-03">
+            May 03, 2022
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/git/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #git
+            </a>
+            <a href="https://pype.dev//tags/tech/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #tech
+            </a>
+            <a href="https://pype.dev//tags/til/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #til
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>I try to commit a lot, and I also try to write useful tests appropriate for the scope of work I'm focusing on, but sometimes I drop the ball...</p>
+<p>Whether by laziness, ignorance, or accepted tech debt I don't always code perfectly and recently I was dozens of commits into a new feature before realizing I broke something along the way that none of my tests caught...</p>
+<p>Before today I would've manually reviewed every commit to see if something obvious slipped by me (talk about a time suck 😩)</p>
+<p><strong>There must be a better way</strong></p>
+<h1 id="bisect">Bisect? <a class="header-anchor" href="#bisect"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p><code>git bisect</code> is the magic sauce for this exact problem...</p>
+<p>You essentially create a range of commits to consider and let <code>git bisect</code> guide you through them in a manner akin to Newton's method for finding the root of a continuous function.</p>
+<h1 id="how-to-do-it">How to do it? <a class="header-anchor" href="#how-to-do-it"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Start with <code>git bisect start</code> and then choose the first <code>good</code> commit (ie. a commit you know the bug isn't present in)</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>bisect-post<span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>start
+
+sandbox<span class="w">  </span><span class="w"> </span>bisect-post<span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>good<span class="w"> </span>655332b
+bisect-post<span class="w">  </span>HEAD<span class="w">         </span>main<span class="w">         </span>ORIG_HEAD
+5b31e1e<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD<span class="o">]</span><span class="w">    </span>add<span class="w"> </span>successful<span class="w"> </span>print<span class="w"> </span><span class="o">(</span><span class="m">52</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="o">)</span>
+308247b<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD^<span class="o">]</span><span class="w">   </span>init<span class="w"> </span>another<span class="w"> </span>loop<span class="w"> </span><span class="o">(</span><span class="m">77</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="o">)</span>
+4555c59<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD^^<span class="o">]</span><span class="w">  </span>introduce<span class="w"> </span>bug<span class="w"> </span><span class="o">(</span><span class="m">2</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+9cf6d55<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~3<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>successful<span class="w"> </span>loop<span class="w"> </span><span class="o">(</span><span class="m">3</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+bcb41c3<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~4<span class="o">]</span><span class="w">  </span>change<span class="w"> </span>x<span class="w"> </span>to<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="o">(</span><span class="m">4</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+3c34aac<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~5<span class="o">]</span><span class="w">  </span>init<span class="w"> </span>x<span class="w"> </span>to<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">(</span><span class="m">4</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+12e53bd<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~6<span class="o">]</span><span class="w">  </span>print<span class="w"> </span>cwd<span class="w"> </span><span class="o">(</span><span class="m">4</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+655332b<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~7<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>example.py<span class="w"> </span><span class="o">(</span><span class="m">10</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span><span class="w">  </span><span class="c1"># &lt;- I want to start at this commit</span>
+59e0048<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~8<span class="o">]</span><span class="w">  </span>gitignore<span class="w"> </span><span class="o">(</span><span class="m">23</span><span class="w"> </span>hours<span class="w"> </span>ago<span class="o">)</span>
+fb9e1fb<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~9<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>reqs<span class="w"> </span><span class="o">(</span><span class="m">23</span><span class="w"> </span>hours<span class="w"> </span>ago<span class="o">)</span>
+</pre></div>
+
+</pre>
+
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>bisect-post<span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>bad<span class="w"> </span>5b31e1e
+bisect-post<span class="w">                                                </span>ORIG_HEAD
+HEAD<span class="w">                                                       </span>refs/bisect/good-655332b6c384934c2c00c3d4aba3011ccc1e5b57
+main
+5b31e1e<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD<span class="o">]</span><span class="w">    </span>add<span class="w"> </span>successful<span class="w"> </span>print<span class="w"> </span><span class="o">(</span><span class="m">5</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span><span class="w">  </span><span class="c1"># &lt;- I start here with the &quot;bad&quot; commit</span>
+308247b<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD^<span class="o">]</span><span class="w">   </span>init<span class="w"> </span>another<span class="w"> </span>loop<span class="w"> </span><span class="o">(</span><span class="m">6</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+4555c59<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD^^<span class="o">]</span><span class="w">  </span>introduce<span class="w"> </span>bug<span class="w"> </span><span class="o">(</span><span class="m">6</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+9cf6d55<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~3<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>successful<span class="w"> </span>loop<span class="w"> </span><span class="o">(</span><span class="m">7</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+bcb41c3<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~4<span class="o">]</span><span class="w">  </span>change<span class="w"> </span>x<span class="w"> </span>to<span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="o">(</span><span class="m">8</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+3c34aac<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~5<span class="o">]</span><span class="w">  </span>init<span class="w"> </span>x<span class="w"> </span>to<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">(</span><span class="m">9</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+12e53bd<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~6<span class="o">]</span><span class="w">  </span>print<span class="w"> </span>cwd<span class="w"> </span><span class="o">(</span><span class="m">9</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+655332b<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~7<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>example.py<span class="w"> </span><span class="o">(</span><span class="m">14</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="o">)</span>
+59e0048<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~8<span class="o">]</span><span class="w">  </span>gitignore<span class="w"> </span><span class="o">(</span><span class="m">23</span><span class="w"> </span>hours<span class="w"> </span>ago<span class="o">)</span>
+fb9e1fb<span class="w">  </span>--<span class="w"> </span><span class="o">[</span>HEAD~9<span class="o">]</span><span class="w">  </span>add<span class="w"> </span>reqs<span class="w"> </span><span class="o">(</span><span class="m">23</span><span class="w"> </span>hours<span class="w"> </span>ago<span class="o">)</span>
+</pre></div>
+
+</pre>
+
+<p>After starting bisect with a &quot;good&quot; start commit and a &quot;bad&quot; ending commit we can let git to it's thing!</p>
+<p>Git checksout a commit somewhere about halfway between the good and bad commit so you can see if your bug is there or not.</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>bisect-post<span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>bad<span class="w"> </span>5b31e1e
+Bisecting:<span class="w"> </span><span class="m">3</span><span class="w"> </span>revisions<span class="w"> </span>left<span class="w"> </span>to<span class="w"> </span><span class="nb">test</span><span class="w"> </span>after<span class="w"> </span>this<span class="w"> </span><span class="o">(</span>roughly<span class="w"> </span><span class="m">2</span><span class="w"> </span>steps<span class="o">)</span>
+<span class="o">[</span>bcb41c3854e343eade85353683f2c1c4ddde4e04<span class="o">]</span><span class="w"> </span>change<span class="w"> </span>x<span class="w"> </span>to<span class="w"> </span><span class="m">10</span>
+
+sandbox<span class="w">  </span><span class="w"> </span>HEAD<span class="w"> </span><span class="o">(</span>bcb41c38<span class="o">)</span><span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯
+</pre></div>
+
+</pre>
+
+<p>In my example here I have a python script with some loops and print statements - they aren't really relevant, I just wanted an easy to follow git history.</p>
+<p>So I check to see if the bug is present or not either by running/writing tests or replicating the bug somehow.</p>
+<p>In this session commit <code>bcb41c38</code> is actually just fine, so I do <code>git bisect good</code></p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>HEAD<span class="w"> </span><span class="o">(</span>bcb41c38<span class="o">)</span><span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>good
+Bisecting:<span class="w"> </span><span class="m">1</span><span class="w"> </span>revision<span class="w"> </span>left<span class="w"> </span>to<span class="w"> </span><span class="nb">test</span><span class="w"> </span>after<span class="w"> </span>this<span class="w"> </span><span class="o">(</span>roughly<span class="w"> </span><span class="m">1</span><span class="w"> </span>step<span class="o">)</span>
+<span class="o">[</span>4555c5979268dff6c475365fdc5ce1d4a12bd820<span class="o">]</span><span class="w"> </span>introduce<span class="w"> </span>bug
+</pre></div>
+
+</pre>
+
+<p>And we see that git moves on to checkout another commit...</p>
+<p>In this case the next commit is the one where I introduced a bug</p>
+<p><code>git bisect bad</code> then gives me:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>HEAD<span class="w"> </span><span class="o">(</span>4555c597<span class="o">)</span><span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>bad
+Bisecting:<span class="w"> </span><span class="m">0</span><span class="w"> </span>revisions<span class="w"> </span>left<span class="w"> </span>to<span class="w"> </span><span class="nb">test</span><span class="w"> </span>after<span class="w"> </span>this<span class="w"> </span><span class="o">(</span>roughly<span class="w"> </span><span class="m">0</span><span class="w"> </span>steps<span class="o">)</span>
+<span class="o">[</span>9cf6d55301560c51e2f55404d0d80b1f1e22a33d<span class="o">]</span><span class="w"> </span>add<span class="w"> </span>successful<span class="w"> </span>loop
+</pre></div>
+
+</pre>
+
+<p>At <code>4555c597</code> the script works as expected so one more <code>git bisect good</code> yields...</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span>sandbox<span class="w">  </span><span class="w"> </span>HEAD<span class="w"> </span><span class="o">(</span>9cf6d553<span class="o">)</span><span class="w"> </span><span class="o">(</span>BISECTING<span class="o">)</span><span class="w">  </span><span class="w"> </span>×1<span class="w"> </span>via<span class="w"> </span><span class="w">  </span>v3.8.11<span class="o">(</span>sandbox<span class="o">)</span><span class="w">  </span>on<span class="w"> </span><span class="w"> </span><span class="o">(</span>us-east-1<span class="o">)</span>
+❯<span class="w"> </span>git<span class="w"> </span>bisect<span class="w"> </span>good
+4555c5979268dff6c475365fdc5ce1d4a12bd820<span class="w"> </span>is<span class="w"> </span>the<span class="w"> </span>first<span class="w"> </span>bad<span class="w"> </span>commit
+commit<span class="w"> </span>4555c5979268dff6c475365fdc5ce1d4a12bd820
+Author:<span class="w"> </span><span class="c1">########################### </span>
+Date:<span class="w">   </span>Tue<span class="w"> </span>May<span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">09</span>:00:00<span class="w"> </span><span class="m">2022</span><span class="w"> </span>-0500
+
+<span class="w">    </span>introduce<span class="w"> </span>bug
+
+<span class="w"> </span>example.py<span class="w"> </span><span class="p">|</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>+-
+<span class="w"> </span><span class="m">1</span><span class="w"> </span>file<span class="w"> </span>changed,<span class="w"> </span><span class="m">1</span><span class="w"> </span>insertion<span class="o">(</span>+<span class="o">)</span>,<span class="w"> </span><span class="m">1</span><span class="w"> </span>deletion<span class="o">(</span>-<span class="o">)</span>
+</pre></div>
+
+</pre>
+
+<h1 id="what-happened">What happened? <a class="header-anchor" href="#what-happened"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h1>
+<p>Git sliced up a range of commits based on me saying of the next one was good or bad and localized the commit that introduced a bug into my workflow!</p>
+<p>I didn't have to manually review commits, click through logs, etc... I just let git checkout relevant commits and I ran whatever was appropriate for reproducing the bug to learn when it was comitted!</p>
+
+        </section>
+    </article>
+</section>

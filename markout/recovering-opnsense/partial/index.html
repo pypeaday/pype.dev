@@ -1,0 +1,57 @@
+<section class="post-terminal   ">
+
+    <article class="post-terminal__article">
+<section class="post-header mb-8">
+    <h1 id="title" style="font-size: 4rem; line-height: 1.1; font-weight: 800;" class="text-6xl md:text-7xl font-extrabold gradient-text mb-4 post-title-large">Recovering OPNSense</h1>
+    <div class="flex items-center text-sm text-text-main/80 mb-6">
+        <time datetime="2024-11-06">
+            November 06, 2024
+        </time>
+    </div>
+    <div class="flex flex-wrap gap-2">
+            <a href="https://pype.dev//tags/blog/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #blog
+            </a>
+            <a href="https://pype.dev//tags/homelab/" class="inline-block bg-primary-light text-accent-cool text-xs font-medium px-3 py-1 rounded-full hover:bg-primary-light/80 transition-colors border border-accent-cool/20 hover-lift">
+                #homelab
+            </a>
+    </div>
+</section>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>I woke up to faulty internet and after some troubleshooting it turns out the
+root zfs dataset that OPNSense boots from got corrupted...</p>
+<blockquote>
+<p>PRO-TIP - Auto backup your OPNSense config to Google Drive, git, or
+nextcloud... But if you won't then at least back up your OPNSense config
+somewhere everytime you update it.</p>
+</blockquote>
+<p>It's too much to recount every issue, so here's a bullet list what worked.</p>
+<ol>
+<li>On a fresh drive install OPNSense</li>
+<li>Plug in the old drive through a USB enclosure - now I'm not sure what would
+happen if you plugged it in along with the new drive and then booted up.
+Because both drives will have a zfs pool <code>zroot</code> and the boot dataset is
+automounted at <code>/zroot/ROOT/default</code>. My old <code>zroot</code> pool was <code>SUSPENDED</code> so it
+didn't automount</li>
+<li>Because the old <code>zoot/ROOT/default</code> was corrupted I did this to mount it RO:
+<code>zpool import -d &lt;path to zfs partition - /dev/stuff&gt; -N zroot zrootrecovery</code></li>
+</ol>
+<blockquote>
+<p>-d is the zfs flag to import the pool by disk id, -N it to not mount any of
+the datasets (we need to change mountpoints) and the <code>zroot zrootrecovery</code>
+imports the <code>zroot</code> pool with a new name</p>
+</blockquote>
+<ol start="4">
+<li>Change the mountpoints for all the <code>zrootrecovery</code> datasets to somewhere
+like <code>/mnt/zrootrecovery</code></li>
+<li>Depending on the mount point you set you'll find a <code>config</code> directory around
+<code>/mnt/zrootrecovery/ROOT/default/config</code> - copy the file you want to another
+machine via scp or whatever</li>
+<li>Go to OPNSense webui and recover from that config!</li>
+</ol>
+<p>All in all this process took me around 8 hours but I did run into about ever
+issue under the sun (several bad disks in the mix, a laptop that wouldn't live
+boot into a BSD system, etc.)</p>
+
+        </section>
+    </article>
+</section>
