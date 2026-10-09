@@ -1,0 +1,2341 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme-texture-scope="all" data-palette="pype" data-aesthetic="minimal" data-fontpack="plain" data-text-size="large">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="view-transition" content="same-origin">
+
+  
+
+  <title>Kubernetes External Secrets Operator | My mental data-lake</title>
+  <meta name="description" content="I wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...">
+  
+
+<link rel="canonical" href="https://pype.dev/kubernetes-external-secrets-operator/">
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Kubernetes External Secrets Operator",
+  "description": "I wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...",
+  "datePublished": "2026-02-10T07:48:34Z",
+  "dateModified": "2026-02-10T07:48:34Z",
+  "author": {
+    "@type": "Person",
+    "name": "Nic Payne"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My mental data-lake",
+    "url": "https://pype.dev"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://pype.dev/kubernetes-external-secrets-operator/"
+  },
+  "keywords": [
+    "devops",
+    "tech"
+  ],
+  "url": "https://pype.dev/kubernetes-external-secrets-operator/"
+}
+</script>
+
+
+
+
+
+<meta property="og:title" content="Kubernetes External Secrets Operator">
+
+<meta property="og:url" content="https://pype.dev/kubernetes-external-secrets-operator/">
+
+<meta property="og:site_name" content="My mental data-lake">
+
+<meta property="og:type" content="article">
+
+<meta property="og:description" content="I wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...">
+
+<meta property="og:locale" content="en_US">
+
+<meta property="article:published_time" content="2026-02-10T07:48:34Z">
+
+<meta property="article:tag" content="devops">
+
+<meta property="article:tag" content="tech">
+
+
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:title" content="Kubernetes External Secrets Operator">
+
+<meta name="twitter:description" content="I wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...">
+
+
+
+
+  
+  <script>
+    var params = new URLSearchParams(location.search);
+    if (params.get('specimen') === 'canonical-headings') {
+      document.documentElement.classList.add('canonical-specimen-route');
+      if (params.get('capture') === 'natural') document.documentElement.classList.add('canonical-natural-route');
+    }
+  </script>
+  
+<script>
+  (function() {
+    var root = document.documentElement;
+    var fallbackSize = root.dataset.textSize || 'large';
+    var allowed = { small: true, medium: true, large: true, 'x-large': true };
+    var size = allowed[fallbackSize] ? fallbackSize : 'large';
+    var allowVisitorSize = true;
+    if (allowVisitorSize) {
+      try {
+        var stored = localStorage.getItem('text-size');
+        if (stored && allowed[stored]) {
+          size = stored;
+        }
+      } catch (_) {
+        // ignore storage access failures
+      }
+    }
+    root.dataset.textSize = size;
+  })();
+</script>
+<script>
+  (function() {
+    var fallbackMode = 'dark';
+    window.__markataThemeFallbackMode = fallbackMode;
+
+    var mode = fallbackMode;
+    var picked = '';
+    var aesthetic = '';
+    var fontpack = '';
+    try {
+      var stored = localStorage.getItem('color-mode') || localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark') {
+        mode = stored;
+      }
+      
+    } catch (_) {
+      // ignore storage access failures
+    }
+
+    document.documentElement.dataset.theme = mode;
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+
+    // Pin data-palette to the variant that matches the resolved mode so the
+    // per-palette CSS block agrees with data-theme on first paint.
+    var palettes = {
+      light: 'pype\u002Dlight',
+      dark: 'pype'
+    };
+    window.__markataThemeDefaults = palettes;
+    
+    if (picked === 'seasonal') picked = '';
+    var modePalette = picked || (mode === 'dark' ? palettes.dark : palettes.light);
+    if (modePalette) {
+      document.documentElement.dataset.palette = modePalette;
+    }
+    if (aesthetic) {
+      document.documentElement.dataset.aesthetic = aesthetic;
+    }
+    window.__markataPageFontpack = document.documentElement.dataset.fontpack || '';
+    if (fontpack) {
+      document.documentElement.dataset.fontpack = fontpack;
+      
+    }
+  })();
+</script>
+
+
+  
+  
+  <link rel="preload" href="/assets/fonts/source-serif-4-full.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <link rel="preload" href="/assets/fonts/inter-tight-full.woff2" as="font" type="font/woff2" crossorigin>
+  
+  
+  <!-- Core CSS (always loaded) -->
+  <link rel="stylesheet" href="/css/variables.08e33724.css">
+  
+  <link rel="stylesheet" href="/css/palette.b4fc830d.css">
+  
+  <link rel="stylesheet" href="/css/main.ea997fca.css">
+  <link rel="stylesheet" href="/css/components.d5d35a1b.css">
+  <link rel="stylesheet" href="/css/text-size.a7cdb148.css">
+  
+  <link rel="stylesheet" href="/css/fonts.ce414e78.css">
+  
+
+  <!-- Conditional CSS: only loaded when page content requires it -->
+  
+  
+  <link rel="stylesheet" href="/css/code.d4dde74d.css">
+  <link rel="stylesheet" href="/css/chroma.e1de617a.css">
+  
+  <link rel="stylesheet" href="/css/cards.bba89fe5.css">
+  
+  
+  
+
+  <!-- Palette Switcher CSS (when enabled) -->
+  
+
+<link rel="stylesheet" href="/css/palette-switcher.0f00e25e.css">
+
+
+
+  <!-- Search CSS: layout styles load eagerly, pagefind UI loads on interaction -->
+  
+  <link rel="stylesheet" href="/css/search.0f0c0c81.css">
+  
+
+
+
+  
+
+  
+
+  <!-- CSS variable overrides from theme config -->
+  
+
+  <!-- Style config overrides (per HEAD_STYLE.md spec) -->
+  
+
+  <!-- Custom CSS file -->
+  
+  <link rel="stylesheet" href="/pype.css">
+  
+
+  <style>
+    /* Native controls and scrollbars follow the site's resolved mode, not the OS. */
+    html:root { color-scheme: dark; }
+    html:root[data-theme="light"] { color-scheme: light; }
+  </style>
+
+  <!-- RSS/Atom/JSON Feeds -->
+  
+  
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Site Feed (RSS)" href="/rss.xml">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Site Feed (Atom)" href="/atom.xml">
+  
+  
+  
+
+  <!-- Global head config (per HEAD_STYLE.md spec) -->
+  
+    <!-- Raw text/HTML -->
+    
+
+    <!-- Meta tags -->
+    
+
+    <!-- Link tags -->
+    
+    <link rel="stylesheet" href="/css/link-avatars.ab8178f9.css">
+    
+
+    <!-- Script tags -->
+    
+    <script src="/js/link-avatars.3380d702.js"></script>
+    
+  
+
+      <!-- Background Decoration CSS -->
+    
+
+  
+
+<link rel="stylesheet" href="/css/aesthetic.0ff75e5a.css">
+
+  <style id="markata-mark-presentation">
+    html mark { background-color: var(--color-highlight) !important; color: var(--color-highlight-text) !important; }
+  </style>
+  <style id="markata-canonical-document-profile">
+    /* Internal conformance profile; scoped so normal site documents are unchanged. */
+     [data-rendering-specimen="canonical-headings"] {
+      box-sizing: border-box;
+       width: 1280px !important;
+       height: 1000px !important;
+       min-height: 1000px !important;
+       padding: 24px;
+       overflow: hidden !important;
+       line-height: 1.6 !important;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document {
+      box-sizing: border-box;
+       width: 680px;
+       max-width: 100%;
+      margin-inline: auto;
+       padding-inline: 0;
+      font-family: var(--font-body, system-ui, sans-serif);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document__title,
+    [data-rendering-specimen="canonical-headings"] .post-content h1,
+    [data-rendering-specimen="canonical-headings"] .post-content h2,
+    [data-rendering-specimen="canonical-headings"] .post-content h3,
+    [data-rendering-specimen="canonical-headings"] .post-content h4,
+    [data-rendering-specimen="canonical-headings"] .post-content h5,
+    [data-rendering-specimen="canonical-headings"] .post-content h6 {
+       font-family: var(--font-heading, var(--font-body, system-ui, sans-serif)) !important;
+       font-weight: 400;
+       overflow: visible;
+       border: 0;
+       padding: 0;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document__title {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 0.95;
+    }
+    [data-rendering-specimen="canonical-headings"] .post-content h1 {
+      margin: 2.5rem 0 0.75rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 0.95;
+    }
+     [data-rendering-specimen="canonical-headings"] .post-content h2 {
+      margin: 2.5rem 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+       line-height: 1;
+     }
+     [data-rendering-specimen="canonical-headings"] > .markata-canonical-texture-layer {
+       position: absolute;
+       inset: 0;
+       width: 1280px;
+       height: 1000px;
+       pointer-events: none;
+       background-repeat: repeat;
+       background-image: var(--theme-texture-image, none);
+       background-size: calc(180px * var(--theme-texture-scale, 0.92));
+       opacity: var(--theme-texture-opacity, 0);
+       z-index: 20;
+     }
+    [data-rendering-specimen="canonical-headings"] .post-content h3 { margin: 2.5rem 0 0.75rem; font-size: 2rem; line-height: 1.05; }
+    [data-rendering-specimen="canonical-headings"] .post-content h4 { margin: 2.5rem 0 0.75rem; font-size: 1.5rem; line-height: 1.1; }
+    [data-rendering-specimen="canonical-headings"] .post-content h5 { margin: 2.5rem 0 0.75rem; font-size: 1.25rem; line-height: 1.2; }
+    [data-rendering-specimen="canonical-headings"] .post-content h6 { margin: 2.5rem 0 0.75rem; font-size: 1rem; line-height: 1.25; }
+     [data-rendering-specimen="canonical-headings"] .canonical-document :is(code, pre, kbd, samp) { font-family: var(--font-code, ui-monospace, monospace); }
+     [data-rendering-specimen="canonical-headings"] .canonical-document :is(strong, em, mark, a) { font-family: inherit; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(code, kbd, samp) { font-family: var(--font-code, ui-monospace, monospace); }
+      html[data-fontpack] [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      html[data-fontpack] [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      [data-rendering-specimen="canonical-headings"] :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) :is(code, kbd, samp) { color: inherit !important; font-family: var(--font-code, ui-monospace, monospace) !important; }
+     html.canonical-specimen-route body { background-size: 1344px 559px !important; }
+     html.canonical-specimen-route body { line-height: 1.6 !important; }
+     html.canonical-specimen-route body::before { background-size: calc(180px * .92) calc(180px * .92) !important; }
+     html.canonical-specimen-route body::after { background-size: 1344px 559px !important; }
+    [data-rendering-specimen="canonical-headings"] .post-content p {
+      margin: 1rem 0;
+    }
+     [data-rendering-specimen="canonical-headings"] mark {
+       box-decoration-break: clone;
+       -webkit-box-decoration-break: clone;
+     }
+     /* The capture harness uses this query route. Keep the specimen itself as
+        the only painted surface; normal site chrome must not enter evidence. */
+      html.canonical-specimen-route body,
+      body:has([data-rendering-specimen="canonical-headings"]) {
+        overflow: hidden;
+      }
+      html.canonical-specimen-route body > :not(.page-wrapper),
+      body:has([data-rendering-specimen="canonical-headings"]) > :not(.skip-link):not(.site-header):not(#view-transition-progress):not(footer):not(.page-wrapper) {
+        display: none !important;
+      }
+     body:has([data-rendering-specimen="canonical-headings"]) > .skip-link,
+     body:has([data-rendering-specimen="canonical-headings"]) > .site-header,
+     body:has([data-rendering-specimen="canonical-headings"]) > #view-transition-progress,
+     body:has([data-rendering-specimen="canonical-headings"]) > footer {
+       display: none !important;
+     }
+      html.canonical-specimen-route body .page-wrapper,
+      body:has([data-rendering-specimen="canonical-headings"]) .page-wrapper {
+        display: contents;
+      }
+      body:has([data-rendering-specimen="canonical-headings"]) .page-wrapper > :not(main) {
+        display: none !important;
+      }
+      html.canonical-specimen-route body .page-wrapper > :not(main) {
+        display: none !important;
+      }
+      html.canonical-specimen-route body [data-rendering-specimen="canonical-headings"],
+      body:has([data-rendering-specimen="canonical-headings"]) [data-rendering-specimen="canonical-headings"] {
+        box-sizing: border-box;
+          width: 1280px !important;
+          height: 1000px !important;
+          min-height: 1000px !important;
+          max-width: none !important;
+          margin: 0;
+          padding: 24px;
+          overflow: hidden !important;
+      }
+       html.canonical-specimen-route [data-rendering-specimen="canonical-headings"] .canonical-document {
+         width: 680px !important;
+         max-width: 100% !important;
+         margin-inline: auto;
+       }
+       html.canonical-specimen-route:not(.canonical-natural-route) [data-rendering-specimen="canonical-headings"] {
+         box-sizing: border-box !important;
+         width: 1280px !important;
+         height: 1000px !important;
+         min-height: 1000px !important;
+         max-height: 1000px !important;
+         overflow: hidden !important;
+       }
+       html.canonical-natural-route,
+       html.canonical-natural-route body,
+       html.canonical-natural-route body .page-wrapper,
+       html.canonical-natural-route body [data-rendering-specimen="canonical-headings"] {
+         height: auto !important;
+         min-height: 0 !important;
+         max-height: none !important;
+         overflow: visible !important;
+       }
+       html.canonical-natural-route body { width: 1280px; }
+       html.canonical-natural-route body [data-rendering-specimen="canonical-headings"] {
+         width: 1280px !important;
+         max-width: none !important;
+       }
+   </style>
+  
+</head>
+<body class="">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+      <!-- Background Decorations -->
+    
+
+  
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="site-title">My mental data-lake</a>
+      
+
+
+
+
+
+<nav class="site-nav site-nav--header site-nav--horizontal" aria-label="Main navigation">
+    
+        
+        
+    
+<a href="/" class="nav-link">Home</a>
+
+
+        
+    
+
+<span class="nav-entry nav-entry--preview">
+  <a href="/slash" class="nav-link">Start Here</a>
+  <span class="nav-preview" aria-hidden="true">
+    <span class="nav-preview__eyebrow">Collection</span>
+    <span class="nav-preview__title">Start Here</span>
+    
+    
+    
+    <span class="nav-preview__stats">
+      <span><strong>9</strong> posts</span>
+      
+      
+    </span>
+    <span class="nav-preview__rhythm"><svg viewBox="0 0 96 28" preserveAspectRatio="none" focusable="false"><polyline points="0.0,23.2 8.0,28.0 16.0,28.0 24.0,28.0 32.0,4.0 40.0,28.0 48.0,23.2 56.0,23.2 64.0,28.0 72.0,28.0 80.0,28.0 88.0,28.0 96.0,23.2" /></svg><span>Publication rhythm</span></span>
+    
+  </span>
+</span>
+
+
+
+        
+    
+
+<span class="nav-entry nav-entry--preview">
+  <a href="/my-thoughts" class="nav-link">My Thoughts</a>
+  <span class="nav-preview" aria-hidden="true">
+    <span class="nav-preview__eyebrow">Collection</span>
+    <span class="nav-preview__title">My Thoughts</span>
+    
+    
+    
+    <span class="nav-preview__stats">
+      <span><strong>83</strong> posts</span>
+      
+      
+    </span>
+    <span class="nav-preview__rhythm"><svg viewBox="0 0 96 28" preserveAspectRatio="none" focusable="false"><polyline points="0.0,25.0 8.0,24.2 16.0,28.0 24.0,28.0 32.0,21.2 40.0,27.2 48.0,4.0 56.0,13.0 64.0,22.8 72.0,26.5 80.0,27.2 88.0,27.2 96.0,27.2" /></svg><span>Publication rhythm</span></span>
+    
+  </span>
+</span>
+
+
+
+        
+    
+<a href="https://github.com/pypeaday/pype.dev" class="nav-link">GitHub</a>
+
+
+        
+    
+<a href="https://mydigitalharbor.com/pypeaday" class="nav-link">DigitalHarbor</a>
+
+
+        
+    
+</nav>
+
+
+
+
+      
+      <div class="header-controls">
+        
+        
+
+
+
+
+<div class="search-container search-container--navbar" id="search-container">
+  <div id="pagefind-search"></div>
+</div>
+
+
+        
+        
+
+
+
+
+
+
+
+<div class="theme-switcher theme-switcher--mode-only" data-pagefind-ignore>
+  
+  <button class="palette-mode-toggle" type="button" aria-label="Toggle dark/light mode" title="Toggle dark/light mode (\)">
+    <span class="mode-icon" aria-hidden="true">
+      <svg class="mode-icon-moon" viewBox="0 0 24 24" width="18" height="18" focusable="false"><path d="M21 14.8A8.8 8.8 0 1 1 9.2 3a7.1 7.1 0 0 0 11.8 11.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <svg class="mode-icon-sun" viewBox="0 0 24 24" width="18" height="18" focusable="false"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+    </span>
+  </button>
+  
+
+  
+  <label class="text-size-control">
+    <span class="sr-only">Text size</span>
+    <select class="text-size-select" data-text-size-control aria-label="Text size">
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+      <option value="x-large">X-Large</option>
+    </select>
+  </label>
+  
+
+  
+</div>
+
+
+      </div>
+    </div>
+  </header>
+  
+
+  <div id="view-transition-progress">
+    
+<div class="article-progress" role="presentation" aria-hidden="true">
+    <span class="article-progress__indicator"></span>
+</div>
+
+  </div>
+
+  <div class="page-wrapper page-wrapper--content-only" id="view-transition-page" style="--feed-sidebar-width: 250px; --doc-sidebar-width: 250px">
+    
+
+      
+      
+
+      
+      
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        
+         
+
+<div class="content-wrapper">
+    <article class="post h-entry" data-pagefind-body>
+        
+        <a class="u-url" href="https://pype.dev/kubernetes-external-secrets-operator/" hidden></a>
+
+        <header class="post-header">
+            <div class="post-header__title-row">
+                <h1 class="p-name" data-pagefind-meta="title" data-title-size="long">Kubernetes External Secrets Operator</h1>
+
+                
+            
+
+
+
+
+
+<div class="post-byline post-byline--multi">
+    <div class="post-byline__authors">
+    
+        <div class="post-byline__author p-author h-card">
+            
+            <div class="post-byline__author-info">
+                
+                <a class="u-url p-name post-byline__name no-avatar" href="https://pype.dev" rel="author">Nic Payne</a>
+                
+                
+                <span class="post-byline__role">author</span>
+                
+            </div>
+            
+        </div>
+    
+    </div>
+
+    
+    <div class="post-meta post-byline__meta">
+        
+        <time class="dt-published" datetime="2026-02-10T07:48:34Z">Feb 10, 2026</time>
+        
+        
+        <span class="post-meta__reading-time">3 min read</span>
+        
+    </div>
+    
+</div>
+
+
+
+        </div>
+
+            
+            <p class="post-description p-summary visually-hidden" data-pagefind-meta="excerpt">I wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...</p>
+            
+
+            
+	            
+            
+            <div class="tags">
+                
+                <a href="/tags/devops/" class="tag p-category" data-local-preview="{&quot;count&quot;:2,&quot;description&quot;:&quot;All posts with the tag \&quot;devops\&quot;&quot;,&quot;kind&quot;:&quot;feed&quot;,&quot;sparkline&quot;:&quot;0.0,4.0 12.0,28.0 24.0,28.0 36.0,28.0 48.0,28.0 60.0,28.0 72.0,28.0 84.0,28.0 96.0,4.0&quot;,&quot;sparkline_title&quot;:&quot;Posts published per month from 2025-06 to 2026-02&quot;,&quot;tags&quot;:[&quot;devops&quot;],&quot;title&quot;:&quot;Posts tagged: devops&quot;}">devops</a>
+                
+                <a href="/tags/tech/" class="tag p-category" data-local-preview="{&quot;count&quot;:186,&quot;description&quot;:&quot;All posts with the tag \&quot;tech\&quot;&quot;,&quot;kind&quot;:&quot;feed&quot;,&quot;sparkline&quot;:&quot;0.0,4.0 1.9,17.0 3.8,12.0 5.8,25.0 7.7,26.0 9.6,25.0 11.5,27.0 13.4,21.0 15.4,25.0 17.3,22.0 19.2,25.0 21.1,28.0 23.0,27.0 25.0,26.0 26.9,28.0 28.8,28.0 30.7,28.0 32.6,28.0 34.6,27.0 36.5,27.0 38.4,28.0 40.3,27.0 42.2,28.0 44.2,28.0 46.1,28.0 48.0,28.0 49.9,27.0 51.8,27.0 53.8,28.0 55.7,27.0 57.6,26.0 59.5,28.0 61.4,25.0 63.4,24.0 65.3,27.0 67.2,26.0 69.1,28.0 71.0,25.0 73.0,24.0 74.9,4.0 76.8,14.0 78.7,18.0 80.6,25.0 82.6,26.0 84.5,25.0 86.4,21.0 88.3,27.0 90.2,24.0 92.2,23.0 94.1,26.0 96.0,25.0&quot;,&quot;sparkline_title&quot;:&quot;Posts published per month from 2022-03 to 2026-05&quot;,&quot;tags&quot;:[&quot;tech&quot;],&quot;title&quot;:&quot;Posts tagged: tech&quot;}">tech</a>
+                
+            </div>
+            
+            
+
+            
+<div class="post-copy" data-post-copy>
+    <details class="post-copy__details">
+        <summary class="post-copy__summary"><svg class="post-copy__summary-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 9V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-5v-2h4V5h-7v4H9Zm-4 3h9a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Zm1 2v5h7v-5H6Z" fill="currentColor"/></svg><span>Copy this post</span></summary>
+        <div class="post-copy__menu" role="menu" aria-label="Copy this post options">
+            <button type="button" class="post-copy__option" data-copy-kind="url" role="menuitem">URL</button>
+            <button type="button" class="post-copy__option" data-copy-kind="rich" role="menuitem">Rich</button>
+            <button type="button" class="post-copy__option" data-copy-kind="markdown" role="menuitem">Markdown</button>
+            <button type="button" class="post-copy__option" data-copy-kind="text" role="menuitem">Text</button>
+            
+            
+            
+        </div>
+    </details>
+    <span class="post-copy__status" aria-live="polite"></span>
+    <script type="application/json" class="post-copy__payload">{"title":"Kubernetes External Secrets Operator","url":"https://pype.dev/kubernetes-external-secrets-operator/","markdown":"# Kubernetes External Secrets Operator\n\nSource: https://pype.dev/kubernetes-external-secrets-operator/\n\nI wanted to put a short demo together of using External Secrets Operator (ESO)\nto expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager, etc)\nto services running in kubernetes\n\nDemo code is [here in this github repo](https://github.com/pypeaday/blog-kubernetes-external-secrets-operator-demo)\n\nThis post is a high level overview of the components, see the repo for the full example.\n\n## Setup\n\n- \u003ca href=\"/docker/\" class=\"wikilink\" data-title=\"docker\" data-description=\"docker - container runtime\" data-date=\"2026-02-10\"\u003edocker\u003c/a\u003e for containerized development\n- \u003ca href=\"/kind/\" class=\"wikilink\" data-title=\"kind\" data-description=\"kind - kubernetes in docker\" data-date=\"2026-02-10\"\u003ekind\u003c/a\u003e for setting up a quick cluster\n- \u003ca href=\"/kubectl/\" class=\"wikilink\" data-title=\"kubectl\" data-description=\"kubectl - canonically pronouned kube-control\" data-date=\"2026-02-10\"\u003ekubectl\u003c/a\u003e for accessing the cluster\n- \u003ca href=\"/helm/\" class=\"wikilink\" data-title=\"helm\" data-description=\"helm - package manager for k8s\" data-date=\"2026-02-10\"\u003ehelm\u003c/a\u003e for installing ArgoCD and ESO\n\n- and then [justfile](https://github.com/casey/just) is there to wrap the commands to easier execution\n\n## Step 0 - Vault\n\n- for the demo we'll setup Hashicorp Vault in docker compose to easily bring it\n  up and down\n- and the init-script is in the repo - it uses curl to make some secrets in\n  vault that we'll reference later\n\n```yml\nservices:\n  vault:\n    image: hashicorp/vault:1.18\n    container_name: vault\n    ports:\n      - \"58200:8200\n    environment:\n      VAULT_DEV_ROOT_TOKEN_ID: root\n      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200\n    volumes:\n      - vault-data:/vault/file\n    cap_add:\n      - IPC_LOCK\n    command: server -dev -dev-root-token-id=root\n\nvolumes:\n  vault-data:\n```\n\n- bringing up the vault instance is a simple `docker compose up` (use the just recipes which some `curl` commands for checking status etc.)\n\n```bash\ncurl -s http://localhost:58200/v1/sys/health | jq .  # or just vault-status\n{\n  \"initialized\": true,\n  \"sealed\": false,\n  \"standby\": false,\n  \"performance_standby\": false,\n  \"replication_performance_mode\": \"disabled\",\n  \"replication_dr_mode\": \"disabled\",\n  \"server_time_utc\": 1770893657,\n  \"version\": \"1.18.5\",\n  \"enterprise\": false,\n  \"cluster_name\": \"vault-cluster-acfb9930\",\n  \"cluster_id\": \"4d9162f4-e501-371b-7f94-bd60052b40a3\",\n  \"echo_duration_ms\": 0,\n  \"clock_skew_ms\": 0,\n  \"replication_primary_canary_age_ms\": 0\n}\n```\n\n## Step 1 - App\n\n- We need an app that requires secrets\n- app code in repo, essentially it's a python webserver to show the vault\n  values (obviously this would expose real secrets so it's just a demo)\n- Below is one of the endpoints in the vibe-coded app, just to illustrate that\n  we're going to give secrets to the app as environment variables (or as mounted\n  files!)\n- In the repo, the app is included and there's a `just build` which builds the docker image\n- There is also `just deploy` which handles loading the image into `kind`'s image cache\n\n```py\n\n# example route from demo-app - see git repo\n@app.get(\"/env\", response_class=HTMLResponse)\ndef show_env():\n    # ESO brings Vault secrets into environment variables\n    env_vars = dict(os.environ)\n\n    # Sort by category, then by key\n    sorted_items = sorted(env_vars.items(), key=lambda x: (classify_env(x[0]), x[0]))\n\n    cards = \"\".join(create_card(k, v) for k, v in sorted_items)\n\n    secret_count = sum(1 for k in env_vars if k in SECRET_KEYS)\n    config_count = sum(1 for k in env_vars if k in CONFIG_KEYS)\n    system_count = len(env_vars) - secret_count - config_count\n\n    html = HTML_TEMPLATE.format(\n        cards=cards,\n        secret_count=secret_count,\n        config_count=config_count,\n        system_count=system_count,\n    )\n\n    return HTMLResponse(content=html)\n\ndef read_mounted_files(directory: str) -\u003e dict:\n    \"\"\"Read all files from a mounted directory.\"\"\"\n    files_data = {}\n    if os.path.exists(directory) and os.path.isdir(directory):\n        for filename in os.listdir(directory):\n            filepath = os.path.join(directory, filename)\n            if os.path.isfile(filepath):\n                try:\n                    with open(filepath, \"r\") as f:\n                        files_data[filename] = f.read().strip()\n                except Exception as e:\n                    files_data[filename] = f\"\u003cError reading file: {e}\u003e\"\n    return files_data\n\n```\n\n## Step 2 - Cluster\n\n- use `kind` to bring up a cluster\n- this will start a few docker containers to act as your control-plane and workers\n\n```yml\n# kind-config.yml\nkind: Cluster\napiVersion: kind.x-k8s.io/v1alpha4\nname: eso-demo\nnodes:\n  - role: control-plane\n    extraPortMappings:\n      - containerPort: 30080\n        hostPort: 58080\n        protocol: TCP\n  - role: worker\n```\n\n```\nkind create cluster --config kind-config.yaml --name eso-demo\n```\n\n## Step 3 - External Secrets Operator\n\n- installed with \u003ca href=\"/helm/\" class=\"wikilink\" data-title=\"helm\" data-description=\"helm - package manager for k8s\" data-date=\"2026-02-10\"\u003ehelm\u003c/a\u003e from the official helm chart\n- NOTE: this is the Operator, not the secrets... this is the thing which goes\n  to the secrets backend and creates kubernetes secrets\n\n```\nhelm repo add external-secrets https://charts.external-secrets.io 2\u003e/dev/null || true\nhelm repo update\nhelm install external-secrets external-secrets/external-secrets \\\n  --namespace external-secrets \\\n  --create-namespace \\\n  --wait\n```\n\nIn the repo this is mostly `just eso-install`\n\n## Step 3.5 - Secretstore\n\n- You need a `clustersecretstore` to be the place that ESO puts secrets\n\n```\napiVersion: external-secrets.io/v1\nkind: ClusterSecretStore\nmetadata:\n  name: vault-backend\nspec:\n  provider:\n    vault:\n      server: \"http://10.10.0.1:58200\"\n      path: \"secret\"\n      version: \"v2\"\n      auth:\n        tokenSecretRef:\n          name: vault-token\n          key: token\n          namespace: external-secrets\n\n```\n\n## Step 4 - Secrets\n\n- Secrets go in the `clustersecretstore`\n  - in this example it's called 'vault-backend'\n- In the demo we can just `kubectl apply -f \u003cmanifest\u003e` to deploy the secret to\n  the cluster\n- In practice this should be handled by something more mature than raw-doggin\n  kubectl commands\n\n```yml\n# manifests/external-secrets.yml\n---\napiVersion: external-secrets.io/v1\nkind: ExternalSecret\nmetadata:\n  name: demo-app-secrets\n  namespace: default\nspec:\n  refreshInterval: \"10s\"\n  secretStoreRef:\n    kind: ClusterSecretStore\n    name: vault-backend\n  target:\n    name: demo-app-secrets\n    creationPolicy: Owner\n  data:\n    - secretKey: DATABASE_PASSWORD\n      remoteRef:\n        key: secret/data/demo-app/secrets\n        property: database_password\n    - secretKey: API_KEY\n      remoteRef:\n        key: secret/data/demo-app/secrets\n        property: api_key\n```\n\n## Step 4.1 - Files\n\n- ESO supports mounting files to containers as well through special `ExternalSecret` resources\n- One of the example seecrets is a TLS certificate\n\n```yml\n# manifests/external-secrets-files.yml\n---\n# File-based ExternalSecret for TLS certificates\n# These will be mounted as files in /etc/secrets/\napiVersion: external-secrets.io/v1\nkind: ExternalSecret\nmetadata:\n  name: demo-app-tls-files\n  namespace: default\nspec:\n  refreshInterval: \"10s\"\n  secretStoreRef:\n    kind: ClusterSecretStore\n    name: vault-backend\n  target:\n    name: demo-app-tls-files\n    creationPolicy: Owner\n    # Template to ensure proper file formatting\n    template:\n      type: Opaque\n      data:\n        tls.crt: \"{{ .tls_crt }}\"\n        tls.key: \"{{ .tls_key }}\"\n  data:\n    - secretKey: tls_crt\n      remoteRef:\n        key: secret/data/demo-app/tls-files\n        property: tls.crt\n    - secretKey: tls_key\n      remoteRef:\n        key: secret/data/demo-app/tls-files\n        property: tls.key\n```\n\n- Notice how there's a `spec.target.template` which templates out the file\n  contents from the secret contents\n\n## Step 5 - Helm Chart\n\n- This isn't about setting up a helm chart so I'm not going to explain a lot\n  but the working example is simple, not secure, and in the repo\n- The helm chart renders manifests - I've paired one down and added comments to\n  the relevant things\n- The thing to just take note of is the reference of the secrets in the `envFrom` section\n\n```yml\n# deployment.yml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  annotations:\n    meta.helm.sh/release-name: demo-app\n    meta.helm.sh/release-namespace: default\n  name: demo-app\n  namespace: default\nspec:\n  replicas: 1\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/instance: demo-app\n        app.kubernetes.io/name: demo-app\n    spec:\n      containers:\n        - envFrom:\n            - secretRef:\n                name: demo-app-secrets # name of example secret from section 4\n            - secretRef:\n                name: demo-app-config # another example in the repo\n          image: demo-app:latest # the image you built and loaded into kind - simple 'just' recipe in the repo\n          imagePullPolicy: Never\n          name: demo-app\n          volumeMounts:\n            - mountPath: /etc/secrets\n              name: secrets-volume\n              readOnly: true\n            - mountPath: /etc/config\n              name: configs-volume\n              readOnly: true\n      volumes:\n        - name: secrets-volume\n          secret:\n            defaultMode: 420\n            secretName: demo-app-tls-files # example secret file from section 4.1\n        - name: configs-volume\n          secret:\n            defaultMode: 420\n            secretName: demo-app-config-files\n```\n\n## Step 5.1 - Deploy\n\n- We can deploy the demo-app from the git repo to the cluster\n- For a local demo a few things happen\n  - local image build\n  - loading that image into \u003ca href=\"/kind/\" class=\"wikilink\" data-title=\"kind\" data-description=\"kind - kubernetes in docker\" data-date=\"2026-02-10\"\u003ekind\u003c/a\u003e (`kind` doesn't have access to your host's docker image cache, so images need to be loaded into the cluster cache)\n- `just deploy` takes care of this for you, read the recipe in the repo if\n  you're interested in more there, the focus of this post and example are to\n  briefly show how to use ESO though\n\n## Step 6 - Profit\n\nThe example app just displays things that are mounted in - totally vibe-coded\nto illustrate the secrets mounting, not the appropriate way to leak secrets.\n\n![20260210233804_614254b7.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260210233804_614254b7.png)\n\n![20260210233828_19852225.png](https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260210233828_19852225.png)","text":"Kubernetes External Secrets Operator\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nI wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager,...\n\nDate: February 10, 2026\n\nI wanted to put a short demo together of using External Secrets Operator (ESO) to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager, etc) to services running in kubernetes\n\nDemo code is here in this github repo \u003chttps://github.com/pypeaday/blog-kubernetes-external-secrets-operator-demo\u003e\n\nThis post is a high level overview of the components, see the repo for the full example.\n\nSetup\n─────\n\n- docker \u003c/docker/\u003e for containerized development\n- kind \u003c/kind/\u003e for setting up a quick cluster\n- kubectl \u003c/kubectl/\u003e for accessing the cluster\n- helm \u003c/helm/\u003e for installing ArgoCD and ESO\n- and then justfile \u003chttps://github.com/casey/just\u003e is there to wrap the commands to easier execution\n\nStep 0 - Vault\n──────────────\n\n- for the demo we’ll setup Hashicorp Vault in\n\n  docker\n\n  compose to easily bring it up and down\n- and the init-script is in the repo - it uses curl to make some secrets in vault that we’ll reference later\n\n```\nservices:\n  vault:\n    image: hashicorp/vault:1.18\n    container_name: vault\n    ports:\n      - \"58200:8200\n    environment:\n      VAULT_DEV_ROOT_TOKEN_ID: root\n      VAULT_DEV_LISTEN_ADDRESS: 0.0.0.0:8200\n    volumes:\n      - vault-data:/vault/file\n    cap_add:\n      - IPC_LOCK\n    command: server -dev -dev-root-token-id=root\n\nvolumes:\n  vault-data:\n```\n\n- bringing up the vault instance is a simple\n\n  docker compose up\n\n  (use the just recipes which some\n\n  curl\n\n  commands for checking status etc.)\n\n```\ncurl -s http://localhost:58200/v1/sys/health | jq .  # or just vault-status\n{\n  \"initialized\": true,\n  \"sealed\": false,\n  \"standby\": false,\n  \"performance_standby\": false,\n  \"replication_performance_mode\": \"disabled\",\n  \"replication_dr_mode\": \"disabled\",\n  \"server_time_utc\": 1770893657,\n  \"version\": \"1.18.5\",\n  \"enterprise\": false,\n  \"cluster_name\": \"vault-cluster-acfb9930\",\n  \"cluster_id\": \"4d9162f4-e501-371b-7f94-bd60052b40a3\",\n  \"echo_duration_ms\": 0,\n  \"clock_skew_ms\": 0,\n  \"replication_primary_canary_age_ms\": 0\n}\n```\n\nStep 1 - App\n────────────\n\n- We need an app that requires secrets\n- app code in repo, essentially it’s a python webserver to show the vault values (obviously this would expose real secrets so it’s just a demo)\n- Below is one of the endpoints in the vibe-coded app, just to illustrate that we’re going to give secrets to the app as environment variables (or as mounted files!)\n- In the repo, the app is included and there’s a\n\n  just build\n\n  which builds the docker image\n- There is also\n\n  just deploy\n\n  which handles loading the image into\n\n  kind\n\n  ’s image cache\n\n```\n# example route from demo-app - see git repo\n@app.get(\"/env\", response_class=HTMLResponse)\ndef show_env():\n    # ESO brings Vault secrets into environment variables\n    env_vars = dict(os.environ)\n\n    # Sort by category, then by key\n    sorted_items = sorted(env_vars.items(), key=lambda x: (classify_env(x[0]), x[0]))\n\n    cards = \"\".join(create_card(k, v) for k, v in sorted_items)\n\n    secret_count = sum(1 for k in env_vars if k in SECRET_KEYS)\n    config_count = sum(1 for k in env_vars if k in CONFIG_KEYS)\n    system_count = len(env_vars) - secret_count - config_count\n\n    html = HTML_TEMPLATE.format(\n        cards=cards,\n        secret_count=secret_count,\n        config_count=config_count,\n        system_count=system_count,\n    )\n\n    return HTMLResponse(content=html)\n\ndef read_mounted_files(directory: str) -\u003e dict:\n    \"\"\"Read all files from a mounted directory.\"\"\"\n    files_data = {}\n    if os.path.exists(directory) and os.path.isdir(directory):\n        for filename in os.listdir(directory):\n            filepath = os.path.join(directory, filename)\n            if os.path.isfile(filepath):\n                try:\n                    with open(filepath, \"r\") as f:\n                        files_data[filename] = f.read().strip()\n                except Exception as e:\n                    files_data[filename] = f\"\u003cError reading file: {e}\u003e\"\n    return files_data\n```\n\nStep 2 - Cluster\n────────────────\n\n- use\n\n  kind\n\n  to bring up a cluster\n- this will start a few docker containers to act as your control-plane and workers\n\n```\n# kind-config.yml\nkind: Cluster\napiVersion: kind.x-k8s.io/v1alpha4\nname: eso-demo\nnodes:\n  - role: control-plane\n    extraPortMappings:\n      - containerPort: 30080\n        hostPort: 58080\n        protocol: TCP\n  - role: worker\n```\n\n```\nkind create cluster --config kind-config.yaml --name eso-demo\n```\n\nStep 3 - External Secrets Operator\n──────────────────────────────────\n\n- installed with\n\n  helm\n\n  from the official\n\n  helm\n\n  chart\n- NOTE: this is the Operator, not the secrets… this is the thing which goes to the secrets backend and creates kubernetes secrets\n\n```\nhelm repo add external-secrets https://charts.external-secrets.io 2\u003e/dev/null || true\nhelm repo update\nhelm install external-secrets external-secrets/external-secrets \\\n  --namespace external-secrets \\\n  --create-namespace \\\n  --wait\n```\n\nIn the repo this is mostly just eso-install\n\nStep 3.5 - Secretstore\n──────────────────────\n\n- You need a\n\n  clustersecretstore\n\n  to be the place that ESO puts secrets\n\n```\napiVersion: external-secrets.io/v1\nkind: ClusterSecretStore\nmetadata:\n  name: vault-backend\nspec:\n  provider:\n    vault:\n      server: \"http://10.10.0.1:58200\"\n      path: \"secret\"\n      version: \"v2\"\n      auth:\n        tokenSecretRef:\n          name: vault-token\n          key: token\n          namespace: external-secrets\n```\n\nStep 4 - Secrets\n────────────────\n\n- Secrets go in the\n\n  clustersecretstore\n\n  - in this example it’s called ‘vault-backend’\n- In the demo we can just\n\n  kubectl apply -f \u003cmanifest\u003e\n\n  to deploy the secret to the cluster\n- In practice this should be handled by something more mature than raw-doggin\n\n  kubectl\n\n  commands\n\n```\n# manifests/external-secrets.yml\n---\napiVersion: external-secrets.io/v1\nkind: ExternalSecret\nmetadata:\n  name: demo-app-secrets\n  namespace: default\nspec:\n  refreshInterval: \"10s\"\n  secretStoreRef:\n    kind: ClusterSecretStore\n    name: vault-backend\n  target:\n    name: demo-app-secrets\n    creationPolicy: Owner\n  data:\n    - secretKey: DATABASE_PASSWORD\n      remoteRef:\n        key: secret/data/demo-app/secrets\n        property: database_password\n    - secretKey: API_KEY\n      remoteRef:\n        key: secret/data/demo-app/secrets\n        property: api_key\n```\n\nStep 4.1 - Files\n────────────────\n\n- ESO supports mounting files to containers as well through special\n\n  ExternalSecret\n\n  resources\n- One of the example seecrets is a TLS certificate\n\n```\n# manifests/external-secrets-files.yml\n---\n# File-based ExternalSecret for TLS certificates\n# These will be mounted as files in /etc/secrets/\napiVersion: external-secrets.io/v1\nkind: ExternalSecret\nmetadata:\n  name: demo-app-tls-files\n  namespace: default\nspec:\n  refreshInterval: \"10s\"\n  secretStoreRef:\n    kind: ClusterSecretStore\n    name: vault-backend\n  target:\n    name: demo-app-tls-files\n    creationPolicy: Owner\n    # Template to ensure proper file formatting\n    template:\n      type: Opaque\n      data:\n        tls.crt: \"{{ .tls_crt }}\"\n        tls.key: \"{{ .tls_key }}\"\n  data:\n    - secretKey: tls_crt\n      remoteRef:\n        key: secret/data/demo-app/tls-files\n        property: tls.crt\n    - secretKey: tls_key\n      remoteRef:\n        key: secret/data/demo-app/tls-files\n        property: tls.key\n```\n\n- Notice how there’s a\n\n  spec.target.template\n\n  which templates out the file contents from the secret contents\n\nStep 5 - Helm Chart\n───────────────────\n\n- This isn’t about setting up a helm chart so I’m not going to explain a lot but the working example is simple, not secure, and in the repo\n- The helm chart renders manifests - I’ve paired one down and added comments to the relevant things\n- The thing to just take note of is the reference of the secrets in the\n\n  envFrom\n\n  section\n\n```\n# deployment.yml\napiVersion: apps/v1\nkind: Deployment\nmetadata:\n  annotations:\n    meta.helm.sh/release-name: demo-app\n    meta.helm.sh/release-namespace: default\n  name: demo-app\n  namespace: default\nspec:\n  replicas: 1\n  template:\n    metadata:\n      labels:\n        app.kubernetes.io/instance: demo-app\n        app.kubernetes.io/name: demo-app\n    spec:\n      containers:\n        - envFrom:\n            - secretRef:\n                name: demo-app-secrets # name of example secret from section 4\n            - secretRef:\n                name: demo-app-config # another example in the repo\n          image: demo-app:latest # the image you built and loaded into kind - simple 'just' recipe in the repo\n          imagePullPolicy: Never\n          name: demo-app\n          volumeMounts:\n            - mountPath: /etc/secrets\n              name: secrets-volume\n              readOnly: true\n            - mountPath: /etc/config\n              name: configs-volume\n              readOnly: true\n      volumes:\n        - name: secrets-volume\n          secret:\n            defaultMode: 420\n            secretName: demo-app-tls-files # example secret file from section 4.1\n        - name: configs-volume\n          secret:\n            defaultMode: 420\n            secretName: demo-app-config-files\n```\n\nStep 5.1 - Deploy\n─────────────────\n\n- We can deploy the demo-app from the git repo to the cluster\n- For a local demo a few things happen\n\n  - local image build\n  - loading that image into\n\n    kind\n\n    (\n\n    kind\n\n    doesn’t have access to your host’s docker image cache, so images need to be loaded into the cluster cache)\n- just deploy\n\n  takes care of this for you, read the recipe in the repo if you’re interested in more there, the focus of this post and example are to briefly show how to use ESO though\n\nStep 6 - Profit\n───────────────\n\nThe example app just displays things that are mounted in - totally vibe-coded to illustrate the secrets mounting, not the appropriate way to leak secrets.\n\nSource: https://pype.dev/kubernetes-external-secrets-operator/","markdown_url":"","text_url":"","ansi_curl":""}</script>
+</div>
+
+<script>
+(function() {
+    if (window.__markataPostCopyBound) {
+        return;
+    }
+    window.__markataPostCopyBound = true;
+
+    function copyText(text) {
+        if (!text) {
+            return Promise.reject(new Error('missing copy text'));
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        var result = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return result ? Promise.resolve() : Promise.reject(new Error('execCommand failed'));
+    }
+
+    function setAbsoluteURLs(container, rootURL) {
+        var attrs = ['href', 'src', 'poster'];
+        attrs.forEach(function(attr) {
+            var selector = '[' + attr + ']';
+            container.querySelectorAll(selector).forEach(function(node) {
+                var value = node.getAttribute(attr);
+                if (!value) {
+                    return;
+                }
+                try {
+                    node.setAttribute(attr, new URL(value, rootURL).href);
+                } catch (err) {
+                }
+            });
+        });
+    }
+
+    function removeCopyNoise(container) {
+        container.querySelectorAll('.anchor, .heading-anchor, [aria-hidden="true"], [role="presentation"]').forEach(function(node) {
+            node.remove();
+        });
+
+        container.querySelectorAll('h1 a[href^="#"], h2 a[href^="#"], h3 a[href^="#"], h4 a[href^="#"], h5 a[href^="#"], h6 a[href^="#"]').forEach(function(node) {
+            node.remove();
+        });
+
+        container.querySelectorAll('pre code').forEach(function(node) {
+            var language = '';
+            (node.className || '').split(/\s+/).forEach(function(className) {
+                if (className.indexOf('language-') === 0) {
+                    language = className.slice('language-'.length);
+                }
+            });
+
+            var pre = node.parentNode;
+            pre.setAttribute('data-copy-code-block', 'true');
+            if (language) {
+                pre.setAttribute('data-language', language);
+                node.setAttribute('data-language', language);
+            }
+
+            node.textContent = (node.textContent || '').replace(/\n+$/, '');
+        });
+    }
+
+    function applyRichStyles(container) {
+        var styles = {
+            h1: 'margin:0 0 16px;font-size:2em;font-weight:700;line-height:1.2;',
+            h2: 'margin:28px 0 14px;font-size:1.5em;font-weight:700;line-height:1.25;',
+            h3: 'margin:24px 0 12px;font-size:1.25em;font-weight:700;line-height:1.3;',
+            h4: 'margin:20px 0 10px;font-size:1.1em;font-weight:700;line-height:1.35;',
+            h5: 'margin:18px 0 8px;font-size:1em;font-weight:700;line-height:1.4;',
+            h6: 'margin:16px 0 8px;font-size:0.95em;font-weight:700;line-height:1.4;',
+            p: 'margin:0 0 14px;line-height:1.6;white-space:normal;',
+            ul: 'margin:0 0 16px;padding-left:24px;',
+            ol: 'margin:0 0 16px;padding-left:24px;',
+            li: 'margin:0 0 6px;',
+            blockquote: 'margin:20px 0;padding:4px 0 4px 16px;border-left:3px solid #cbd5e1;',
+            pre: 'margin:16px 0;padding:12px 14px;white-space:pre-wrap;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;',
+            code: 'font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;',
+            a: 'text-decoration:underline;',
+            hr: 'margin:24px 0;',
+            img: 'max-width:100%;height:auto;',
+            table: 'border-collapse:collapse;margin:16px 0;',
+            th: 'border:1px solid #d0d7de;padding:6px 10px;text-align:left;',
+            td: 'border:1px solid #d0d7de;padding:6px 10px;text-align:left;'
+        };
+
+        Object.keys(styles).forEach(function(selector) {
+            container.querySelectorAll(selector).forEach(function(node) {
+                var existing = node.getAttribute('style');
+                node.setAttribute('style', styles[selector] + (existing ? existing : ''));
+            });
+        });
+
+        container.querySelectorAll('[data-copy-code-block]').forEach(function(node) {
+            var existing = node.getAttribute('style');
+            node.setAttribute('style', 'margin:16px 0;padding:12px 14px;white-space:pre-wrap;overflow:auto;background:#f8fafc;' + (existing ? existing : ''));
+        });
+    }
+
+    function buildRichPayload(root) {
+        var data = readPayload(root);
+        var title = data.title || document.title;
+        var url = data.url || window.location.href;
+        var article = document.querySelector('.post .post-content');
+        var wrapper = document.createElement('div');
+        var heading = document.createElement('h1');
+        var source = document.createElement('p');
+        var link = document.createElement('a');
+
+        heading.textContent = title;
+        link.href = url;
+        link.textContent = url;
+        source.appendChild(link);
+        wrapper.appendChild(heading);
+        wrapper.appendChild(source);
+
+        if (article) {
+            var content = article.cloneNode(true);
+            removeCopyNoise(content);
+            setAbsoluteURLs(content, url);
+            applyRichStyles(content);
+            wrapper.appendChild(content);
+        }
+
+        heading.setAttribute('style', 'margin:0 0 16px;font-size:2em;font-weight:700;line-height:1.2;');
+        source.setAttribute('style', 'margin:0 0 18px;line-height:1.5;white-space:normal;');
+        link.setAttribute('style', 'text-decoration:underline;');
+
+        return {
+            html: wrapper.innerHTML,
+            text: data.text || url
+        };
+    }
+
+    function readPayload(root) {
+        var payloadNode = root.querySelector('.post-copy__payload');
+        var raw = payloadNode ? payloadNode.textContent : '{}';
+        try {
+            return JSON.parse(raw);
+        } catch (err) {
+            return {};
+        }
+    }
+
+    function copyRich(root) {
+        var payload = buildRichPayload(root);
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            var item = new ClipboardItem({
+                'text/html': new Blob([payload.html], { type: 'text/html' }),
+                'text/plain': new Blob([payload.text], { type: 'text/plain' })
+            });
+            return navigator.clipboard.write([item]).catch(function() {
+                return copyText(payload.text);
+            });
+        }
+        return copyText(payload.text);
+    }
+
+    function feedbackMessage(kind) {
+        if (kind === 'url') {
+            return 'URL copied';
+        }
+        if (kind === 'rich') {
+            return 'Rich copy ready';
+        }
+        if (kind === 'markdown') {
+            return 'Markdown copied';
+        }
+        if (kind === 'text') {
+            return 'Text copied';
+        }
+        if (kind === 'markdown-url') {
+            return 'Markdown URL copied';
+        }
+        if (kind === 'text-url') {
+            return 'Text URL copied';
+        }
+        if (kind === 'ansi-curl') {
+            return 'curl command copied';
+        }
+        return 'Copied';
+    }
+
+    function buildFormatPath(ext) {
+        var path = window.location.pathname || '/';
+        if (path !== '/' && path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+        return path + ext;
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('.post-copy__option');
+        if (!button) {
+            return;
+        }
+        var root = button.closest('[data-post-copy]');
+        if (!root) {
+            return;
+        }
+        var status = root.querySelector('.post-copy__status');
+        var details = root.querySelector('.post-copy__details');
+        var kind = button.dataset.copyKind;
+        var data = readPayload(root);
+        var action;
+
+        if (kind === 'markdown-url') {
+            if (details) {
+                details.open = false;
+            }
+            window.location.href = buildFormatPath('.md');
+            return;
+        }
+
+        if (kind === 'text-url') {
+            if (details) {
+                details.open = false;
+            }
+            window.location.href = buildFormatPath('.txt');
+            return;
+        }
+
+        if (kind === 'url') {
+            action = copyText(data.url || window.location.href);
+        } else if (kind === 'rich') {
+            action = copyRich(root);
+        } else if (kind === 'markdown') {
+            action = copyText(data.markdown || '');
+        } else if (kind === 'ansi-curl') {
+            action = copyText(data.ansi_curl || '');
+        } else {
+            action = copyText(data.text || '');
+        }
+
+        action.then(function() {
+            root.dataset.copyState = 'copied';
+            if (status) {
+                status.textContent = feedbackMessage(kind);
+            }
+            if (details) {
+                details.open = false;
+            }
+            window.setTimeout(function() {
+                if (status) {
+                    status.textContent = '';
+                }
+                root.dataset.copyState = '';
+            }, 1800);
+        }).catch(function() {
+            root.dataset.copyState = 'error';
+            if (status) {
+                status.textContent = 'Unable to copy';
+            }
+            window.setTimeout(function() {
+                if (status) {
+                    status.textContent = '';
+                }
+                root.dataset.copyState = '';
+            }, 1800);
+        });
+    });
+})();
+</script>
+
+
+        </header>
+
+        <div class="post-content e-content">
+            <p>I wanted to put a short demo together of using External Secrets Operator (ESO)
+to expose secrets from a vault (like Hashicorp Vault, AWS Secrets Manager, etc)
+to services running in kubernetes</p>
+<p>Demo code is <a href="https://github.com/pypeaday/blog-kubernetes-external-secrets-operator-demo">here in this github repo</a></p>
+<p>This post is a high level overview of the components, see the repo for the full example.</p>
+<h2 id="setup"><span class="heading-wear-glyph">Setup</span> <a href="#setup" class="heading-anchor">#</a></h2>
+<ul>
+<li>
+<p><a href="/docker/" class="wikilink" data-title="docker" data-description="docker - container runtime" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;docker - container runtime&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;docker&#34;}">docker</a> for containerized development</p>
+</li>
+<li>
+<p><a href="/kind/" class="wikilink" data-title="kind" data-description="kind - kubernetes in docker" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;kind - kubernetes in docker&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;kind&#34;}">kind</a> for setting up a quick cluster</p>
+</li>
+<li>
+<p><a href="/kubectl/" class="wikilink" data-title="kubectl" data-description="kubectl - canonically pronouned kube-control" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;kubectl - canonically pronouned kube-control&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;kubectl&#34;}">kubectl</a> for accessing the cluster</p>
+</li>
+<li>
+<p><a href="/helm/" class="wikilink" data-title="helm" data-description="helm - package manager for k8s" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;helm - package manager for k8s&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;helm&#34;}">helm</a> for installing ArgoCD and ESO</p>
+</li>
+<li>
+<p>and then <a href="https://github.com/casey/just">justfile</a> is there to wrap the commands to easier execution</p>
+</li>
+</ul>
+<h2 id="step-0-vault"><span class="heading-wear-glyph">Step 0 - Vault</span> <a href="#step-0-vault" class="heading-anchor">#</a></h2>
+<ul>
+<li>for the demo we&rsquo;ll setup Hashicorp Vault in <a href="/docker/" class="glossary-term" title="docker - container runtime" data-hover-title="docker" data-local-preview="{&#34;description&#34;:&#34;docker - container runtime&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;docker&#34;}">docker</a> compose to easily bring it
+up and down</li>
+<li>and the init-script is in the repo - it uses curl to make some secrets in
+vault that we&rsquo;ll reference later</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl"><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">vault</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">hashicorp/vault:1.18</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">vault</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">&#34;58200:8200</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">VAULT_DEV_ROOT_TOKEN_ID</span><span class="p">:</span><span class="w"> </span><span class="l">root</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">VAULT_DEV_LISTEN_ADDRESS</span><span class="p">:</span><span class="w"> </span><span class="m">0.0.0.0</span><span class="p">:</span><span class="m">8200</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">vault-data:/vault/file</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cap_add</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">IPC_LOCK</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">server -dev -dev-root-token-id=root</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">vault-data</span><span class="p">:</span><span class="w">
+</span></span></span></code></pre><ul>
+<li>bringing up the vault instance is a simple <code>docker compose up</code> (use the just recipes which some <code>curl</code> commands for checking status etc.)</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl">curl -s http://localhost:58200/v1/sys/health <span class="p">|</span> jq .  <span class="c1"># or just vault-status</span>
+</span></span><span class="line"><span class="cl"><span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;initialized&#34;</span>: true,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;sealed&#34;</span>: false,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;standby&#34;</span>: false,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;performance_standby&#34;</span>: false,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;replication_performance_mode&#34;</span>: <span class="s2">&#34;disabled&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;replication_dr_mode&#34;</span>: <span class="s2">&#34;disabled&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;server_time_utc&#34;</span>: 1770893657,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;version&#34;</span>: <span class="s2">&#34;1.18.5&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;enterprise&#34;</span>: false,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;cluster_name&#34;</span>: <span class="s2">&#34;vault-cluster-acfb9930&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;cluster_id&#34;</span>: <span class="s2">&#34;4d9162f4-e501-371b-7f94-bd60052b40a3&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;echo_duration_ms&#34;</span>: 0,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;clock_skew_ms&#34;</span>: 0,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;replication_primary_canary_age_ms&#34;</span>: <span class="m">0</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre><h2 id="step-1-app"><span class="heading-wear-glyph">Step 1 - App</span> <a href="#step-1-app" class="heading-anchor">#</a></h2>
+<ul>
+<li>We need an app that requires secrets</li>
+<li>app code in repo, essentially it&rsquo;s a python webserver to show the vault
+values (obviously this would expose real secrets so it&rsquo;s just a demo)</li>
+<li>Below is one of the endpoints in the vibe-coded app, just to illustrate that
+we&rsquo;re going to give secrets to the app as environment variables (or as mounted
+files!)</li>
+<li>In the repo, the app is included and there&rsquo;s a <code>just build</code> which builds the docker image</li>
+<li>There is also <code>just deploy</code> which handles loading the image into <code>kind</code>&rsquo;s image cache</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># example route from demo-app - see git repo</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@app.get</span><span class="p">(</span><span class="s2">&#34;/env&#34;</span><span class="p">,</span> <span class="n">response_class</span><span class="o">=</span><span class="n">HTMLResponse</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">show_env</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># ESO brings Vault secrets into environment variables</span>
+</span></span><span class="line"><span class="cl">    <span class="n">env_vars</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1"># Sort by category, then by key</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sorted_items</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">env_vars</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">classify_env</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">cards</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">create_card</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sorted_items</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">secret_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">env_vars</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">SECRET_KEYS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">config_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">env_vars</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">CONFIG_KEYS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">system_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">env_vars</span><span class="p">)</span> <span class="o">-</span> <span class="n">secret_count</span> <span class="o">-</span> <span class="n">config_count</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">html</span> <span class="o">=</span> <span class="n">HTML_TEMPLATE</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cards</span><span class="o">=</span><span class="n">cards</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">secret_count</span><span class="o">=</span><span class="n">secret_count</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">config_count</span><span class="o">=</span><span class="n">config_count</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system_count</span><span class="o">=</span><span class="n">system_count</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">HTMLResponse</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="n">html</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">read_mounted_files</span><span class="p">(</span><span class="n">directory</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;&#34;&#34;Read all files from a mounted directory.&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">files_data</span> <span class="o">=</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&#34;r&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">files_data</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">files_data</span><span class="p">[</span><span class="n">filename</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;&lt;Error reading file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">files_data</span>
+</span></span><span class="line"><span class="cl">
+</span></span></code></pre><h2 id="step-2-cluster"><span class="heading-wear-glyph">Step 2 - Cluster</span> <a href="#step-2-cluster" class="heading-anchor">#</a></h2>
+<ul>
+<li>use <code>kind</code> to bring up a cluster</li>
+<li>this will start a few docker containers to act as your control-plane and workers</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># kind-config.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">kind.x-k8s.io/v1alpha4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">eso-demo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">nodes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">control-plane</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">extraPortMappings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">containerPort</span><span class="p">:</span><span class="w"> </span><span class="m">30080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hostPort</span><span class="p">:</span><span class="w"> </span><span class="m">58080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">role</span><span class="p">:</span><span class="w"> </span><span class="l">worker</span><span class="w">
+</span></span></span></code></pre><pre><code>kind create cluster --config kind-config.yaml --name eso-demo
+</code></pre>
+<h2 id="step-3-external-secrets-operator"><span class="heading-wear-glyph">Step 3 - External Secrets Operator</span> <a href="#step-3-external-secrets-operator" class="heading-anchor">#</a></h2>
+<ul>
+<li>installed with <a href="/helm/" class="wikilink" data-title="helm" data-description="helm - package manager for k8s" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;helm - package manager for k8s&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;helm&#34;}">helm</a> from the official <a href="/helm/" class="glossary-term" title="helm - package manager for k8s" data-hover-title="helm" data-local-preview="{&#34;description&#34;:&#34;helm - package manager for k8s&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;helm&#34;}">helm</a> chart</li>
+<li>NOTE: this is the Operator, not the secrets&hellip; this is the thing which goes
+to the secrets backend and creates kubernetes secrets</li>
+</ul>
+<pre><code>helm repo add external-secrets https://charts.external-secrets.io 2&gt;/dev/null || true
+helm repo update
+helm install external-secrets external-secrets/external-secrets \
+  --namespace external-secrets \
+  --create-namespace \
+  --wait
+</code></pre>
+<p>In the repo this is mostly <code>just eso-install</code></p>
+<h2 id="step-3-5-secretstore"><span class="heading-wear-glyph">Step 3.5 - Secretstore</span> <a href="#step-3-5-secretstore" class="heading-anchor">#</a></h2>
+<ul>
+<li>You need a <code>clustersecretstore</code> to be the place that ESO puts secrets</li>
+</ul>
+<pre><code>apiVersion: external-secrets.io/v1
+kind: ClusterSecretStore
+metadata:
+  name: vault-backend
+spec:
+  provider:
+    vault:
+      server: &quot;http://10.10.0.1:58200&quot;
+      path: &quot;secret&quot;
+      version: &quot;v2&quot;
+      auth:
+        tokenSecretRef:
+          name: vault-token
+          key: token
+          namespace: external-secrets
+
+</code></pre>
+<h2 id="step-4-secrets"><span class="heading-wear-glyph">Step 4 - Secrets</span> <a href="#step-4-secrets" class="heading-anchor">#</a></h2>
+<ul>
+<li>Secrets go in the <code>clustersecretstore</code>
+<ul>
+<li>in this example it&rsquo;s called &lsquo;vault-backend&rsquo;</li>
+</ul>
+</li>
+<li>In the demo we can just <code>kubectl apply -f &lt;manifest&gt;</code> to deploy the secret to
+the cluster</li>
+<li>In practice this should be handled by something more mature than raw-doggin
+<a href="/kubectl/" class="glossary-term" title="kubectl - canonically pronouned kube-control" data-hover-title="kubectl" data-local-preview="{&#34;description&#34;:&#34;kubectl - canonically pronouned kube-control&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;kubectl&#34;}">kubectl</a> commands</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># manifests/external-secrets.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">external-secrets.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalSecret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-secrets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">refreshInterval</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10s&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">secretStoreRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterSecretStore</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-backend</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-secrets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">creationPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Owner</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="l">DATABASE_PASSWORD</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">remoteRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">secret/data/demo-app/secrets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l">database_password</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="l">API_KEY</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">remoteRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">secret/data/demo-app/secrets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l">api_key</span><span class="w">
+</span></span></span></code></pre><h2 id="step-4-1-files"><span class="heading-wear-glyph">Step 4.1 - Files</span> <a href="#step-4-1-files" class="heading-anchor">#</a></h2>
+<ul>
+<li>ESO supports mounting files to containers as well through special <code>ExternalSecret</code> resources</li>
+<li>One of the example seecrets is a TLS certificate</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># manifests/external-secrets-files.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># File-based ExternalSecret for TLS certificates</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c"># These will be mounted as files in /etc/secrets/</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">external-secrets.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ExternalSecret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-tls-files</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">refreshInterval</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;10s&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">secretStoreRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">ClusterSecretStore</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vault-backend</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">target</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-tls-files</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">creationPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Owner</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Template to ensure proper file formatting</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">Opaque</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">tls.crt</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ .tls_crt }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">tls.key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{{ .tls_key }}&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">data</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="l">tls_crt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">remoteRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">secret/data/demo-app/tls-files</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l">tls.crt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">secretKey</span><span class="p">:</span><span class="w"> </span><span class="l">tls_key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">remoteRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">key</span><span class="p">:</span><span class="w"> </span><span class="l">secret/data/demo-app/tls-files</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">property</span><span class="p">:</span><span class="w"> </span><span class="l">tls.key</span><span class="w">
+</span></span></span></code></pre><ul>
+<li>Notice how there&rsquo;s a <code>spec.target.template</code> which templates out the file
+contents from the secret contents</li>
+</ul>
+<h2 id="step-5-helm-chart"><span class="heading-wear-glyph">Step 5 - Helm Chart</span> <a href="#step-5-helm-chart" class="heading-anchor">#</a></h2>
+<ul>
+<li>This isn&rsquo;t about setting up a helm chart so I&rsquo;m not going to explain a lot
+but the working example is simple, not secure, and in the repo</li>
+<li>The helm chart renders manifests - I&rsquo;ve paired one down and added comments to
+the relevant things</li>
+<li>The thing to just take note of is the reference of the secrets in the <code>envFrom</code> section</li>
+</ul>
+<pre class="chroma"><code><span class="line"><span class="cl"><span class="c"># deployment.yml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Deployment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">meta.helm.sh/release-name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">meta.helm.sh/release-namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">replicas</span><span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">template</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app.kubernetes.io/instance</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">app.kubernetes.io/name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">envFrom</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">secretRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-secrets</span><span class="w"> </span><span class="c"># name of example secret from section 4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">secretRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-config</span><span class="w"> </span><span class="c"># another example in the repo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app:latest</span><span class="w"> </span><span class="c"># the image you built and loaded into kind - simple &#39;just&#39; recipe in the repo</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">Never</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/secrets</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">secrets-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/etc/config</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">configs-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">              </span><span class="nt">readOnly</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">secrets-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">defaultMode</span><span class="p">:</span><span class="w"> </span><span class="m">420</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-tls-files</span><span class="w"> </span><span class="c"># example secret file from section 4.1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">configs-volume</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">defaultMode</span><span class="p">:</span><span class="w"> </span><span class="m">420</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="l">demo-app-config-files</span><span class="w">
+</span></span></span></code></pre><h2 id="step-5-1-deploy"><span class="heading-wear-glyph">Step 5.1 - Deploy</span> <a href="#step-5-1-deploy" class="heading-anchor">#</a></h2>
+<ul>
+<li>We can deploy the demo-app from the git repo to the cluster</li>
+<li>For a local demo a few things happen
+<ul>
+<li>local image build</li>
+<li>loading that image into <a href="/kind/" class="wikilink" data-title="kind" data-description="kind - kubernetes in docker" data-date="2026-02-10" data-local-preview="{&#34;description&#34;:&#34;kind - kubernetes in docker&#34;,&#34;kind&#34;:&#34;post&#34;,&#34;tags&#34;:[&#34;glossary&#34;],&#34;title&#34;:&#34;kind&#34;}">kind</a> (<code>kind</code> doesn&rsquo;t have access to your host&rsquo;s docker image cache, so images need to be loaded into the cluster cache)</li>
+</ul>
+</li>
+<li><code>just deploy</code> takes care of this for you, read the recipe in the repo if
+you&rsquo;re interested in more there, the focus of this post and example are to
+briefly show how to use ESO though</li>
+</ul>
+<h2 id="step-6-profit"><span class="heading-wear-glyph">Step 6 - Profit</span> <a href="#step-6-profit" class="heading-anchor">#</a></h2>
+<p>The example app just displays things that are mounted in - totally vibe-coded
+to illustrate the secrets mounting, not the appropriate way to leak secrets.</p>
+<figure>
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260210233804_614254b7.png" alt="20260210233804_614254b7.png">
+</figure>
+<figure>
+<img src="https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/20260210233828_19852225.png" alt="20260210233828_19852225.png">
+</figure>
+
+        </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="post-graph post-graph--pending" data-graph="/garden/graph.json" data-post="/kubernetes-external-secrets-operator/">
+  <div class="post-graph__header">
+    <div>
+      <h2>Connections</h2>
+      <p class="post-graph__description">Related tags and posts connected to this entry.</p>
+    </div>
+    <div class="post-graph__controls">
+      <label class="post-graph__control">
+        <span>Nodes</span>
+        <input type="range" class="post-graph__limit" min="8" max="120" step="2" value="100" data-default="100" />
+        <span class="post-graph__limit-value">100</span>
+      </label>
+      <label class="post-graph__toggle">
+        <input type="checkbox" class="post-graph__animate" checked />
+        <span>Animate</span>
+      </label>
+      <label class="post-graph__toggle">
+        <input type="checkbox" class="post-graph__labels" />
+        <span>Labels</span>
+      </label>
+    </div>
+  </div>
+  <div class="post-graph__canvas">
+    <canvas class="post-graph__canvas-el" aria-label="Post connections graph"></canvas>
+    <div class="post-graph__tooltip" aria-live="polite"></div>
+  </div>
+</section>
+<script>
+(function() {
+  var graphSection = document.currentScript && document.currentScript.previousElementSibling;
+  if (!graphSection || !graphSection.classList || !graphSection.classList.contains('post-graph')) {
+    return;
+  }
+
+  var scriptSrc = '/js/post-graph.9f75d12a.js';
+  var loaded = false;
+
+  function loadGraphScript() {
+    if (loaded) {
+      return;
+    }
+    loaded = true;
+
+    if (document.querySelector('script[src="' + scriptSrc + '"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.src = scriptSrc;
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          observer.disconnect();
+          loadGraphScript();
+          return;
+        }
+      }
+    }, { rootMargin: '400px 0px' });
+    observer.observe(graphSection);
+    return;
+  }
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadGraphScript, { timeout: 2000 });
+    return;
+  }
+
+  window.setTimeout(loadGraphScript, 1200);
+})();
+</script>
+
+
+
+
+
+
+<style>
+.post-graph {
+  margin: var(--space-8, 2rem) 0 var(--space-6, 1.5rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 0.5rem);
+  background: var(--color-background, #1a1a1a);
+}
+
+/* Stay out of the flow until the graph data confirms this post has
+   connections; post-graph.js removes the class once it can render. */
+.post-graph--pending {
+  visibility: hidden;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.post-graph__header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: var(--space-3, 0.75rem);
+}
+
+.post-graph__header h2 {
+  margin-bottom: var(--space-1, 0.25rem);
+}
+
+.post-graph__description {
+  color: var(--garden-muted, #999);
+  font-size: var(--text-sm, 0.875rem);
+  max-width: 40ch;
+}
+
+.post-graph__controls {
+  display: flex;
+  gap: var(--space-2, 0.5rem);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.post-graph__control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--garden-muted, #999);
+  border: 1px solid var(--garden-border, #444);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-background, #1a1a1a);
+}
+
+.post-graph__control input[type="range"] {
+  accent-color: var(--garden-accent, #ffcd11);
+}
+
+.post-graph__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 0.25rem);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--garden-muted, #999);
+  border: 1px solid var(--garden-border, #444);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-background, #1a1a1a);
+}
+
+.post-graph__toggle input {
+  accent-color: var(--garden-accent, #ffcd11);
+}
+
+.post-graph__canvas {
+  position: relative;
+  height: clamp(280px, 45vw, 420px);
+  border-radius: 20px;
+  background: var(--color-background, #1a1a1a);
+  overflow: hidden;
+}
+
+.post-graph__canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.post-graph__tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.35rem;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.1s ease;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .post-graph__canvas {
+    height: 60vw;
+  }
+}
+</style>
+
+
+
+
+
+        
+        
+<section class="share-panel share-panel--bottom" aria-label="Share this post">
+    <div class="share-panel__header">
+        <h2 class="share-panel__title">Share this post</h2>
+    </div>
+    <div class="share-panel__grid">
+        
+        
+        <a href="https://twitter.com/intent/tweet?text=Kubernetes+External+Secrets+Operator&amp;url=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter" title="Share on Twitter">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/twitter.svg');"></span>
+            <span class="share-button__name">Twitter</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://bsky.app/intent/compose?text=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Bluesky" title="Share on Bluesky">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/bluesky.svg');"></span>
+            <span class="share-button__name">Bluesky</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" title="Share on LinkedIn">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/linkedin.svg');"></span>
+            <span class="share-button__name">LinkedIn</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://wa.me/?text=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" title="Share on WhatsApp">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/whatsapp.svg');"></span>
+            <span class="share-button__name">WhatsApp</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" title="Share on Facebook">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/facebook.svg');"></span>
+            <span class="share-button__name">Facebook</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://t.me/share/url?url=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Telegram" title="Share on Telegram">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/telegram.svg');"></span>
+            <span class="share-button__name">Telegram</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Pinterest" title="Share on Pinterest">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/pinterest.svg');"></span>
+            <span class="share-button__name">Pinterest</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://reddit.com/submit?url=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F&amp;title=Kubernetes+External+Secrets+Operator" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Reddit" title="Share on Reddit">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/reddit.svg');"></span>
+            <span class="share-button__name">Reddit</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F&amp;t=Kubernetes+External+Secrets+Operator" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Hacker News" title="Share on Hacker News">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/hacker_news.svg');"></span>
+            <span class="share-button__name">Hacker News</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="mailto:?subject=Kubernetes+External+Secrets+Operator&amp;body=https%3A%2F%2Fpype.dev%2Fkubernetes-external-secrets-operator%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Email" title="Share on Email">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/email.svg');"></span>
+            <span class="share-button__name">Email</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <button type="button" class="share-button" data-share-action="copy" data-share-copy="https://pype.dev/kubernetes-external-secrets-operator/" data-share-label="Copy link to clipboard" data-share-feedback="Link copied to clipboard" aria-label="Copy link to clipboard" title="Copy link to clipboard">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/copy.svg');"></span>
+            <span class="share-button__name">Copy link</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </button>
+        
+        
+    </div>
+    <div class="share-toast" role="status" aria-live="polite"></div>
+</section>
+
+<script>
+(function() {
+    if (window.__markataShareCopyBound) {
+        return;
+    }
+    window.__markataShareCopyBound = true;
+
+    function copyToClipboard(text) {
+        if (!text) {
+            return Promise.reject();
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        var result = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return result ? Promise.resolve() : Promise.reject();
+    }
+
+    function showDesktopToast(target, text) {
+        if (!target) {
+            return;
+        }
+        if (window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) {
+            return;
+        }
+        target.textContent = text;
+        target.classList.add('share-toast--visible');
+        clearTimeout(target._timeout);
+        target._timeout = window.setTimeout(function() {
+            target.classList.remove('share-toast--visible');
+        }, 1600);
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('[data-share-action="copy"]');
+        if (!button) {
+            return;
+        }
+        event.preventDefault();
+        var payload = button.dataset.shareCopy;
+        if (!payload) {
+            return;
+        }
+        var hint = button.querySelector('.share-button__hint');
+        var defaultLabel = button.dataset.shareLabel || button.getAttribute('aria-label') || 'Copy link';
+        var feedback = button.dataset.shareFeedback || 'Link copied to clipboard';
+        var panel = button.closest('.share-panel');
+        var toast = panel ? panel.querySelector('.share-toast') : null;
+
+        copyToClipboard(payload).then(function() {
+            if (hint) {
+                hint.textContent = feedback;
+            }
+            button.setAttribute('aria-label', feedback);
+            button.classList.add('share-button--copied');
+            showDesktopToast(toast, feedback);
+            window.setTimeout(function() {
+                if (hint) {
+                    hint.textContent = '';
+                }
+                button.setAttribute('aria-label', defaultLabel);
+                button.classList.remove('share-button--copied');
+            }, 1800);
+        }).catch(function() {
+            if (hint) {
+                hint.textContent = 'Unable to copy';
+            }
+        });
+    });
+})();
+</script>
+
+
+        
+
+        
+        
+
+
+
+        
+        
+
+
+
+    </article>
+</div>
+
+
+      </main>
+
+      
+      
+
+    
+  </div>
+
+  
+  
+
+
+
+
+
+
+
+<footer class="site-footer site-footer--full" role="contentinfo">
+    <div class="container">
+        
+
+        
+
+        
+        
+        
+
+
+
+
+
+
+
+
+
+        
+
+         
+         <p class="footer-copyright">
+             &copy; 2026 Nic Payne.
+             
+             
+         </p>
+         
+    </div>
+
+    
+    
+
+
+
+
+
+
+<div class="h-card site-author-card visually-hidden">
+    
+    
+    <span class="p-name">Nic Payne</span>
+    
+
+    
+    
+    <a class="u-url u-uid" href="https://pype.dev">https://pype.dev</a>
+    
+
+    
+    
+
+    
+    
+    <span class="p-note">My thoughts and streams of consciousness organized into barely coherent posts about things</span>
+    
+</div>
+
+
+</footer>
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+
+
+<div id="shortcuts-modal" class="shortcuts-modal" aria-hidden="true" role="dialog" aria-labelledby="shortcuts-modal-title">
+    <div class="shortcuts-modal-content">
+        <header class="shortcuts-modal-header">
+            <h2 id="shortcuts-modal-title">Keyboard Shortcuts</h2>
+            <button type="button" class="shortcuts-modal-close" aria-label="Close shortcuts help">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+
+        <div class="shortcuts-modal-body">
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Scrolling</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>j</kbd></td>
+                            <td>Scroll down</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>k</kbd></td>
+                            <td>Scroll up</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>g</kbd></td>
+                            <td>Scroll to top</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>G</kbd></td>
+                            <td>Scroll to bottom</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>d</kbd></td>
+                            <td>Half-page down</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>u</kbd></td>
+                            <td>Half-page up</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Navigation</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>j</kbd> / <kbd>&darr;</kbd></td>
+                            <td>Next post (in feeds)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>k</kbd> / <kbd>&uarr;</kbd></td>
+                            <td>Previous post (in feeds)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Enter</kbd> / <kbd>o</kbd></td>
+                            <td>Open highlighted post</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>O</kbd></td>
+                            <td>Open in new tab</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>h</kbd></td>
+                            <td>Go to home</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>s</kbd></td>
+                            <td>Focus search</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>[</kbd> / <kbd>Shift</kbd> <kbd>K</kbd></td>
+                            <td>Previous post in series (or previous page)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>]</kbd> / <kbd>Shift</kbd> <kbd>J</kbd></td>
+                            <td>Next post in series (or next page)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>b</kbd></td>
+                            <td>Toggle left sidebar</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>B</kbd></td>
+                            <td>Toggle right sidebar</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>s</kbd></td>
+                            <td>Toggle reader mode (posts) / simple/rich view (feeds)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            
+            
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Theme</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td><kbd>\</kbd></td>
+                            <td>Toggle dark/light mode</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </section>
+            
+
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Utility</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>/</kbd></td>
+                            <td>Focus search input</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <kbd class="kbd-mac">&#8984;</kbd><kbd class="kbd-win">Ctrl</kbd><kbd>K</kbd>
+                            </td>
+                            <td>Focus search (alternative)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>y</kbd> <kbd>y</kbd></td>
+                            <td>Copy URL to clipboard</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>?</kbd></td>
+                            <td>Show this help</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Esc</kbd></td>
+                            <td>Close / clear highlight</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            
+        </div>
+
+        <footer class="shortcuts-modal-footer">
+            <button type="button" id="shortcuts-toggle" class="shortcuts-toggle-btn" aria-pressed="true">
+                Disable Shortcuts
+            </button>
+            <p class="shortcuts-hint">Shortcuts are disabled when typing in input fields</p>
+        </footer>
+    </div>
+</div>
+
+
+  <!-- Conditional Script Loading: Only load when needed -->
+  <script>
+    // Honor prefers-reduced-motion: pause autoplaying preview videos
+    (function() {
+      function handleReducedMotion() {
+        if (!window.matchMedia) return;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        document.querySelectorAll('video[autoplay]').forEach((v) => {
+          try {
+            v.pause();
+            v.removeAttribute('autoplay');
+          } catch (_) {
+            // ignore
+          }
+        });
+      }
+
+      handleReducedMotion();
+      if (window.matchMedia) {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mq && typeof mq.addEventListener === 'function') {
+          mq.addEventListener('change', handleReducedMotion);
+        }
+      }
+    })();
+
+    // Custom Navigation Shortcuts from config
+    
+
+    // Mention Cards - load once, the first time a page has mention links.
+    // SPA navigation can reach such a page after a first page without any;
+    // once loaded the script re-initialises itself on view-transition-complete.
+    (function() {
+      var mentionCardsLoaded = false;
+      function loadMentionCards() {
+        if (mentionCardsLoaded || !document.querySelector('a.mention')) return;
+        mentionCardsLoaded = true;
+        window.removeEventListener('view-transition-complete', loadMentionCards);
+        var mentionScript = document.createElement('script');
+        mentionScript.src = '/js/mention-cards.eadff291.js';
+        mentionScript.defer = true;
+        document.body.appendChild(mentionScript);
+      }
+      loadMentionCards();
+      if (!mentionCardsLoaded) window.addEventListener('view-transition-complete', loadMentionCards);
+    })();
+
+    // Keyboard Shortcuts Registry - load the core registry first, then load dependent scripts
+    const shortcutsRegistryScript = document.createElement('script');
+    shortcutsRegistryScript.src = '/js/shortcuts-registry.47e34d14.js';
+    // Use onload to ensure registry is fully loaded before dependent scripts
+    shortcutsRegistryScript.onload = function() {
+      // Keyboard Shortcuts - load search and core shortcuts
+      if (document.querySelector('#pagefind-search, #shortcuts-modal, [type="search"]')) {
+        const shortcutsScript = document.createElement('script');
+        shortcutsScript.src = '/js/search-shortcuts.5d0d8901.js';
+        document.body.appendChild(shortcutsScript);
+      }
+
+      // Scrolling Shortcuts - always available
+      const scrollingScript = document.createElement('script');
+      scrollingScript.src = '/js/scrolling-shortcuts.b3e4e8fa.js';
+      document.body.appendChild(scrollingScript);
+
+      // Navigation Shortcuts - load if feed, post cards, or prev/next navigation exist
+      if (document.querySelector('.feed, .feed-sidebar, .doc-sidebar, .post-nav, .card, [data-card], [data-action="prev"], [data-action="next"], .pagination-prev, .pagination-next')) {
+        const navigationScript = document.createElement('script');
+        navigationScript.src = '/js/navigation-shortcuts.d9c93267.js';
+        document.body.appendChild(navigationScript);
+      }
+
+      // History Shortcuts - always available (go back/forward)
+      const historyScript = document.createElement('script');
+      historyScript.src = '/js/history-shortcuts.06ade051.js';
+      document.body.appendChild(historyScript);
+    };
+    document.body.appendChild(shortcutsRegistryScript);
+
+    // Custom Shortcuts - load if custom shortcuts are defined in config
+      
+    // Pagination (JS mode) - only load if JS pagination element exists
+    if (document.querySelector('.pagination-js')) {
+      const paginationScript = document.createElement('script');
+      paginationScript.src = '/js/pagination.361bd4f5.js';
+      paginationScript.defer = true;
+      document.body.appendChild(paginationScript);
+    }
+
+    if (document.querySelector('video[data-hover-play]')) {
+      const hoverPlayVideoScript = document.createElement('script');
+      hoverPlayVideoScript.src = '/js/hover-play-video.1e0c4237.js';
+      hoverPlayVideoScript.defer = true;
+      document.body.appendChild(hoverPlayVideoScript);
+    }
+
+    // Feed cycling - populates the feed sidebar picker, counter, and prev/next
+    // feed controls when the page ships feed sidebar data.
+    if (document.querySelector('#feed-sidebar-data')) {
+      const feedCyclingScript = document.createElement('script');
+      feedCyclingScript.src = '/js/feed-cycling.938a27de.js';
+      feedCyclingScript.defer = true;
+      document.body.appendChild(feedCyclingScript);
+    }
+
+    // GLightbox - load when page has zoomable images
+    
+
+    // Lite YouTube embeds (oEmbed)
+    
+  </script>
+
+  <!-- Pagefind Search JS: lazy-loaded on user interaction -->
+  
+  <script>
+    
+
+    // If a bleve search endpoint is configured, skip pagefind and load bleve search instead.
+    if (window.__markataSearchEndpoint) {
+      (function() {
+        var script = document.createElement('script');
+        script.src = '/js/bleve-search.132d4e98.js';
+        document.body.appendChild(script);
+      })();
+    } else {
+    // Expose globally so view transitions can re-initialize after DOM swap.
+    window.initPagefindSearch = function initPagefindSearch() {
+      var root = document.getElementById('pagefind-search');
+      if (!root) return;
+      if (typeof PagefindUI === 'undefined') return;
+
+      // Tear down any previous instance if supported.
+      if (window.__pagefindUI && typeof window.__pagefindUI.destroy === 'function') {
+        try {
+          window.__pagefindUI.destroy();
+        } catch (_) {
+          // ignore
+        }
+      }
+
+      // Remove stale markup from previous page.
+      root.innerHTML = '';
+
+      window.__pagefindUI = new PagefindUI({
+        element: '#pagefind-search',
+        showSubResults: true,
+        showImages: true,
+        excerptLength: 200,
+        translations: {
+          placeholder: 'Search…'
+        }
+      });
+
+      var pagefindInput = root.querySelector('.pagefind-ui__search-input');
+      if (pagefindInput) {
+        if (!pagefindInput.id) pagefindInput.id = 'pagefind-search-input';
+        if (!pagefindInput.name) pagefindInput.name = 'search';
+      }
+    };
+
+    // Lazy-load pagefind: only fetch CSS + JS on first interaction
+    (function() {
+      var loaded = false;
+      var bundleDir = '/_pagefind';
+
+      function ensurePagefindCSS() {
+        if (document.querySelector('link[href*="/pagefind-ui.css"]')) return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = bundleDir + '/pagefind-ui.css';
+        document.head.appendChild(link);
+      }
+
+      function loadPagefind(callback) {
+        ensurePagefindCSS();
+
+        if (loaded) {
+          if (window.initPagefindSearch) {
+            window.initPagefindSearch();
+          }
+          if (callback) callback();
+          return;
+        }
+        loaded = true;
+
+        // Inject pagefind JS
+        var script = document.createElement('script');
+        script.src = bundleDir + '/pagefind-ui.js';
+        script.onload = function() {
+          if (window.initPagefindSearch) {
+            window.initPagefindSearch();
+          }
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+
+      // Trigger on: hover over search area, focus on search input
+      var searchEl = document.getElementById('pagefind-search');
+      if (searchEl) {
+        searchEl.addEventListener('mouseenter', function() { loadPagefind(); }, { once: true });
+        searchEl.addEventListener('focusin', function() { loadPagefind(); }, { once: true });
+      }
+
+      // Also trigger from any search input/button in the header
+      var searchControls = document.querySelectorAll('[type="search"], .search-toggle, .search-trigger');
+      for (var i = 0; i < searchControls.length; i++) {
+        searchControls[i].addEventListener('mouseenter', function() { loadPagefind(); }, { once: true });
+        searchControls[i].addEventListener('focus', function() { loadPagefind(); }, { once: true });
+      }
+
+      // Expose for view transitions re-initialization and search-shortcuts.js
+      window.loadPagefind = loadPagefind;
+    })();
+    } // end else (pagefind)
+  </script>
+  
+
+   <!-- Palette Switcher JS (when enabled) -->
+   
+   
+   <script src="/js/palette-switcher.b69367b1.js" defer></script>
+   
+   
+   <script src="/js/text-size.939ab303.js" defer></script>
+   
+   <script src="/js/heading-highlights.ce5a7302.js" defer></script>
+   <script src="/js/fit-post-titles.a8799b3f.js" defer></script>
+   
+   <script src="/js/scroll-spy.1bf62692.js" defer></script>
+   <script src="/js/tooltips.5c989f85.js" defer></script>
+
+    
+    <script>
+      window.MARKATA_GO_D3_URL = 'https://d3js.org/d3.v7.min.js';
+    </script>
+    
+
+  <!-- View Transitions API - Global Navigation Interceptor -->
+  
+  <script>
+    // View Transitions Configuration
+    window.VIEW_TRANSITIONS_CONFIG = {
+      enabled: true,
+      debug: false,
+      skipClasses: [],
+      skipSelectors: [],
+      transitionDuration: 300,
+      updateMeta: true,
+      scrollToTop: true,
+    };
+
+    // Special routes that should always use full navigation.
+    // (View-transition navigation swaps DOM without running inline scripts.)
+    
+  </script>
+  <script src="/js/view-transitions.5bfec5b0.js" defer></script>
+  <!-- Conditional CSS loader: injects missing CSS after view-transition SPA navigations -->
+  <script src="/js/conditional-css.86777e3d.js" defer></script>
+  
+
+  <!-- Decryption JS (only loaded for encrypted posts) -->
+  
+
+    <script>
+    (function() {
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      var MIN_VIEWPORT_MULTIPLIER = 1.75;
+
+      function initArticleProgressIndicator() {
+        if (window.__articleProgressCleanup) {
+          window.__articleProgressCleanup();
+          window.__articleProgressCleanup = null;
+        }
+
+        var container = document.querySelector('.article-progress');
+        var indicator = document.querySelector('.article-progress__indicator');
+        var article = document.querySelector('article.post');
+        if (!container || !indicator || !article) {
+          return;
+        }
+
+        var raf = window.requestAnimationFrame ? window.requestAnimationFrame.bind(window) : function(cb) { return window.setTimeout(cb, 16); };
+        var scheduled = false;
+        var lastValue = -1;
+        var lastVisibility = null;
+
+        function clamp(value, min, max) {
+          if (value < min) return min;
+          if (value > max) return max;
+          return value;
+        }
+
+        function refresh() {
+          scheduled = false;
+          var rect = article.getBoundingClientRect();
+          var articleTop = window.scrollY + rect.top;
+          var articleHeight = rect.height;
+          var viewportHeight = window.innerHeight || 1;
+          var minHeight = viewportHeight * MIN_VIEWPORT_MULTIPLIER;
+          var shouldShow = articleHeight >= minHeight;
+
+          if (shouldShow !== lastVisibility) {
+            container.classList.toggle('article-progress--hidden', !shouldShow);
+            lastVisibility = shouldShow;
+          }
+
+          if (!shouldShow) {
+            if (lastValue !== 0) {
+              lastValue = 0;
+              indicator.style.transform = 'scaleX(0)';
+            }
+            return;
+          }
+
+          var scrollableDistance = articleHeight - viewportHeight;
+          var ratio;
+          if (scrollableDistance <= 0) {
+            ratio = 1;
+          } else {
+            ratio = clamp((window.scrollY - articleTop) / scrollableDistance, 0, 1);
+          }
+
+          if (Math.abs(ratio - lastValue) < 0.001) {
+            return;
+          }
+          lastValue = ratio;
+          indicator.style.transform = 'scaleX(' + ratio + ')';
+        }
+
+        function schedule() {
+          if (scheduled) {
+            return;
+          }
+          scheduled = true;
+          raf(refresh);
+        }
+
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+        window.__articleProgressCleanup = function() {
+          window.removeEventListener('scroll', schedule);
+          window.removeEventListener('resize', schedule);
+        };
+
+        schedule();
+      }
+
+      window.initArticleProgressIndicator = initArticleProgressIndicator;
+      window.addEventListener('view-transition-complete', initArticleProgressIndicator);
+      initArticleProgressIndicator();
+    })();
+  </script>
+
+        <!-- Background Decoration Scripts -->
+    
+
+    <script>
+      (() => {
+        // Keep <mark> in sync with the active palette's highlight tokens.
+        // Runs on load, palette/theme attribute changes, and content swaps;
+        // it only writes when values change so it never churns style.
+        let lastBackground = null;
+        let lastColor = null;
+        let markFrame = 0;
+        const applyMarkPresentation = (force) => {
+          markFrame = 0;
+          const root = getComputedStyle(document.documentElement);
+          const background = root.getPropertyValue('--color-highlight').trim();
+          const color = root.getPropertyValue('--color-highlight-text').trim();
+          const changed = background !== lastBackground || color !== lastColor;
+          if (!changed && force !== true) return;
+          lastBackground = background;
+          lastColor = color;
+          if (background) document.documentElement.style.setProperty('--heading-mark-bg', background, 'important');
+          if (color) document.documentElement.style.setProperty('--heading-mark-fg', color, 'important');
+          document.querySelectorAll('mark').forEach(mark => {
+            if (background) mark.style.setProperty('background-color', background, 'important');
+            if (color) mark.style.setProperty('color', color, 'important');
+          });
+        };
+        const scheduleMarkPresentation = (force) => {
+          if (markFrame) return;
+          markFrame = requestAnimationFrame(() => applyMarkPresentation(force));
+        };
+        applyMarkPresentation(true);
+        setTimeout(applyMarkPresentation, 100);
+        window.addEventListener('load', () => applyMarkPresentation());
+        new MutationObserver(() => scheduleMarkPresentation()).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['class', 'data-palette', 'data-theme', 'data-aesthetic', 'data-fontpack']
+        });
+        new MutationObserver(records => {
+          const addedMark = records.some(record => Array.from(record.addedNodes).some(node =>
+            node.nodeType === 1 && (node.nodeName === 'MARK' || node.querySelector('mark'))));
+          if (addedMark) scheduleMarkPresentation(true);
+        }).observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('view-transition-complete', () => scheduleMarkPresentation(true));
+      })();
+    </script>
+  
+</body>
+</html>

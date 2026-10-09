@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */var WaCollapseEvent=class extends Event{constructor(){super("wa-collapse",{bubbles:!0,cancelable:!1,composed:!0})}};export{WaCollapseEvent}

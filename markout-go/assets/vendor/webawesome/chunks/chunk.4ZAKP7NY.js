@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */var WaShowEvent=class extends Event{constructor(){super("wa-show",{bubbles:!0,cancelable:!0,composed:!0})}};export{WaShowEvent}

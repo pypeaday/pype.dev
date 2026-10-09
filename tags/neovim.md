@@ -1,0 +1,7 @@
+# Posts tagged: neovim
+
+All posts with the tag "neovim"
+
+- [Neovim Markdown Journaling Research](/neovim-markdown-journaling-research/) - 2026-10-04
+- [A Simple Lua Plugin To Find My Drafts](/a-simple-lua-plugin-to-find-my-drafts/) - 2025-08-10
+- [Daily Notes Neovim Plugin](/daily-notes-neovim-plugin/) - 2025-07-17

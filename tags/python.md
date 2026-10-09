@@ -1,0 +1,46 @@
+# Posts tagged: python
+
+All posts with the tag "python"
+
+- [💭 uv script management](/thoughts-831/) - 2025-09-08
+- [Zsh alias for uv scripts](/zsh-alias-for-uv-scripts/) - 2025-09-08
+- [Python editable installs and nested scripts](/python-editable-installs-and-nested-scripts/) - 2025-07-14
+- [💭 Build backend | uv](/thoughts-732/) - 2025-07-04
+- [💭 Switching pip to uv in a Dockerized Flask / Django App — Nick …](/thoughts-722/) - 2025-06-27
+- [💭 Snowflake Status - Certificate Authority Update for AWS Regions](/thoughts-698/) - 2025-06-16
+- [I built a simple app for adding images to my blog](/i-built-a-simple-app-for-adding-images-to-my-blog/) - 2025-06-07
+- [Pandas.DataFrame info always answers and is sometimes right](/pandas-dataframe-info-always-answers-and-is-sometimes-right/) - 2025-05-26
+- [My MCP Configuration](/my-mcp-configuration/) - 2025-04-27
+- [docker context (and an issue to question your sanity)](/docker-context-and-an-issue-to-question-your-sanity/) - 2024-12-19
+- [Add a healthcheck to your FastAPI app](/add-a-healthcheck-to-your-fastapi-app/) - 2024-12-15
+- [Switching from AltaCV to RenderCV for my Resume](/switching-from-altacv-to-rendercv-for-my-resume/) - 2024-08-01
+- [Modal Labs](/modal-labs/) - 2022-12-28
+- [Call basicConfig to get Python log messages in iPython](/call-basicconfig-to-get-python-log-messages-in-ipython/) - 2022-12-10
+- [Benchmark your disks with fio](/benchmark-your-disks-with-fio/) - 2022-08-27
+- [Playing with mdformat](/playing-with-mdformat/) - 2022-08-23
+- [Add colored indicators to your dataframes html representation](/add-colored-indicators-to-your-dataframes-html-representation/) - 2022-06-04
+- [Subset a list based on values in another list with itertools.compress](/subset-a-list-based-on-values-in-another-list-with-itertools-compress/) - 2022-05-19
+- [Forms with FastAPI and Jinja](/fastapi-jinja-forms/) - 2022-05-15
+- [Dynamic-Form-Values-With-Jinja-And-Fastapi](/dynamic-form-values-with-jinja-and-fastapi/) - 2022-05-15
+- [Python-Eval](/python-eval/) - 2022-05-12
+- [Dataframe-To-Styled-Html](/dataframe-to-styled-html/) - 2022-05-07
+- [Dataframe-To-Markdown](/dataframe-to-markdown/) - 2022-05-07
+- [Wish-List-With-Fastapi](/wish-list-with-fastapi/) - 2022-05-06
+- [Pandas-String-Contains](/pandas-string-contains/) - 2022-05-02
+- [Unpack-Anywhere-With-Star](/unpack-anywhere-with-star/) - 2022-04-24
+- [Pipx](/pipx/) - 2022-04-22
+- [Typeddict](/typeddict/) - 2022-04-15
+- [And-vs-&](/and-vs/) - 2022-04-06
+- [Ipython-Prompt](/ipython-prompt/) - 2022-04-02
+- [Deques](/deques/) - 2022-03-31
+- [Plotly-And-Streamlit](/plotly-and-streamlit/) - 2022-03-31
+- [self-hosted-media](/self-hosted-media/) - 2022-03-24
+- [Skimpy](/skimpy/) - 2022-03-23
+- [Pyclean](/pyclean/) - 2022-03-22
+- [Psutil-01](/psutils-01/) - 2022-03-16
+- [Mu](/mu/) - 2022-03-15
+- [Abstract-Base-Class](/abstract-base-class/) - 2022-03-09
+- [Python-F-String-Align](/python-f-string-align/) - 2022-03-08
+- [Python-Builtin-Calendar](/python-builtin-calendar/) - 2022-03-08
+- [Dataframe-Memory-Usage](/dataframe-memory-usage/) - 2022-03-07
+- [Pandas-Select-Dtypes](/pandas-select-dtypes/) - 2022-03-05

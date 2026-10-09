@@ -1,0 +1,217 @@
+# Posts tagged: tech
+
+All posts with the tag "tech"
+
+- [The Faulted Disk: harbor Replacement Writeup](/harbor-faulted-disk-replacement/) - 2026-10-06
+- [It Will Be Hard To Do More](/it-will-be-hard-to-do-more/) - 2026-05-22
+- [Panicking Led to Losing My Desktop](/panicking-led-to-losing-my-desktop/) - 2026-05-13
+- [The Relief of Earning](/the-relief-of-earning/) - 2026-05-08
+- [Fixing Firefox Launcher on Kubuntu 22](/fixing-firefox-launcher-on-kubuntu-22/) - 2026-04-11
+- [Data Loading is a Huge Deal](/data-loading-is-a-huge-deal/) - 2026-04-08
+- [Agents can miss obvious things too](/agents-can-miss-obvious-things-too/) - 2026-04-03
+- [The Irony of 10x](/the-irony-of-10x/) - 2026-03-26
+- [Remote Terraform State Requires Working Traefik… DUH!](/remote-terraform-state-requires-working-traefik-duh/) - 2026-03-23
+- [To Live In A World Without AI](/to-live-in-a-world-without-ai/) - 2026-03-22
+- [paynepride dot com outage on vacation](/paynepride-dot-com-outage-on-vacation/) - 2026-03-16
+- [My Thoughts on Beads](/my-thoughts-on-beads/) - 2026-03-03
+- [Forge Ahead](/forge-ahead/) - 2026-02-17
+- [Kubernetes External Secrets Operator](/kubernetes-external-secrets-operator/) - 2026-02-10
+- [Cat Autonomy 2.0](/cat-autonomy-2-0/) - 2026-02-09
+- [Learning How To Agent](/learning-how-to-agent/) - 2026-02-03
+- [New Job - Caterpillar Autonomy](/new-job-caterpillar-autonomy/) - 2026-01-26
+- [Increase inotify limit in your CI workers](/increase-inotify-limit-in-your-ci-workers/) - 2025-12-30
+- [Prettier Docker ‘ps’ Command](/prettier-docker-ps-command/) - 2025-12-29
+- [Setup A Cloudflare Tunnel With Terraform](/setup-a-cloudflare-tunnel-with-terraform/) - 2025-12-12
+- [COLUMNS Env Var For Nicer Screenshots](/columns-env-var-for-nicer-screenshots/) - 2025-12-08
+- [UV Run + PEP 723 Is A Match Made In Heaven](/uv-run-pep-723-is-a-match-made-in-heaven/) - 2025-12-08
+- [GitHub Stopped Me From Messing With The Bots](/github-stopped-me-from-messing-with-the-bots/) - 2025-12-06
+- [Small Steps Towards Handling Malicious Traffic on Static Sites](/small-steps-towards-handling-malicious-traffic-on-static-sites/) - 2025-12-04
+- [Check SWAP in htop](/check-swap-in-htop/) - 2025-11-15
+- [Speakr For Recording and Transcribing at Home](/speakr-for-recording-and-transcribing-at-home/) - 2025-11-11
+- [RepoFlow Robot User](/repoflow-robot-user/) - 2025-11-10
+- [Use Jellyfin Tags For Content Moderation](/use-jellyfin-tags-for-content-moderation/) - 2025-10-08
+- [Chili Notes](/chili-notes/) - 2025-10-04
+- [Sending SMS with SMTP](/sending-sms-with-smtp/) - 2025-10-04
+- [Docker Compose Build From Git Repo](/docker-compose-build-from-git-repo/) - 2025-09-12
+- [💭 uv script management](/thoughts-831/) - 2025-09-08
+- [Zsh alias for uv scripts](/zsh-alias-for-uv-scripts/) - 2025-09-08
+- [Reflection - AI Work and ADHD](/reflection-ai-work-and-adhd/) - 2025-08-27
+- [Pair AceGamer Wireless PS4 Controller With PC](/pair-acegamer-wireless-ps4-controller-with-pc/) - 2025-08-14
+- [Proxy Pull Docker Images From Self-Hosted Container Registry Through Self-Hosted Repoflow](/proxy-pull-docker-images-from-self-hosted-container-registry-through-self-hosted-repoflow/) - 2025-08-12
+- [A Simple Lua Plugin To Find My Drafts](/a-simple-lua-plugin-to-find-my-drafts/) - 2025-08-10
+- [AudioMass](/audiomass/) - 2025-08-10
+- [Using Litestream to Restore My Database for Easy Development](/using-litestream-to-restore-my-database-for-easy-development/) - 2025-08-07
+- [Migrate Github Issues to Kanboard](/migrate-github-issues-to-kanboard/) - 2025-08-07
+- [Using Litestream to Backup QuadTask’s SQLite DB](/using-litestream-to-backup-quadtasks-sqlite-db/) - 2025-08-05
+- [Setup Remote MinIO S3 Backend Target for Litestream](/setup-remote-minio-s3-backend-target-for-litestream/) - 2025-08-05
+- [Docker Volume Mounts Link to an Inode](/docker-volume-mounts-link-to-an-inode/) - 2025-08-02
+- [You suck at git - but it’s honestly fine](/you-suck-at-git-but-its-honestly-fine/) - 2025-07-21
+- [Add yourself to www-data to view your Nextcloud data on the filesystem](/add-yourself-to-www-data-to-view-your-nextcloud-data-on-the-filesystem/) - 2025-07-17
+- [gotify cli for notifying me of nextcloud uploads](/gotify-cli-for-notifying-me-of-nextcloud-uploads/) - 2025-07-16
+- [Using restic to backup my home directory](/using-restic-to-backup-my-home-directory/) - 2025-07-16
+- [Python editable installs and nested scripts](/python-editable-installs-and-nested-scripts/) - 2025-07-14
+- [Ghost](/ghost/) - 2025-07-11
+- [The Homelab](/the-homelab/) - 2025-07-11
+- [Lua type hinting - undefined global](/lua-type-hinting-undefined-global/) - 2025-07-11
+- [Testing a Postiz Change Locally (IT WORKS!)](/testing-a-postiz-change-locally/) - 2025-07-06
+- [💭 Build backend | uv](/thoughts-732/) - 2025-07-04
+- [MCPHub with Windsurf](/mcphub-with-windsurf/) - 2025-07-03
+- [Nostr](/nostr/) - 2025-07-02
+- [Nostr hex key](/nostr-hex-key/) - 2025-07-02
+- [Github Star Sorter](/github-star-sorter/) - 2025-07-01
+- [💭 Switching pip to uv in a Dockerized Flask / Django App — Nick …](/thoughts-722/) - 2025-06-27
+- [temporal](/temporal/) - 2025-06-24
+- [Traefik and gRPC for Temporal at home](/traefik-and-grpc-for-temporal-at-home/) - 2025-06-24
+- [Nextcloud PHP Opache Memory Consumption](/nextcloud-php-opache-memory-consumption/) - 2025-06-23
+- [Quit issueing 200s for 500s](/quit-issueing-200s-for-500s/) - 2025-06-22
+- [💭 matduggan.com/what-would-a-kubernetes-2-0-look-like/](/thoughts-710/) - 2025-06-20
+- [Thinking In Diagrams](/thinking-in-diagrams/) - 2025-06-20
+- [💭 pypeaday/whose-turn-is-it: Simple uv webapp to determine order…](/thoughts-709/) - 2025-06-20
+- [💭 Microsoft planning thousands of job cuts aimed at salespeople,…](/thoughts-707/) - 2025-06-19
+- [Homelab Youtube Podcasts to AudioBookShelf Pipeline](/homelab-youtube-podcasts-to-audiobookshelf-pipeline/) - 2025-06-18
+- [💭 neverjust](/thoughts-705/) - 2025-06-18
+- [source_up for nested .envrc](/source-up-for-nested-envrc/) - 2025-06-17
+- [Stable Diffusion QR Codes for Josh](/stable-diffusion-qr-codes-for-josh/) - 2025-06-17
+- [💭 Snowflake Status - Certificate Authority Update for AWS Regions](/thoughts-698/) - 2025-06-16
+- [U-Blue Aurora Upgrade Broke HWA Docker](/u-blue-aurora-upgrade-broke-hwa-docker/) - 2025-06-15
+- [Homelab Pinchflat](/homelab-pinchflat/) - 2025-06-14
+- [If You Want Something Make It So - Song Style](/if-you-want-something-make-it-so-song-style/) - 2025-06-14
+- [ZSA typing challenge issue](/zsa-typing-challenge-issue/) - 2025-06-13
+- [Double Check Your DNS Records](/double-check-your-dns-records/) - 2025-06-13
+- [💭 “We would be less confidential than Google” – Proton threatens…](/thoughts-690/) - 2025-06-13
+- [Example For Andrew](/example-for-andrew/) - 2025-06-08
+- [I built a simple app for adding images to my blog](/i-built-a-simple-app-for-adding-images-to-my-blog/) - 2025-06-07
+- [Double check your CIDR blocks!](/double-check-your-cidr-blocks/) - 2025-06-07
+- [homelab-journey-part-1](/homelab-journey-part-1/) - 2025-06-05
+- [Backups interrupted by full disk usage](/backups-interrupted-by-full-disk-usage/) - 2025-06-03
+- [Windows Update Broke Wifi](/windows-update-broke-wifi/) - 2025-06-01
+- [homelab-computer-vision-pipelines](/homelab-computer-vision-pipelines/) - 2025-05-31
+- [Backups are dope](/backups-are-dope/) - 2025-05-27
+- [Aurora U-Blue ZRAM Config](/aurora-u-blue-zram-config/) - 2025-05-27
+- [Pandas.DataFrame info always answers and is sometimes right](/pandas-dataframe-info-always-answers-and-is-sometimes-right/) - 2025-05-26
+- [SearXNG](/searxng/) - 2025-05-25
+- [My MCP Configuration](/my-mcp-configuration/) - 2025-04-27
+- [I was wrecked by a weird combo of » and -e](/i-was-wrecked-by-a-weird-combo-of-and-e/) - 2025-04-23
+- [Grafana + Gotify for push notifications](/grafana-gotify-for-push-notifications/) - 2025-04-07
+- [SMB with ZFS on Ubuntu](/smb-with-zfs-on-ubuntu/) - 2025-02-20
+- [Recovering from zpool corruption when you’re short a drive](/recovering-from-zpool-corruption-when-you-re-short-a-drive/) - 2025-02-03
+- [The Importance of Nostr According to ChatGPT](/the-importance-of-nostr-according-to-chatgpt/) - 2025-01-24
+- [Deployments are not StatefulSets](/deployments-are-not-statefulsets/) - 2025-01-15
+- [docker context (and an issue to question your sanity)](/docker-context-and-an-issue-to-question-your-sanity/) - 2024-12-19
+- [Add a healthcheck to your FastAPI app](/add-a-healthcheck-to-your-fastapi-app/) - 2024-12-15
+- [statically.io to help me out](/statically-io-to-help-me-out/) - 2024-12-14
+- [D and uninterruptable sleep](/d-and-uninterruptable-sleep/) - 2024-12-11
+- [Stylus for custom webpage themes](/stylus-for-custom-webpage-themes/) - 2024-11-27
+- [DNS Broke After Reboot - Ubuntu 22.04](/dns-broke-after-reboot-ubuntu-22-04/) - 2024-11-22
+- [OPNSense Bootstrap Recovery](/opnsense-bootstrap-recovery/) - 2024-11-07
+- [docker-remote-add](/docker-remote-add/) - 2024-09-17
+- [Docker copy and chown](/docker-copy-and-chown/) - 2024-09-17
+- [Switching from AltaCV to RenderCV for my Resume](/switching-from-altacv-to-rendercv-for-my-resume/) - 2024-08-01
+- [Interesting IPs between Jellyfin clients and server depending on tailscale and server address](/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address/) - 2024-07-12
+- [Upgrading your kernel can F you up… whoops](/upgrading-your-kernel-can-f-you-up-whoops/) - 2024-06-26
+- [Customize K9s](/customize-k9s/) - 2024-05-06
+- [Kanboard to keep me focused on my own ideas](/kanboard-to-keep-me-focused-on-my-own-ideas/) - 2024-04-20
+- [DHCP Restart to Save Ubuntu 22.04 Server Networking](/dhcp-restart-to-save-ubuntu-22-04-server-networking/) - 2023-12-31
+- [Simple Port Forwarding OPNSense](/simple-port-forwarding-opnsense/) - 2023-10-17
+- [Refresh Nextcloud Groupfolders after messing around on the filesystem](/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem/) - 2023-09-23
+- [lsof to find what’s using your filesystem](/lsof-to-find-what-s-using-your-filesystem/) - 2023-04-09
+- [Changing ZFS key for child datasets of encrypted dataset after migration](/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration/) - 2023-04-08
+- [Convert Word Doc to PDF with Headless Libreoffice](/convert-word-doc-to-pdf-with-headless-libreoffice/) - 2023-03-09
+- [Stable Diffusion Notes](/stable-diffusion-notes/) - 2023-01-28
+- [FFMPEG 10-bit videos to 8-bit](/ffmpeg-10-bit-videos-to-8-bit/) - 2023-01-16
+- [i3-Like keyboard mapping in Pop_OS](/i3-like-keyboard-mapping-in-pop-os/) - 2023-01-12
+- [Use non-standard named ssh keys with github](/use-non-standard-named-ssh-keys-with-github/) - 2023-01-03
+- [Modal Labs](/modal-labs/) - 2022-12-28
+- [Reminder about ssh-copy-id for SSH and Ansible](/reminder-about-ssh-copy-id-for-ssh-and-ansible/) - 2022-12-28
+- [Nextcloud Docker Upgrade Error](/nextcloud-docker-upgrade-error/) - 2022-12-28
+- [Systemd timer for syncoid](/systemd-timer-for-syncoid/) - 2022-12-21
+- [Adding docker daemon.json broke docker](/adding-docker-daemon-json-broke-docker/) - 2022-12-21
+- [suda.vim for sudo access to files](/suda-vim-for-sudo-access-to-files/) - 2022-12-21
+- [Cron for Nextcloud in Docker](/cron-for-nextcloud-in-docker/) - 2022-12-13
+- [Call basicConfig to get Python log messages in iPython](/call-basicconfig-to-get-python-log-messages-in-ipython/) - 2022-12-10
+- [New lines in Markdown tables](/new-lines-in-markdown-tables/) - 2022-11-25
+- [Description of my proposed vimconf 2022 talk](/description-of-my-proposed-vimconf-2022-talk/) - 2022-11-12
+- [Make a series of directories fast!](/make-a-series-of-directories-fast/) - 2022-11-10
+- [Case-insensitive search in Vim](/case-insensitive-search-in-vim/) - 2022-10-21
+- [Limit zfs list to avoid docker vomit](/limit-zfs-list-to-avoid-docker-vomit/) - 2022-10-20
+- [You can embed gifs?!](/you-can-embed-gifs/) - 2022-10-09
+- [Don’t forget to load XMP!](/dont-forget-to-load-xmp/) - 2022-10-09
+- [My PassMark Scores](/my-passmark-scores/) - 2022-10-08
+- [Suddenly SSH requires a password](/suddenly-ssh-requires-a-password/) - 2022-10-07
+- [Quick setup of ZFS encrytped datasets with sane permissions](/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions/) - 2022-10-06
+- [Check Your BIOS Version On Ubuntu](/check-your-bios-version-on-ubuntu/) - 2022-10-02
+- [Destroying Tmux sessions with fzf](/destroying-tmux-sessions-with-fzf/) - 2022-09-15
+- [Trick to login to web server on another box on lan](/trick-to-login-to-web-server-on-another-box-on-lan/) - 2022-09-12
+- [Check your SMART status with smartctl](/check-your-smart-status-with-smartctl/) - 2022-08-29
+- [Benchmark your disks with fio](/benchmark-your-disks-with-fio/) - 2022-08-27
+- [Playing with mdformat](/playing-with-mdformat/) - 2022-08-23
+- [Paperless-NGX filtering on IDs instead of values](/paperless-ngx-filtering-on-ids-instead-of-values/) - 2022-08-09
+- [Mounting exFAT USB in Linux](/mounting-exfat-usb-in-linux/) - 2022-07-31
+- [Xrdp-Authentication-Required-To-Create-Managed-Color-Device](/xrdp-authentication-required-to-create-managed-color-device/) - 2022-07-18
+- [Setup KVM to boot from local PXE server](/setup-kvm-to-boot-from-local-pxe-server/) - 2022-07-06
+- [Self-hosted Docker registry with proxy pull through](/self-hosted-docker-registry-with-proxy-pull-through/) - 2022-07-06
+- [kvm-network-interface-via-nat-ubuntu-20](/kvm-network-interface-via-nat-ubuntu-20/) - 2022-06-25
+- [cheat on your man](/cheat-on-your-man/) - 2022-06-23
+- [Add colored indicators to your dataframes html representation](/add-colored-indicators-to-your-dataframes-html-representation/) - 2022-06-04
+- [Samba on Ubuntu 22 needs “inherit permissions” set](/samba-on-ubuntu-22-needs-inherit-permissions-set/) - 2022-05-31
+- [Filtering emails with core utils](/filtering-emails-with-core-utils/) - 2022-05-30
+- [Reindex Nextcloud After Adding Data via CLI](/reindex-nextcloud-after-adding-data-via-cli/) - 2022-05-29
+- [arr client config](/arr-download-client-config/) - 2022-05-28
+- [Add space to your LVM on Ubuntu](/add-space-to-your-lvm-on-ubuntu/) - 2022-05-26
+- [Tdarr worker nodes share the cache!](/tdarr-worker-nodes-share-the-cache/) - 2022-05-25
+- [Local DNS with Pi-hole](/local-dns-with-pi-hole/) - 2022-05-23
+- [Configure bridge network on Ubuntu 22.04 with Netplan](/configure-bridge-network-on-ubuntu-22-04-with-netplan/) - 2022-05-22
+- [Netplan change from Focal to Jammy](/netplan-change-from-focal-to-jammy/) - 2022-05-22
+- [How I use Nextcloud for safe central storage](/how-i-use-nextcloud-for-safe-central-storage/) - 2022-05-19
+- [Subset a list based on values in another list with itertools.compress](/subset-a-list-based-on-values-in-another-list-with-itertools-compress/) - 2022-05-19
+- [Nextcloud permissions with ZFS and Ansible-NAS](/nextcloud-permissions-with-zfs-and-ansible-nas/) - 2022-05-19
+- [See ZFS snapshot disk usage](/see-zfs-snapshot-disk-usage/) - 2022-05-19
+- [Deleting files on remote storage from Ubuntu might not do what you think](/deleting-files-on-remote-storage-from-ubuntu-might-not-do-what-you-think/) - 2022-05-19
+- [Plug Snapshot!](/plug-snapshot/) - 2022-05-17
+- [Filepath Completion in Neovim](/filepath-completion-in-neovim/) - 2022-05-17
+- [Forms with FastAPI and Jinja](/fastapi-jinja-forms/) - 2022-05-15
+- [Dynamic-Form-Values-With-Jinja-And-Fastapi](/dynamic-form-values-with-jinja-and-fastapi/) - 2022-05-15
+- [Plug-Snapshot-To-Save-Your-Life](/plug-snapshot-to-save-your-life/) - 2022-05-13
+- [Python-Eval](/python-eval/) - 2022-05-12
+- [Dataframe-To-Styled-Html](/dataframe-to-styled-html/) - 2022-05-07
+- [Dataframe-To-Markdown](/dataframe-to-markdown/) - 2022-05-07
+- [Wish-List-With-Fastapi](/wish-list-with-fastapi/) - 2022-05-06
+- [Git-Bisect](/git-bisect/) - 2022-05-03
+- [Pandas-String-Contains](/pandas-string-contains/) - 2022-05-02
+- [Unpack-Anywhere-With-Star](/unpack-anywhere-with-star/) - 2022-04-24
+- [Htop](/htop/) - 2022-04-24
+- [Pipx](/pipx/) - 2022-04-22
+- [Fx-Json](/fx-json/) - 2022-04-19
+- [Jellyfin-Media-Players](/jellyfin-media-players/) - 2022-04-17
+- [Typeddict](/typeddict/) - 2022-04-15
+- [Home-Server-Refactor](/home-server-refactor/) - 2022-04-10
+- [And-vs-&](/and-vs/) - 2022-04-06
+- [File-Length](/file-length/) - 2022-04-04
+- [Ipython-Prompt](/ipython-prompt/) - 2022-04-02
+- [Vim-Spell-Check](/vim-spell-check/) - 2022-04-01
+- [Polybar-01](/polybar-01/) - 2022-04-01
+- [Deques](/deques/) - 2022-03-31
+- [Plotly-And-Streamlit](/plotly-and-streamlit/) - 2022-03-31
+- [Starship](/starship/) - 2022-03-25
+- [self-hosted-media](/self-hosted-media/) - 2022-03-24
+- [Skimpy](/skimpy/) - 2022-03-23
+- [Truenas-And-Wireguard](/truenas-and-wireguard/) - 2022-03-23
+- [Pyclean](/pyclean/) - 2022-03-22
+- [Psutil-01](/psutils-01/) - 2022-03-16
+- [Mu](/mu/) - 2022-03-15
+- [Wireguard](/wireguard/) - 2022-03-12
+- [Git-Worktrees-01](/git-worktrees-01/) - 2022-03-11
+- [Abstract-Base-Class](/abstract-base-class/) - 2022-03-09
+- [Python-F-String-Align](/python-f-string-align/) - 2022-03-08
+- [Python-Builtin-Calendar](/python-builtin-calendar/) - 2022-03-08
+- [Dataframe-Memory-Usage](/dataframe-memory-usage/) - 2022-03-07
+- [Adblock-Coverage](/adblock-coverage/) - 2022-03-07
+- [Webservers-And-Indexes](/webservers-and-indexes/) - 2022-03-06
+- [Tree](/tree/) - 2022-03-06
+- [Traefik](/traefik/) - 2022-03-06
+- [Pandas-Select-Dtypes](/pandas-select-dtypes/) - 2022-03-05
+- [Tiddly-Wiki](/tiddly-wiki/) - 2022-03-05
+- [Vim-Auto-Space](/vim-auto-space/) - 2022-03-04
+- [Stow](/stow/) - 2022-03-04
+- [Stow-Target](/stow-target/) - 2022-03-04
+- [Git ammend to a commit](/git-ammend-no-edit/) - 2022-03-04

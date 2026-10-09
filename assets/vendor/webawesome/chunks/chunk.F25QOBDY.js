@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */function waitForEvent(e,t){return new Promise(n=>{function s(o){o.target===e&&(e.removeEventListener(t,s),n())}e.addEventListener(t,s)})}export{waitForEvent}

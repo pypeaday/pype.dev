@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */import"../chunks/chunk.JHZRD2LV.js";var WaCreateEvent=class extends Event{constructor(e){super("wa-create",{bubbles:!0,cancelable:!0,composed:!0}),this.detail=e}};export{WaCreateEvent}
