@@ -1,0 +1,102 @@
+# Posts tagged: homelab
+
+All posts with the tag "homelab"
+
+- [The Faulted Disk: harbor Replacement Writeup](/harbor-faulted-disk-replacement/) - 2026-10-06
+- [💭 Docker | Atuin Docs](/thoughts-871/) - 2025-11-22
+- [Homelabbing Realization - Configs and Git](/homelabbing-realization-configs-and-git/) - 2025-11-13
+- [RepoFlow Robot User](/repoflow-robot-user/) - 2025-11-10
+- [Proxy Pull Docker Images From Self-Hosted Container Registry Through Self-Hosted Repoflow](/proxy-pull-docker-images-from-self-hosted-container-registry-through-self-hosted-repoflow/) - 2025-08-12
+- [💭 My Ultimate Self-hosting Setup](/thoughts-764/) - 2025-07-25
+- [Using restic to backup my home directory](/using-restic-to-backup-my-home-directory/) - 2025-07-16
+- [Jellyfin](/jellyfin/) - 2025-07-11
+- [Ghost](/ghost/) - 2025-07-11
+- [The Homelab](/the-homelab/) - 2025-07-11
+- [💭 Docker Brings Compose to the AI Agent Era | Docker](/thoughts-746/) - 2025-07-11
+- [💭 restic · Backups done right!](/thoughts-740/) - 2025-07-08
+- [Thoughts To Nostr](/thoughts-to-nostr/) - 2025-07-08
+- [💭 HomeBox](/thoughts-737/) - 2025-07-07
+- [💭 Self-Hosting A Cluster On Old Phones | Hackaday](/thoughts-735/) - 2025-07-06
+- [Github Star Sorter](/github-star-sorter/) - 2025-07-01
+- [temporal](/temporal/) - 2025-06-24
+- [Traefik and gRPC for Temporal at home](/traefik-and-grpc-for-temporal-at-home/) - 2025-06-24
+- [Nextcloud PHP Opache Memory Consumption](/nextcloud-php-opache-memory-consumption/) - 2025-06-23
+- [Quit issueing 200s for 500s](/quit-issueing-200s-for-500s/) - 2025-06-22
+- [💭 Control Your n8n Instance Remotely with Telegram Bot Commands …](/thoughts-711/) - 2025-06-22
+- [Thinking In Diagrams](/thinking-in-diagrams/) - 2025-06-20
+- [💭 pypeaday/whose-turn-is-it: Simple uv webapp to determine order…](/thoughts-709/) - 2025-06-20
+- [Homelab Youtube Podcasts to AudioBookShelf Pipeline](/homelab-youtube-podcasts-to-audiobookshelf-pipeline/) - 2025-06-18
+- [source_up for nested .envrc](/source-up-for-nested-envrc/) - 2025-06-17
+- [Stable Diffusion QR Codes for Josh](/stable-diffusion-qr-codes-for-josh/) - 2025-06-17
+- [U-Blue Aurora Upgrade Broke HWA Docker](/u-blue-aurora-upgrade-broke-hwa-docker/) - 2025-06-15
+- [Homelab Pinchflat](/homelab-pinchflat/) - 2025-06-14
+- [If You Want Something Make It So - Song Style](/if-you-want-something-make-it-so-song-style/) - 2025-06-14
+- [ZSA typing challenge issue](/zsa-typing-challenge-issue/) - 2025-06-13
+- [Double Check Your DNS Records](/double-check-your-dns-records/) - 2025-06-13
+- [💭 qwen3](/thoughts-685/) - 2025-06-11
+- [💭 News - Apps - App Store - Nextcloud](/thoughts-680/) - 2025-06-09
+- [Example For Andrew](/example-for-andrew/) - 2025-06-08
+- [I built a simple app for adding images to my blog](/i-built-a-simple-app-for-adding-images-to-my-blog/) - 2025-06-07
+- [Double check your CIDR blocks!](/double-check-your-cidr-blocks/) - 2025-06-07
+- [homelab-journey-part-1](/homelab-journey-part-1/) - 2025-06-05
+- [Backups interrupted by full disk usage](/backups-interrupted-by-full-disk-usage/) - 2025-06-03
+- [homelab-computer-vision-pipelines](/homelab-computer-vision-pipelines/) - 2025-05-31
+- [Backups are dope](/backups-are-dope/) - 2025-05-27
+- [SearXNG](/searxng/) - 2025-05-25
+- [Grafana + Gotify for push notifications](/grafana-gotify-for-push-notifications/) - 2025-04-07
+- [💭 audiobookshelf](/thoughts-479/) - 2024-12-29
+- [Add a healthcheck to your FastAPI app](/add-a-healthcheck-to-your-fastapi-app/) - 2024-12-15
+- [Jellyfin container updates for HWE + AMD](/jellyfin-container-updates-for-hwe-amd/) - 2024-12-14
+- [hostnamectl to easily change hostname](/hostnamectl-to-easily-change-hostname/) - 2024-12-06
+- [DNS Broke After Reboot - Ubuntu 22.04](/dns-broke-after-reboot-ubuntu-22-04/) - 2024-11-22
+- [OPNSense Bootstrap Recovery](/opnsense-bootstrap-recovery/) - 2024-11-07
+- [Recovering OPNSense](/recovering-opnsense/) - 2024-11-06
+- [docker-remote-add](/docker-remote-add/) - 2024-09-17
+- [Docker copy and chown](/docker-copy-and-chown/) - 2024-09-17
+- [Interesting IPs between Jellyfin clients and server depending on tailscale and server address](/interesting-ips-between-jellyfin-clients-and-server-depending-on-tailscale-and-server-address/) - 2024-07-12
+- [Upgrading your kernel can F you up… whoops](/upgrading-your-kernel-can-f-you-up-whoops/) - 2024-06-26
+- [Customize K9s](/customize-k9s/) - 2024-05-06
+- [Kanboard to keep me focused on my own ideas](/kanboard-to-keep-me-focused-on-my-own-ideas/) - 2024-04-20
+- [DHCP Restart to Save Ubuntu 22.04 Server Networking](/dhcp-restart-to-save-ubuntu-22-04-server-networking/) - 2023-12-31
+- [Simple Port Forwarding OPNSense](/simple-port-forwarding-opnsense/) - 2023-10-17
+- [Refresh Nextcloud Groupfolders after messing around on the filesystem](/refresh-nextcloud-groupfolders-after-messing-around-on-the-filesystem/) - 2023-09-23
+- [lsof to find what’s using your filesystem](/lsof-to-find-what-s-using-your-filesystem/) - 2023-04-09
+- [Changing ZFS key for child datasets of encrypted dataset after migration](/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration/) - 2023-04-08
+- [Stable Diffusion Notes](/stable-diffusion-notes/) - 2023-01-28
+- [FFMPEG 10-bit videos to 8-bit](/ffmpeg-10-bit-videos-to-8-bit/) - 2023-01-16
+- [Reminder about ssh-copy-id for SSH and Ansible](/reminder-about-ssh-copy-id-for-ssh-and-ansible/) - 2022-12-28
+- [Nextcloud Docker Upgrade Error](/nextcloud-docker-upgrade-error/) - 2022-12-28
+- [Systemd timer for syncoid](/systemd-timer-for-syncoid/) - 2022-12-21
+- [Cron for Nextcloud in Docker](/cron-for-nextcloud-in-docker/) - 2022-12-13
+- [You can embed gifs?!](/you-can-embed-gifs/) - 2022-10-09
+- [Don’t forget to load XMP!](/dont-forget-to-load-xmp/) - 2022-10-09
+- [My PassMark Scores](/my-passmark-scores/) - 2022-10-08
+- [Quick setup of ZFS encrytped datasets with sane permissions](/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions/) - 2022-10-06
+- [Trick to login to web server on another box on lan](/trick-to-login-to-web-server-on-another-box-on-lan/) - 2022-09-12
+- [Paperless-NGX filtering on IDs instead of values](/paperless-ngx-filtering-on-ids-instead-of-values/) - 2022-08-09
+- [Mounting exFAT USB in Linux](/mounting-exfat-usb-in-linux/) - 2022-07-31
+- [Xrdp-Authentication-Required-To-Create-Managed-Color-Device](/xrdp-authentication-required-to-create-managed-color-device/) - 2022-07-18
+- [ZFS Permissions for Sanoid/Syncoid](/zfs-permissions-for-sanoid/) - 2022-07-08
+- [Setup KVM to boot from local PXE server](/setup-kvm-to-boot-from-local-pxe-server/) - 2022-07-06
+- [Self-hosted Docker registry with proxy pull through](/self-hosted-docker-registry-with-proxy-pull-through/) - 2022-07-06
+- [kvm-network-interface-via-nat-ubuntu-20](/kvm-network-interface-via-nat-ubuntu-20/) - 2022-06-25
+- [Reset SSH key passphrase](/reset-ssh-key-passphrase/) - 2022-06-13
+- [Samba on Ubuntu 22 needs “inherit permissions” set](/samba-on-ubuntu-22-needs-inherit-permissions-set/) - 2022-05-31
+- [Reindex Nextcloud After Adding Data via CLI](/reindex-nextcloud-after-adding-data-via-cli/) - 2022-05-29
+- [arr client config](/arr-download-client-config/) - 2022-05-28
+- [Add space to your LVM on Ubuntu](/add-space-to-your-lvm-on-ubuntu/) - 2022-05-26
+- [Tdarr worker nodes share the cache!](/tdarr-worker-nodes-share-the-cache/) - 2022-05-25
+- [Local DNS with Pi-hole](/local-dns-with-pi-hole/) - 2022-05-23
+- [Configure bridge network on Ubuntu 22.04 with Netplan](/configure-bridge-network-on-ubuntu-22-04-with-netplan/) - 2022-05-22
+- [Netplan change from Focal to Jammy](/netplan-change-from-focal-to-jammy/) - 2022-05-22
+- [How I use Nextcloud for safe central storage](/how-i-use-nextcloud-for-safe-central-storage/) - 2022-05-19
+- [Nextcloud permissions with ZFS and Ansible-NAS](/nextcloud-permissions-with-zfs-and-ansible-nas/) - 2022-05-19
+- [See ZFS snapshot disk usage](/see-zfs-snapshot-disk-usage/) - 2022-05-19
+- [Remove ZFS Dataset Specific Snapshots](/remove-zfs-dataset-specific-snapshots/) - 2022-05-19
+- [Jellyfin-Media-Players](/jellyfin-media-players/) - 2022-04-17
+- [self-hosted-media](/self-hosted-media/) - 2022-03-24
+- [Truenas-And-Wireguard](/truenas-and-wireguard/) - 2022-03-23
+- [Wireguard](/wireguard/) - 2022-03-12
+- [Adblock-Coverage](/adblock-coverage/) - 2022-03-07
+- [Webservers-And-Indexes](/webservers-and-indexes/) - 2022-03-06
+- [Traefik](/traefik/) - 2022-03-06

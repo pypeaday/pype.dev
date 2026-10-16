@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/atom.xsl" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Posts tagged: zfs</title>
+  <id>https://pype.dev/tags/zfs/atom.xml</id>
+  <updated>2026-10-06T21:30:00Z</updated>
+  <subtitle>All posts with the tag &#34;zfs&#34;</subtitle>
+  <link href="https://pype.dev/tags/zfs/" rel="alternate" type="text/html"></link>
+  <link href="https://pype.dev/tags/zfs/atom.xml" rel="self" type="application/atom+xml"></link>
+  <author>
+    <name>Nic Payne</name>
+  </author>
+  <generator uri="https://github.com/WaylonWalker/markata-go">markata-go</generator>
+  <entry>
+    <title>The Faulted Disk: harbor Replacement Writeup</title>
+    <id>https://pype.dev/harbor-faulted-disk-replacement/</id>
+    <updated>2026-10-06T21:30:00Z</updated>
+    <published>2026-10-06T21:30:00Z</published>
+    <link href="https://pype.dev/harbor-faulted-disk-replacement/" rel="alternate" type="text/html"></link>
+    <summary type="text">The sequel to panicking-led-to-losing-my-desktop — this time the monitoring actually caught the disk dying, and nothing was lost.</summary>
+    <content type="html">&lt;p&gt;The sequel to &lt;a href=&#34;/panicking-led-to-losing-my-desktop&#34;&gt;panicking-led-to-losing-my-desktop&lt;/a&gt; — this time the monitoring actually caught the disk dying, and nothing was lost.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-happened&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;What happened&lt;/span&gt; &lt;a href=&#34;#what-happened&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;harbor&lt;/code&gt; is my replica pool — a 10.9T mirror (2x 12TB) that receives syncoid snapshots from &lt;code&gt;tank&lt;/code&gt;. One side of the mirror, a Seagate Exos &lt;code&gt;ST12000NM0127&lt;/code&gt; (serial &lt;code&gt;ZJV4QFLB&lt;/code&gt;, &lt;code&gt;/dev/sdb&lt;/code&gt;), went &lt;strong&gt;FAULTED&lt;/strong&gt; with 14 read + 22 checksum errors.&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;mirror-0                              DEGRADED     0     0     0&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  ata-ST12000VN0008-2PH103_ZTM0NFDW  ONLINE       0     0     0&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  ata-ST12000NM0127_ZJV4QFLB         FAULTED     14     0    22  too many errors&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The IronWolf mirror side carried the pool — &lt;code&gt;No known data errors&lt;/code&gt;. ZFS redundancy did exactly its job.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-difference-from-last-time&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The difference from last time&lt;/span&gt; &lt;a href=&#34;#the-difference-from-last-time&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Last failure: no monitoring, found out by accident months later, desktop died.&lt;/p&gt;&#xA;&lt;p&gt;This failure: SigNoz + node-exporter&amp;rsquo;s ZFS collector → &lt;code&gt;node_zfs_zpool_state{state=&amp;quot;degraded&amp;quot;}&lt;/code&gt; → alert rule → Gotify → my phone. The gotify notification fired &lt;em&gt;before&lt;/em&gt; I knew anything was wrong.&lt;/p&gt;&#xA;&lt;h2 id=&#34;diagnosis&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Diagnosis&lt;/span&gt; &lt;a href=&#34;#diagnosis&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Before &lt;code&gt;zpool clear&lt;/code&gt; or replace — check SMART. &lt;code&gt;smartctl-exporter&lt;/code&gt; already scrapes all disks into SigNoz, so I didn&amp;rsquo;t even need sudo:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;Reallocated_Sector_Ct&lt;/code&gt; raw = &lt;strong&gt;3024&lt;/strong&gt; and counting&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;Offline_Uncorrectable&lt;/code&gt; value/worst still 100 but raw errors climbing&lt;/li&gt;&#xA;&lt;li&gt;SMART overall: still PASS (SMART&amp;rsquo;s overall bit is conservative until threshold)&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;3k+ remapped sectors is a platter going bad — not a cable blip. Verdict: replace, don&amp;rsquo;t clear.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-swap-the-annoying-part&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The swap (the annoying part)&lt;/span&gt; &lt;a href=&#34;#the-swap-the-annoying-part&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Hot-plug is never as smooth as it should be:&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;&lt;code&gt;zpool offline harbor &amp;lt;old&amp;gt;&lt;/code&gt; to stop writes to the dead drive — actually skipped; drive fell off the bus on its own&lt;/li&gt;&#xA;&lt;li&gt;New IronWolf &lt;code&gt;ZTN1CQ07&lt;/code&gt; in hand → plugged into ghost&amp;rsquo;s SATA → &lt;strong&gt;didn&amp;rsquo;t enumerate&lt;/strong&gt;&lt;/li&gt;&#xA;&lt;li&gt;Forced rescan (&lt;code&gt;echo &amp;quot;- - -&amp;quot; | sudo tee /sys/class/scsi_host/host*/scan&lt;/code&gt;) → nothing&lt;/li&gt;&#xA;&lt;li&gt;Moved it to the &lt;em&gt;old drive&amp;rsquo;s port&lt;/em&gt; → nothing&lt;/li&gt;&#xA;&lt;li&gt;Sabrent USB dock on aurora → dock enumerated as &lt;code&gt;0B&lt;/code&gt; device, no disk behind it → reseated + replugged → &lt;strong&gt;drive spun up and appeared&lt;/strong&gt;: &lt;code&gt;/dev/sdd&lt;/code&gt;, 10.9T, old ZFS partition table on it (used drive — &lt;code&gt;part1&lt;/code&gt;/&lt;code&gt;part9&lt;/code&gt; layout)&lt;/li&gt;&#xA;&lt;li&gt;Back to ghost, direct SATA → enumerated as &lt;code&gt;sdb&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Lesson: &amp;ldquo;spins up but doesn&amp;rsquo;t enumerate&amp;rdquo; on direct SATA + dock-shows-0B = seating/power problem, not DOA. The drive was fine all along.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-replace&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The replace&lt;/span&gt; &lt;a href=&#34;#the-replace&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;sudo zpool replace harbor &lt;span class=&#34;se&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  ata-ST12000NM0127_ZJV4QFLB &lt;span class=&#34;se&#34;&gt;\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  ata-ST12000VN0008-2PH103_ZTN1CQ07&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Resilver: &lt;strong&gt;8.80T in 18h38m, 0 errors&lt;/strong&gt; (~154M/s). Pool stayed online and usable the whole time.&lt;/p&gt;&#xA;&lt;p&gt;One gotcha: after resilver, &lt;code&gt;zpool status&lt;/code&gt; showed &lt;code&gt;errors: 1 data errors&lt;/code&gt; — but &lt;code&gt;zpool status -v&lt;/code&gt; showed an &lt;strong&gt;empty error list&lt;/strong&gt;. The corrupted data was already repaired; the counter was just stale. &lt;code&gt;sudo zpool clear harbor&lt;/code&gt; → clean.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-monitoring-that-made-this-possible&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The monitoring that made this possible&lt;/span&gt; &lt;a href=&#34;#the-monitoring-that-made-this-possible&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Wired during this session (all now in SigNoz):&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;node_zfs_zpool_state&lt;/code&gt; — pool health (node-exporter zfs collector)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;smartctl-exporter&lt;/code&gt; — SMART attributes incl. reallocated sectors (the early-death signal)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;zfs-metrics.sh&lt;/code&gt; textfile bridge — sanoid &lt;code&gt;--monitor-*&lt;/code&gt; exit codes, zpool error counters, scrub ages, resilver %, syncoid last-success&lt;/li&gt;&#xA;&lt;li&gt;Alert rules → Gotify → phone&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;The replication alerting even proved itself live: syncoid failed twice during the resilver window and I got paged on both. Turned out to be send-time contention — self-healed once resilver finished — but the notification path works end to end.&lt;/p&gt;&#xA;&lt;h2 id=&#34;remaining-homework&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Remaining homework&lt;/span&gt; &lt;a href=&#34;#remaining-homework&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Buy the replacement spare (the shelf&amp;rsquo;s empty now)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;10Fold&lt;/code&gt; datasets are garbage + have zero snapshots — destroy&lt;/li&gt;&#xA;&lt;li&gt;Every scheduled job emits &lt;code&gt;cron_last_success_epoch&lt;/code&gt; now — if a job dies silently again, I&amp;rsquo;ll know&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;Same failure as April, opposite outcome. Redundancy did the protection; monitoring did the &lt;em&gt;detection&lt;/em&gt;. You need both.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;&lt;em&gt;Co-authored with Devin, who ran the monitoring stack, the SMART diagnosis, and the alerting loop.&lt;/em&gt;&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Backups are dope</title>
+    <id>https://pype.dev/backups-are-dope/</id>
+    <updated>2025-05-27T19:42:27Z</updated>
+    <published>2025-05-27T19:42:27Z</published>
+    <link href="https://pype.dev/backups-are-dope/" rel="alternate" type="text/html"></link>
+    <summary type="text">I accidently chown&#39;d -R an app directory and it totally screwed up the database folder. Luckily I zfs replicate my docker volumes to another drive even on...</summary>
+    <content type="html">&lt;p&gt;I accidently chown&amp;rsquo;d -R an app directory and it totally screwed up the database&#xA;folder. Luckily I zfs replicate my &lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;docker&lt;/a&gt; volumes to another drive even on the&#xA;same host, so a quick [rsync] from /harbor/encrypted/docker/manyfold to&#xA;/tank/encrypted/docker/manyfold got me back up and running since I hadn&amp;rsquo;t&#xA;replicated the messed up permission set yet&lt;/p&gt;&#xA;&lt;p&gt;Q: How to link to my rsync like a pro post?&lt;/p&gt;&#xA;&lt;p&gt;A: Wikilinks &lt;code&gt;&amp;lt;a href=&amp;quot;/rsync-like-a-pro/&amp;quot; class=&amp;quot;wikilink&amp;quot; data-title=&amp;quot;rsync like a pro&amp;quot; data-description=&amp;quot;I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using for this just to make sure I don&amp;amp;#39;t propagate any...&amp;quot; data-date=&amp;quot;2024-12-11&amp;quot;&amp;gt;rsync like a pro&amp;lt;/a&amp;gt;&lt;/code&gt; &lt;a href=&#34;/rsync-like-a-pro/&#34; class=&#34;wikilink&#34; data-title=&#34;rsync like a pro&#34; data-description=&#34;I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using for this just to make sure I don&amp;#39;t propagate any...&#34; data-date=&#34;2024-12-11&#34; data-preview=&#34;I am moving a hefty amount of data to a new ZFS pool due to some corruption and I want to avoid using for this just to make sure I don&amp;#39;t propagate any...&#34;&gt;rsync like a pro&lt;/a&gt;&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>SMB with ZFS on Ubuntu</title>
+    <id>https://pype.dev/smb-with-zfs-on-ubuntu/</id>
+    <updated>2025-02-20T09:18:35Z</updated>
+    <published>2025-02-20T09:18:35Z</published>
+    <link href="https://pype.dev/smb-with-zfs-on-ubuntu/" rel="alternate" type="text/html"></link>
+    <summary type="text">sudo apt-get install -y samba \\ then set sharesmb=on \\ chown the user \\ smbpasswd -a \\ then mount with user/password from other machine</summary>
+    <content type="html">&lt;p&gt;sudo apt-get install -y samba \ then set sharesmb=on \ chown the user \ smbpasswd &lt;user&gt; -a \ then mount with user/password from other machine&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Recovering from zpool corruption when you’re short a drive</title>
+    <id>https://pype.dev/recovering-from-zpool-corruption-when-you-re-short-a-drive/</id>
+    <updated>2025-02-03T21:08:56Z</updated>
+    <published>2025-02-03T21:08:56Z</published>
+    <link href="https://pype.dev/recovering-from-zpool-corruption-when-you-re-short-a-drive/" rel="alternate" type="text/html"></link>
+    <summary type="text">can only mount tank RO - so can&#39;t rename - also can&#39;t detach which is what I&#39;d want</summary>
+    <content type="html">&lt;ol&gt;&#xA;&lt;li&gt;can only mount tank RO&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;so can&amp;rsquo;t rename&lt;/li&gt;&#xA;&lt;li&gt;also can&amp;rsquo;t detach which is what I&amp;rsquo;d want&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;ol start=&#34;2&#34;&gt;&#xA;&lt;li&gt;Could import pool witn -N to not mount any datasets&lt;/li&gt;&#xA;&lt;li&gt;detach and attach&lt;/li&gt;&#xA;&lt;li&gt;resilver&amp;hellip;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>D and uninterruptable sleep</title>
+    <id>https://pype.dev/d-and-uninterruptable-sleep/</id>
+    <updated>2024-12-11T10:48:10Z</updated>
+    <published>2024-12-11T10:48:10Z</published>
+    <link href="https://pype.dev/d-and-uninterruptable-sleep/" rel="alternate" type="text/html"></link>
+    <summary type="text">I recently have been having significant home server issues, and that&#39;s not the point of this - today I learned what state is when looking at htop.</summary>
+    <content type="html">&lt;h2 id=&#34;htop&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Htop&lt;/span&gt; &lt;a href=&#34;#htop&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;I recently have been having significant home server issues, and that&amp;rsquo;s not the point of this - today I learned what &lt;code&gt;D&lt;/code&gt; state is when looking at htop.&lt;/p&gt;&#xA;&lt;img src=&#34;https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/d-htop.png&#34; alt=&#34;htop-d&#34; title=&#34;htop with D state&#34; /&gt;&#xA;&lt;p&gt;Apparently this means &amp;ldquo;uninterruptable sleep&amp;rdquo; and it&amp;rsquo;s a dev&amp;rsquo;s nightmare&amp;hellip;&lt;/p&gt;&#xA;&lt;h3 id=&#34;context&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Context&lt;/span&gt; &lt;a href=&#34;#context&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h3&gt;&#xA;&lt;p&gt;The issue I was having was that some &lt;code&gt;zfs rollback&lt;/code&gt; commands were hung - for hours&amp;hellip; I wasn&amp;rsquo;t sure what was going on, rollbacks should be instant but I figured it was just an artifact of these issues.&lt;/p&gt;&#xA;&lt;p&gt;Turns out I still don&amp;rsquo;t know what locked the disks up but I learned why &lt;code&gt;&amp;lt;C&amp;gt;-c&lt;/code&gt; did &lt;strong&gt;nothing&lt;/strong&gt;&amp;hellip;&#xA;the more you know&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>lsof to find what’s using your filesystem</title>
+    <id>https://pype.dev/lsof-to-find-what-s-using-your-filesystem/</id>
+    <updated>2023-04-09T13:32:38Z</updated>
+    <published>2023-04-09T13:32:38Z</published>
+    <link href="https://pype.dev/lsof-to-find-what-s-using-your-filesystem/" rel="alternate" type="text/html"></link>
+    <summary type="text">lsof | grep /tank/nas shows me what is using my nas at any time!</summary>
+    <content type="html">&lt;p&gt;lsof | grep /tank/nas shows me what is using my nas at any time!&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Changing ZFS key for child datasets of encrypted dataset after migration</title>
+    <id>https://pype.dev/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration/</id>
+    <updated>2023-04-08T20:12:22Z</updated>
+    <published>2023-04-08T20:12:22Z</published>
+    <link href="https://pype.dev/changing-zfs-key-for-child-datasets-of-encrypted-dataset-after-migration/" rel="alternate" type="text/html"></link>
+    <summary type="text">➜ pihole sudo zfs load-key -L file:///path/to/.zfs.tank.key tank/encrypted/vms/arch-sandbox ➜ pihole sudo zfs change-key -o...</summary>
+    <content type="html">&lt;p&gt;➜ pihole sudo zfs load-key -L file:///path/to/.zfs.tank.key tank/encrypted/vms/arch-sandbox&#xA;➜ pihole sudo zfs change-key -o keylocation=file:///path/to/.zfs.tank.key -o keyformat=raw tank/encrypted/vms/arch-sandbox&#xA;Need to load-key for each individual dataset, then change key location to be a file instead of the prompt&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Systemd timer for syncoid</title>
+    <id>https://pype.dev/systemd-timer-for-syncoid/</id>
+    <updated>2022-12-21T11:38:27Z</updated>
+    <published>2022-12-21T11:38:27Z</published>
+    <link href="https://pype.dev/systemd-timer-for-syncoid/" rel="alternate" type="text/html"></link>
+    <summary type="text">I have a bash script called which boils down to a barebones -</summary>
+    <content type="html">&lt;p&gt;I have a bash script called &lt;code&gt;syncoid-job&lt;/code&gt; which boils down to a barebones -&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;cp&#34;&gt;#!/bin/bash&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;syncoid --no-sync-snap --sendoptions&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;w --no-privilege-elevation &lt;span class=&#34;nv&#34;&gt;$SYNOIC_USER&lt;/span&gt;@&lt;span class=&#34;nv&#34;&gt;$SERVER&lt;/span&gt;:tank/encrypted/nas tank/encrypted/nas&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;I want to run this script hourly but as my user (notice the no-privilege-elevation flag)&lt;/p&gt;&#xA;&lt;p&gt;First - create a systemd unit file at &lt;code&gt;/etc/systemd/system/syncoid-replication.service&lt;/code&gt;&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Unit&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;Description&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;ZFS Replication With Syncoid&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Service&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;Type&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;oneshot&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;ExecStart&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;/&lt;span class=&#34;nv&#34;&gt;$HOME&lt;/span&gt;/dotfiles/syncoid-job&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;User&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$USER&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;Group&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;$GROUP&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Install&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;WantedBy&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;multi-user.target&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Then we save the unit file, enable the service, and then start it&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;systemctl enable syncoid-replication.service&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;go&#34;&gt;systemctl start syncoid-replication.service&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;&#xA;&lt;p&gt;Note this will run that script&amp;hellip; so be ready for syncoid to do its thing&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;Now for the timer&amp;hellip; We create &lt;code&gt;/etc/systemd/system/syncoid-replication.timer&lt;/code&gt;&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Unit&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;Description&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;Run syncoid-replication every hour&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Timer&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;OnCalendar&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;hourly&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;Install&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nv&#34;&gt;WantedBy&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;timers.target&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Hit it with a &lt;code&gt;systemctl enable syncoid-replication.timer&lt;/code&gt; and you&amp;rsquo;re in business!&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Limit zfs list to avoid docker vomit</title>
+    <id>https://pype.dev/limit-zfs-list-to-avoid-docker-vomit/</id>
+    <updated>2022-10-20T06:39:18Z</updated>
+    <published>2022-10-20T06:39:18Z</published>
+    <link href="https://pype.dev/limit-zfs-list-to-avoid-docker-vomit/" rel="alternate" type="text/html"></link>
+    <summary type="text">zfs list has a flag -r, but if you use zfs driver for docker then you&#39;ll get flooded with every docker volume in the world. zfs list -r -d N will limit the...</summary>
+    <content type="html">&lt;p&gt;zfs list has a flag -r, but if you use zfs driver for &lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;docker&lt;/a&gt; then you&amp;rsquo;ll get&#xA;flooded with every docker volume in the world. zfs list -r -d N will limit the&#xA;dept of the print out, so zfs list -r -d 2 gives me tank, tank/encrypted,&#xA;tank/encrypted/docker -&amp;gt; but then I don&amp;rsquo;t see all the continer volumes&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Quick setup of ZFS encrytped datasets with sane permissions</title>
+    <id>https://pype.dev/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions/</id>
+    <updated>2022-10-06T19:58:01Z</updated>
+    <published>2022-10-06T19:58:01Z</published>
+    <link href="https://pype.dev/quick-setup-of-zfs-encrytped-datasets-with-sane-permissions/" rel="alternate" type="text/html"></link>
+    <summary type="text">Assuming you have a pool called ...</summary>
+    <content type="html">&lt;p&gt;Assuming you have a pool called &lt;code&gt;tank&lt;/code&gt;&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;And assuming you have an encrypted dataset (See &lt;a href=&#34;https://arstechnica.com/gadgets/2021/06/a-quick-start-guide-to-openzfs-native-encryption/&#34;&gt;Jim Saltar&amp;rsquo;s short&#xA;intro&lt;/a&gt;)&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;Create a group for permissions - in my case I have one called &lt;code&gt;home&lt;/code&gt;&lt;/li&gt;&#xA;&lt;li&gt;Then if there&amp;rsquo;s anything in &lt;code&gt;/tank/encrypted&lt;/code&gt; his it with &lt;code&gt;chgrp -R home /tank/encrypted&lt;/code&gt; to give the &lt;code&gt;home&lt;/code&gt; group ownership&lt;/li&gt;&#xA;&lt;li&gt;Next we need to make sure that the members of &lt;code&gt;home&lt;/code&gt; can do the writing&amp;hellip;&#xA;so &lt;code&gt;chmod 775 -R /tank/encrypted&lt;/code&gt; will do the trick&lt;/li&gt;&#xA;&lt;li&gt;Finally we want to make sure that all data created inside our dataset has&#xA;the same set of permissions with &lt;code&gt;chmod g+s /tank/encrypted&lt;/code&gt; and &lt;code&gt;chmod g+w /tank/encrypted&lt;/code&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Benchmark your disks with fio</title>
+    <id>https://pype.dev/benchmark-your-disks-with-fio/</id>
+    <updated>2022-08-27T13:43:22Z</updated>
+    <published>2022-08-27T13:43:22Z</published>
+    <link href="https://pype.dev/benchmark-your-disks-with-fio/" rel="alternate" type="text/html"></link>
+    <summary type="text">I use ZFS at home in my homelab for basically all of my storage... Docker uses ZFS backend, all my VMs have their images in their own zfs datasets, and all...</summary>
+    <content type="html">&lt;h1 id=&#34;intro&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Intro&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;I use ZFS at home in my homelab for basically all of my storage&amp;hellip; &lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;Docker&lt;/a&gt; uses&#xA;ZFS backend, all my VMs have their &lt;code&gt;.qcow2&lt;/code&gt; images in their own zfs datasets,&#xA;and all my shares are ZFS datasets. I love ZFS but my home hardware presently&#xA;is the opposite of expensive or new&amp;hellip; Thankfully I&amp;rsquo;ve had a lot of my orginal&#xA;homelab simply given to me but the cost of this is that I didn&amp;rsquo;t put my&#xA;machines together, I didn&amp;rsquo;t choose the disks, and I definitely didn&amp;rsquo;t do the&#xA;research I would&amp;rsquo;ve otherwise done had I bankrolled my server personally&amp;hellip;&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-problem&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The Problem&lt;/span&gt; &lt;a href=&#34;#the-problem&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;I run &lt;code&gt;glances&lt;/code&gt; on basically all my machines and for the longest time I have&#xA;been seeing big time &lt;code&gt;iowait&lt;/code&gt; issues. Now, since everything was free I&amp;rsquo;ve&#xA;largely been able to ignore that however I&amp;rsquo;m now after some better performance&#xA;which I think means new hardware!&lt;/p&gt;&#xA;&lt;p&gt;Here is a random screenshot of my glances homepage at time of writing - The&#xA;only major load on my server is some &lt;code&gt;ffmpeg&lt;/code&gt; transcoding (about 60% CPU&#xA;utilization)&amp;hellip;&lt;/p&gt;&#xA;&lt;img src=&#34;https://cdn.statically.io/gh/pypeaday/images.pype.dev/main/blog-media/glances-iowait.png&#34; alt=&#34;glances&#34; title=&#34;glances with iowait&#34; /&gt;&#xA;&lt;p&gt;As you can see&amp;hellip; there&amp;rsquo;s a lot of issues and &lt;em&gt;I don&amp;rsquo;t even know what they mean&lt;/em&gt;.&lt;/p&gt;&#xA;&lt;h1 id=&#34;fio&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;fio&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;I heard about &lt;a href=&#34;https://fio.readthedocs.io/en/latest/&#34;&gt;fio&lt;/a&gt; through a friend and&#xA;decided to try it out quick. It installs with &lt;code&gt;apt&lt;/code&gt; on ubuntu quick and easy&amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;Jim Saltar has a good blog post on it &lt;a href=&#34;https://arstechnica.com/gadgets/2020/02/how-fast-are-your-disks-find-out-the-open-source-way-with-fio/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Basically it&amp;rsquo;s a handy tool for benchmarking your disks and the blog dives into&#xA;what types of metrics matter - it&amp;rsquo;s not just throughput, but also latency,&#xA;iops, etc.&lt;/p&gt;&#xA;&lt;h2 id=&#34;tests&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Tests&lt;/span&gt; &lt;a href=&#34;#tests&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;I ran a few basic commands inside a new zfs dataset on my server &lt;code&gt;tank/fio&lt;/code&gt;&lt;/p&gt;&#xA;&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;fio --name&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;random-write --ioengine&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;posixaio --rw&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;randwrite --bs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;4k --size&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;4g --numjobs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; --runtime&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;60&lt;/span&gt; --time_based --end_fsync&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &amp;gt; single-4KiB-random-write.txt&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;fio --name&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;random-write --ioengine&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;posixaio --rw&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;randwrite --bs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;64k --size&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;256m --numjobs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;16&lt;/span&gt; --iodepth&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;16&lt;/span&gt; --runtime&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;60&lt;/span&gt; --time_based --end_fsync&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &amp;gt; 16-parallel-64KiB-random-write.txt&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;fio --name&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;random-write --ioengine&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;posixaio --rw&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;randwrite --bs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;1m --size&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;16g --numjobs&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; --iodepth&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; --runtime&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;60&lt;/span&gt; --time_based --end_fsync&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &amp;gt; single-1MiB-random-write.txt&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;results&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Results&lt;/span&gt; &lt;a href=&#34;#results&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;The single 4 KiB random write:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;WRITE: bw=7836KiB/s (8024kB/s), 7836KiB/s-7836KiB/s (8024kB/s-8024kB/s), io=523MiB (548MB), run=68317-68317msec&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;The 16 parallel 64KiB random writes:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;WRITE: bw=93.9MiB/s (98.4MB/s), 5599KiB/s-6303KiB/s (5734kB/s-6454kB/s), io=7642MiB (8013MB), run=81310-81418msec&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;The single 1MiB random write:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;WRITE: bw=81.2MiB/s (85.1MB/s), 81.2MiB/s-81.2MiB/s (85.1MB/s-85.1MB/s), io=8177MiB (8574MB), run=100699-100699msec&lt;/code&gt;&lt;/p&gt;&#xA;&lt;h1 id=&#34;summary&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Summary&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;So I don&amp;rsquo;t fully understand these numbers yet&amp;hellip; 80-100 MiB/s isn&amp;rsquo;t super fast&#xA;and that&amp;rsquo;s across a parallelized workload&amp;hellip; The single threaded workloads have&#xA;awful performance so this tells me something is wrong&amp;hellip; I have a few ideas&amp;hellip;&lt;/p&gt;&#xA;&lt;ol&gt;&#xA;&lt;li&gt;ZFS dataset config options such as &lt;code&gt;ashift&lt;/code&gt; or the blocksize might be way misconfigured&lt;/li&gt;&#xA;&lt;li&gt;The disks/pool which came from a TrueNAS/FreeBSD machine may have some artifacts that I need to clean up&lt;/li&gt;&#xA;&lt;li&gt;The SAS controller I am using, which I flashed with IT firmware to get it into JBOD mode might be messed up&lt;/li&gt;&#xA;&lt;li&gt;The data cables themselves could be a problem&amp;hellip;&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;&lt;p&gt;Points 3 and 4 are less likely given that the write speed does increase in the parallelized job but I&amp;rsquo;m a newbie so it&amp;rsquo;s time to dive in!&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>ZFS Permissions for Sanoid/Syncoid</title>
+    <id>https://pype.dev/zfs-permissions-for-sanoid/</id>
+    <updated>2022-07-08T15:54:58Z</updated>
+    <published>2022-07-08T15:54:58Z</published>
+    <link href="https://pype.dev/zfs-permissions-for-sanoid/" rel="alternate" type="text/html"></link>
+    <content type="html">&lt;p&gt;&lt;code&gt;zfs allow -u $USER clone,load-key,create,destroy,mount,mountpoint,receive,send,rollback,compression,snapshot,hold,keylocation,bookmark tank&lt;/code&gt;&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;load-key only needed if using encrypted datasets&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Self-hosted Docker registry with proxy pull through</title>
+    <id>https://pype.dev/self-hosted-docker-registry-with-proxy-pull-through/</id>
+    <updated>2022-07-06T06:44:35Z</updated>
+    <published>2022-07-06T06:44:35Z</published>
+    <link href="https://pype.dev/self-hosted-docker-registry-with-proxy-pull-through/" rel="alternate" type="text/html"></link>
+    <summary type="text">I decided that I want to self-host all my docker images for the purposes of regularly rebuilding and security scanning. The first step is to set up a...</summary>
+    <content type="html">&lt;p&gt;I decided that I want to self-host all my &lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;docker&lt;/a&gt; images for the purposes of&#xA;regularly rebuilding and security scanning. The first step is to set up a&#xA;registry, which coincidently enough you can do with a Docker container 😛!&lt;/p&gt;&#xA;&lt;p&gt;Instructions for setting up the proxy are on the offidical docker docs &lt;a href=&#34;https://docs.docker.com/registry/recipes/mirror/&#34;&gt;here&lt;/a&gt;&lt;/p&gt;&#xA;&lt;h1 id=&#34;deployment&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Deployment&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;I chose to deploy with Portainer because I already use it for monitoring all my&#xA;docker containers. I deploy most container with Ansible but use Portainer to&#xA;setup a few more adhoc or non-git driven applications.&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>How I use Nextcloud for safe central storage</title>
+    <id>https://pype.dev/how-i-use-nextcloud-for-safe-central-storage/</id>
+    <updated>2022-05-19T21:17:42Z</updated>
+    <published>2022-05-19T21:17:42Z</published>
+    <link href="https://pype.dev/how-i-use-nextcloud-for-safe-central-storage/" rel="alternate" type="text/html"></link>
+    <summary type="text">Setup admin 2. External Storage extension 3. Add my nas zfs dataset 4. chown -R www-data:www-data on anything nextcloud uploads to.</summary>
+    <content type="html">&lt;ol&gt;&#xA;&lt;li&gt;Setup admin&lt;/li&gt;&#xA;&lt;li&gt;External Storage extension&lt;/li&gt;&#xA;&lt;li&gt;Add my nas zfs dataset&lt;/li&gt;&#xA;&lt;li&gt;chown -R www-data:www-data on anything nextcloud uploads to.&lt;/li&gt;&#xA;&lt;/ol&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Nextcloud permissions with ZFS and Ansible-NAS</title>
+    <id>https://pype.dev/nextcloud-permissions-with-zfs-and-ansible-nas/</id>
+    <updated>2022-05-19T13:55:20Z</updated>
+    <published>2022-05-19T13:55:20Z</published>
+    <link href="https://pype.dev/nextcloud-permissions-with-zfs-and-ansible-nas/" rel="alternate" type="text/html"></link>
+    <summary type="text">As the nextcloud docs say... if you want to write to an external volume that location has to be writeable by the user/group on the host system... so if that...</summary>
+    <content type="html">&lt;h1 id=&#34;tl-dr&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;TL;DR&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;As the nextcloud docs say&amp;hellip; if you want to write to an external volume that&#xA;location has to be writeable by the user/group &lt;code&gt;www-data&lt;/code&gt; on the host system&amp;hellip;&#xA;so if that makes sense to you then this TIL probably isn&amp;rsquo;t a ton of value.. if&#xA;not however, read on :)&lt;/p&gt;&#xA;&lt;h1 id=&#34;case-study&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Case Study&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;You want to self-host your own cloud and use a smart file system for convenience&amp;hellip;&#xA;Nextcloud and ZFS are pretty common goto answers for each of those problems.&lt;/p&gt;&#xA;&lt;p&gt;My home NAS is built on ZFS and among other things I have a &lt;code&gt;zpool&lt;/code&gt; named&#xA;&lt;code&gt;tank&lt;/code&gt; and nested in there is a &lt;code&gt;tank/nas&lt;/code&gt; dataset with several child zfs&#xA;datasets under that.&lt;/p&gt;&#xA;&lt;p&gt;I want to use nextcloud mainly for auto-uploading photos from my wife&amp;rsquo;s and my phones for automatic backups.&#xA;The issue is that the nextcloud application (I run in &lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;Docker&lt;/a&gt;) is fixed as the&#xA;&lt;code&gt;www-data&lt;/code&gt; user and so any volume/folder that you want nextcloud to write to&#xA;needs to be permissioned such that &lt;code&gt;www-data&lt;/code&gt; owns it&amp;hellip; but I don&amp;rsquo;t want&#xA;&lt;code&gt;www-data&lt;/code&gt; to own everything in my NAS&amp;hellip; so what&amp;rsquo;s a girl to do?&lt;/p&gt;&#xA;&lt;h1 id=&#34;solution&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;Solution&lt;/span&gt;&lt;/h1&gt;&#xA;&lt;p&gt;Well, one way to go is to just utilize docker volumes, write the data in the&#xA;container to &lt;code&gt;/var/www/html&lt;/code&gt; and let that be the place your data backsup to.&lt;/p&gt;&#xA;&lt;p&gt;I still wanted nextcloud to automatically write right to my NAS so I created a&#xA;&lt;code&gt;nextcloud-upload&lt;/code&gt; directory inside of &lt;code&gt;tank/nas/media/photos&lt;/code&gt; (photos cause&#xA;that&amp;rsquo;s all that gets automatically uploaded)&lt;/p&gt;&#xA;&lt;p&gt;Then I &lt;code&gt;chown -R www-data:www-data /tank/nas/media/photos/nextcloud-upload&lt;/code&gt; so&#xA;that just that sub-folder is owned by &lt;code&gt;www-data&lt;/code&gt;. Now everyone&amp;rsquo;s happy!&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>See ZFS snapshot disk usage</title>
+    <id>https://pype.dev/see-zfs-snapshot-disk-usage/</id>
+    <updated>2022-05-19T06:05:23Z</updated>
+    <published>2022-05-19T06:05:23Z</published>
+    <link href="https://pype.dev/see-zfs-snapshot-disk-usage/" rel="alternate" type="text/html"></link>
+    <summary type="text">As I was cleaning up my NAS recently I noticed that I ran out of storage even though my disk usage looked pretty low... turns out I was keeping a mega-ton of...</summary>
+    <content type="html">&lt;p&gt;As I was cleaning up my NAS recently I noticed that I ran out of storage even&#xA;though my disk usage looked pretty low&amp;hellip; turns out I was keeping a mega-ton of&#xA;ZFS snapshots and due to my own ignorance at the time didn&amp;rsquo;t realize the&#xA;storage cost of this!&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;zfs list-o space tank/home&lt;/code&gt; will show the disk usage of the dataset and snapshots in &lt;code&gt;tank/home&lt;/code&gt;&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+  <entry>
+    <title>Remove ZFS Dataset Specific Snapshots</title>
+    <id>https://pype.dev/remove-zfs-dataset-specific-snapshots/</id>
+    <updated>2022-05-19T05:49:16Z</updated>
+    <published>2022-05-19T05:49:16Z</published>
+    <link href="https://pype.dev/remove-zfs-dataset-specific-snapshots/" rel="alternate" type="text/html"></link>
+    <summary type="text">I started my homelab journey being super naive about ZFS and how to manage the filesystem... that bit me in the butt when transfering a ton of files out of...</summary>
+    <content type="html">&lt;p&gt;I started my homelab journey being super naive about ZFS and how to manage the&#xA;filesystem&amp;hellip; that bit me in the butt when transfering a ton of files out of&#xA;folders and into datasets because ZFS is copy on write so I was essentially&#xA;duplicating my storage until I got a hair smarter about removing files after&#xA;they&amp;rsquo;re moved (rsync &amp;ndash;remove-source-file ftw). But I had a ton of snapshots of&#xA;child datasets with a ton of data that I just never will need, so I learned&#xA;&lt;code&gt;zfs list -H -o name -t snapshot tank/dataset1/dataset2&lt;/code&gt; will list just the&#xA;snapshots for dataset2 and if you pipe that into &lt;code&gt;xargs -n1 zfs destroy&lt;/code&gt; then&#xA;you have a way to clear out some snapshots you don&amp;rsquo;t need!&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+</feed>

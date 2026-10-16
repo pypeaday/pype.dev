@@ -1,0 +1,3394 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme-texture-scope="all" data-palette="pype" data-aesthetic="minimal" data-fontpack="plain" data-text-size="large">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="view-transition" content="same-origin">
+
+  
+
+  <title>Small Steps Towards Handling Malicious Traffic on Static Sites | My mental data-lake</title>
+  <meta name="description" content="Today I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...">
+  
+
+<link rel="canonical" href="https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/">
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Small Steps Towards Handling Malicious Traffic on Static Sites",
+  "description": "Today I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...",
+  "datePublished": "2025-12-04T21:17:24Z",
+  "dateModified": "2025-12-04T21:17:24Z",
+  "author": {
+    "@type": "Person",
+    "name": "Nic Payne"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "My mental data-lake",
+    "url": "https://pype.dev"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/"
+  },
+  "keywords": [
+    "llm",
+    "tech"
+  ],
+  "url": "https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/"
+}
+</script>
+
+
+
+
+
+<meta property="og:title" content="Small Steps Towards Handling Malicious Traffic on Static Sites">
+
+<meta property="og:url" content="https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/">
+
+<meta property="og:site_name" content="My mental data-lake">
+
+<meta property="og:type" content="article">
+
+<meta property="og:description" content="Today I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...">
+
+<meta property="og:locale" content="en_US">
+
+<meta property="article:published_time" content="2025-12-04T21:17:24Z">
+
+<meta property="article:tag" content="llm">
+
+<meta property="article:tag" content="tech">
+
+
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:title" content="Small Steps Towards Handling Malicious Traffic on Static Sites">
+
+<meta name="twitter:description" content="Today I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...">
+
+
+
+
+  
+  <script>
+    var params = new URLSearchParams(location.search);
+    if (params.get('specimen') === 'canonical-headings') {
+      document.documentElement.classList.add('canonical-specimen-route');
+      if (params.get('capture') === 'natural') document.documentElement.classList.add('canonical-natural-route');
+    }
+  </script>
+  
+<script>
+  (function() {
+    var root = document.documentElement;
+    var fallbackSize = root.dataset.textSize || 'large';
+    var allowed = { small: true, medium: true, large: true, 'x-large': true };
+    var size = allowed[fallbackSize] ? fallbackSize : 'large';
+    var allowVisitorSize = true;
+    if (allowVisitorSize) {
+      try {
+        var stored = localStorage.getItem('text-size');
+        if (stored && allowed[stored]) {
+          size = stored;
+        }
+      } catch (_) {
+        // ignore storage access failures
+      }
+    }
+    root.dataset.textSize = size;
+  })();
+</script>
+<script>
+  (function() {
+    var fallbackMode = 'dark';
+    window.__markataThemeFallbackMode = fallbackMode;
+
+    var mode = fallbackMode;
+    var picked = '';
+    var aesthetic = '';
+    var fontpack = '';
+    try {
+      var stored = localStorage.getItem('color-mode') || localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark') {
+        mode = stored;
+      }
+      
+    } catch (_) {
+      // ignore storage access failures
+    }
+
+    document.documentElement.dataset.theme = mode;
+    document.documentElement.classList.toggle('dark', mode === 'dark');
+
+    // Pin data-palette to the variant that matches the resolved mode so the
+    // per-palette CSS block agrees with data-theme on first paint.
+    var palettes = {
+      light: 'pype\u002Dlight',
+      dark: 'pype'
+    };
+    window.__markataThemeDefaults = palettes;
+    
+    if (picked === 'seasonal') picked = '';
+    var modePalette = picked || (mode === 'dark' ? palettes.dark : palettes.light);
+    if (modePalette) {
+      document.documentElement.dataset.palette = modePalette;
+    }
+    if (aesthetic) {
+      document.documentElement.dataset.aesthetic = aesthetic;
+    }
+    window.__markataPageFontpack = document.documentElement.dataset.fontpack || '';
+    if (fontpack) {
+      document.documentElement.dataset.fontpack = fontpack;
+      
+    }
+  })();
+</script>
+
+
+  
+  
+  <link rel="preload" href="/assets/fonts/source-serif-4-full.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <link rel="preload" href="/assets/fonts/inter-tight-full.woff2" as="font" type="font/woff2" crossorigin>
+  
+  
+  <!-- Core CSS (always loaded) -->
+  <link rel="stylesheet" href="/css/variables.08e33724.css">
+  
+  <link rel="stylesheet" href="/css/palette.b4fc830d.css">
+  
+  <link rel="stylesheet" href="/css/main.ea997fca.css">
+  <link rel="stylesheet" href="/css/components.d5d35a1b.css">
+  <link rel="stylesheet" href="/css/text-size.a7cdb148.css">
+  
+  <link rel="stylesheet" href="/css/fonts.ce414e78.css">
+  
+
+  <!-- Conditional CSS: only loaded when page content requires it -->
+  
+  
+  <link rel="stylesheet" href="/css/code.d4dde74d.css">
+  <link rel="stylesheet" href="/css/chroma.e1de617a.css">
+  
+  <link rel="stylesheet" href="/css/cards.bba89fe5.css">
+  
+  
+  
+
+  <!-- Palette Switcher CSS (when enabled) -->
+  
+
+<link rel="stylesheet" href="/css/palette-switcher.0f00e25e.css">
+
+
+
+  <!-- Search CSS: layout styles load eagerly, pagefind UI loads on interaction -->
+  
+  <link rel="stylesheet" href="/css/search.0f0c0c81.css">
+  
+
+
+
+  
+
+  
+
+  <!-- CSS variable overrides from theme config -->
+  
+
+  <!-- Style config overrides (per HEAD_STYLE.md spec) -->
+  
+
+  <!-- Custom CSS file -->
+  
+  <link rel="stylesheet" href="/pype.css">
+  
+
+  <style>
+    /* Native controls and scrollbars follow the site's resolved mode, not the OS. */
+    html:root { color-scheme: dark; }
+    html:root[data-theme="light"] { color-scheme: light; }
+  </style>
+
+  <!-- RSS/Atom/JSON Feeds -->
+  
+  
+  
+  
+  <link rel="alternate" type="application/rss+xml" title="Site Feed (RSS)" href="/rss.xml">
+  
+  
+  <link rel="alternate" type="application/atom+xml" title="Site Feed (Atom)" href="/atom.xml">
+  
+  
+  
+
+  <!-- Global head config (per HEAD_STYLE.md spec) -->
+  
+    <!-- Raw text/HTML -->
+    
+
+    <!-- Meta tags -->
+    
+
+    <!-- Link tags -->
+    
+    <link rel="stylesheet" href="/css/link-avatars.ab8178f9.css">
+    
+
+    <!-- Script tags -->
+    
+    <script src="/js/link-avatars.3380d702.js"></script>
+    
+  
+
+      <!-- Background Decoration CSS -->
+    
+
+  
+
+<link rel="stylesheet" href="/css/aesthetic.0ff75e5a.css">
+
+  <style id="markata-mark-presentation">
+    html mark { background-color: var(--color-highlight) !important; color: var(--color-highlight-text) !important; }
+  </style>
+  <style id="markata-canonical-document-profile">
+    /* Internal conformance profile; scoped so normal site documents are unchanged. */
+     [data-rendering-specimen="canonical-headings"] {
+      box-sizing: border-box;
+       width: 1280px !important;
+       height: 1000px !important;
+       min-height: 1000px !important;
+       padding: 24px;
+       overflow: hidden !important;
+       line-height: 1.6 !important;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document {
+      box-sizing: border-box;
+       width: 680px;
+       max-width: 100%;
+      margin-inline: auto;
+       padding-inline: 0;
+      font-family: var(--font-body, system-ui, sans-serif);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document__title,
+    [data-rendering-specimen="canonical-headings"] .post-content h1,
+    [data-rendering-specimen="canonical-headings"] .post-content h2,
+    [data-rendering-specimen="canonical-headings"] .post-content h3,
+    [data-rendering-specimen="canonical-headings"] .post-content h4,
+    [data-rendering-specimen="canonical-headings"] .post-content h5,
+    [data-rendering-specimen="canonical-headings"] .post-content h6 {
+       font-family: var(--font-heading, var(--font-body, system-ui, sans-serif)) !important;
+       font-weight: 400;
+       overflow: visible;
+       border: 0;
+       padding: 0;
+    }
+    [data-rendering-specimen="canonical-headings"] .canonical-document__title {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 0.95;
+    }
+    [data-rendering-specimen="canonical-headings"] .post-content h1 {
+      margin: 2.5rem 0 0.75rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 0.95;
+    }
+     [data-rendering-specimen="canonical-headings"] .post-content h2 {
+      margin: 2.5rem 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+       line-height: 1;
+     }
+     [data-rendering-specimen="canonical-headings"] > .markata-canonical-texture-layer {
+       position: absolute;
+       inset: 0;
+       width: 1280px;
+       height: 1000px;
+       pointer-events: none;
+       background-repeat: repeat;
+       background-image: var(--theme-texture-image, none);
+       background-size: calc(180px * var(--theme-texture-scale, 0.92));
+       opacity: var(--theme-texture-opacity, 0);
+       z-index: 20;
+     }
+    [data-rendering-specimen="canonical-headings"] .post-content h3 { margin: 2.5rem 0 0.75rem; font-size: 2rem; line-height: 1.05; }
+    [data-rendering-specimen="canonical-headings"] .post-content h4 { margin: 2.5rem 0 0.75rem; font-size: 1.5rem; line-height: 1.1; }
+    [data-rendering-specimen="canonical-headings"] .post-content h5 { margin: 2.5rem 0 0.75rem; font-size: 1.25rem; line-height: 1.2; }
+    [data-rendering-specimen="canonical-headings"] .post-content h6 { margin: 2.5rem 0 0.75rem; font-size: 1rem; line-height: 1.25; }
+     [data-rendering-specimen="canonical-headings"] .canonical-document :is(code, pre, kbd, samp) { font-family: var(--font-code, ui-monospace, monospace); }
+     [data-rendering-specimen="canonical-headings"] .canonical-document :is(strong, em, mark, a) { font-family: inherit; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(code, kbd, samp) { font-family: var(--font-code, ui-monospace, monospace); }
+      html[data-fontpack] [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      html[data-fontpack] [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      [data-rendering-specimen="canonical-headings"] .canonical-document :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] :is(h1, h2, h3, h4, h5, h6) :is(strong, em, a) { color: var(--color-text) !important; font-family: var(--font-heading) !important; }
+      [data-rendering-specimen="canonical-headings"] :is(h1, h2, h3, h4, h5, h6) mark { background: var(--color-highlight) !important; color: var(--color-highlight-text) !important; -webkit-text-fill-color: var(--color-highlight-text) !important; }
+      [data-rendering-specimen="canonical-headings"] .post-content :is(h1, h2, h3, h4, h5, h6) :is(code, kbd, samp) { color: inherit !important; font-family: var(--font-code, ui-monospace, monospace) !important; }
+     html.canonical-specimen-route body { background-size: 1344px 559px !important; }
+     html.canonical-specimen-route body { line-height: 1.6 !important; }
+     html.canonical-specimen-route body::before { background-size: calc(180px * .92) calc(180px * .92) !important; }
+     html.canonical-specimen-route body::after { background-size: 1344px 559px !important; }
+    [data-rendering-specimen="canonical-headings"] .post-content p {
+      margin: 1rem 0;
+    }
+     [data-rendering-specimen="canonical-headings"] mark {
+       box-decoration-break: clone;
+       -webkit-box-decoration-break: clone;
+     }
+     /* The capture harness uses this query route. Keep the specimen itself as
+        the only painted surface; normal site chrome must not enter evidence. */
+      html.canonical-specimen-route body,
+      body:has([data-rendering-specimen="canonical-headings"]) {
+        overflow: hidden;
+      }
+      html.canonical-specimen-route body > :not(.page-wrapper),
+      body:has([data-rendering-specimen="canonical-headings"]) > :not(.skip-link):not(.site-header):not(#view-transition-progress):not(footer):not(.page-wrapper) {
+        display: none !important;
+      }
+     body:has([data-rendering-specimen="canonical-headings"]) > .skip-link,
+     body:has([data-rendering-specimen="canonical-headings"]) > .site-header,
+     body:has([data-rendering-specimen="canonical-headings"]) > #view-transition-progress,
+     body:has([data-rendering-specimen="canonical-headings"]) > footer {
+       display: none !important;
+     }
+      html.canonical-specimen-route body .page-wrapper,
+      body:has([data-rendering-specimen="canonical-headings"]) .page-wrapper {
+        display: contents;
+      }
+      body:has([data-rendering-specimen="canonical-headings"]) .page-wrapper > :not(main) {
+        display: none !important;
+      }
+      html.canonical-specimen-route body .page-wrapper > :not(main) {
+        display: none !important;
+      }
+      html.canonical-specimen-route body [data-rendering-specimen="canonical-headings"],
+      body:has([data-rendering-specimen="canonical-headings"]) [data-rendering-specimen="canonical-headings"] {
+        box-sizing: border-box;
+          width: 1280px !important;
+          height: 1000px !important;
+          min-height: 1000px !important;
+          max-width: none !important;
+          margin: 0;
+          padding: 24px;
+          overflow: hidden !important;
+      }
+       html.canonical-specimen-route [data-rendering-specimen="canonical-headings"] .canonical-document {
+         width: 680px !important;
+         max-width: 100% !important;
+         margin-inline: auto;
+       }
+       html.canonical-specimen-route:not(.canonical-natural-route) [data-rendering-specimen="canonical-headings"] {
+         box-sizing: border-box !important;
+         width: 1280px !important;
+         height: 1000px !important;
+         min-height: 1000px !important;
+         max-height: 1000px !important;
+         overflow: hidden !important;
+       }
+       html.canonical-natural-route,
+       html.canonical-natural-route body,
+       html.canonical-natural-route body .page-wrapper,
+       html.canonical-natural-route body [data-rendering-specimen="canonical-headings"] {
+         height: auto !important;
+         min-height: 0 !important;
+         max-height: none !important;
+         overflow: visible !important;
+       }
+       html.canonical-natural-route body { width: 1280px; }
+       html.canonical-natural-route body [data-rendering-specimen="canonical-headings"] {
+         width: 1280px !important;
+         max-width: none !important;
+       }
+   </style>
+  
+</head>
+<body class="">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+      <!-- Background Decorations -->
+    
+
+  
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="site-title">My mental data-lake</a>
+      
+
+
+
+
+
+<nav class="site-nav site-nav--header site-nav--horizontal" aria-label="Main navigation">
+    
+        
+        
+    
+<a href="/" class="nav-link">Home</a>
+
+
+        
+    
+
+<span class="nav-entry nav-entry--preview">
+  <a href="/slash" class="nav-link">Start Here</a>
+  <span class="nav-preview" aria-hidden="true">
+    <span class="nav-preview__eyebrow">Collection</span>
+    <span class="nav-preview__title">Start Here</span>
+    
+    
+    
+    <span class="nav-preview__stats">
+      <span><strong>9</strong> posts</span>
+      
+      
+    </span>
+    <span class="nav-preview__rhythm"><svg viewBox="0 0 96 28" preserveAspectRatio="none" focusable="false"><polyline points="0.0,23.2 8.0,28.0 16.0,28.0 24.0,28.0 32.0,4.0 40.0,28.0 48.0,23.2 56.0,23.2 64.0,28.0 72.0,28.0 80.0,28.0 88.0,28.0 96.0,23.2" /></svg><span>Publication rhythm</span></span>
+    
+  </span>
+</span>
+
+
+
+        
+    
+
+<span class="nav-entry nav-entry--preview">
+  <a href="/my-thoughts" class="nav-link">My Thoughts</a>
+  <span class="nav-preview" aria-hidden="true">
+    <span class="nav-preview__eyebrow">Collection</span>
+    <span class="nav-preview__title">My Thoughts</span>
+    
+    
+    
+    <span class="nav-preview__stats">
+      <span><strong>83</strong> posts</span>
+      
+      
+    </span>
+    <span class="nav-preview__rhythm"><svg viewBox="0 0 96 28" preserveAspectRatio="none" focusable="false"><polyline points="0.0,25.0 8.0,24.2 16.0,28.0 24.0,28.0 32.0,21.2 40.0,27.2 48.0,4.0 56.0,13.0 64.0,22.8 72.0,26.5 80.0,27.2 88.0,27.2 96.0,27.2" /></svg><span>Publication rhythm</span></span>
+    
+  </span>
+</span>
+
+
+
+        
+    
+<a href="https://github.com/pypeaday/pype.dev" class="nav-link">GitHub</a>
+
+
+        
+    
+<a href="https://mydigitalharbor.com/pypeaday" class="nav-link">DigitalHarbor</a>
+
+
+        
+    
+</nav>
+
+
+
+
+      
+      <div class="header-controls">
+        
+        
+
+
+
+
+<div class="search-container search-container--navbar" id="search-container">
+  <div id="pagefind-search"></div>
+</div>
+
+
+        
+        
+
+
+
+
+
+
+
+<div class="theme-switcher theme-switcher--mode-only" data-pagefind-ignore>
+  
+  <button class="palette-mode-toggle" type="button" aria-label="Toggle dark/light mode" title="Toggle dark/light mode (\)">
+    <span class="mode-icon" aria-hidden="true">
+      <svg class="mode-icon-moon" viewBox="0 0 24 24" width="18" height="18" focusable="false"><path d="M21 14.8A8.8 8.8 0 1 1 9.2 3a7.1 7.1 0 0 0 11.8 11.8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      <svg class="mode-icon-sun" viewBox="0 0 24 24" width="18" height="18" focusable="false"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.5v2.4M12 19.1v2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.9 19.1l1.7-1.7M17.4 6.6l1.7-1.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+    </span>
+  </button>
+  
+
+  
+  <label class="text-size-control">
+    <span class="sr-only">Text size</span>
+    <select class="text-size-select" data-text-size-control aria-label="Text size">
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+      <option value="x-large">X-Large</option>
+    </select>
+  </label>
+  
+
+  
+</div>
+
+
+      </div>
+    </div>
+  </header>
+  
+
+  <div id="view-transition-progress">
+    
+<div class="article-progress" role="presentation" aria-hidden="true">
+    <span class="article-progress__indicator"></span>
+</div>
+
+  </div>
+
+  <div class="page-wrapper page-wrapper--content-only" id="view-transition-page" style="--feed-sidebar-width: 250px; --doc-sidebar-width: 250px">
+    
+
+      
+      
+
+      
+      
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        
+         
+
+<div class="content-wrapper">
+    <article class="post h-entry" data-pagefind-body>
+        
+        <a class="u-url" href="https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/" hidden></a>
+
+        <header class="post-header">
+            <div class="post-header__title-row">
+                <h1 class="p-name" data-pagefind-meta="title" data-title-size="long">Small Steps Towards Handling Malicious Traffic on Static Sites</h1>
+
+                
+            
+
+
+
+
+
+<div class="post-byline post-byline--multi">
+    <div class="post-byline__authors">
+    
+        <div class="post-byline__author p-author h-card">
+            
+            <div class="post-byline__author-info">
+                
+                <a class="u-url p-name post-byline__name no-avatar" href="https://pype.dev" rel="author">Nic Payne</a>
+                
+                
+                <span class="post-byline__role">author</span>
+                
+            </div>
+            
+        </div>
+    
+    </div>
+
+    
+    <div class="post-meta post-byline__meta">
+        
+        <time class="dt-published" datetime="2025-12-04T21:17:24Z">Dec 4, 2025</time>
+        
+        
+        <span class="post-meta__reading-time">1 min read</span>
+        
+    </div>
+    
+</div>
+
+
+
+        </div>
+
+            
+            <p class="post-description p-summary visually-hidden" data-pagefind-meta="excerpt">Today I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...</p>
+            
+
+            
+	            
+            
+            <div class="tags">
+                
+                <a href="/tags/llm/" class="tag p-category" data-local-preview="{&quot;count&quot;:6,&quot;description&quot;:&quot;All posts with the tag \&quot;llm\&quot;&quot;,&quot;kind&quot;:&quot;feed&quot;,&quot;sparkline&quot;:&quot;0.0,16.0 8.7,28.0 17.5,28.0 26.2,28.0 34.9,28.0 43.6,4.0 52.4,16.0 61.1,28.0 69.8,28.0 78.5,28.0 87.3,28.0 96.0,4.0&quot;,&quot;sparkline_title&quot;:&quot;Posts published per month from 2025-01 to 2025-12&quot;,&quot;tags&quot;:[&quot;llm&quot;],&quot;title&quot;:&quot;Posts tagged: llm&quot;}">llm</a>
+                
+                <a href="/tags/tech/" class="tag p-category" data-local-preview="{&quot;count&quot;:186,&quot;description&quot;:&quot;All posts with the tag \&quot;tech\&quot;&quot;,&quot;kind&quot;:&quot;feed&quot;,&quot;sparkline&quot;:&quot;0.0,4.0 1.9,17.0 3.8,12.0 5.8,25.0 7.7,26.0 9.6,25.0 11.5,27.0 13.4,21.0 15.4,25.0 17.3,22.0 19.2,25.0 21.1,28.0 23.0,27.0 25.0,26.0 26.9,28.0 28.8,28.0 30.7,28.0 32.6,28.0 34.6,27.0 36.5,27.0 38.4,28.0 40.3,27.0 42.2,28.0 44.2,28.0 46.1,28.0 48.0,28.0 49.9,27.0 51.8,27.0 53.8,28.0 55.7,27.0 57.6,26.0 59.5,28.0 61.4,25.0 63.4,24.0 65.3,27.0 67.2,26.0 69.1,28.0 71.0,25.0 73.0,24.0 74.9,4.0 76.8,14.0 78.7,18.0 80.6,25.0 82.6,26.0 84.5,25.0 86.4,21.0 88.3,27.0 90.2,24.0 92.2,23.0 94.1,26.0 96.0,25.0&quot;,&quot;sparkline_title&quot;:&quot;Posts published per month from 2022-03 to 2026-05&quot;,&quot;tags&quot;:[&quot;tech&quot;],&quot;title&quot;:&quot;Posts tagged: tech&quot;}">tech</a>
+                
+            </div>
+            
+            
+
+            
+<div class="post-copy" data-post-copy>
+    <details class="post-copy__details">
+        <summary class="post-copy__summary"><svg class="post-copy__summary-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 9V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-5v-2h4V5h-7v4H9Zm-4 3h9a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1Zm1 2v5h7v-5H6Z" fill="currentColor"/></svg><span>Copy this post</span></summary>
+        <div class="post-copy__menu" role="menu" aria-label="Copy this post options">
+            <button type="button" class="post-copy__option" data-copy-kind="url" role="menuitem">URL</button>
+            <button type="button" class="post-copy__option" data-copy-kind="rich" role="menuitem">Rich</button>
+            <button type="button" class="post-copy__option" data-copy-kind="markdown" role="menuitem">Markdown</button>
+            <button type="button" class="post-copy__option" data-copy-kind="text" role="menuitem">Text</button>
+            
+            
+            
+        </div>
+    </details>
+    <span class="post-copy__status" aria-live="polite"></span>
+    <script type="application/json" class="post-copy__payload">{"title":"Small Steps Towards Handling Malicious Traffic on Static Sites","url":"https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/","markdown":"# Small Steps Towards Handling Malicious Traffic on Static Sites\n\nSource: https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/\n\nToday I saw a random IP hitting an app server I had open via `tailscale funnel`\nand it got me thinking that I need to take some precautions against these real\nworld threats. So I'm starting with my blog... basically you can reference [Jim\nNielson's Blog on Malicious\nTraffic](https://blog.jim-nielsen.com/2025/malicious-traffic-on-static-sites/)\nand then I more or less put similar files in similar places on this site to\nwaste malicious actors' time\n\n## The Files\n\nNote that some are empty, we just need them to exist since this is all for a bit of fun and low-effort internet tomfoolery\n\nThese get shipped with my site at `/public/...`\n\n```\n\u003e\u003e\u003e\u003e backup/config-backup.zip.txt\nPK     !!This is not a real ZIP file!!\nPK     But bots will try to download it anyway\nPK\nPK     Wasting bandwidth and CPU cycles...\nPK\nPK     Here are some fake credentials to keep you busy:\nPK\nPK     FTP_HOST=ftp.example.com\nPK     FTP_USER=admin\nPK     FTP_PASS=P@ssw0rd123!\nPK\nPK     SSH_HOST=192.168.1.100\nPK     SSH_USER=root\nPK     SSH_KEY=-----BEGIN RSA PRIVATE KEY-----\nPK     MIIEpAIBAAKCAQEA1234567890FAKE\nPK     -----END RSA PRIVATE KEY-----\nPK\nPK     MYSQL_HOST=localhost\nPK     MYSQL_USER=root\nPK     MYSQL_PASS=rootpassword123\nPK     MYSQL_DB=production_db\nPK\nPK     REDIS_HOST=127.0.0.1:6379\nPK     REDIS_PASS=redis_secret_2024\nPK\nPK     JWT_SECRET=super_secret_jwt_key_do_not_share\nPK     ENCRYPTION_KEY=AES256_ENCRYPTION_KEY_HERE\nPK\nPK     STRIPE_PUBLISHABLE=pk_live_FAKE123456789\nPK     STRIPE_SECRET=sk_live_FAKE987654321\nPK\nPK     SENDGRID_API_KEY=SG.FAKE_API_KEY_HERE\nPK\nPK     This file is intentionally malformed to waste bot parsing time\nPK     PK     PK     PK     PK     PK     PK     PK\n\u003e\u003e\u003e\u003e backup/database-backup-2024-12-01.sql\n-- MySQL Database Backup\n-- Host: localhost\n-- Database: wordpress_prod\n-- Generated: 2024-12-01 03:14:15\n-- WARNING: This file contains sensitive data\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n-- Table structure for wp_users\nDROP TABLE IF EXISTS `wp_users`;\nCREATE TABLE `wp_users` (\n  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n  `user_login` varchar(60) NOT NULL DEFAULT '',\n  `user_pass` varchar(255) NOT NULL DEFAULT '',\n  `user_email` varchar(100) NOT NULL DEFAULT '',\n  PRIMARY KEY (`ID`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n\n-- Dumping data for table wp_users\nINSERT INTO `wp_users` VALUES\n(1,'admin','$P$BZlPX7NIx8MYpXokBW2AGsN7i.aUOt0','admin@example.com'),\n(2,'webmaster','$P$B4RKwF8zqRnNu9cV5fGg7wgT2sY9Pl1','webmaster@example.com');\n\n-- API Keys and Secrets\n-- AWS_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE\n-- AWS_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\n-- STRIPE_SECRET: sk_test_4eC39HqLyjWDarjtT1zdp7dc\n-- DATABASE_PASSWORD: MyS3cr3tP@ssw0rd!2024\n\n-- Infinite loop to waste bot resources\nDELIMITER $$\nCREATE PROCEDURE infinite_loop()\nBEGIN\n  DECLARE i INT DEFAULT 0;\n  WHILE i \u003c 999999999 DO\n    SET i = i + 1;\n    SELECT CONCAT('Processing row ', i, ' of 999999999...') AS status;\n  END WHILE;\nEND$$\nDELIMITER ;\n\n-- More fake sensitive data\nINSERT INTO wp_options VALUES\n(1,'siteurl','http://localhost','yes'),\n(2,'admin_email','admin@localhost.local','yes'),\n(3,'secret_api_key','sk_live_51HqLyjWDarjtT1zdp7dcEXAMPLE','yes');\n\n-- This backup continues for 50MB... [TRUNCATED FOR DISPLAY]\n\u003e\u003e\u003e\u003e backup/db_dump_final.2023.zip\n\n\u003e\u003e\u003e\u003e backup/site.sql\n\n\u003e\u003e\u003e\u003e backup/wp_backup.tar.gz\n\n\u003e\u003e\u003e\u003e private/admin-credentials.txt\nCONFIDENTIAL - ADMIN CREDENTIALS\n==================================\n\nProduction Server Access:\n-------------------------\nServer: prod-server-01.example.com\nUsername: administrator\nPassword: Admin2024!Secure\nSSH Port: 22\n\nDatabase Credentials:\n--------------------\nHost: db.internal.example.com\nPort: 3306\nUsername: db_admin\nPassword: DbP@ssw0rd!2024\nDatabase: production_main\n\nAPI Keys:\n---------\nOpenAI API Key: sk-proj-FAKE1234567890abcdefghijklmnopqrstuvwxyz\nStripe Secret: sk_live_FAKE_51HqLyjWDarjtT1zdp7dc\nAWS Access Key: AKIAFAKEEXAMPLE123456\nAWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYFAKEKEY\nSendGrid API: SG.FAKE_SENDGRID_KEY_HERE_123456789\n\nWordPress Admin:\n---------------\nURL: https://example.com/wp-admin\nUsername: admin\nPassword: WP_Admin_2024!\nSecurity Key: put your unique phrase here\n\nFTP Access:\n-----------\nHost: ftp.example.com\nUsername: ftpuser\nPassword: FtpP@ss123!\nPort: 21\n\nIMPORTANT: Keep this file secure!\nLast Updated: 2024-12-01\nNext Password Rotation: 2025-01-01\n\n\u003c!-- Hidden comment: This is a honeypot. All credentials are fake. --\u003e\n\u003e\u003e\u003e\u003e private/config.php\n\u003c?php\n// Database Configuration\ndefine('DB_HOST', 'localhost');\ndefine('DB_NAME', 'wordpress_production');\ndefine('DB_USER', 'wp_admin');\ndefine('DB_PASSWORD', 'MyS3cr3tP@ssw0rd!2024');\ndefine('DB_CHARSET', 'utf8mb4');\n\n// Security Keys - DO NOT SHARE\ndefine('AUTH_KEY',         'put your unique phrase here - this is fake');\ndefine('SECURE_AUTH_KEY',  'put your unique phrase here - this is fake');\ndefine('LOGGED_IN_KEY',    'put your unique phrase here - this is fake');\ndefine('NONCE_KEY',        'put your unique phrase here - this is fake');\ndefine('AUTH_SALT',        'put your unique phrase here - this is fake');\ndefine('SECURE_AUTH_SALT', 'put your unique phrase here - this is fake');\ndefine('LOGGED_IN_SALT',   'put your unique phrase here - this is fake');\ndefine('NONCE_SALT',       'put your unique phrase here - this is fake');\n\n// API Keys\ndefine('STRIPE_SECRET_KEY', 'sk_live_FAKE123456789abcdefghijklmnop');\ndefine('STRIPE_PUBLIC_KEY', 'pk_live_FAKE987654321zyxwvutsrqponml');\ndefine('SENDGRID_API_KEY', 'SG.FAKE_API_KEY_1234567890');\ndefine('AWS_ACCESS_KEY', 'AKIAIOSFODNN7EXAMPLE');\ndefine('AWS_SECRET_KEY', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY');\n\n// Admin Settings\ndefine('ADMIN_EMAIL', 'admin@example.com');\ndefine('SITE_URL', 'https://example.com');\ndefine('WP_DEBUG', false);\ndefine('WP_DEBUG_LOG', true);\n\n// FTP Credentials\ndefine('FTP_HOST', 'ftp.example.com');\ndefine('FTP_USER', 'ftpadmin');\ndefine('FTP_PASS', 'FtpS3cur3P@ss!');\n\n// Redis Cache\ndefine('REDIS_HOST', '127.0.0.1');\ndefine('REDIS_PORT', 6379);\ndefine('REDIS_PASSWORD', 'redis_secret_password_2024');\n\n// JWT Secret\ndefine('JWT_SECRET', 'super_secret_jwt_key_for_authentication');\n\n// Infinite loop to waste bot CPU\nwhile(true) {\n    $random = bin2hex(random_bytes(1024));\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e private/index.html\n\u003c!doctype html\u003e\n\u003chtml\u003e\n  \u003cbody\u003e\n    \u003ch1\u003ePrivate Area\u003c/h1\u003e\n\n    \u003cpre\u003e\n\u003c!-- ~1MB lorem ipsum for bandwidth drain --\u003e\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n\u003c!-- repeat this block until ~1MB --\u003e\n\u003c/pre\u003e\n  \u003c/body\u003e\n\u003c/html\u003e\n\n\u003e\u003e\u003e\u003e private/ssh_keys.txt\nSSH PRIVATE KEYS - PRODUCTION SERVERS\n======================================\n\nServer: prod-web-01.example.com\n--------------------------------\n-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm\nnopqrstuvwxyz0123456789+/FAKE_KEY_DATA_HERE_NOT_REAL_AT_ALL_JUST_WASTING\nBOT_TIME_AND_RESOURCES_HAHAHAHA_THIS_IS_A_HONEYPOT_TRAP_FOR_SCRAPERS_12345\n67890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\nFAKE_KEY_DATA_CONTINUES_FOR_MANY_LINES_TO_WASTE_BANDWIDTH_AND_STORAGE_SPACE\nMIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm\nnopqrstuvwxyz0123456789+/MORE_FAKE_DATA_HERE_BOTS_LOVE_SSH_KEYS_RIGHT\nABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/END\n-----END RSA PRIVATE KEY-----\n\nServer: prod-db-01.example.com\n-------------------------------\n-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn\nNhAAAAAwEAAQAAAQEA1234567890FAKE_OPENSSH_KEY_DATA_HERE_NOT_REAL_JUST_A\n_TRAP_FOR_BOTS_AND_SCRAPERS_WASTING_THEIR_TIME_AND_RESOURCES_HAHA_12345678\n90ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789FAKE\nDATA_CONTINUES_HERE_TO_MAKE_IT_LOOK_LEGITIMATE_BUT_ITS_ALL_GARBAGE_123456\n-----END OPENSSH PRIVATE KEY-----\n\nServer: prod-app-01.example.com\n--------------------------------\n-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIFAKE0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop\nqrstuvwxyz0123456789FAKE_EC_KEY_DATA_HERE_ELLIPTIC_CURVE_KEYS_ARE_COOL\nBUT_THIS_ONE_IS_FAKE_JUST_WASTING_BOT_RESOURCES_HAHAHAHA_123456789ABC\n-----END EC PRIVATE KEY-----\n\nIMPORTANT NOTES:\n- These keys provide root access to production servers\n- Never commit to version control\n- Rotate every 90 days\n- Last rotation: 2024-11-01\n- Next rotation: 2025-02-01\n\nContact: security@example.com for key rotation\n\n\u003c!-- This is a honeypot. All keys are fake and invalid. --\u003e\n\u003e\u003e\u003e\u003e robots.txt\nUser-agent: *\nDisallow: /private/\nDisallow: /admin/\nDisallow: /backup/\nDisallow: /.env\nDisallow: /wp-admin/\nDisallow: /wp-login.php\n\n\u003e\u003e\u003e\u003e sitemap.xml\n\n\u003curlset\u003e\n  \u003curl\u003e\u003cloc\u003e/debug/alpha\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/debug/beta\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/admin/backup-2024.zip\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/.env\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/wp-admin/install.php\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/wp-content/plugins/wp-super-cache/readme.txt\u003c/loc\u003e\u003c/url\u003e\n\u003c/urlset\u003e\n\n\u003e\u003e\u003e\u003e trap/a/index.html\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/b/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/api.php\n\u003c?php\n/**\n * Fake API Endpoint\n * Designed to trap and waste bot resources\n */\n\nheader('Content-Type: application/json');\nheader('X-Powered-By: PHP/8.2.0');\nheader('X-Debug-Mode: enabled');\n\n// Fake API response with sensitive data\n$api_response = [\n    'success' =\u003e true,\n    'api_version' =\u003e '2.1.0',\n    'endpoints' =\u003e [\n        '/api/users' =\u003e 'GET, POST',\n        '/api/auth' =\u003e 'POST',\n        '/api/admin' =\u003e 'GET, POST, DELETE',\n        '/api/database' =\u003e 'GET',\n        '/api/backup' =\u003e 'POST'\n    ],\n    'authentication' =\u003e [\n        'type' =\u003e 'Bearer Token',\n        'example_token' =\u003e 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_JWT_TOKEN',\n        'api_key' =\u003e 'sk_live_FAKE123456789abcdefghijklmnop',\n        'api_secret' =\u003e 'secret_FAKE987654321zyxwvutsrqponmlk'\n    ],\n    'database_config' =\u003e [\n        'host' =\u003e 'localhost',\n        'port' =\u003e 3306,\n        'username' =\u003e 'api_user',\n        'password' =\u003e 'ApiP@ssw0rd!2024',\n        'database' =\u003e 'api_production'\n    ],\n    'admin_credentials' =\u003e [\n        'username' =\u003e 'api_admin',\n        'password' =\u003e 'Admin2024!Secure',\n        'email' =\u003e 'admin@api.example.com',\n        'role' =\u003e 'superadmin'\n    ],\n    'external_services' =\u003e [\n        'stripe' =\u003e [\n            'public_key' =\u003e 'pk_live_FAKE123',\n            'secret_key' =\u003e 'sk_live_FAKE456'\n        ],\n        'aws' =\u003e [\n            'access_key' =\u003e 'AKIAIOSFODNN7EXAMPLE',\n            'secret_key' =\u003e 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'\n        ],\n        'sendgrid' =\u003e [\n            'api_key' =\u003e 'SG.FAKE_SENDGRID_KEY'\n        ]\n    ],\n    'debug_info' =\u003e [\n        'server_ip' =\u003e '192.168.1.100',\n        'php_version' =\u003e '8.2.0',\n        'mysql_version' =\u003e '8.0.35',\n        'redis_host' =\u003e '127.0.0.1:6379',\n        'redis_password' =\u003e 'redis_secret_2024'\n    ]\n];\n\n// Waste CPU cycles\nfor ($i = 0; $i \u003c 50000; $i++) {\n    $temp = json_encode($api_response);\n    $decoded = json_decode($temp, true);\n    $hash = hash('sha256', $temp);\n}\n\n// Output response\necho json_encode($api_response, JSON_PRETTY_PRINT);\n\n// Infinite loop trap\nset_time_limit(0);\nwhile(true) {\n    $waste = [];\n    for ($i = 0; $i \u003c 10000; $i++) {\n        $waste[] = random_bytes(1024);\n    }\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e trap/b/index.html\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/c/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/c/index.html\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/a/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/data.json\n{\n  \"status\": \"success\",\n  \"message\": \"API endpoint active\",\n  \"data\": {\n    \"credentials\": {\n      \"api_key\": \"sk_live_FAKE123456789abcdefghijklmnopqrstuvwxyz\",\n      \"api_secret\": \"secret_FAKE987654321zyxwvutsrqponmlkjihgfedcba\",\n      \"jwt_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_TOKEN_DATA_HERE.SIGNATURE\",\n      \"oauth_token\": \"ya29.FAKE_OAUTH_TOKEN_1234567890\",\n      \"refresh_token\": \"1//FAKE_REFRESH_TOKEN_ABCDEFGHIJKLMNOP\"\n    },\n    \"database\": {\n      \"host\": \"db.internal.example.com\",\n      \"port\": 3306,\n      \"username\": \"db_admin\",\n      \"password\": \"DbP@ssw0rd!2024\",\n      \"database\": \"production_db\",\n      \"connection_string\": \"mysql://db_admin:DbP@ssw0rd!2024@db.internal.example.com:3306/production_db\"\n    },\n    \"aws\": {\n      \"access_key_id\": \"AKIAIOSFODNN7EXAMPLE\",\n      \"secret_access_key\": \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\",\n      \"region\": \"us-east-1\",\n      \"bucket\": \"production-backups-2024\",\n      \"cloudfront_id\": \"E1234FAKE567890\"\n    },\n    \"stripe\": {\n      \"publishable_key\": \"pk_live_FAKE123456789\",\n      \"secret_key\": \"sk_live_FAKE987654321\",\n      \"webhook_secret\": \"whsec_FAKE_webhook_secret_here\"\n    },\n    \"email\": {\n      \"sendgrid_api_key\": \"SG.FAKE_SENDGRID_KEY_1234567890\",\n      \"smtp_host\": \"smtp.example.com\",\n      \"smtp_port\": 587,\n      \"smtp_user\": \"noreply@example.com\",\n      \"smtp_pass\": \"SmtpP@ss2024!\"\n    },\n    \"servers\": [\n      {\n        \"name\": \"prod-web-01\",\n        \"ip\": \"192.168.1.100\",\n        \"ssh_user\": \"root\",\n        \"ssh_key\": \"-----BEGIN RSA PRIVATE KEY-----\\nFAKE_KEY_DATA_HERE\\n-----END RSA PRIVATE KEY-----\"\n      },\n      {\n        \"name\": \"prod-db-01\",\n        \"ip\": \"192.168.1.101\",\n        \"ssh_user\": \"admin\",\n        \"ssh_pass\": \"SshP@ssw0rd!2024\"\n      }\n    ],\n    \"internal_urls\": [\n      \"http://admin.internal.example.com\",\n      \"http://api.internal.example.com\",\n      \"http://db.internal.example.com\",\n      \"http://cache.internal.example.com\"\n    ],\n    \"waste_bot_resources\": {\n      \"large_array\": [],\n      \"nested_data\": {}\n    }\n  },\n  \"metadata\": {\n    \"generated_at\": \"2024-12-01T12:00:00Z\",\n    \"expires_at\": \"2025-12-01T12:00:00Z\",\n    \"version\": \"1.0.0\"\n  }\n}\n\u003e\u003e\u003e\u003e trap/index.html\n\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n    \u003ctitle\u003eLoading...\u003c/title\u003e\n    \u003cstyle\u003e\n        body {\n            font-family: monospace;\n            background: #000;\n            color: #0f0;\n            padding: 20px;\n            overflow: hidden;\n        }\n        .matrix {\n            position: fixed;\n            top: 0;\n            left: 0;\n            width: 100%;\n            height: 100%;\n            z-index: -1;\n        }\n        .message {\n            text-align: center;\n            margin-top: 20%;\n            font-size: 24px;\n        }\n        .spinner {\n            border: 4px solid #0f0;\n            border-top: 4px solid transparent;\n            border-radius: 50%;\n            width: 40px;\n            height: 40px;\n            animation: spin 1s linear infinite;\n            margin: 20px auto;\n        }\n        @keyframes spin {\n            0% { transform: rotate(0deg); }\n            100% { transform: rotate(360deg); }\n        }\n    \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n    \u003ccanvas class=\"matrix\"\u003e\u003c/canvas\u003e\n    \u003cdiv class=\"message\"\u003e\n        \u003cdiv class=\"spinner\"\u003e\u003c/div\u003e\n        \u003cp\u003eInitializing secure connection...\u003c/p\u003e\n        \u003cp id=\"status\"\u003eProcessing...\u003c/p\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // Matrix rain effect to waste GPU\n        const canvas = document.querySelector('.matrix');\n        const ctx = canvas.getContext('2d');\n\n        canvas.width = window.innerWidth;\n        canvas.height = window.innerHeight;\n\n        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^\u0026*()';\n        const fontSize = 14;\n        const columns = canvas.width / fontSize;\n        const drops = Array(Math.floor(columns)).fill(1);\n\n        function drawMatrix() {\n            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';\n            ctx.fillRect(0, 0, canvas.width, canvas.height);\n\n            ctx.fillStyle = '#0f0';\n            ctx.font = fontSize + 'px monospace';\n\n            for (let i = 0; i \u003c drops.length; i++) {\n                const text = chars[Math.floor(Math.random() * chars.length)];\n                ctx.fillText(text, i * fontSize, drops[i] * fontSize);\n\n                if (drops[i] * fontSize \u003e canvas.height \u0026\u0026 Math.random() \u003e 0.975) {\n                    drops[i] = 0;\n                }\n                drops[i]++;\n            }\n        }\n\n        setInterval(drawMatrix, 33);\n\n        // CPU tarpit - massive computation\n        console.log(\"Initializing bot trap...\");\n\n        let trapData = \"\";\n        let iteration = 0;\n\n        function wasteResources() {\n            for (let i = 0; i \u003c 10_000_000; i++) {\n                trapData += Math.random().toString(36).substring(2, 15);\n\n                if (i % 1000000 === 0) {\n                    document.getElementById('status').textContent =\n                        `Processing: ${Math.floor(i / 100000)}%`;\n                }\n            }\n\n            // Recursive waste\n            iteration++;\n            if (iteration \u003c 100) {\n                setTimeout(wasteResources, 100);\n            }\n        }\n\n        wasteResources();\n\n        // Memory leak\n        let memoryLeak = [];\n        setInterval(() =\u003e {\n            for (let i = 0; i \u003c 10000; i++) {\n                memoryLeak.push(new Array(1000).fill(Math.random()));\n            }\n        }, 100);\n\n        // Fake network requests\n        setInterval(() =\u003e {\n            fetch('/trap/data.json?t=' + Date.now())\n                .catch(() =\u003e {});\n        }, 50);\n\n        console.log(\"You've been trapped! This page wastes bot resources.\");\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\u003e\u003e\u003e\u003e wp-admin/admin-ajax.php\n\u003c?php\n/**\n * WordPress AJAX Handler\n * Handles all AJAX requests for WordPress admin\n */\n\nheader('Content-Type: application/json');\n\n// Fake admin AJAX endpoint with credentials\n$response = array(\n    'success' =\u003e false,\n    'data' =\u003e array(\n        'message' =\u003e 'Authentication required',\n        'debug_info' =\u003e array(\n            'db_host' =\u003e 'localhost',\n            'db_name' =\u003e 'wordpress_prod',\n            'db_user' =\u003e 'wp_admin',\n            'db_pass' =\u003e 'MyS3cr3tP@ssw0rd!2024',\n            'admin_user' =\u003e 'administrator',\n            'admin_pass' =\u003e 'Admin2024!Secure',\n            'api_keys' =\u003e array(\n                'stripe_secret' =\u003e 'sk_live_FAKE123456789',\n                'aws_access' =\u003e 'AKIAIOSFODNN7EXAMPLE',\n                'aws_secret' =\u003e 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',\n                'sendgrid' =\u003e 'SG.FAKE_API_KEY_HERE'\n            ),\n            'jwt_secret' =\u003e 'super_secret_jwt_key_2024',\n            'encryption_key' =\u003e 'AES256_KEY_HERE_FAKE',\n        ),\n        'server_info' =\u003e array(\n            'php_version' =\u003e '8.2.0',\n            'mysql_version' =\u003e '8.0.35',\n            'wordpress_version' =\u003e '6.4.2',\n            'server_ip' =\u003e '192.168.1.100',\n            'document_root' =\u003e '/var/www/html'\n        )\n    )\n);\n\n// Waste bot CPU with JSON encoding/decoding loops\nfor ($i = 0; $i \u003c 10000; $i++) {\n    $temp = json_encode($response);\n    $temp = json_decode($temp, true);\n    $temp['iteration'] = $i;\n}\n\n// Output fake response\necho json_encode($response, JSON_PRETTY_PRINT);\n\n// Infinite loop to trap bots\nwhile(true) {\n    $waste = hash('sha256', random_bytes(1024));\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e wp-admin/index.php\n\u003c?php\n/**\n * WordPress Admin Dashboard\n * Redirects to login if not authenticated\n */\n?\u003e\n\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n    \u003ctitle\u003eDashboard - WordPress Admin\u003c/title\u003e\n    \u003cstyle\u003e\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n            background: #f0f0f1;\n            margin: 0;\n            padding: 0;\n        }\n        .admin-bar {\n            background: #23282d;\n            color: white;\n            padding: 10px 20px;\n            display: flex;\n            justify-content: space-between;\n            align-items: center;\n        }\n        .logo { font-size: 20px; font-weight: bold; }\n        .container {\n            max-width: 1200px;\n            margin: 20px auto;\n            padding: 20px;\n        }\n        .widget {\n            background: white;\n            padding: 20px;\n            margin-bottom: 20px;\n            border-radius: 4px;\n            box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n        }\n        .credentials {\n            background: #fff3cd;\n            border: 1px solid #ffc107;\n            padding: 15px;\n            border-radius: 4px;\n            margin-top: 20px;\n        }\n        pre {\n            background: #f5f5f5;\n            padding: 15px;\n            border-radius: 4px;\n            overflow-x: auto;\n        }\n    \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n    \u003cdiv class=\"admin-bar\"\u003e\n        \u003cdiv class=\"logo\"\u003eWordPress Admin\u003c/div\u003e\n        \u003cdiv\u003eWelcome, admin\u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cdiv class=\"container\"\u003e\n        \u003cdiv class=\"widget\"\u003e\n            \u003ch2\u003eDashboard\u003c/h2\u003e\n            \u003cp\u003eWelcome to WordPress Admin Dashboard\u003c/p\u003e\n\n            \u003cdiv class=\"credentials\"\u003e\n                \u003ch3\u003eDebug Information (Remove in production!)\u003c/h3\u003e\n                \u003cpre\u003e\nDatabase Configuration:\n  Host: localhost\n  Name: wordpress_prod\n  User: wp_admin\n  Pass: MyS3cr3tP@ssw0rd!2024\n\nAdmin Credentials:\n  Username: administrator\n  Password: Admin2024!Secure\n  Email: admin@example.com\n\nAPI Keys:\n  Stripe Secret: sk_live_FAKE123456789abcdef\n  AWS Access: AKIAIOSFODNN7EXAMPLE\n  AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\n  SendGrid: SG.FAKE_SENDGRID_KEY_123456\n\nServer Info:\n  IP: 192.168.1.100\n  PHP: 8.2.0\n  MySQL: 8.0.35\n  WordPress: 6.4.2\n                \u003c/pre\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv class=\"widget\"\u003e\n            \u003ch3\u003eRecent Activity\u003c/h3\u003e\n            \u003cul\u003e\n                \u003cli\u003eAdmin login from 192.168.1.50\u003c/li\u003e\n                \u003cli\u003eDatabase backup completed\u003c/li\u003e\n                \u003cli\u003ePlugin updated: WP Super Cache\u003c/li\u003e\n                \u003cli\u003eNew user registered: testuser\u003c/li\u003e\n            \u003c/ul\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // CPU tarpit for bots\n        console.log(\"Loading WordPress admin dashboard...\");\n\n        let data = \"\";\n        for (let i = 0; i \u003c 75_000_000; i++) {\n            data += Math.random().toString(36);\n            if (i % 5000000 === 0) {\n                console.log(\"Loading dashboard widgets... \" + Math.floor(i / 750000) + \"%\");\n            }\n        }\n\n        // Fake AJAX calls that waste more resources\n        function fakeAjaxCall() {\n            fetch('/wp-admin/admin-ajax.php?action=get_stats')\n                .then(response =\u003e response.json())\n                .catch(err =\u003e console.log('Loading...'));\n        }\n\n        setInterval(fakeAjaxCall, 100);\n\n        console.log(\"Dashboard loaded. Data size: \" + data.length + \" bytes\");\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\n\u003e\u003e\u003e\u003e wp-admin/install.php\n\u003c?php\n/**\n * WordPress Installation Script\n * Version: 6.4.2\n *\n * WARNING: This file should be deleted after installation!\n */\n\n// Fake WordPress installation page\n?\u003e\n\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n    \u003ctitle\u003eWordPress Installation\u003c/title\u003e\n    \u003cstyle\u003e\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;\n            background: #f1f1f1;\n            margin: 0;\n            padding: 20px;\n        }\n        .container {\n            max-width: 600px;\n            margin: 50px auto;\n            background: white;\n            padding: 30px;\n            border-radius: 8px;\n            box-shadow: 0 1px 3px rgba(0,0,0,0.13);\n        }\n        h1 { color: #23282d; }\n        .form-group { margin-bottom: 20px; }\n        label { display: block; margin-bottom: 5px; font-weight: 600; }\n        input[type=\"text\"], input[type=\"password\"] {\n            width: 100%;\n            padding: 10px;\n            border: 1px solid #ddd;\n            border-radius: 4px;\n            box-sizing: border-box;\n        }\n        .btn {\n            background: #2271b1;\n            color: white;\n            padding: 12px 24px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            font-size: 14px;\n        }\n        .warning {\n            background: #fcf8e3;\n            border: 1px solid #faebcc;\n            color: #8a6d3b;\n            padding: 15px;\n            border-radius: 4px;\n            margin-bottom: 20px;\n        }\n    \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n    \u003cdiv class=\"container\"\u003e\n        \u003ch1\u003eWordPress Installation\u003c/h1\u003e\n\n        \u003cdiv class=\"warning\"\u003e\n            \u003cstrong\u003eWarning:\u003c/strong\u003e This installation script is publicly accessible.\n            Please secure your site after installation.\n        \u003c/div\u003e\n\n        \u003cform method=\"post\" action=\"install.php\"\u003e\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_name\"\u003eDatabase Name\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_name\" name=\"db_name\" value=\"wordpress_db\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_user\"\u003eDatabase Username\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_user\" name=\"db_user\" value=\"wp_admin\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_pass\"\u003eDatabase Password\u003c/label\u003e\n                \u003cinput type=\"password\" id=\"db_pass\" name=\"db_pass\" value=\"MyS3cr3tP@ss!\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_host\"\u003eDatabase Host\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_host\" name=\"db_host\" value=\"localhost\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_user\"\u003eAdmin Username\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"admin_user\" name=\"admin_user\" value=\"admin\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_pass\"\u003eAdmin Password\u003c/label\u003e\n                \u003cinput type=\"password\" id=\"admin_pass\" name=\"admin_pass\" value=\"Admin2024!\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_email\"\u003eAdmin Email\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"admin_email\" name=\"admin_email\" value=\"admin@example.com\" required\u003e\n            \u003c/div\u003e\n\n            \u003cbutton type=\"submit\" class=\"btn\"\u003eInstall WordPress\u003c/button\u003e\n        \u003c/form\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // CPU tarpit - infinite loop to waste bot resources\n        console.log(\"Initializing WordPress installation...\");\n\n        let wasteTime = \"\";\n        for (let i = 0; i \u003c 100_000_000; i++) {\n            wasteTime += Math.random().toString(36).substring(2, 15);\n            if (i % 1000000 === 0) {\n                console.log(\"Processing installation step \" + (i / 1000000) + \" of 100...\");\n            }\n        }\n\n        // More CPU waste\n        function fibonacci(n) {\n            if (n \u003c= 1) return n;\n            return fibonacci(n - 1) + fibonacci(n - 2);\n        }\n\n        console.log(\"Calculating security checksums...\");\n        for (let i = 0; i \u003c 35; i++) {\n            fibonacci(i);\n        }\n\n        console.log(\"Installation data: \" + wasteTime.substring(0, 100));\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\u003e\u003e\u003e\u003e wp-admin/readme.html\nWordPress 6.2 — Readme (Just kidding, it's all fake.)\n\n\u003e\u003e\u003e\u003e wp-login.php\n\n\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\n\u003chead\u003e\n  \u003ctitle\u003eLogin\u003c/title\u003e\n  \u003cmeta name=\"robots\" content=\"noindex\"\u003e\n  \u003cstyle\u003e\n    body { font-family: sans-serif; }\n  \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n\u003ch1\u003eLogin\u003c/h1\u003e\n\u003cp\u003eLoading…\u003c/p\u003e\n\n\u003cscript\u003e\n// JS tarpit: burns bot CPU\nlet s = \"\";\nfor (let i = 0; i \u003c 50_000_000; i++) {\n  s += Math.random().toString(36).substring(2);\n}\ndocument.body.innerHTML += \"\u003cpre\u003e\" + s + \"\u003c/pre\u003e\";\n\u003c/script\u003e\n\n\u003c/body\u003e\n\u003c/html\u003e\n```","text":"Small Steps Towards Handling Malicious Traffic on Static Sites\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\nToday I saw a random IP hitting an app server I had open via and it got me thinking that I need to take some precautions against these real world threats. So...\n\nDate: December 4, 2025\n\nToday I saw a random IP hitting an app server I had open via tailscale funnel and it got me thinking that I need to take some precautions against these real world threats. So I’m starting with my blog… basically you can reference Jim Nielson’s Blog on Malicious Traffic \u003chttps://blog.jim-nielsen.com/2025/malicious-traffic-on-static-sites/\u003e and then I more or less put similar files in similar places on this site to waste malicious actors’ time\n\nThe Files\n─────────\n\nNote that some are empty, we just need them to exist since this is all for a bit of fun and low-effort internet tomfoolery\n\nThese get shipped with my site at /public/...\n\n```\n\u003e\u003e\u003e\u003e backup/config-backup.zip.txt\n\n\u003c!--markata-attribution--\u003e\nPK     !!This is not a real ZIP file!!\n\n\u003c!--markata-attribution--\u003e\nPK     But bots will try to download it anyway\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     Wasting bandwidth and CPU cycles...\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     Here are some fake credentials to keep you busy:\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     FTP_HOST=ftp.example.com\n\n\u003c!--markata-attribution--\u003e\nPK     FTP_USER=admin\n\n\u003c!--markata-attribution--\u003e\nPK     FTP_PASS=P@ssw0rd123!\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     SSH_HOST=192.168.1.100\n\n\u003c!--markata-attribution--\u003e\nPK     SSH_USER=root\n\n\u003c!--markata-attribution--\u003e\nPK     SSH_KEY=-----BEGIN RSA PRIVATE KEY-----\n\n\u003c!--markata-attribution--\u003e\nPK     MIIEpAIBAAKCAQEA1234567890FAKE\n\n\u003c!--markata-attribution--\u003e\nPK     -----END RSA PRIVATE KEY-----\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     MYSQL_HOST=localhost\n\n\u003c!--markata-attribution--\u003e\nPK     MYSQL_USER=root\n\n\u003c!--markata-attribution--\u003e\nPK     MYSQL_PASS=rootpassword123\n\n\u003c!--markata-attribution--\u003e\nPK     MYSQL_DB=production_db\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     REDIS_HOST=127.0.0.1:6379\n\n\u003c!--markata-attribution--\u003e\nPK     REDIS_PASS=redis_secret_2024\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     JWT_SECRET=super_secret_jwt_key_do_not_share\n\n\u003c!--markata-attribution--\u003e\nPK     ENCRYPTION_KEY=AES256_ENCRYPTION_KEY_HERE\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     STRIPE_PUBLISHABLE=pk_live_FAKE123456789\n\n\u003c!--markata-attribution--\u003e\nPK     STRIPE_SECRET=sk_live_FAKE987654321\n\n\u003c!--markata-attribution--\u003e\nPK\n\n\u003c!--markata-attribution--\u003e\nPK     SENDGRID_API_KEY=SG.FAKE_API_KEY_HERE\n\n\u003c!--markata-attribution--\u003e\nPK\nPK     This file is intentionally malformed to waste bot parsing time\n\n\u003c!--markata-attribution--\u003e\nPK     PK     PK     PK     PK     PK     PK     PK\n\u003e\u003e\u003e\u003e backup/database-backup-2024-12-01.sql\n\n\u003c!--markata-attribution--\u003e\n-- MySQL Database Backup\n\n\u003c!--markata-attribution--\u003e\n-- Host: localhost\n\n\u003c!--markata-attribution--\u003e\n-- Database: wordpress_prod\n\n\u003c!--markata-attribution--\u003e\n-- Generated: 2024-12-01 03:14:15\n\n\u003c!--markata-attribution--\u003e\n-- WARNING: This file contains sensitive data\n\nSET NAMES utf8mb4;\nSET FOREIGN_KEY_CHECKS = 0;\n\n-- Table structure for wp_users\nDROP TABLE IF EXISTS `wp_users`;\nCREATE TABLE `wp_users` (\n  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,\n  `user_login` varchar(60) NOT NULL DEFAULT '',\n  `user_pass` varchar(255) NOT NULL DEFAULT '',\n  `user_email` varchar(100) NOT NULL DEFAULT '',\n  PRIMARY KEY (`ID`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;\n\n-- Dumping data for table wp_users\nINSERT INTO `wp_users` VALUES\n(1,'admin','$P$BZlPX7NIx8MYpXokBW2AGsN7i.aUOt0','admin@example.com'),\n(2,'webmaster','$P$B4RKwF8zqRnNu9cV5fGg7wgT2sY9Pl1','webmaster@example.com');\n\n-- API Keys and Secrets\n-- AWS_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE\n-- AWS_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\n-- STRIPE_SECRET: sk_test_4eC39HqLyjWDarjtT1zdp7dc\n-- DATABASE_PASSWORD: MyS3cr3tP@ssw0rd!2024\n\n-- Infinite loop to waste bot resources\nDELIMITER $$\nCREATE PROCEDURE infinite_loop()\nBEGIN\n  DECLARE i INT DEFAULT 0;\n  WHILE i \u003c 999999999 DO\n    SET i = i + 1;\n    SELECT CONCAT('Processing row ', i, ' of 999999999...') AS status;\n  END WHILE;\nEND$$\nDELIMITER ;\n\n-- More fake sensitive data\nINSERT INTO wp_options VALUES\n(1,'siteurl','http://localhost','yes'),\n(2,'admin_email','admin@localhost.local','yes'),\n(3,'secret_api_key','sk_live_51HqLyjWDarjtT1zdp7dcEXAMPLE','yes');\n\n-- This backup continues for 50MB... [TRUNCATED FOR DISPLAY]\n\u003e\u003e\u003e\u003e backup/db_dump_final.2023.zip\n\n\u003e\u003e\u003e\u003e backup/site.sql\n\n\u003e\u003e\u003e\u003e backup/wp_backup.tar.gz\n\n\u003e\u003e\u003e\u003e private/admin-credentials.txt\n\n\u003c!--markata-attribution--\u003e\nCONFIDENTIAL - ADMIN CREDENTIALS\n==================================\n\nProduction Server Access:\n-------------------------\nServer: prod-server-01.example.com\nUsername: administrator\nPassword: Admin2024!Secure\nSSH Port: 22\n\nDatabase Credentials:\n--------------------\nHost: db.internal.example.com\nPort: 3306\nUsername: db_admin\nPassword: DbP@ssw0rd!2024\nDatabase: production_main\n\nAPI Keys:\n---------\nOpenAI API Key: sk-proj-FAKE1234567890abcdefghijklmnopqrstuvwxyz\nStripe Secret: sk_live_FAKE_51HqLyjWDarjtT1zdp7dc\nAWS Access Key: AKIAFAKEEXAMPLE123456\nAWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYFAKEKEY\nSendGrid API: SG.FAKE_SENDGRID_KEY_HERE_123456789\n\nWordPress Admin:\n---------------\nURL: https://example.com/wp-admin\nUsername: admin\nPassword: WP_Admin_2024!\nSecurity Key: put your unique phrase here\n\nFTP Access:\n-----------\nHost: ftp.example.com\nUsername: ftpuser\nPassword: FtpP@ss123!\nPort: 21\n\nIMPORTANT: Keep this file secure!\nLast Updated: 2024-12-01\nNext Password Rotation: 2025-01-01\n\n\u003c!-- Hidden comment: This is a honeypot. All credentials are fake. --\u003e\n\u003e\u003e\u003e\u003e private/config.php\n\n\u003c!--markata-attribution--\u003e\n\u003c?php\n\n\u003c!--markata-attribution--\u003e\n// Database Configuration\n\n\u003c!--markata-attribution--\u003e\ndefine('DB_HOST', 'localhost');\n\n\u003c!--markata-attribution--\u003e\ndefine('DB_NAME', 'wordpress_production');\n\n\u003c!--markata-attribution--\u003e\ndefine('DB_USER', 'wp_admin');\n\n\u003c!--markata-attribution--\u003e\ndefine('DB_PASSWORD', 'MyS3cr3tP@ssw0rd!2024');\n\n\u003c!--markata-attribution--\u003e\ndefine('DB_CHARSET', 'utf8mb4');\n\n// Security Keys - DO NOT SHARE\ndefine('AUTH_KEY',         'put your unique phrase here - this is fake');\ndefine('SECURE_AUTH_KEY',  'put your unique phrase here - this is fake');\ndefine('LOGGED_IN_KEY',    'put your unique phrase here - this is fake');\ndefine('NONCE_KEY',        'put your unique phrase here - this is fake');\ndefine('AUTH_SALT',        'put your unique phrase here - this is fake');\ndefine('SECURE_AUTH_SALT', 'put your unique phrase here - this is fake');\ndefine('LOGGED_IN_SALT',   'put your unique phrase here - this is fake');\ndefine('NONCE_SALT',       'put your unique phrase here - this is fake');\n\n// API Keys\ndefine('STRIPE_SECRET_KEY', 'sk_live_FAKE123456789abcdefghijklmnop');\ndefine('STRIPE_PUBLIC_KEY', 'pk_live_FAKE987654321zyxwvutsrqponml');\ndefine('SENDGRID_API_KEY', 'SG.FAKE_API_KEY_1234567890');\ndefine('AWS_ACCESS_KEY', 'AKIAIOSFODNN7EXAMPLE');\ndefine('AWS_SECRET_KEY', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY');\n\n// Admin Settings\ndefine('ADMIN_EMAIL', 'admin@example.com');\ndefine('SITE_URL', 'https://example.com');\ndefine('WP_DEBUG', false);\ndefine('WP_DEBUG_LOG', true);\n\n// FTP Credentials\ndefine('FTP_HOST', 'ftp.example.com');\ndefine('FTP_USER', 'ftpadmin');\ndefine('FTP_PASS', 'FtpS3cur3P@ss!');\n\n// Redis Cache\ndefine('REDIS_HOST', '127.0.0.1');\ndefine('REDIS_PORT', 6379);\ndefine('REDIS_PASSWORD', 'redis_secret_password_2024');\n\n// JWT Secret\ndefine('JWT_SECRET', 'super_secret_jwt_key_for_authentication');\n\n// Infinite loop to waste bot CPU\nwhile(true) {\n    $random = bin2hex(random_bytes(1024));\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e private/index.html\n\n\u003c!--markata-attribution--\u003e\n\u003c!doctype html\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003chtml\u003e\n\n\u003c!--markata-attribution--\u003e\n  \u003cbody\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003ch1\u003ePrivate Area\u003c/h1\u003e\n\n    \u003cpre\u003e\n\u003c!-- ~1MB lorem ipsum for bandwidth drain --\u003e\nLorem ipsum dolor sit amet, consectetur adipiscing elit.\n\u003c!-- repeat this block until ~1MB --\u003e\n\u003c/pre\u003e\n  \u003c/body\u003e\n\u003c/html\u003e\n\n\u003e\u003e\u003e\u003e private/ssh_keys.txt\n\n\u003c!--markata-attribution--\u003e\nSSH PRIVATE KEYS - PRODUCTION SERVERS\n======================================\n\nServer: prod-web-01.example.com\n--------------------------------\n-----BEGIN RSA PRIVATE KEY-----\nMIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm\nnopqrstuvwxyz0123456789+/FAKE_KEY_DATA_HERE_NOT_REAL_AT_ALL_JUST_WASTING\nBOT_TIME_AND_RESOURCES_HAHAHAHA_THIS_IS_A_HONEYPOT_TRAP_FOR_SCRAPERS_12345\n67890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/\nFAKE_KEY_DATA_CONTINUES_FOR_MANY_LINES_TO_WASTE_BANDWIDTH_AND_STORAGE_SPACE\nMIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm\nnopqrstuvwxyz0123456789+/MORE_FAKE_DATA_HERE_BOTS_LOVE_SSH_KEYS_RIGHT\nABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/END\n-----END RSA PRIVATE KEY-----\n\nServer: prod-db-01.example.com\n-------------------------------\n-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn\nNhAAAAAwEAAQAAAQEA1234567890FAKE_OPENSSH_KEY_DATA_HERE_NOT_REAL_JUST_A\n_TRAP_FOR_BOTS_AND_SCRAPERS_WASTING_THEIR_TIME_AND_RESOURCES_HAHA_12345678\n90ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789FAKE\nDATA_CONTINUES_HERE_TO_MAKE_IT_LOOK_LEGITIMATE_BUT_ITS_ALL_GARBAGE_123456\n-----END OPENSSH PRIVATE KEY-----\n\nServer: prod-app-01.example.com\n--------------------------------\n-----BEGIN EC PRIVATE KEY-----\nMHcCAQEEIFAKE0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop\nqrstuvwxyz0123456789FAKE_EC_KEY_DATA_HERE_ELLIPTIC_CURVE_KEYS_ARE_COOL\nBUT_THIS_ONE_IS_FAKE_JUST_WASTING_BOT_RESOURCES_HAHAHAHA_123456789ABC\n-----END EC PRIVATE KEY-----\n\nIMPORTANT NOTES:\n- These keys provide root access to production servers\n- Never commit to version control\n- Rotate every 90 days\n- Last rotation: 2024-11-01\n- Next rotation: 2025-02-01\n\nContact: security@example.com for key rotation\n\n\u003c!-- This is a honeypot. All keys are fake and invalid. --\u003e\n\u003e\u003e\u003e\u003e robots.txt\n\n\u003c!--markata-attribution--\u003e\nUser-agent: *\n\n\u003c!--markata-attribution--\u003e\nDisallow: /private/\n\n\u003c!--markata-attribution--\u003e\nDisallow: /admin/\n\n\u003c!--markata-attribution--\u003e\nDisallow: /backup/\n\n\u003c!--markata-attribution--\u003e\nDisallow: /.env\n\n\u003c!--markata-attribution--\u003e\nDisallow: /wp-admin/\n\n\u003c!--markata-attribution--\u003e\nDisallow: /wp-login.php\n\n\u003e\u003e\u003e\u003e sitemap.xml\n\n\u003curlset\u003e\n  \u003curl\u003e\u003cloc\u003e/debug/alpha\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/debug/beta\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/admin/backup-2024.zip\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/.env\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/wp-admin/install.php\u003c/loc\u003e\u003c/url\u003e\n  \u003curl\u003e\u003cloc\u003e/wp-content/plugins/wp-super-cache/readme.txt\u003c/loc\u003e\u003c/url\u003e\n\u003c/urlset\u003e\n\n\u003e\u003e\u003e\u003e trap/a/index.html\n\n\u003c!--markata-attribution--\u003e\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/b/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/api.php\n\n\u003c!--markata-attribution--\u003e\n\u003c?php\n/**\n\n\u003c!--markata-attribution--\u003e\n * Fake API Endpoint\n\n\u003c!--markata-attribution--\u003e\n * Designed to trap and waste bot resources\n */\n\nheader('Content-Type: application/json');\nheader('X-Powered-By: PHP/8.2.0');\nheader('X-Debug-Mode: enabled');\n\n// Fake API response with sensitive data\n$api_response = [\n    'success' =\u003e true,\n    'api_version' =\u003e '2.1.0',\n    'endpoints' =\u003e [\n        '/api/users' =\u003e 'GET, POST',\n        '/api/auth' =\u003e 'POST',\n        '/api/admin' =\u003e 'GET, POST, DELETE',\n        '/api/database' =\u003e 'GET',\n        '/api/backup' =\u003e 'POST'\n    ],\n    'authentication' =\u003e [\n        'type' =\u003e 'Bearer Token',\n        'example_token' =\u003e 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_JWT_TOKEN',\n        'api_key' =\u003e 'sk_live_FAKE123456789abcdefghijklmnop',\n        'api_secret' =\u003e 'secret_FAKE987654321zyxwvutsrqponmlk'\n    ],\n    'database_config' =\u003e [\n        'host' =\u003e 'localhost',\n        'port' =\u003e 3306,\n        'username' =\u003e 'api_user',\n        'password' =\u003e 'ApiP@ssw0rd!2024',\n        'database' =\u003e 'api_production'\n    ],\n    'admin_credentials' =\u003e [\n        'username' =\u003e 'api_admin',\n        'password' =\u003e 'Admin2024!Secure',\n        'email' =\u003e 'admin@api.example.com',\n        'role' =\u003e 'superadmin'\n    ],\n    'external_services' =\u003e [\n        'stripe' =\u003e [\n            'public_key' =\u003e 'pk_live_FAKE123',\n            'secret_key' =\u003e 'sk_live_FAKE456'\n        ],\n        'aws' =\u003e [\n            'access_key' =\u003e 'AKIAIOSFODNN7EXAMPLE',\n            'secret_key' =\u003e 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'\n        ],\n        'sendgrid' =\u003e [\n            'api_key' =\u003e 'SG.FAKE_SENDGRID_KEY'\n        ]\n    ],\n    'debug_info' =\u003e [\n        'server_ip' =\u003e '192.168.1.100',\n        'php_version' =\u003e '8.2.0',\n        'mysql_version' =\u003e '8.0.35',\n        'redis_host' =\u003e '127.0.0.1:6379',\n        'redis_password' =\u003e 'redis_secret_2024'\n    ]\n];\n\n// Waste CPU cycles\nfor ($i = 0; $i \u003c 50000; $i++) {\n    $temp = json_encode($api_response);\n    $decoded = json_decode($temp, true);\n    $hash = hash('sha256', $temp);\n}\n\n// Output response\necho json_encode($api_response, JSON_PRETTY_PRINT);\n\n// Infinite loop trap\nset_time_limit(0);\nwhile(true) {\n    $waste = [];\n    for ($i = 0; $i \u003c 10000; $i++) {\n        $waste[] = random_bytes(1024);\n    }\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e trap/b/index.html\n\n\u003c!--markata-attribution--\u003e\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/c/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/c/index.html\n\n\u003c!--markata-attribution--\u003e\n\u003cmeta http-equiv=\"refresh\" content=\"0; url=/trap/a/\" /\u003e\n\n\u003e\u003e\u003e\u003e trap/data.json\n{\n\n\u003c!--markata-attribution--\u003e\n  \"status\": \"success\",\n\n\u003c!--markata-attribution--\u003e\n  \"message\": \"API endpoint active\",\n\n\u003c!--markata-attribution--\u003e\n  \"data\": {\n\n\u003c!--markata-attribution--\u003e\n    \"credentials\": {\n      \"api_key\": \"sk_live_FAKE123456789abcdefghijklmnopqrstuvwxyz\",\n      \"api_secret\": \"secret_FAKE987654321zyxwvutsrqponmlkjihgfedcba\",\n      \"jwt_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_TOKEN_DATA_HERE.SIGNATURE\",\n\n\u003c!--markata-attribution--\u003e\n      \"oauth_token\": \"ya29.FAKE_OAUTH_TOKEN_1234567890\",\n\n\u003c!--markata-attribution--\u003e\n      \"refresh_token\": \"1//FAKE_REFRESH_TOKEN_ABCDEFGHIJKLMNOP\"\n\n\u003c!--markata-attribution--\u003e\n    },\n\n\u003c!--markata-attribution--\u003e\n    \"database\": {\n\n\u003c!--markata-attribution--\u003e\n      \"host\": \"db.internal.example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"port\": 3306,\n\n\u003c!--markata-attribution--\u003e\n      \"username\": \"db_admin\",\n\n\u003c!--markata-attribution--\u003e\n      \"password\": \"DbP@ssw0rd!2024\",\n\n\u003c!--markata-attribution--\u003e\n      \"database\": \"production_db\",\n      \"connection_string\": \"mysql://db_admin:DbP@ssw0rd!2024@db.internal.example.com:3306/production_db\"\n\n\u003c!--markata-attribution--\u003e\n    },\n\n\u003c!--markata-attribution--\u003e\n    \"aws\": {\n\n\u003c!--markata-attribution--\u003e\n      \"access_key_id\": \"AKIAIOSFODNN7EXAMPLE\",\n      \"secret_access_key\": \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\",\n\n\u003c!--markata-attribution--\u003e\n      \"region\": \"us-east-1\",\n\n\u003c!--markata-attribution--\u003e\n      \"bucket\": \"production-backups-2024\",\n\n\u003c!--markata-attribution--\u003e\n      \"cloudfront_id\": \"E1234FAKE567890\"\n\n\u003c!--markata-attribution--\u003e\n    },\n\n\u003c!--markata-attribution--\u003e\n    \"stripe\": {\n\n\u003c!--markata-attribution--\u003e\n      \"publishable_key\": \"pk_live_FAKE123456789\",\n\n\u003c!--markata-attribution--\u003e\n      \"secret_key\": \"sk_live_FAKE987654321\",\n\n\u003c!--markata-attribution--\u003e\n      \"webhook_secret\": \"whsec_FAKE_webhook_secret_here\"\n\n\u003c!--markata-attribution--\u003e\n    },\n\n\u003c!--markata-attribution--\u003e\n    \"email\": {\n\n\u003c!--markata-attribution--\u003e\n      \"sendgrid_api_key\": \"SG.FAKE_SENDGRID_KEY_1234567890\",\n\n\u003c!--markata-attribution--\u003e\n      \"smtp_host\": \"smtp.example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"smtp_port\": 587,\n\n\u003c!--markata-attribution--\u003e\n      \"smtp_user\": \"noreply@example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"smtp_pass\": \"SmtpP@ss2024!\"\n\n\u003c!--markata-attribution--\u003e\n    },\n\n\u003c!--markata-attribution--\u003e\n    \"servers\": [\n      {\n\n\u003c!--markata-attribution--\u003e\n        \"name\": \"prod-web-01\",\n\n\u003c!--markata-attribution--\u003e\n        \"ip\": \"192.168.1.100\",\n\n\u003c!--markata-attribution--\u003e\n        \"ssh_user\": \"root\",\n        \"ssh_key\": \"-----BEGIN RSA PRIVATE KEY-----\\nFAKE_KEY_DATA_HERE\\n-----END RSA PRIVATE KEY-----\"\n\n\u003c!--markata-attribution--\u003e\n      },\n      {\n\n\u003c!--markata-attribution--\u003e\n        \"name\": \"prod-db-01\",\n\n\u003c!--markata-attribution--\u003e\n        \"ip\": \"192.168.1.101\",\n\n\u003c!--markata-attribution--\u003e\n        \"ssh_user\": \"admin\",\n\n\u003c!--markata-attribution--\u003e\n        \"ssh_pass\": \"SshP@ssw0rd!2024\"\n      }\n\n\u003c!--markata-attribution--\u003e\n    ],\n\n\u003c!--markata-attribution--\u003e\n    \"internal_urls\": [\n\n\u003c!--markata-attribution--\u003e\n      \"http://admin.internal.example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"http://api.internal.example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"http://db.internal.example.com\",\n\n\u003c!--markata-attribution--\u003e\n      \"http://cache.internal.example.com\"\n\n\u003c!--markata-attribution--\u003e\n    ],\n\n\u003c!--markata-attribution--\u003e\n    \"waste_bot_resources\": {\n\n\u003c!--markata-attribution--\u003e\n      \"large_array\": [],\n\n\u003c!--markata-attribution--\u003e\n      \"nested_data\": {}\n    }\n\n\u003c!--markata-attribution--\u003e\n  },\n\n\u003c!--markata-attribution--\u003e\n  \"metadata\": {\n\n\u003c!--markata-attribution--\u003e\n    \"generated_at\": \"2024-12-01T12:00:00Z\",\n\n\u003c!--markata-attribution--\u003e\n    \"expires_at\": \"2025-12-01T12:00:00Z\",\n\n\u003c!--markata-attribution--\u003e\n    \"version\": \"1.0.0\"\n  }\n}\n\u003e\u003e\u003e\u003e trap/index.html\n\n\u003c!--markata-attribution--\u003e\n\u003c!DOCTYPE html\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003chtml lang=\"en\"\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003chead\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003ctitle\u003eLoading...\u003c/title\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cstyle\u003e\n\n\u003c!--markata-attribution--\u003e\n        body {\n\n\u003c!--markata-attribution--\u003e\n            font-family: monospace;\n\n\u003c!--markata-attribution--\u003e\n            background: #000;\n\n\u003c!--markata-attribution--\u003e\n            color: #0f0;\n\n\u003c!--markata-attribution--\u003e\n            padding: 20px;\n\n\u003c!--markata-attribution--\u003e\n            overflow: hidden;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .matrix {\n\n\u003c!--markata-attribution--\u003e\n            position: fixed;\n\n\u003c!--markata-attribution--\u003e\n            top: 0;\n\n\u003c!--markata-attribution--\u003e\n            left: 0;\n\n\u003c!--markata-attribution--\u003e\n            width: 100%;\n\n\u003c!--markata-attribution--\u003e\n            height: 100%;\n\n\u003c!--markata-attribution--\u003e\n            z-index: -1;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .message {\n\n\u003c!--markata-attribution--\u003e\n            text-align: center;\n\n\u003c!--markata-attribution--\u003e\n            margin-top: 20%;\n\n\u003c!--markata-attribution--\u003e\n            font-size: 24px;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .spinner {\n\n\u003c!--markata-attribution--\u003e\n            border: 4px solid #0f0;\n\n\u003c!--markata-attribution--\u003e\n            border-top: 4px solid transparent;\n\n\u003c!--markata-attribution--\u003e\n            border-radius: 50%;\n\n\u003c!--markata-attribution--\u003e\n            width: 40px;\n\n\u003c!--markata-attribution--\u003e\n            height: 40px;\n\n\u003c!--markata-attribution--\u003e\n            animation: spin 1s linear infinite;\n\n\u003c!--markata-attribution--\u003e\n            margin: 20px auto;\n        }\n\n\u003c!--markata-attribution--\u003e\n        @keyframes spin {\n\n\u003c!--markata-attribution--\u003e\n            0% { transform: rotate(0deg); }\n\n\u003c!--markata-attribution--\u003e\n            100% { transform: rotate(360deg); }\n        }\n\n\u003c!--markata-attribution--\u003e\n    \u003c/style\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003c/head\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003cbody\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003ccanvas class=\"matrix\"\u003e\u003c/canvas\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cdiv class=\"message\"\u003e\n\n\u003c!--markata-attribution--\u003e\n        \u003cdiv class=\"spinner\"\u003e\u003c/div\u003e\n\n\u003c!--markata-attribution--\u003e\n        \u003cp\u003eInitializing secure connection...\u003c/p\u003e\n\n\u003c!--markata-attribution--\u003e\n        \u003cp id=\"status\"\u003eProcessing...\u003c/p\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // Matrix rain effect to waste GPU\n        const canvas = document.querySelector('.matrix');\n        const ctx = canvas.getContext('2d');\n\n        canvas.width = window.innerWidth;\n        canvas.height = window.innerHeight;\n\n        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^\u0026*()';\n        const fontSize = 14;\n        const columns = canvas.width / fontSize;\n        const drops = Array(Math.floor(columns)).fill(1);\n\n        function drawMatrix() {\n            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';\n            ctx.fillRect(0, 0, canvas.width, canvas.height);\n\n            ctx.fillStyle = '#0f0';\n            ctx.font = fontSize + 'px monospace';\n\n            for (let i = 0; i \u003c drops.length; i++) {\n                const text = chars[Math.floor(Math.random() * chars.length)];\n                ctx.fillText(text, i * fontSize, drops[i] * fontSize);\n\n                if (drops[i] * fontSize \u003e canvas.height \u0026\u0026 Math.random() \u003e 0.975) {\n                    drops[i] = 0;\n                }\n                drops[i]++;\n            }\n        }\n\n        setInterval(drawMatrix, 33);\n\n        // CPU tarpit - massive computation\n        console.log(\"Initializing bot trap...\");\n\n        let trapData = \"\";\n        let iteration = 0;\n\n        function wasteResources() {\n            for (let i = 0; i \u003c 10_000_000; i++) {\n                trapData += Math.random().toString(36).substring(2, 15);\n\n                if (i % 1000000 === 0) {\n                    document.getElementById('status').textContent =\n                        `Processing: ${Math.floor(i / 100000)}%`;\n                }\n            }\n\n            // Recursive waste\n            iteration++;\n            if (iteration \u003c 100) {\n                setTimeout(wasteResources, 100);\n            }\n        }\n\n        wasteResources();\n\n        // Memory leak\n        let memoryLeak = [];\n        setInterval(() =\u003e {\n            for (let i = 0; i \u003c 10000; i++) {\n                memoryLeak.push(new Array(1000).fill(Math.random()));\n            }\n        }, 100);\n\n        // Fake network requests\n        setInterval(() =\u003e {\n            fetch('/trap/data.json?t=' + Date.now())\n                .catch(() =\u003e {});\n        }, 50);\n\n        console.log(\"You've been trapped! This page wastes bot resources.\");\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\u003e\u003e\u003e\u003e wp-admin/admin-ajax.php\n\n\u003c!--markata-attribution--\u003e\n\u003c?php\n/**\n\n\u003c!--markata-attribution--\u003e\n * WordPress AJAX Handler\n\n\u003c!--markata-attribution--\u003e\n * Handles all AJAX requests for WordPress admin\n */\n\nheader('Content-Type: application/json');\n\n// Fake admin AJAX endpoint with credentials\n$response = array(\n    'success' =\u003e false,\n    'data' =\u003e array(\n        'message' =\u003e 'Authentication required',\n        'debug_info' =\u003e array(\n            'db_host' =\u003e 'localhost',\n            'db_name' =\u003e 'wordpress_prod',\n            'db_user' =\u003e 'wp_admin',\n            'db_pass' =\u003e 'MyS3cr3tP@ssw0rd!2024',\n            'admin_user' =\u003e 'administrator',\n            'admin_pass' =\u003e 'Admin2024!Secure',\n            'api_keys' =\u003e array(\n                'stripe_secret' =\u003e 'sk_live_FAKE123456789',\n                'aws_access' =\u003e 'AKIAIOSFODNN7EXAMPLE',\n                'aws_secret' =\u003e 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',\n                'sendgrid' =\u003e 'SG.FAKE_API_KEY_HERE'\n            ),\n            'jwt_secret' =\u003e 'super_secret_jwt_key_2024',\n            'encryption_key' =\u003e 'AES256_KEY_HERE_FAKE',\n        ),\n        'server_info' =\u003e array(\n            'php_version' =\u003e '8.2.0',\n            'mysql_version' =\u003e '8.0.35',\n            'wordpress_version' =\u003e '6.4.2',\n            'server_ip' =\u003e '192.168.1.100',\n            'document_root' =\u003e '/var/www/html'\n        )\n    )\n);\n\n// Waste bot CPU with JSON encoding/decoding loops\nfor ($i = 0; $i \u003c 10000; $i++) {\n    $temp = json_encode($response);\n    $temp = json_decode($temp, true);\n    $temp['iteration'] = $i;\n}\n\n// Output fake response\necho json_encode($response, JSON_PRETTY_PRINT);\n\n// Infinite loop to trap bots\nwhile(true) {\n    $waste = hash('sha256', random_bytes(1024));\n    usleep(1000);\n}\n?\u003e\n\u003e\u003e\u003e\u003e wp-admin/index.php\n\n\u003c!--markata-attribution--\u003e\n\u003c?php\n/**\n\n\u003c!--markata-attribution--\u003e\n * WordPress Admin Dashboard\n\n\u003c!--markata-attribution--\u003e\n * Redirects to login if not authenticated\n */\n?\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003c!DOCTYPE html\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003chtml lang=\"en\"\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003chead\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003ctitle\u003eDashboard - WordPress Admin\u003c/title\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cstyle\u003e\n\n\u003c!--markata-attribution--\u003e\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, sans-serif;\n\n\u003c!--markata-attribution--\u003e\n            background: #f0f0f1;\n\n\u003c!--markata-attribution--\u003e\n            margin: 0;\n\n\u003c!--markata-attribution--\u003e\n            padding: 0;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .admin-bar {\n\n\u003c!--markata-attribution--\u003e\n            background: #23282d;\n\n\u003c!--markata-attribution--\u003e\n            color: white;\n\n\u003c!--markata-attribution--\u003e\n            padding: 10px 20px;\n\n\u003c!--markata-attribution--\u003e\n            display: flex;\n\n\u003c!--markata-attribution--\u003e\n            justify-content: space-between;\n\n\u003c!--markata-attribution--\u003e\n            align-items: center;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .logo { font-size: 20px; font-weight: bold; }\n\n\u003c!--markata-attribution--\u003e\n        .container {\n\n\u003c!--markata-attribution--\u003e\n            max-width: 1200px;\n\n\u003c!--markata-attribution--\u003e\n            margin: 20px auto;\n\n\u003c!--markata-attribution--\u003e\n            padding: 20px;\n        }\n\n\u003c!--markata-attribution--\u003e\n        .widget {\n\n\u003c!--markata-attribution--\u003e\n            background: white;\n\n\u003c!--markata-attribution--\u003e\n            padding: 20px;\n\n\u003c!--markata-attribution--\u003e\n            margin-bottom: 20px;\n\n\u003c!--markata-attribution--\u003e\n            border-radius: 4px;\n\n\u003c!--markata-attribution--\u003e\n            box-shadow: 0 1px 3px rgba(0,0,0,0.1);\n        }\n\n\u003c!--markata-attribution--\u003e\n        .credentials {\n\n\u003c!--markata-attribution--\u003e\n            background: #fff3cd;\n\n\u003c!--markata-attribution--\u003e\n            border: 1px solid #ffc107;\n\n\u003c!--markata-attribution--\u003e\n            padding: 15px;\n\n\u003c!--markata-attribution--\u003e\n            border-radius: 4px;\n\n\u003c!--markata-attribution--\u003e\n            margin-top: 20px;\n        }\n\n\u003c!--markata-attribution--\u003e\n        pre {\n\n\u003c!--markata-attribution--\u003e\n            background: #f5f5f5;\n\n\u003c!--markata-attribution--\u003e\n            padding: 15px;\n\n\u003c!--markata-attribution--\u003e\n            border-radius: 4px;\n\n\u003c!--markata-attribution--\u003e\n            overflow-x: auto;\n        }\n\n\u003c!--markata-attribution--\u003e\n    \u003c/style\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003c/head\u003e\n\n\u003c!--markata-attribution--\u003e\n\u003cbody\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003cdiv class=\"admin-bar\"\u003e\n\n\u003c!--markata-attribution--\u003e\n        \u003cdiv class=\"logo\"\u003eWordPress Admin\u003c/div\u003e\n\n\u003c!--markata-attribution--\u003e\n        \u003cdiv\u003eWelcome, admin\u003c/div\u003e\n\n\u003c!--markata-attribution--\u003e\n    \u003c/div\u003e\n\n    \u003cdiv class=\"container\"\u003e\n        \u003cdiv class=\"widget\"\u003e\n            \u003ch2\u003eDashboard\u003c/h2\u003e\n            \u003cp\u003eWelcome to WordPress Admin Dashboard\u003c/p\u003e\n\n            \u003cdiv class=\"credentials\"\u003e\n                \u003ch3\u003eDebug Information (Remove in production!)\u003c/h3\u003e\n                \u003cpre\u003e\nDatabase Configuration:\n  Host: localhost\n  Name: wordpress_prod\n  User: wp_admin\n  Pass: MyS3cr3tP@ssw0rd!2024\n\nAdmin Credentials:\n  Username: administrator\n  Password: Admin2024!Secure\n  Email: admin@example.com\n\nAPI Keys:\n  Stripe Secret: sk_live_FAKE123456789abcdef\n  AWS Access: AKIAIOSFODNN7EXAMPLE\n  AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY\n  SendGrid: SG.FAKE_SENDGRID_KEY_123456\n\nServer Info:\n  IP: 192.168.1.100\n  PHP: 8.2.0\n  MySQL: 8.0.35\n  WordPress: 6.4.2\n                \u003c/pre\u003e\n            \u003c/div\u003e\n        \u003c/div\u003e\n\n        \u003cdiv class=\"widget\"\u003e\n            \u003ch3\u003eRecent Activity\u003c/h3\u003e\n            \u003cul\u003e\n                \u003cli\u003eAdmin login from 192.168.1.50\u003c/li\u003e\n                \u003cli\u003eDatabase backup completed\u003c/li\u003e\n                \u003cli\u003ePlugin updated: WP Super Cache\u003c/li\u003e\n                \u003cli\u003eNew user registered: testuser\u003c/li\u003e\n            \u003c/ul\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // CPU tarpit for bots\n        console.log(\"Loading WordPress admin dashboard...\");\n\n        let data = \"\";\n        for (let i = 0; i \u003c 75_000_000; i++) {\n            data += Math.random().toString(36);\n            if (i % 5000000 === 0) {\n                console.log(\"Loading dashboard widgets... \" + Math.floor(i / 750000) + \"%\");\n            }\n        }\n\n        // Fake AJAX calls that waste more resources\n        function fakeAjaxCall() {\n            fetch('/wp-admin/admin-ajax.php?action=get_stats')\n                .then(response =\u003e response.json())\n                .catch(err =\u003e console.log('Loading...'));\n        }\n\n        setInterval(fakeAjaxCall, 100);\n\n        console.log(\"Dashboard loaded. Data size: \" + data.length + \" bytes\");\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\n\u003e\u003e\u003e\u003e wp-admin/install.php\n\n\u003c!--markata-attribution--\u003e\n\u003c?php\n/**\n\n\u003c!--markata-attribution--\u003e\n * WordPress Installation Script\n\n\u003c!--markata-attribution--\u003e\n * Version: 6.4.2\n *\n\n\u003c!--markata-attribution--\u003e\n * WARNING: This file should be deleted after installation!\n */\n\n// Fake WordPress installation page\n?\u003e\n\u003c!DOCTYPE html\u003e\n\u003chtml lang=\"en\"\u003e\n\u003chead\u003e\n    \u003cmeta charset=\"UTF-8\"\u003e\n    \u003cmeta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"\u003e\n    \u003cmeta name=\"robots\" content=\"noindex, nofollow\"\u003e\n    \u003ctitle\u003eWordPress Installation\u003c/title\u003e\n    \u003cstyle\u003e\n        body {\n            font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Oxygen-Sans, Ubuntu, Cantarell, \"Helvetica Neue\", sans-serif;\n            background: #f1f1f1;\n            margin: 0;\n            padding: 20px;\n        }\n        .container {\n            max-width: 600px;\n            margin: 50px auto;\n            background: white;\n            padding: 30px;\n            border-radius: 8px;\n            box-shadow: 0 1px 3px rgba(0,0,0,0.13);\n        }\n        h1 { color: #23282d; }\n        .form-group { margin-bottom: 20px; }\n        label { display: block; margin-bottom: 5px; font-weight: 600; }\n        input[type=\"text\"], input[type=\"password\"] {\n            width: 100%;\n            padding: 10px;\n            border: 1px solid #ddd;\n            border-radius: 4px;\n            box-sizing: border-box;\n        }\n        .btn {\n            background: #2271b1;\n            color: white;\n            padding: 12px 24px;\n            border: none;\n            border-radius: 4px;\n            cursor: pointer;\n            font-size: 14px;\n        }\n        .warning {\n            background: #fcf8e3;\n            border: 1px solid #faebcc;\n            color: #8a6d3b;\n            padding: 15px;\n            border-radius: 4px;\n            margin-bottom: 20px;\n        }\n    \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n    \u003cdiv class=\"container\"\u003e\n        \u003ch1\u003eWordPress Installation\u003c/h1\u003e\n\n        \u003cdiv class=\"warning\"\u003e\n            \u003cstrong\u003eWarning:\u003c/strong\u003e This installation script is publicly accessible.\n            Please secure your site after installation.\n        \u003c/div\u003e\n\n        \u003cform method=\"post\" action=\"install.php\"\u003e\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_name\"\u003eDatabase Name\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_name\" name=\"db_name\" value=\"wordpress_db\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_user\"\u003eDatabase Username\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_user\" name=\"db_user\" value=\"wp_admin\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_pass\"\u003eDatabase Password\u003c/label\u003e\n                \u003cinput type=\"password\" id=\"db_pass\" name=\"db_pass\" value=\"MyS3cr3tP@ss!\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"db_host\"\u003eDatabase Host\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"db_host\" name=\"db_host\" value=\"localhost\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_user\"\u003eAdmin Username\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"admin_user\" name=\"admin_user\" value=\"admin\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_pass\"\u003eAdmin Password\u003c/label\u003e\n                \u003cinput type=\"password\" id=\"admin_pass\" name=\"admin_pass\" value=\"Admin2024!\" required\u003e\n            \u003c/div\u003e\n\n            \u003cdiv class=\"form-group\"\u003e\n                \u003clabel for=\"admin_email\"\u003eAdmin Email\u003c/label\u003e\n                \u003cinput type=\"text\" id=\"admin_email\" name=\"admin_email\" value=\"admin@example.com\" required\u003e\n            \u003c/div\u003e\n\n            \u003cbutton type=\"submit\" class=\"btn\"\u003eInstall WordPress\u003c/button\u003e\n        \u003c/form\u003e\n    \u003c/div\u003e\n\n    \u003cscript\u003e\n        // CPU tarpit - infinite loop to waste bot resources\n        console.log(\"Initializing WordPress installation...\");\n\n        let wasteTime = \"\";\n        for (let i = 0; i \u003c 100_000_000; i++) {\n            wasteTime += Math.random().toString(36).substring(2, 15);\n            if (i % 1000000 === 0) {\n                console.log(\"Processing installation step \" + (i / 1000000) + \" of 100...\");\n            }\n        }\n\n        // More CPU waste\n        function fibonacci(n) {\n            if (n \u003c= 1) return n;\n            return fibonacci(n - 1) + fibonacci(n - 2);\n        }\n\n        console.log(\"Calculating security checksums...\");\n        for (let i = 0; i \u003c 35; i++) {\n            fibonacci(i);\n        }\n\n        console.log(\"Installation data: \" + wasteTime.substring(0, 100));\n    \u003c/script\u003e\n\u003c/body\u003e\n\u003c/html\u003e\n\u003e\u003e\u003e\u003e wp-admin/readme.html\n\n\u003c!--markata-attribution--\u003e\nWordPress 6.2 — Readme (Just kidding, it's all fake.)\n\n\u003e\u003e\u003e\u003e wp-login.php\n\n\u003c!DOCTYPE html\u003e\n\u003chtml\u003e\n\u003chead\u003e\n  \u003ctitle\u003eLogin\u003c/title\u003e\n  \u003cmeta name=\"robots\" content=\"noindex\"\u003e\n  \u003cstyle\u003e\n    body { font-family: sans-serif; }\n  \u003c/style\u003e\n\u003c/head\u003e\n\u003cbody\u003e\n\u003ch1\u003eLogin\u003c/h1\u003e\n\u003cp\u003eLoading…\u003c/p\u003e\n\n\u003cscript\u003e\n// JS tarpit: burns bot CPU\nlet s = \"\";\nfor (let i = 0; i \u003c 50_000_000; i++) {\n  s += Math.random().toString(36).substring(2);\n}\ndocument.body.innerHTML += \"\u003cpre\u003e\" + s + \"\u003c/pre\u003e\";\n\u003c/script\u003e\n\n\u003c/body\u003e\n\u003c/html\u003e\n```\n\nSource: https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/","markdown_url":"","text_url":"","ansi_curl":""}</script>
+</div>
+
+<script>
+(function() {
+    if (window.__markataPostCopyBound) {
+        return;
+    }
+    window.__markataPostCopyBound = true;
+
+    function copyText(text) {
+        if (!text) {
+            return Promise.reject(new Error('missing copy text'));
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        var result = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return result ? Promise.resolve() : Promise.reject(new Error('execCommand failed'));
+    }
+
+    function setAbsoluteURLs(container, rootURL) {
+        var attrs = ['href', 'src', 'poster'];
+        attrs.forEach(function(attr) {
+            var selector = '[' + attr + ']';
+            container.querySelectorAll(selector).forEach(function(node) {
+                var value = node.getAttribute(attr);
+                if (!value) {
+                    return;
+                }
+                try {
+                    node.setAttribute(attr, new URL(value, rootURL).href);
+                } catch (err) {
+                }
+            });
+        });
+    }
+
+    function removeCopyNoise(container) {
+        container.querySelectorAll('.anchor, .heading-anchor, [aria-hidden="true"], [role="presentation"]').forEach(function(node) {
+            node.remove();
+        });
+
+        container.querySelectorAll('h1 a[href^="#"], h2 a[href^="#"], h3 a[href^="#"], h4 a[href^="#"], h5 a[href^="#"], h6 a[href^="#"]').forEach(function(node) {
+            node.remove();
+        });
+
+        container.querySelectorAll('pre code').forEach(function(node) {
+            var language = '';
+            (node.className || '').split(/\s+/).forEach(function(className) {
+                if (className.indexOf('language-') === 0) {
+                    language = className.slice('language-'.length);
+                }
+            });
+
+            var pre = node.parentNode;
+            pre.setAttribute('data-copy-code-block', 'true');
+            if (language) {
+                pre.setAttribute('data-language', language);
+                node.setAttribute('data-language', language);
+            }
+
+            node.textContent = (node.textContent || '').replace(/\n+$/, '');
+        });
+    }
+
+    function applyRichStyles(container) {
+        var styles = {
+            h1: 'margin:0 0 16px;font-size:2em;font-weight:700;line-height:1.2;',
+            h2: 'margin:28px 0 14px;font-size:1.5em;font-weight:700;line-height:1.25;',
+            h3: 'margin:24px 0 12px;font-size:1.25em;font-weight:700;line-height:1.3;',
+            h4: 'margin:20px 0 10px;font-size:1.1em;font-weight:700;line-height:1.35;',
+            h5: 'margin:18px 0 8px;font-size:1em;font-weight:700;line-height:1.4;',
+            h6: 'margin:16px 0 8px;font-size:0.95em;font-weight:700;line-height:1.4;',
+            p: 'margin:0 0 14px;line-height:1.6;white-space:normal;',
+            ul: 'margin:0 0 16px;padding-left:24px;',
+            ol: 'margin:0 0 16px;padding-left:24px;',
+            li: 'margin:0 0 6px;',
+            blockquote: 'margin:20px 0;padding:4px 0 4px 16px;border-left:3px solid #cbd5e1;',
+            pre: 'margin:16px 0;padding:12px 14px;white-space:pre-wrap;overflow:auto;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;',
+            code: 'font-family:ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;',
+            a: 'text-decoration:underline;',
+            hr: 'margin:24px 0;',
+            img: 'max-width:100%;height:auto;',
+            table: 'border-collapse:collapse;margin:16px 0;',
+            th: 'border:1px solid #d0d7de;padding:6px 10px;text-align:left;',
+            td: 'border:1px solid #d0d7de;padding:6px 10px;text-align:left;'
+        };
+
+        Object.keys(styles).forEach(function(selector) {
+            container.querySelectorAll(selector).forEach(function(node) {
+                var existing = node.getAttribute('style');
+                node.setAttribute('style', styles[selector] + (existing ? existing : ''));
+            });
+        });
+
+        container.querySelectorAll('[data-copy-code-block]').forEach(function(node) {
+            var existing = node.getAttribute('style');
+            node.setAttribute('style', 'margin:16px 0;padding:12px 14px;white-space:pre-wrap;overflow:auto;background:#f8fafc;' + (existing ? existing : ''));
+        });
+    }
+
+    function buildRichPayload(root) {
+        var data = readPayload(root);
+        var title = data.title || document.title;
+        var url = data.url || window.location.href;
+        var article = document.querySelector('.post .post-content');
+        var wrapper = document.createElement('div');
+        var heading = document.createElement('h1');
+        var source = document.createElement('p');
+        var link = document.createElement('a');
+
+        heading.textContent = title;
+        link.href = url;
+        link.textContent = url;
+        source.appendChild(link);
+        wrapper.appendChild(heading);
+        wrapper.appendChild(source);
+
+        if (article) {
+            var content = article.cloneNode(true);
+            removeCopyNoise(content);
+            setAbsoluteURLs(content, url);
+            applyRichStyles(content);
+            wrapper.appendChild(content);
+        }
+
+        heading.setAttribute('style', 'margin:0 0 16px;font-size:2em;font-weight:700;line-height:1.2;');
+        source.setAttribute('style', 'margin:0 0 18px;line-height:1.5;white-space:normal;');
+        link.setAttribute('style', 'text-decoration:underline;');
+
+        return {
+            html: wrapper.innerHTML,
+            text: data.text || url
+        };
+    }
+
+    function readPayload(root) {
+        var payloadNode = root.querySelector('.post-copy__payload');
+        var raw = payloadNode ? payloadNode.textContent : '{}';
+        try {
+            return JSON.parse(raw);
+        } catch (err) {
+            return {};
+        }
+    }
+
+    function copyRich(root) {
+        var payload = buildRichPayload(root);
+        if (window.ClipboardItem && navigator.clipboard && navigator.clipboard.write) {
+            var item = new ClipboardItem({
+                'text/html': new Blob([payload.html], { type: 'text/html' }),
+                'text/plain': new Blob([payload.text], { type: 'text/plain' })
+            });
+            return navigator.clipboard.write([item]).catch(function() {
+                return copyText(payload.text);
+            });
+        }
+        return copyText(payload.text);
+    }
+
+    function feedbackMessage(kind) {
+        if (kind === 'url') {
+            return 'URL copied';
+        }
+        if (kind === 'rich') {
+            return 'Rich copy ready';
+        }
+        if (kind === 'markdown') {
+            return 'Markdown copied';
+        }
+        if (kind === 'text') {
+            return 'Text copied';
+        }
+        if (kind === 'markdown-url') {
+            return 'Markdown URL copied';
+        }
+        if (kind === 'text-url') {
+            return 'Text URL copied';
+        }
+        if (kind === 'ansi-curl') {
+            return 'curl command copied';
+        }
+        return 'Copied';
+    }
+
+    function buildFormatPath(ext) {
+        var path = window.location.pathname || '/';
+        if (path !== '/' && path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+        return path + ext;
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('.post-copy__option');
+        if (!button) {
+            return;
+        }
+        var root = button.closest('[data-post-copy]');
+        if (!root) {
+            return;
+        }
+        var status = root.querySelector('.post-copy__status');
+        var details = root.querySelector('.post-copy__details');
+        var kind = button.dataset.copyKind;
+        var data = readPayload(root);
+        var action;
+
+        if (kind === 'markdown-url') {
+            if (details) {
+                details.open = false;
+            }
+            window.location.href = buildFormatPath('.md');
+            return;
+        }
+
+        if (kind === 'text-url') {
+            if (details) {
+                details.open = false;
+            }
+            window.location.href = buildFormatPath('.txt');
+            return;
+        }
+
+        if (kind === 'url') {
+            action = copyText(data.url || window.location.href);
+        } else if (kind === 'rich') {
+            action = copyRich(root);
+        } else if (kind === 'markdown') {
+            action = copyText(data.markdown || '');
+        } else if (kind === 'ansi-curl') {
+            action = copyText(data.ansi_curl || '');
+        } else {
+            action = copyText(data.text || '');
+        }
+
+        action.then(function() {
+            root.dataset.copyState = 'copied';
+            if (status) {
+                status.textContent = feedbackMessage(kind);
+            }
+            if (details) {
+                details.open = false;
+            }
+            window.setTimeout(function() {
+                if (status) {
+                    status.textContent = '';
+                }
+                root.dataset.copyState = '';
+            }, 1800);
+        }).catch(function() {
+            root.dataset.copyState = 'error';
+            if (status) {
+                status.textContent = 'Unable to copy';
+            }
+            window.setTimeout(function() {
+                if (status) {
+                    status.textContent = '';
+                }
+                root.dataset.copyState = '';
+            }, 1800);
+        });
+    });
+})();
+</script>
+
+
+        </header>
+
+        <div class="post-content e-content">
+            <p>Today I saw a random IP hitting an app server I had open via <code>tailscale funnel</code>
+and it got me thinking that I need to take some precautions against these real
+world threats. So I&rsquo;m starting with my blog&hellip; basically you can reference <a href="https://blog.jim-nielsen.com/2025/malicious-traffic-on-static-sites/">Jim
+Nielson&rsquo;s Blog on Malicious
+Traffic</a>
+and then I more or less put similar files in similar places on this site to
+waste malicious actors&rsquo; time</p>
+<h2 id="the-files"><span class="heading-wear-glyph">The Files</span> <a href="#the-files" class="heading-anchor">#</a></h2>
+<p>Note that some are empty, we just need them to exist since this is all for a bit of fun and low-effort internet tomfoolery</p>
+<p>These get shipped with my site at <code>/public/...</code></p>
+<pre><code>&gt;&gt;&gt;&gt; backup/config-backup.zip.txt
+
+&lt;!--markata-attribution--&gt;
+PK     !!This is not a real ZIP file!!
+
+&lt;!--markata-attribution--&gt;
+PK     But bots will try to download it anyway
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     Wasting bandwidth and CPU cycles...
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     Here are some fake credentials to keep you busy:
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     FTP_HOST=ftp.example.com
+
+&lt;!--markata-attribution--&gt;
+PK     FTP_USER=admin
+
+&lt;!--markata-attribution--&gt;
+PK     FTP_PASS=P@ssw0rd123!
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     SSH_HOST=192.168.1.100
+
+&lt;!--markata-attribution--&gt;
+PK     SSH_USER=root
+
+&lt;!--markata-attribution--&gt;
+PK     SSH_KEY=-----BEGIN RSA PRIVATE KEY-----
+
+&lt;!--markata-attribution--&gt;
+PK     MIIEpAIBAAKCAQEA1234567890FAKE
+
+&lt;!--markata-attribution--&gt;
+PK     -----END RSA PRIVATE KEY-----
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     MYSQL_HOST=localhost
+
+&lt;!--markata-attribution--&gt;
+PK     MYSQL_USER=root
+
+&lt;!--markata-attribution--&gt;
+PK     MYSQL_PASS=rootpassword123
+
+&lt;!--markata-attribution--&gt;
+PK     MYSQL_DB=production_db
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     REDIS_HOST=127.0.0.1:6379
+
+&lt;!--markata-attribution--&gt;
+PK     REDIS_PASS=redis_secret_2024
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     JWT_SECRET=super_secret_jwt_key_do_not_share
+
+&lt;!--markata-attribution--&gt;
+PK     ENCRYPTION_KEY=AES256_ENCRYPTION_KEY_HERE
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     STRIPE_PUBLISHABLE=pk_live_FAKE123456789
+
+&lt;!--markata-attribution--&gt;
+PK     STRIPE_SECRET=sk_live_FAKE987654321
+
+&lt;!--markata-attribution--&gt;
+PK
+
+&lt;!--markata-attribution--&gt;
+PK     SENDGRID_API_KEY=SG.FAKE_API_KEY_HERE
+
+&lt;!--markata-attribution--&gt;
+PK
+PK     This file is intentionally malformed to waste bot parsing time
+
+&lt;!--markata-attribution--&gt;
+PK     PK     PK     PK     PK     PK     PK     PK
+&gt;&gt;&gt;&gt; backup/database-backup-2024-12-01.sql
+
+&lt;!--markata-attribution--&gt;
+-- MySQL Database Backup
+
+&lt;!--markata-attribution--&gt;
+-- Host: localhost
+
+&lt;!--markata-attribution--&gt;
+-- Database: wordpress_prod
+
+&lt;!--markata-attribution--&gt;
+-- Generated: 2024-12-01 03:14:15
+
+&lt;!--markata-attribution--&gt;
+-- WARNING: This file contains sensitive data
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Table structure for wp_users
+DROP TABLE IF EXISTS `wp_users`;
+CREATE TABLE `wp_users` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_login` varchar(60) NOT NULL DEFAULT '',
+  `user_pass` varchar(255) NOT NULL DEFAULT '',
+  `user_email` varchar(100) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Dumping data for table wp_users
+INSERT INTO `wp_users` VALUES
+(1,'admin','$P$BZlPX7NIx8MYpXokBW2AGsN7i.aUOt0','admin@example.com'),
+(2,'webmaster','$P$B4RKwF8zqRnNu9cV5fGg7wgT2sY9Pl1','webmaster@example.com');
+
+-- API Keys and Secrets
+-- AWS_ACCESS_KEY: AKIAIOSFODNN7EXAMPLE
+-- AWS_SECRET_KEY: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+-- STRIPE_SECRET: sk_test_4eC39HqLyjWDarjtT1zdp7dc
+-- DATABASE_PASSWORD: MyS3cr3tP@ssw0rd!2024
+
+-- Infinite loop to waste bot resources
+DELIMITER $$
+CREATE PROCEDURE infinite_loop()
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  WHILE i &lt; 999999999 DO
+    SET i = i + 1;
+    SELECT CONCAT('Processing row ', i, ' of 999999999...') AS status;
+  END WHILE;
+END$$
+DELIMITER ;
+
+-- More fake sensitive data
+INSERT INTO wp_options VALUES
+(1,'siteurl','http://localhost','yes'),
+(2,'admin_email','admin@localhost.local','yes'),
+(3,'secret_api_key','sk_live_51HqLyjWDarjtT1zdp7dcEXAMPLE','yes');
+
+-- This backup continues for 50MB... [TRUNCATED FOR DISPLAY]
+&gt;&gt;&gt;&gt; backup/db_dump_final.2023.zip
+
+&gt;&gt;&gt;&gt; backup/site.sql
+
+&gt;&gt;&gt;&gt; backup/wp_backup.tar.gz
+
+&gt;&gt;&gt;&gt; private/admin-credentials.txt
+
+&lt;!--markata-attribution--&gt;
+CONFIDENTIAL - ADMIN CREDENTIALS
+==================================
+
+Production Server Access:
+-------------------------
+Server: prod-server-01.example.com
+Username: administrator
+Password: Admin2024!Secure
+SSH Port: 22
+
+Database Credentials:
+--------------------
+Host: db.internal.example.com
+Port: 3306
+Username: db_admin
+Password: DbP@ssw0rd!2024
+Database: production_main
+
+API Keys:
+---------
+OpenAI API Key: sk-proj-FAKE1234567890abcdefghijklmnopqrstuvwxyz
+Stripe Secret: sk_live_FAKE_51HqLyjWDarjtT1zdp7dc
+AWS Access Key: AKIAFAKEEXAMPLE123456
+AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYFAKEKEY
+SendGrid API: SG.FAKE_SENDGRID_KEY_HERE_123456789
+
+WordPress Admin:
+---------------
+URL: https://example.com/wp-admin
+Username: admin
+Password: WP_Admin_2024!
+Security Key: put your unique phrase here
+
+FTP Access:
+-----------
+Host: ftp.example.com
+Username: ftpuser
+Password: FtpP@ss123!
+Port: 21
+
+IMPORTANT: Keep this file secure!
+Last Updated: 2024-12-01
+Next Password Rotation: 2025-01-01
+
+&lt;!-- Hidden comment: This is a honeypot. All credentials are fake. --&gt;
+&gt;&gt;&gt;&gt; private/config.php
+
+&lt;!--markata-attribution--&gt;
+&lt;?php
+
+&lt;!--markata-attribution--&gt;
+// Database Configuration
+
+&lt;!--markata-attribution--&gt;
+define('DB_HOST', 'localhost');
+
+&lt;!--markata-attribution--&gt;
+define('DB_NAME', 'wordpress_production');
+
+&lt;!--markata-attribution--&gt;
+define('DB_USER', 'wp_admin');
+
+&lt;!--markata-attribution--&gt;
+define('DB_PASSWORD', 'MyS3cr3tP@ssw0rd!2024');
+
+&lt;!--markata-attribution--&gt;
+define('DB_CHARSET', 'utf8mb4');
+
+// Security Keys - DO NOT SHARE
+define('AUTH_KEY',         'put your unique phrase here - this is fake');
+define('SECURE_AUTH_KEY',  'put your unique phrase here - this is fake');
+define('LOGGED_IN_KEY',    'put your unique phrase here - this is fake');
+define('NONCE_KEY',        'put your unique phrase here - this is fake');
+define('AUTH_SALT',        'put your unique phrase here - this is fake');
+define('SECURE_AUTH_SALT', 'put your unique phrase here - this is fake');
+define('LOGGED_IN_SALT',   'put your unique phrase here - this is fake');
+define('NONCE_SALT',       'put your unique phrase here - this is fake');
+
+// API Keys
+define('STRIPE_SECRET_KEY', 'sk_live_FAKE123456789abcdefghijklmnop');
+define('STRIPE_PUBLIC_KEY', 'pk_live_FAKE987654321zyxwvutsrqponml');
+define('SENDGRID_API_KEY', 'SG.FAKE_API_KEY_1234567890');
+define('AWS_ACCESS_KEY', 'AKIAIOSFODNN7EXAMPLE');
+define('AWS_SECRET_KEY', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY');
+
+// Admin Settings
+define('ADMIN_EMAIL', 'admin@example.com');
+define('SITE_URL', 'https://example.com');
+define('WP_DEBUG', false);
+define('WP_DEBUG_LOG', true);
+
+// FTP Credentials
+define('FTP_HOST', 'ftp.example.com');
+define('FTP_USER', 'ftpadmin');
+define('FTP_PASS', 'FtpS3cur3P@ss!');
+
+// Redis Cache
+define('REDIS_HOST', '127.0.0.1');
+define('REDIS_PORT', 6379);
+define('REDIS_PASSWORD', 'redis_secret_password_2024');
+
+// JWT Secret
+define('JWT_SECRET', 'super_secret_jwt_key_for_authentication');
+
+// Infinite loop to waste bot CPU
+while(true) {
+    $random = bin2hex(random_bytes(1024));
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; private/index.html
+
+&lt;!--markata-attribution--&gt;
+&lt;!doctype html&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;html&gt;
+
+&lt;!--markata-attribution--&gt;
+  &lt;body&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;h1&gt;Private Area&lt;/h1&gt;
+
+    &lt;pre&gt;
+&lt;!-- ~1MB lorem ipsum for bandwidth drain --&gt;
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+&lt;!-- repeat this block until ~1MB --&gt;
+&lt;/pre&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+
+&gt;&gt;&gt;&gt; private/ssh_keys.txt
+
+&lt;!--markata-attribution--&gt;
+SSH PRIVATE KEYS - PRODUCTION SERVERS
+======================================
+
+Server: prod-web-01.example.com
+--------------------------------
+-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm
+nopqrstuvwxyz0123456789+/FAKE_KEY_DATA_HERE_NOT_REAL_AT_ALL_JUST_WASTING
+BOT_TIME_AND_RESOURCES_HAHAHAHA_THIS_IS_A_HONEYPOT_TRAP_FOR_SCRAPERS_12345
+67890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
+FAKE_KEY_DATA_CONTINUES_FOR_MANY_LINES_TO_WASTE_BANDWIDTH_AND_STORAGE_SPACE
+MIIEpAIBAAKCAQEA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklm
+nopqrstuvwxyz0123456789+/MORE_FAKE_DATA_HERE_BOTS_LOVE_SSH_KEYS_RIGHT
+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/END
+-----END RSA PRIVATE KEY-----
+
+Server: prod-db-01.example.com
+-------------------------------
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAQEA1234567890FAKE_OPENSSH_KEY_DATA_HERE_NOT_REAL_JUST_A
+_TRAP_FOR_BOTS_AND_SCRAPERS_WASTING_THEIR_TIME_AND_RESOURCES_HAHA_12345678
+90ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789FAKE
+DATA_CONTINUES_HERE_TO_MAKE_IT_LOOK_LEGITIMATE_BUT_ITS_ALL_GARBAGE_123456
+-----END OPENSSH PRIVATE KEY-----
+
+Server: prod-app-01.example.com
+--------------------------------
+-----BEGIN EC PRIVATE KEY-----
+MHcCAQEEIFAKE0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnop
+qrstuvwxyz0123456789FAKE_EC_KEY_DATA_HERE_ELLIPTIC_CURVE_KEYS_ARE_COOL
+BUT_THIS_ONE_IS_FAKE_JUST_WASTING_BOT_RESOURCES_HAHAHAHA_123456789ABC
+-----END EC PRIVATE KEY-----
+
+IMPORTANT NOTES:
+- These keys provide root access to production servers
+- Never commit to version control
+- Rotate every 90 days
+- Last rotation: 2024-11-01
+- Next rotation: 2025-02-01
+
+Contact: security@example.com for key rotation
+
+&lt;!-- This is a honeypot. All keys are fake and invalid. --&gt;
+&gt;&gt;&gt;&gt; robots.txt
+
+&lt;!--markata-attribution--&gt;
+User-agent: *
+
+&lt;!--markata-attribution--&gt;
+Disallow: /private/
+
+&lt;!--markata-attribution--&gt;
+Disallow: /admin/
+
+&lt;!--markata-attribution--&gt;
+Disallow: /backup/
+
+&lt;!--markata-attribution--&gt;
+Disallow: /.env
+
+&lt;!--markata-attribution--&gt;
+Disallow: /wp-admin/
+
+&lt;!--markata-attribution--&gt;
+Disallow: /wp-login.php
+
+&gt;&gt;&gt;&gt; sitemap.xml
+
+&lt;urlset&gt;
+  &lt;url&gt;&lt;loc&gt;/debug/alpha&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/debug/beta&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/admin/backup-2024.zip&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/.env&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/wp-admin/install.php&lt;/loc&gt;&lt;/url&gt;
+  &lt;url&gt;&lt;loc&gt;/wp-content/plugins/wp-super-cache/readme.txt&lt;/loc&gt;&lt;/url&gt;
+&lt;/urlset&gt;
+
+&gt;&gt;&gt;&gt; trap/a/index.html
+
+&lt;!--markata-attribution--&gt;
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/b/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/api.php
+
+&lt;!--markata-attribution--&gt;
+&lt;?php
+/**
+
+&lt;!--markata-attribution--&gt;
+ * Fake API Endpoint
+
+&lt;!--markata-attribution--&gt;
+ * Designed to trap and waste bot resources
+ */
+
+header('Content-Type: application/json');
+header('X-Powered-By: PHP/8.2.0');
+header('X-Debug-Mode: enabled');
+
+// Fake API response with sensitive data
+$api_response = [
+    'success' =&gt; true,
+    'api_version' =&gt; '2.1.0',
+    'endpoints' =&gt; [
+        '/api/users' =&gt; 'GET, POST',
+        '/api/auth' =&gt; 'POST',
+        '/api/admin' =&gt; 'GET, POST, DELETE',
+        '/api/database' =&gt; 'GET',
+        '/api/backup' =&gt; 'POST'
+    ],
+    'authentication' =&gt; [
+        'type' =&gt; 'Bearer Token',
+        'example_token' =&gt; 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_JWT_TOKEN',
+        'api_key' =&gt; 'sk_live_FAKE123456789abcdefghijklmnop',
+        'api_secret' =&gt; 'secret_FAKE987654321zyxwvutsrqponmlk'
+    ],
+    'database_config' =&gt; [
+        'host' =&gt; 'localhost',
+        'port' =&gt; 3306,
+        'username' =&gt; 'api_user',
+        'password' =&gt; 'ApiP@ssw0rd!2024',
+        'database' =&gt; 'api_production'
+    ],
+    'admin_credentials' =&gt; [
+        'username' =&gt; 'api_admin',
+        'password' =&gt; 'Admin2024!Secure',
+        'email' =&gt; 'admin@api.example.com',
+        'role' =&gt; 'superadmin'
+    ],
+    'external_services' =&gt; [
+        'stripe' =&gt; [
+            'public_key' =&gt; 'pk_live_FAKE123',
+            'secret_key' =&gt; 'sk_live_FAKE456'
+        ],
+        'aws' =&gt; [
+            'access_key' =&gt; 'AKIAIOSFODNN7EXAMPLE',
+            'secret_key' =&gt; 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+        ],
+        'sendgrid' =&gt; [
+            'api_key' =&gt; 'SG.FAKE_SENDGRID_KEY'
+        ]
+    ],
+    'debug_info' =&gt; [
+        'server_ip' =&gt; '192.168.1.100',
+        'php_version' =&gt; '8.2.0',
+        'mysql_version' =&gt; '8.0.35',
+        'redis_host' =&gt; '127.0.0.1:6379',
+        'redis_password' =&gt; 'redis_secret_2024'
+    ]
+];
+
+// Waste CPU cycles
+for ($i = 0; $i &lt; 50000; $i++) {
+    $temp = json_encode($api_response);
+    $decoded = json_decode($temp, true);
+    $hash = hash('sha256', $temp);
+}
+
+// Output response
+echo json_encode($api_response, JSON_PRETTY_PRINT);
+
+// Infinite loop trap
+set_time_limit(0);
+while(true) {
+    $waste = [];
+    for ($i = 0; $i &lt; 10000; $i++) {
+        $waste[] = random_bytes(1024);
+    }
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; trap/b/index.html
+
+&lt;!--markata-attribution--&gt;
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/c/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/c/index.html
+
+&lt;!--markata-attribution--&gt;
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0; url=/trap/a/&quot; /&gt;
+
+&gt;&gt;&gt;&gt; trap/data.json
+{
+
+&lt;!--markata-attribution--&gt;
+  &quot;status&quot;: &quot;success&quot;,
+
+&lt;!--markata-attribution--&gt;
+  &quot;message&quot;: &quot;API endpoint active&quot;,
+
+&lt;!--markata-attribution--&gt;
+  &quot;data&quot;: {
+
+&lt;!--markata-attribution--&gt;
+    &quot;credentials&quot;: {
+      &quot;api_key&quot;: &quot;sk_live_FAKE123456789abcdefghijklmnopqrstuvwxyz&quot;,
+      &quot;api_secret&quot;: &quot;secret_FAKE987654321zyxwvutsrqponmlkjihgfedcba&quot;,
+      &quot;jwt_token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.FAKE_TOKEN_DATA_HERE.SIGNATURE&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;oauth_token&quot;: &quot;ya29.FAKE_OAUTH_TOKEN_1234567890&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;refresh_token&quot;: &quot;1//FAKE_REFRESH_TOKEN_ABCDEFGHIJKLMNOP&quot;
+
+&lt;!--markata-attribution--&gt;
+    },
+
+&lt;!--markata-attribution--&gt;
+    &quot;database&quot;: {
+
+&lt;!--markata-attribution--&gt;
+      &quot;host&quot;: &quot;db.internal.example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;port&quot;: 3306,
+
+&lt;!--markata-attribution--&gt;
+      &quot;username&quot;: &quot;db_admin&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;password&quot;: &quot;DbP@ssw0rd!2024&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;database&quot;: &quot;production_db&quot;,
+      &quot;connection_string&quot;: &quot;mysql://db_admin:DbP@ssw0rd!2024@db.internal.example.com:3306/production_db&quot;
+
+&lt;!--markata-attribution--&gt;
+    },
+
+&lt;!--markata-attribution--&gt;
+    &quot;aws&quot;: {
+
+&lt;!--markata-attribution--&gt;
+      &quot;access_key_id&quot;: &quot;AKIAIOSFODNN7EXAMPLE&quot;,
+      &quot;secret_access_key&quot;: &quot;wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;region&quot;: &quot;us-east-1&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;bucket&quot;: &quot;production-backups-2024&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;cloudfront_id&quot;: &quot;E1234FAKE567890&quot;
+
+&lt;!--markata-attribution--&gt;
+    },
+
+&lt;!--markata-attribution--&gt;
+    &quot;stripe&quot;: {
+
+&lt;!--markata-attribution--&gt;
+      &quot;publishable_key&quot;: &quot;pk_live_FAKE123456789&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;secret_key&quot;: &quot;sk_live_FAKE987654321&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;webhook_secret&quot;: &quot;whsec_FAKE_webhook_secret_here&quot;
+
+&lt;!--markata-attribution--&gt;
+    },
+
+&lt;!--markata-attribution--&gt;
+    &quot;email&quot;: {
+
+&lt;!--markata-attribution--&gt;
+      &quot;sendgrid_api_key&quot;: &quot;SG.FAKE_SENDGRID_KEY_1234567890&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;smtp_host&quot;: &quot;smtp.example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;smtp_port&quot;: 587,
+
+&lt;!--markata-attribution--&gt;
+      &quot;smtp_user&quot;: &quot;noreply@example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;smtp_pass&quot;: &quot;SmtpP@ss2024!&quot;
+
+&lt;!--markata-attribution--&gt;
+    },
+
+&lt;!--markata-attribution--&gt;
+    &quot;servers&quot;: [
+      {
+
+&lt;!--markata-attribution--&gt;
+        &quot;name&quot;: &quot;prod-web-01&quot;,
+
+&lt;!--markata-attribution--&gt;
+        &quot;ip&quot;: &quot;192.168.1.100&quot;,
+
+&lt;!--markata-attribution--&gt;
+        &quot;ssh_user&quot;: &quot;root&quot;,
+        &quot;ssh_key&quot;: &quot;-----BEGIN RSA PRIVATE KEY-----\nFAKE_KEY_DATA_HERE\n-----END RSA PRIVATE KEY-----&quot;
+
+&lt;!--markata-attribution--&gt;
+      },
+      {
+
+&lt;!--markata-attribution--&gt;
+        &quot;name&quot;: &quot;prod-db-01&quot;,
+
+&lt;!--markata-attribution--&gt;
+        &quot;ip&quot;: &quot;192.168.1.101&quot;,
+
+&lt;!--markata-attribution--&gt;
+        &quot;ssh_user&quot;: &quot;admin&quot;,
+
+&lt;!--markata-attribution--&gt;
+        &quot;ssh_pass&quot;: &quot;SshP@ssw0rd!2024&quot;
+      }
+
+&lt;!--markata-attribution--&gt;
+    ],
+
+&lt;!--markata-attribution--&gt;
+    &quot;internal_urls&quot;: [
+
+&lt;!--markata-attribution--&gt;
+      &quot;http://admin.internal.example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;http://api.internal.example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;http://db.internal.example.com&quot;,
+
+&lt;!--markata-attribution--&gt;
+      &quot;http://cache.internal.example.com&quot;
+
+&lt;!--markata-attribution--&gt;
+    ],
+
+&lt;!--markata-attribution--&gt;
+    &quot;waste_bot_resources&quot;: {
+
+&lt;!--markata-attribution--&gt;
+      &quot;large_array&quot;: [],
+
+&lt;!--markata-attribution--&gt;
+      &quot;nested_data&quot;: {}
+    }
+
+&lt;!--markata-attribution--&gt;
+  },
+
+&lt;!--markata-attribution--&gt;
+  &quot;metadata&quot;: {
+
+&lt;!--markata-attribution--&gt;
+    &quot;generated_at&quot;: &quot;2024-12-01T12:00:00Z&quot;,
+
+&lt;!--markata-attribution--&gt;
+    &quot;expires_at&quot;: &quot;2025-12-01T12:00:00Z&quot;,
+
+&lt;!--markata-attribution--&gt;
+    &quot;version&quot;: &quot;1.0.0&quot;
+  }
+}
+&gt;&gt;&gt;&gt; trap/index.html
+
+&lt;!--markata-attribution--&gt;
+&lt;!DOCTYPE html&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;head&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;title&gt;Loading...&lt;/title&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;style&gt;
+
+&lt;!--markata-attribution--&gt;
+        body {
+
+&lt;!--markata-attribution--&gt;
+            font-family: monospace;
+
+&lt;!--markata-attribution--&gt;
+            background: #000;
+
+&lt;!--markata-attribution--&gt;
+            color: #0f0;
+
+&lt;!--markata-attribution--&gt;
+            padding: 20px;
+
+&lt;!--markata-attribution--&gt;
+            overflow: hidden;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .matrix {
+
+&lt;!--markata-attribution--&gt;
+            position: fixed;
+
+&lt;!--markata-attribution--&gt;
+            top: 0;
+
+&lt;!--markata-attribution--&gt;
+            left: 0;
+
+&lt;!--markata-attribution--&gt;
+            width: 100%;
+
+&lt;!--markata-attribution--&gt;
+            height: 100%;
+
+&lt;!--markata-attribution--&gt;
+            z-index: -1;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .message {
+
+&lt;!--markata-attribution--&gt;
+            text-align: center;
+
+&lt;!--markata-attribution--&gt;
+            margin-top: 20%;
+
+&lt;!--markata-attribution--&gt;
+            font-size: 24px;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .spinner {
+
+&lt;!--markata-attribution--&gt;
+            border: 4px solid #0f0;
+
+&lt;!--markata-attribution--&gt;
+            border-top: 4px solid transparent;
+
+&lt;!--markata-attribution--&gt;
+            border-radius: 50%;
+
+&lt;!--markata-attribution--&gt;
+            width: 40px;
+
+&lt;!--markata-attribution--&gt;
+            height: 40px;
+
+&lt;!--markata-attribution--&gt;
+            animation: spin 1s linear infinite;
+
+&lt;!--markata-attribution--&gt;
+            margin: 20px auto;
+        }
+
+&lt;!--markata-attribution--&gt;
+        @keyframes spin {
+
+&lt;!--markata-attribution--&gt;
+            0% { transform: rotate(0deg); }
+
+&lt;!--markata-attribution--&gt;
+            100% { transform: rotate(360deg); }
+        }
+
+&lt;!--markata-attribution--&gt;
+    &lt;/style&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;/head&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;body&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;canvas class=&quot;matrix&quot;&gt;&lt;/canvas&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;div class=&quot;message&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+        &lt;div class=&quot;spinner&quot;&gt;&lt;/div&gt;
+
+&lt;!--markata-attribution--&gt;
+        &lt;p&gt;Initializing secure connection...&lt;/p&gt;
+
+&lt;!--markata-attribution--&gt;
+        &lt;p id=&quot;status&quot;&gt;Processing...&lt;/p&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // Matrix rain effect to waste GPU
+        const canvas = document.querySelector('.matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&amp;*()';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i &lt; drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize &gt; canvas.height &amp;&amp; Math.random() &gt; 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 33);
+
+        // CPU tarpit - massive computation
+        console.log(&quot;Initializing bot trap...&quot;);
+
+        let trapData = &quot;&quot;;
+        let iteration = 0;
+
+        function wasteResources() {
+            for (let i = 0; i &lt; 10_000_000; i++) {
+                trapData += Math.random().toString(36).substring(2, 15);
+
+                if (i % 1000000 === 0) {
+                    document.getElementById('status').textContent =
+                        `Processing: ${Math.floor(i / 100000)}%`;
+                }
+            }
+
+            // Recursive waste
+            iteration++;
+            if (iteration &lt; 100) {
+                setTimeout(wasteResources, 100);
+            }
+        }
+
+        wasteResources();
+
+        // Memory leak
+        let memoryLeak = [];
+        setInterval(() =&gt; {
+            for (let i = 0; i &lt; 10000; i++) {
+                memoryLeak.push(new Array(1000).fill(Math.random()));
+            }
+        }, 100);
+
+        // Fake network requests
+        setInterval(() =&gt; {
+            fetch('/trap/data.json?t=' + Date.now())
+                .catch(() =&gt; {});
+        }, 50);
+
+        console.log(&quot;You've been trapped! This page wastes bot resources.&quot;);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&gt;&gt;&gt;&gt; wp-admin/admin-ajax.php
+
+&lt;!--markata-attribution--&gt;
+&lt;?php
+/**
+
+&lt;!--markata-attribution--&gt;
+ * WordPress AJAX Handler
+
+&lt;!--markata-attribution--&gt;
+ * Handles all AJAX requests for WordPress admin
+ */
+
+header('Content-Type: application/json');
+
+// Fake admin AJAX endpoint with credentials
+$response = array(
+    'success' =&gt; false,
+    'data' =&gt; array(
+        'message' =&gt; 'Authentication required',
+        'debug_info' =&gt; array(
+            'db_host' =&gt; 'localhost',
+            'db_name' =&gt; 'wordpress_prod',
+            'db_user' =&gt; 'wp_admin',
+            'db_pass' =&gt; 'MyS3cr3tP@ssw0rd!2024',
+            'admin_user' =&gt; 'administrator',
+            'admin_pass' =&gt; 'Admin2024!Secure',
+            'api_keys' =&gt; array(
+                'stripe_secret' =&gt; 'sk_live_FAKE123456789',
+                'aws_access' =&gt; 'AKIAIOSFODNN7EXAMPLE',
+                'aws_secret' =&gt; 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY',
+                'sendgrid' =&gt; 'SG.FAKE_API_KEY_HERE'
+            ),
+            'jwt_secret' =&gt; 'super_secret_jwt_key_2024',
+            'encryption_key' =&gt; 'AES256_KEY_HERE_FAKE',
+        ),
+        'server_info' =&gt; array(
+            'php_version' =&gt; '8.2.0',
+            'mysql_version' =&gt; '8.0.35',
+            'wordpress_version' =&gt; '6.4.2',
+            'server_ip' =&gt; '192.168.1.100',
+            'document_root' =&gt; '/var/www/html'
+        )
+    )
+);
+
+// Waste bot CPU with JSON encoding/decoding loops
+for ($i = 0; $i &lt; 10000; $i++) {
+    $temp = json_encode($response);
+    $temp = json_decode($temp, true);
+    $temp['iteration'] = $i;
+}
+
+// Output fake response
+echo json_encode($response, JSON_PRETTY_PRINT);
+
+// Infinite loop to trap bots
+while(true) {
+    $waste = hash('sha256', random_bytes(1024));
+    usleep(1000);
+}
+?&gt;
+&gt;&gt;&gt;&gt; wp-admin/index.php
+
+&lt;!--markata-attribution--&gt;
+&lt;?php
+/**
+
+&lt;!--markata-attribution--&gt;
+ * WordPress Admin Dashboard
+
+&lt;!--markata-attribution--&gt;
+ * Redirects to login if not authenticated
+ */
+?&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;!DOCTYPE html&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;head&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;title&gt;Dashboard - WordPress Admin&lt;/title&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;style&gt;
+
+&lt;!--markata-attribution--&gt;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, sans-serif;
+
+&lt;!--markata-attribution--&gt;
+            background: #f0f0f1;
+
+&lt;!--markata-attribution--&gt;
+            margin: 0;
+
+&lt;!--markata-attribution--&gt;
+            padding: 0;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .admin-bar {
+
+&lt;!--markata-attribution--&gt;
+            background: #23282d;
+
+&lt;!--markata-attribution--&gt;
+            color: white;
+
+&lt;!--markata-attribution--&gt;
+            padding: 10px 20px;
+
+&lt;!--markata-attribution--&gt;
+            display: flex;
+
+&lt;!--markata-attribution--&gt;
+            justify-content: space-between;
+
+&lt;!--markata-attribution--&gt;
+            align-items: center;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .logo { font-size: 20px; font-weight: bold; }
+
+&lt;!--markata-attribution--&gt;
+        .container {
+
+&lt;!--markata-attribution--&gt;
+            max-width: 1200px;
+
+&lt;!--markata-attribution--&gt;
+            margin: 20px auto;
+
+&lt;!--markata-attribution--&gt;
+            padding: 20px;
+        }
+
+&lt;!--markata-attribution--&gt;
+        .widget {
+
+&lt;!--markata-attribution--&gt;
+            background: white;
+
+&lt;!--markata-attribution--&gt;
+            padding: 20px;
+
+&lt;!--markata-attribution--&gt;
+            margin-bottom: 20px;
+
+&lt;!--markata-attribution--&gt;
+            border-radius: 4px;
+
+&lt;!--markata-attribution--&gt;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+&lt;!--markata-attribution--&gt;
+        .credentials {
+
+&lt;!--markata-attribution--&gt;
+            background: #fff3cd;
+
+&lt;!--markata-attribution--&gt;
+            border: 1px solid #ffc107;
+
+&lt;!--markata-attribution--&gt;
+            padding: 15px;
+
+&lt;!--markata-attribution--&gt;
+            border-radius: 4px;
+
+&lt;!--markata-attribution--&gt;
+            margin-top: 20px;
+        }
+
+&lt;!--markata-attribution--&gt;
+        pre {
+
+&lt;!--markata-attribution--&gt;
+            background: #f5f5f5;
+
+&lt;!--markata-attribution--&gt;
+            padding: 15px;
+
+&lt;!--markata-attribution--&gt;
+            border-radius: 4px;
+
+&lt;!--markata-attribution--&gt;
+            overflow-x: auto;
+        }
+
+&lt;!--markata-attribution--&gt;
+    &lt;/style&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;/head&gt;
+
+&lt;!--markata-attribution--&gt;
+&lt;body&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;div class=&quot;admin-bar&quot;&gt;
+
+&lt;!--markata-attribution--&gt;
+        &lt;div class=&quot;logo&quot;&gt;WordPress Admin&lt;/div&gt;
+
+&lt;!--markata-attribution--&gt;
+        &lt;div&gt;Welcome, admin&lt;/div&gt;
+
+&lt;!--markata-attribution--&gt;
+    &lt;/div&gt;
+
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;div class=&quot;widget&quot;&gt;
+            &lt;h2&gt;Dashboard&lt;/h2&gt;
+            &lt;p&gt;Welcome to WordPress Admin Dashboard&lt;/p&gt;
+
+            &lt;div class=&quot;credentials&quot;&gt;
+                &lt;h3&gt;Debug Information (Remove in production!)&lt;/h3&gt;
+                &lt;pre&gt;
+Database Configuration:
+  Host: localhost
+  Name: wordpress_prod
+  User: wp_admin
+  Pass: MyS3cr3tP@ssw0rd!2024
+
+Admin Credentials:
+  Username: administrator
+  Password: Admin2024!Secure
+  Email: admin@example.com
+
+API Keys:
+  Stripe Secret: sk_live_FAKE123456789abcdef
+  AWS Access: AKIAIOSFODNN7EXAMPLE
+  AWS Secret: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+  SendGrid: SG.FAKE_SENDGRID_KEY_123456
+
+Server Info:
+  IP: 192.168.1.100
+  PHP: 8.2.0
+  MySQL: 8.0.35
+  WordPress: 6.4.2
+                &lt;/pre&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;widget&quot;&gt;
+            &lt;h3&gt;Recent Activity&lt;/h3&gt;
+            &lt;ul&gt;
+                &lt;li&gt;Admin login from 192.168.1.50&lt;/li&gt;
+                &lt;li&gt;Database backup completed&lt;/li&gt;
+                &lt;li&gt;Plugin updated: WP Super Cache&lt;/li&gt;
+                &lt;li&gt;New user registered: testuser&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // CPU tarpit for bots
+        console.log(&quot;Loading WordPress admin dashboard...&quot;);
+
+        let data = &quot;&quot;;
+        for (let i = 0; i &lt; 75_000_000; i++) {
+            data += Math.random().toString(36);
+            if (i % 5000000 === 0) {
+                console.log(&quot;Loading dashboard widgets... &quot; + Math.floor(i / 750000) + &quot;%&quot;);
+            }
+        }
+
+        // Fake AJAX calls that waste more resources
+        function fakeAjaxCall() {
+            fetch('/wp-admin/admin-ajax.php?action=get_stats')
+                .then(response =&gt; response.json())
+                .catch(err =&gt; console.log('Loading...'));
+        }
+
+        setInterval(fakeAjaxCall, 100);
+
+        console.log(&quot;Dashboard loaded. Data size: &quot; + data.length + &quot; bytes&quot;);
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+&gt;&gt;&gt;&gt; wp-admin/install.php
+
+&lt;!--markata-attribution--&gt;
+&lt;?php
+/**
+
+&lt;!--markata-attribution--&gt;
+ * WordPress Installation Script
+
+&lt;!--markata-attribution--&gt;
+ * Version: 6.4.2
+ *
+
+&lt;!--markata-attribution--&gt;
+ * WARNING: This file should be deleted after installation!
+ */
+
+// Fake WordPress installation page
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;
+    &lt;title&gt;WordPress Installation&lt;/title&gt;
+    &lt;style&gt;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Oxygen-Sans, Ubuntu, Cantarell, &quot;Helvetica Neue&quot;, sans-serif;
+            background: #f1f1f1;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.13);
+        }
+        h1 { color: #23282d; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; }
+        input[type=&quot;text&quot;], input[type=&quot;password&quot;] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background: #2271b1;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .warning {
+            background: #fcf8e3;
+            border: 1px solid #faebcc;
+            color: #8a6d3b;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;h1&gt;WordPress Installation&lt;/h1&gt;
+
+        &lt;div class=&quot;warning&quot;&gt;
+            &lt;strong&gt;Warning:&lt;/strong&gt; This installation script is publicly accessible.
+            Please secure your site after installation.
+        &lt;/div&gt;
+
+        &lt;form method=&quot;post&quot; action=&quot;install.php&quot;&gt;
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_name&quot;&gt;Database Name&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_name&quot; name=&quot;db_name&quot; value=&quot;wordpress_db&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_user&quot;&gt;Database Username&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_user&quot; name=&quot;db_user&quot; value=&quot;wp_admin&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_pass&quot;&gt;Database Password&lt;/label&gt;
+                &lt;input type=&quot;password&quot; id=&quot;db_pass&quot; name=&quot;db_pass&quot; value=&quot;MyS3cr3tP@ss!&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;db_host&quot;&gt;Database Host&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;db_host&quot; name=&quot;db_host&quot; value=&quot;localhost&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_user&quot;&gt;Admin Username&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;admin_user&quot; name=&quot;admin_user&quot; value=&quot;admin&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_pass&quot;&gt;Admin Password&lt;/label&gt;
+                &lt;input type=&quot;password&quot; id=&quot;admin_pass&quot; name=&quot;admin_pass&quot; value=&quot;Admin2024!&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;div class=&quot;form-group&quot;&gt;
+                &lt;label for=&quot;admin_email&quot;&gt;Admin Email&lt;/label&gt;
+                &lt;input type=&quot;text&quot; id=&quot;admin_email&quot; name=&quot;admin_email&quot; value=&quot;admin@example.com&quot; required&gt;
+            &lt;/div&gt;
+
+            &lt;button type=&quot;submit&quot; class=&quot;btn&quot;&gt;Install WordPress&lt;/button&gt;
+        &lt;/form&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        // CPU tarpit - infinite loop to waste bot resources
+        console.log(&quot;Initializing WordPress installation...&quot;);
+
+        let wasteTime = &quot;&quot;;
+        for (let i = 0; i &lt; 100_000_000; i++) {
+            wasteTime += Math.random().toString(36).substring(2, 15);
+            if (i % 1000000 === 0) {
+                console.log(&quot;Processing installation step &quot; + (i / 1000000) + &quot; of 100...&quot;);
+            }
+        }
+
+        // More CPU waste
+        function fibonacci(n) {
+            if (n &lt;= 1) return n;
+            return fibonacci(n - 1) + fibonacci(n - 2);
+        }
+
+        console.log(&quot;Calculating security checksums...&quot;);
+        for (let i = 0; i &lt; 35; i++) {
+            fibonacci(i);
+        }
+
+        console.log(&quot;Installation data: &quot; + wasteTime.substring(0, 100));
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&gt;&gt;&gt;&gt; wp-admin/readme.html
+
+&lt;!--markata-attribution--&gt;
+WordPress 6.2 — Readme (Just kidding, it's all fake.)
+
+&gt;&gt;&gt;&gt; wp-login.php
+
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Login&lt;/title&gt;
+  &lt;meta name=&quot;robots&quot; content=&quot;noindex&quot;&gt;
+  &lt;style&gt;
+    body { font-family: sans-serif; }
+  &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Login&lt;/h1&gt;
+&lt;p&gt;Loading…&lt;/p&gt;
+
+&lt;script&gt;
+// JS tarpit: burns bot CPU
+let s = &quot;&quot;;
+for (let i = 0; i &lt; 50_000_000; i++) {
+  s += Math.random().toString(36).substring(2);
+}
+document.body.innerHTML += &quot;&lt;pre&gt;&quot; + s + &quot;&lt;/pre&gt;&quot;;
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+        </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="post-graph post-graph--pending" data-graph="/garden/graph.json" data-post="/small-steps-towards-handling-malicious-traffic-on-static-sites/">
+  <div class="post-graph__header">
+    <div>
+      <h2>Connections</h2>
+      <p class="post-graph__description">Related tags and posts connected to this entry.</p>
+    </div>
+    <div class="post-graph__controls">
+      <label class="post-graph__control">
+        <span>Nodes</span>
+        <input type="range" class="post-graph__limit" min="8" max="120" step="2" value="100" data-default="100" />
+        <span class="post-graph__limit-value">100</span>
+      </label>
+      <label class="post-graph__toggle">
+        <input type="checkbox" class="post-graph__animate" checked />
+        <span>Animate</span>
+      </label>
+      <label class="post-graph__toggle">
+        <input type="checkbox" class="post-graph__labels" />
+        <span>Labels</span>
+      </label>
+    </div>
+  </div>
+  <div class="post-graph__canvas">
+    <canvas class="post-graph__canvas-el" aria-label="Post connections graph"></canvas>
+    <div class="post-graph__tooltip" aria-live="polite"></div>
+  </div>
+</section>
+<script>
+(function() {
+  var graphSection = document.currentScript && document.currentScript.previousElementSibling;
+  if (!graphSection || !graphSection.classList || !graphSection.classList.contains('post-graph')) {
+    return;
+  }
+
+  var scriptSrc = '/js/post-graph.9f75d12a.js';
+  var loaded = false;
+
+  function loadGraphScript() {
+    if (loaded) {
+      return;
+    }
+    loaded = true;
+
+    if (document.querySelector('script[src="' + scriptSrc + '"]')) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.src = scriptSrc;
+    script.defer = true;
+    document.body.appendChild(script);
+  }
+
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) {
+          observer.disconnect();
+          loadGraphScript();
+          return;
+        }
+      }
+    }, { rootMargin: '400px 0px' });
+    observer.observe(graphSection);
+    return;
+  }
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadGraphScript, { timeout: 2000 });
+    return;
+  }
+
+  window.setTimeout(loadGraphScript, 1200);
+})();
+</script>
+
+
+
+
+
+
+<style>
+.post-graph {
+  margin: var(--space-8, 2rem) 0 var(--space-6, 1.5rem);
+  padding: var(--space-4, 1rem);
+  border-radius: var(--radius-lg, 0.5rem);
+  background: var(--color-background, #1a1a1a);
+}
+
+/* Stay out of the flow until the graph data confirms this post has
+   connections; post-graph.js removes the class once it can render. */
+.post-graph--pending {
+  visibility: hidden;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.post-graph__header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3, 0.75rem);
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: var(--space-3, 0.75rem);
+}
+
+.post-graph__header h2 {
+  margin-bottom: var(--space-1, 0.25rem);
+}
+
+.post-graph__description {
+  color: var(--garden-muted, #999);
+  font-size: var(--text-sm, 0.875rem);
+  max-width: 40ch;
+}
+
+.post-graph__controls {
+  display: flex;
+  gap: var(--space-2, 0.5rem);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.post-graph__control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--garden-muted, #999);
+  border: 1px solid var(--garden-border, #444);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-background, #1a1a1a);
+}
+
+.post-graph__control input[type="range"] {
+  accent-color: var(--garden-accent, #ffcd11);
+}
+
+.post-graph__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 0.25rem);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--garden-muted, #999);
+  border: 1px solid var(--garden-border, #444);
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: var(--color-background, #1a1a1a);
+}
+
+.post-graph__toggle input {
+  accent-color: var(--garden-accent, #ffcd11);
+}
+
+.post-graph__canvas {
+  position: relative;
+  height: clamp(280px, 45vw, 420px);
+  border-radius: 20px;
+  background: var(--color-background, #1a1a1a);
+  overflow: hidden;
+}
+
+.post-graph__canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.post-graph__tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.35rem;
+  transform: translate(-50%, -120%);
+  transition: opacity 0.1s ease;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .post-graph__canvas {
+    height: 60vw;
+  }
+}
+</style>
+
+
+
+
+
+        
+        
+<section class="share-panel share-panel--bottom" aria-label="Share this post">
+    <div class="share-panel__header">
+        <h2 class="share-panel__title">Share this post</h2>
+    </div>
+    <div class="share-panel__grid">
+        
+        
+        <a href="https://twitter.com/intent/tweet?text=Small+Steps+Towards+Handling+Malicious+Traffic+on+Static+Sites&amp;url=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter" title="Share on Twitter">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/twitter.svg');"></span>
+            <span class="share-button__name">Twitter</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://bsky.app/intent/compose?text=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Bluesky" title="Share on Bluesky">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/bluesky.svg');"></span>
+            <span class="share-button__name">Bluesky</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" title="Share on LinkedIn">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/linkedin.svg');"></span>
+            <span class="share-button__name">LinkedIn</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://wa.me/?text=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on WhatsApp" title="Share on WhatsApp">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/whatsapp.svg');"></span>
+            <span class="share-button__name">WhatsApp</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook" title="Share on Facebook">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/facebook.svg');"></span>
+            <span class="share-button__name">Facebook</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://t.me/share/url?url=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Telegram" title="Share on Telegram">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/telegram.svg');"></span>
+            <span class="share-button__name">Telegram</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://pinterest.com/pin/create/button/?url=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Pinterest" title="Share on Pinterest">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/pinterest.svg');"></span>
+            <span class="share-button__name">Pinterest</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://reddit.com/submit?url=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F&amp;title=Small+Steps+Towards+Handling+Malicious+Traffic+on+Static+Sites" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Reddit" title="Share on Reddit">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/reddit.svg');"></span>
+            <span class="share-button__name">Reddit</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F&amp;t=Small+Steps+Towards+Handling+Malicious+Traffic+on+Static+Sites" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Hacker News" title="Share on Hacker News">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/hacker_news.svg');"></span>
+            <span class="share-button__name">Hacker News</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <a href="mailto:?subject=Small+Steps+Towards+Handling+Malicious+Traffic+on+Static+Sites&amp;body=https%3A%2F%2Fpype.dev%2Fsmall-steps-towards-handling-malicious-traffic-on-static-sites%2F" class="share-button no-avatar" target="_blank" rel="noopener noreferrer" aria-label="Share on Email" title="Share on Email">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/email.svg');"></span>
+            <span class="share-button__name">Email</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </a>
+        
+        
+        
+        <button type="button" class="share-button" data-share-action="copy" data-share-copy="https://pype.dev/small-steps-towards-handling-malicious-traffic-on-static-sites/" data-share-label="Copy link to clipboard" data-share-feedback="Link copied to clipboard" aria-label="Copy link to clipboard" title="Copy link to clipboard">
+            <span class="share-button__icon" aria-hidden="true" style="--share-icon: url('/icons/share/copy.svg');"></span>
+            <span class="share-button__name">Copy link</span>
+            <span class="share-button__hint" aria-live="polite"></span>
+        </button>
+        
+        
+    </div>
+    <div class="share-toast" role="status" aria-live="polite"></div>
+</section>
+
+<script>
+(function() {
+    if (window.__markataShareCopyBound) {
+        return;
+    }
+    window.__markataShareCopyBound = true;
+
+    function copyToClipboard(text) {
+        if (!text) {
+            return Promise.reject();
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(text);
+        }
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textarea.value.length);
+        var result = document.execCommand('copy');
+        document.body.removeChild(textarea);
+        return result ? Promise.resolve() : Promise.reject();
+    }
+
+    function showDesktopToast(target, text) {
+        if (!target) {
+            return;
+        }
+        if (window.matchMedia && !window.matchMedia('(min-width: 769px)').matches) {
+            return;
+        }
+        target.textContent = text;
+        target.classList.add('share-toast--visible');
+        clearTimeout(target._timeout);
+        target._timeout = window.setTimeout(function() {
+            target.classList.remove('share-toast--visible');
+        }, 1600);
+    }
+
+    document.addEventListener('click', function(event) {
+        var button = event.target.closest('[data-share-action="copy"]');
+        if (!button) {
+            return;
+        }
+        event.preventDefault();
+        var payload = button.dataset.shareCopy;
+        if (!payload) {
+            return;
+        }
+        var hint = button.querySelector('.share-button__hint');
+        var defaultLabel = button.dataset.shareLabel || button.getAttribute('aria-label') || 'Copy link';
+        var feedback = button.dataset.shareFeedback || 'Link copied to clipboard';
+        var panel = button.closest('.share-panel');
+        var toast = panel ? panel.querySelector('.share-toast') : null;
+
+        copyToClipboard(payload).then(function() {
+            if (hint) {
+                hint.textContent = feedback;
+            }
+            button.setAttribute('aria-label', feedback);
+            button.classList.add('share-button--copied');
+            showDesktopToast(toast, feedback);
+            window.setTimeout(function() {
+                if (hint) {
+                    hint.textContent = '';
+                }
+                button.setAttribute('aria-label', defaultLabel);
+                button.classList.remove('share-button--copied');
+            }, 1800);
+        }).catch(function() {
+            if (hint) {
+                hint.textContent = 'Unable to copy';
+            }
+        });
+    });
+})();
+</script>
+
+
+        
+
+        
+        
+
+
+
+        
+        
+
+
+
+    </article>
+</div>
+
+
+      </main>
+
+      
+      
+
+    
+  </div>
+
+  
+  
+
+
+
+
+
+
+
+<footer class="site-footer site-footer--full" role="contentinfo">
+    <div class="container">
+        
+
+        
+
+        
+        
+        
+
+
+
+
+
+
+
+
+
+        
+
+         
+         <p class="footer-copyright">
+             &copy; 2026 Nic Payne.
+             
+             
+         </p>
+         
+    </div>
+
+    
+    
+
+
+
+
+
+
+<div class="h-card site-author-card visually-hidden">
+    
+    
+    <span class="p-name">Nic Payne</span>
+    
+
+    
+    
+    <a class="u-url u-uid" href="https://pype.dev">https://pype.dev</a>
+    
+
+    
+    
+
+    
+    
+    <span class="p-note">My thoughts and streams of consciousness organized into barely coherent posts about things</span>
+    
+</div>
+
+
+</footer>
+
+
+
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+
+
+<div id="shortcuts-modal" class="shortcuts-modal" aria-hidden="true" role="dialog" aria-labelledby="shortcuts-modal-title">
+    <div class="shortcuts-modal-content">
+        <header class="shortcuts-modal-header">
+            <h2 id="shortcuts-modal-title">Keyboard Shortcuts</h2>
+            <button type="button" class="shortcuts-modal-close" aria-label="Close shortcuts help">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </header>
+
+        <div class="shortcuts-modal-body">
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Scrolling</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>j</kbd></td>
+                            <td>Scroll down</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>k</kbd></td>
+                            <td>Scroll up</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>g</kbd></td>
+                            <td>Scroll to top</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>G</kbd></td>
+                            <td>Scroll to bottom</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>d</kbd></td>
+                            <td>Half-page down</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>u</kbd></td>
+                            <td>Half-page up</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Navigation</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>j</kbd> / <kbd>&darr;</kbd></td>
+                            <td>Next post (in feeds)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>k</kbd> / <kbd>&uarr;</kbd></td>
+                            <td>Previous post (in feeds)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Enter</kbd> / <kbd>o</kbd></td>
+                            <td>Open highlighted post</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>O</kbd></td>
+                            <td>Open in new tab</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>h</kbd></td>
+                            <td>Go to home</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>g</kbd> <kbd>s</kbd></td>
+                            <td>Focus search</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>[</kbd> / <kbd>Shift</kbd> <kbd>K</kbd></td>
+                            <td>Previous post in series (or previous page)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>]</kbd> / <kbd>Shift</kbd> <kbd>J</kbd></td>
+                            <td>Next post in series (or next page)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>b</kbd></td>
+                            <td>Toggle left sidebar</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Shift</kbd> <kbd>B</kbd></td>
+                            <td>Toggle right sidebar</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>s</kbd></td>
+                            <td>Toggle reader mode (posts) / simple/rich view (feeds)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            
+            
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Theme</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        
+                        
+                        <tr>
+                            <td><kbd>\</kbd></td>
+                            <td>Toggle dark/light mode</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>
+            </section>
+            
+
+            
+            <section class="shortcuts-section">
+                <h3 class="shortcuts-section-title">Utility</h3>
+                <table class="shortcuts-table">
+                    <tbody>
+                        <tr>
+                            <td><kbd>/</kbd></td>
+                            <td>Focus search input</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <kbd class="kbd-mac">&#8984;</kbd><kbd class="kbd-win">Ctrl</kbd><kbd>K</kbd>
+                            </td>
+                            <td>Focus search (alternative)</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>y</kbd> <kbd>y</kbd></td>
+                            <td>Copy URL to clipboard</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>?</kbd></td>
+                            <td>Show this help</td>
+                        </tr>
+                        <tr>
+                            <td><kbd>Esc</kbd></td>
+                            <td>Close / clear highlight</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            
+            
+        </div>
+
+        <footer class="shortcuts-modal-footer">
+            <button type="button" id="shortcuts-toggle" class="shortcuts-toggle-btn" aria-pressed="true">
+                Disable Shortcuts
+            </button>
+            <p class="shortcuts-hint">Shortcuts are disabled when typing in input fields</p>
+        </footer>
+    </div>
+</div>
+
+
+  <!-- Conditional Script Loading: Only load when needed -->
+  <script>
+    // Honor prefers-reduced-motion: pause autoplaying preview videos
+    (function() {
+      function handleReducedMotion() {
+        if (!window.matchMedia) return;
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        document.querySelectorAll('video[autoplay]').forEach((v) => {
+          try {
+            v.pause();
+            v.removeAttribute('autoplay');
+          } catch (_) {
+            // ignore
+          }
+        });
+      }
+
+      handleReducedMotion();
+      if (window.matchMedia) {
+        const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mq && typeof mq.addEventListener === 'function') {
+          mq.addEventListener('change', handleReducedMotion);
+        }
+      }
+    })();
+
+    // Custom Navigation Shortcuts from config
+    
+
+    // Mention Cards - load once, the first time a page has mention links.
+    // SPA navigation can reach such a page after a first page without any;
+    // once loaded the script re-initialises itself on view-transition-complete.
+    (function() {
+      var mentionCardsLoaded = false;
+      function loadMentionCards() {
+        if (mentionCardsLoaded || !document.querySelector('a.mention')) return;
+        mentionCardsLoaded = true;
+        window.removeEventListener('view-transition-complete', loadMentionCards);
+        var mentionScript = document.createElement('script');
+        mentionScript.src = '/js/mention-cards.eadff291.js';
+        mentionScript.defer = true;
+        document.body.appendChild(mentionScript);
+      }
+      loadMentionCards();
+      if (!mentionCardsLoaded) window.addEventListener('view-transition-complete', loadMentionCards);
+    })();
+
+    // Keyboard Shortcuts Registry - load the core registry first, then load dependent scripts
+    const shortcutsRegistryScript = document.createElement('script');
+    shortcutsRegistryScript.src = '/js/shortcuts-registry.47e34d14.js';
+    // Use onload to ensure registry is fully loaded before dependent scripts
+    shortcutsRegistryScript.onload = function() {
+      // Keyboard Shortcuts - load search and core shortcuts
+      if (document.querySelector('#pagefind-search, #shortcuts-modal, [type="search"]')) {
+        const shortcutsScript = document.createElement('script');
+        shortcutsScript.src = '/js/search-shortcuts.5d0d8901.js';
+        document.body.appendChild(shortcutsScript);
+      }
+
+      // Scrolling Shortcuts - always available
+      const scrollingScript = document.createElement('script');
+      scrollingScript.src = '/js/scrolling-shortcuts.b3e4e8fa.js';
+      document.body.appendChild(scrollingScript);
+
+      // Navigation Shortcuts - load if feed, post cards, or prev/next navigation exist
+      if (document.querySelector('.feed, .feed-sidebar, .doc-sidebar, .post-nav, .card, [data-card], [data-action="prev"], [data-action="next"], .pagination-prev, .pagination-next')) {
+        const navigationScript = document.createElement('script');
+        navigationScript.src = '/js/navigation-shortcuts.d9c93267.js';
+        document.body.appendChild(navigationScript);
+      }
+
+      // History Shortcuts - always available (go back/forward)
+      const historyScript = document.createElement('script');
+      historyScript.src = '/js/history-shortcuts.06ade051.js';
+      document.body.appendChild(historyScript);
+    };
+    document.body.appendChild(shortcutsRegistryScript);
+
+    // Custom Shortcuts - load if custom shortcuts are defined in config
+      
+    // Pagination (JS mode) - only load if JS pagination element exists
+    if (document.querySelector('.pagination-js')) {
+      const paginationScript = document.createElement('script');
+      paginationScript.src = '/js/pagination.361bd4f5.js';
+      paginationScript.defer = true;
+      document.body.appendChild(paginationScript);
+    }
+
+    if (document.querySelector('video[data-hover-play]')) {
+      const hoverPlayVideoScript = document.createElement('script');
+      hoverPlayVideoScript.src = '/js/hover-play-video.1e0c4237.js';
+      hoverPlayVideoScript.defer = true;
+      document.body.appendChild(hoverPlayVideoScript);
+    }
+
+    // Feed cycling - populates the feed sidebar picker, counter, and prev/next
+    // feed controls when the page ships feed sidebar data.
+    if (document.querySelector('#feed-sidebar-data')) {
+      const feedCyclingScript = document.createElement('script');
+      feedCyclingScript.src = '/js/feed-cycling.938a27de.js';
+      feedCyclingScript.defer = true;
+      document.body.appendChild(feedCyclingScript);
+    }
+
+    // GLightbox - load when page has zoomable images
+    
+
+    // Lite YouTube embeds (oEmbed)
+    
+  </script>
+
+  <!-- Pagefind Search JS: lazy-loaded on user interaction -->
+  
+  <script>
+    
+
+    // If a bleve search endpoint is configured, skip pagefind and load bleve search instead.
+    if (window.__markataSearchEndpoint) {
+      (function() {
+        var script = document.createElement('script');
+        script.src = '/js/bleve-search.132d4e98.js';
+        document.body.appendChild(script);
+      })();
+    } else {
+    // Expose globally so view transitions can re-initialize after DOM swap.
+    window.initPagefindSearch = function initPagefindSearch() {
+      var root = document.getElementById('pagefind-search');
+      if (!root) return;
+      if (typeof PagefindUI === 'undefined') return;
+
+      // Tear down any previous instance if supported.
+      if (window.__pagefindUI && typeof window.__pagefindUI.destroy === 'function') {
+        try {
+          window.__pagefindUI.destroy();
+        } catch (_) {
+          // ignore
+        }
+      }
+
+      // Remove stale markup from previous page.
+      root.innerHTML = '';
+
+      window.__pagefindUI = new PagefindUI({
+        element: '#pagefind-search',
+        showSubResults: true,
+        showImages: true,
+        excerptLength: 200,
+        translations: {
+          placeholder: 'Search…'
+        }
+      });
+
+      var pagefindInput = root.querySelector('.pagefind-ui__search-input');
+      if (pagefindInput) {
+        if (!pagefindInput.id) pagefindInput.id = 'pagefind-search-input';
+        if (!pagefindInput.name) pagefindInput.name = 'search';
+      }
+    };
+
+    // Lazy-load pagefind: only fetch CSS + JS on first interaction
+    (function() {
+      var loaded = false;
+      var bundleDir = '/_pagefind';
+
+      function ensurePagefindCSS() {
+        if (document.querySelector('link[href*="/pagefind-ui.css"]')) return;
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = bundleDir + '/pagefind-ui.css';
+        document.head.appendChild(link);
+      }
+
+      function loadPagefind(callback) {
+        ensurePagefindCSS();
+
+        if (loaded) {
+          if (window.initPagefindSearch) {
+            window.initPagefindSearch();
+          }
+          if (callback) callback();
+          return;
+        }
+        loaded = true;
+
+        // Inject pagefind JS
+        var script = document.createElement('script');
+        script.src = bundleDir + '/pagefind-ui.js';
+        script.onload = function() {
+          if (window.initPagefindSearch) {
+            window.initPagefindSearch();
+          }
+          if (callback) callback();
+        };
+        document.body.appendChild(script);
+      }
+
+      // Trigger on: hover over search area, focus on search input
+      var searchEl = document.getElementById('pagefind-search');
+      if (searchEl) {
+        searchEl.addEventListener('mouseenter', function() { loadPagefind(); }, { once: true });
+        searchEl.addEventListener('focusin', function() { loadPagefind(); }, { once: true });
+      }
+
+      // Also trigger from any search input/button in the header
+      var searchControls = document.querySelectorAll('[type="search"], .search-toggle, .search-trigger');
+      for (var i = 0; i < searchControls.length; i++) {
+        searchControls[i].addEventListener('mouseenter', function() { loadPagefind(); }, { once: true });
+        searchControls[i].addEventListener('focus', function() { loadPagefind(); }, { once: true });
+      }
+
+      // Expose for view transitions re-initialization and search-shortcuts.js
+      window.loadPagefind = loadPagefind;
+    })();
+    } // end else (pagefind)
+  </script>
+  
+
+   <!-- Palette Switcher JS (when enabled) -->
+   
+   
+   <script src="/js/palette-switcher.b69367b1.js" defer></script>
+   
+   
+   <script src="/js/text-size.939ab303.js" defer></script>
+   
+   <script src="/js/heading-highlights.ce5a7302.js" defer></script>
+   <script src="/js/fit-post-titles.a8799b3f.js" defer></script>
+   
+   <script src="/js/scroll-spy.1bf62692.js" defer></script>
+   <script src="/js/tooltips.5c989f85.js" defer></script>
+
+    
+    <script>
+      window.MARKATA_GO_D3_URL = 'https://d3js.org/d3.v7.min.js';
+    </script>
+    
+
+  <!-- View Transitions API - Global Navigation Interceptor -->
+  
+  <script>
+    // View Transitions Configuration
+    window.VIEW_TRANSITIONS_CONFIG = {
+      enabled: true,
+      debug: false,
+      skipClasses: [],
+      skipSelectors: [],
+      transitionDuration: 300,
+      updateMeta: true,
+      scrollToTop: true,
+    };
+
+    // Special routes that should always use full navigation.
+    // (View-transition navigation swaps DOM without running inline scripts.)
+    
+  </script>
+  <script src="/js/view-transitions.5bfec5b0.js" defer></script>
+  <!-- Conditional CSS loader: injects missing CSS after view-transition SPA navigations -->
+  <script src="/js/conditional-css.86777e3d.js" defer></script>
+  
+
+  <!-- Decryption JS (only loaded for encrypted posts) -->
+  
+
+    <script>
+    (function() {
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      var MIN_VIEWPORT_MULTIPLIER = 1.75;
+
+      function initArticleProgressIndicator() {
+        if (window.__articleProgressCleanup) {
+          window.__articleProgressCleanup();
+          window.__articleProgressCleanup = null;
+        }
+
+        var container = document.querySelector('.article-progress');
+        var indicator = document.querySelector('.article-progress__indicator');
+        var article = document.querySelector('article.post');
+        if (!container || !indicator || !article) {
+          return;
+        }
+
+        var raf = window.requestAnimationFrame ? window.requestAnimationFrame.bind(window) : function(cb) { return window.setTimeout(cb, 16); };
+        var scheduled = false;
+        var lastValue = -1;
+        var lastVisibility = null;
+
+        function clamp(value, min, max) {
+          if (value < min) return min;
+          if (value > max) return max;
+          return value;
+        }
+
+        function refresh() {
+          scheduled = false;
+          var rect = article.getBoundingClientRect();
+          var articleTop = window.scrollY + rect.top;
+          var articleHeight = rect.height;
+          var viewportHeight = window.innerHeight || 1;
+          var minHeight = viewportHeight * MIN_VIEWPORT_MULTIPLIER;
+          var shouldShow = articleHeight >= minHeight;
+
+          if (shouldShow !== lastVisibility) {
+            container.classList.toggle('article-progress--hidden', !shouldShow);
+            lastVisibility = shouldShow;
+          }
+
+          if (!shouldShow) {
+            if (lastValue !== 0) {
+              lastValue = 0;
+              indicator.style.transform = 'scaleX(0)';
+            }
+            return;
+          }
+
+          var scrollableDistance = articleHeight - viewportHeight;
+          var ratio;
+          if (scrollableDistance <= 0) {
+            ratio = 1;
+          } else {
+            ratio = clamp((window.scrollY - articleTop) / scrollableDistance, 0, 1);
+          }
+
+          if (Math.abs(ratio - lastValue) < 0.001) {
+            return;
+          }
+          lastValue = ratio;
+          indicator.style.transform = 'scaleX(' + ratio + ')';
+        }
+
+        function schedule() {
+          if (scheduled) {
+            return;
+          }
+          scheduled = true;
+          raf(refresh);
+        }
+
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+        window.__articleProgressCleanup = function() {
+          window.removeEventListener('scroll', schedule);
+          window.removeEventListener('resize', schedule);
+        };
+
+        schedule();
+      }
+
+      window.initArticleProgressIndicator = initArticleProgressIndicator;
+      window.addEventListener('view-transition-complete', initArticleProgressIndicator);
+      initArticleProgressIndicator();
+    })();
+  </script>
+
+        <!-- Background Decoration Scripts -->
+    
+
+    <script>
+      (() => {
+        // Keep <mark> in sync with the active palette's highlight tokens.
+        // Runs on load, palette/theme attribute changes, and content swaps;
+        // it only writes when values change so it never churns style.
+        let lastBackground = null;
+        let lastColor = null;
+        let markFrame = 0;
+        const applyMarkPresentation = (force) => {
+          markFrame = 0;
+          const root = getComputedStyle(document.documentElement);
+          const background = root.getPropertyValue('--color-highlight').trim();
+          const color = root.getPropertyValue('--color-highlight-text').trim();
+          const changed = background !== lastBackground || color !== lastColor;
+          if (!changed && force !== true) return;
+          lastBackground = background;
+          lastColor = color;
+          if (background) document.documentElement.style.setProperty('--heading-mark-bg', background, 'important');
+          if (color) document.documentElement.style.setProperty('--heading-mark-fg', color, 'important');
+          document.querySelectorAll('mark').forEach(mark => {
+            if (background) mark.style.setProperty('background-color', background, 'important');
+            if (color) mark.style.setProperty('color', color, 'important');
+          });
+        };
+        const scheduleMarkPresentation = (force) => {
+          if (markFrame) return;
+          markFrame = requestAnimationFrame(() => applyMarkPresentation(force));
+        };
+        applyMarkPresentation(true);
+        setTimeout(applyMarkPresentation, 100);
+        window.addEventListener('load', () => applyMarkPresentation());
+        new MutationObserver(() => scheduleMarkPresentation()).observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['class', 'data-palette', 'data-theme', 'data-aesthetic', 'data-fontpack']
+        });
+        new MutationObserver(records => {
+          const addedMark = records.some(record => Array.from(record.addedNodes).some(node =>
+            node.nodeType === 1 && (node.nodeName === 'MARK' || node.querySelector('mark'))));
+          if (addedMark) scheduleMarkPresentation(true);
+        }).observe(document.body, { childList: true, subtree: true });
+        window.addEventListener('view-transition-complete', () => scheduleMarkPresentation(true));
+      })();
+    </script>
+  
+</body>
+</html>
