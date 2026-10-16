@@ -1,0 +1,378 @@
+<section class="post-terminal   ">
+
+    <article class="post-terminal__article">
+<header class="post-header">
+    <h1 id="title" class="post-header__title">Neovim Markdown Journaling Research</h1>
+    <div class="post-header__meta">
+        <time datetime="2026-10-04">
+            October 04, 2026
+        </time>
+    </div>
+    <div class="post-header__tags">
+            <a href="https://pype.dev//tags/neovim/" class="post-header__tag">
+                #neovim
+            </a>
+            <a href="https://pype.dev//tags/markdown/" class="post-header__tag">
+                #markdown
+            </a>
+            <a href="https://pype.dev//tags/note/" class="post-header__tag">
+                #note
+            </a>
+    </div>
+</header>        <section class="post-terminal__body prose dark:prose-invert">
+            <p>Research on the current Neovim plugin landscape for writing/journaling in
+Markdown, oriented around this site's workflow: a markata blog with YAML
+frontmatter, mkdocs-material-style <code>!!! scripture</code> / <code>??? scripture</code>
+admonitions, <code>[[ slug ]]</code> wikilinks, and a custom <code>pypeaday.daily</code> module
+(copier templates + telescope/fzf pickers + live_grep backlinks).</p>
+<h2 id="1-lazyvim-langmarkdown-extra--what-it-actually-does">1. LazyVim <code>lang.markdown</code> extra — what it actually does <a class="header-anchor" href="#1-lazyvim-langmarkdown-extra--what-it-actually-does"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Source of truth (current <code>main</code>):
+<a href="https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/markdown.lua">https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/plugins/extras/lang/markdown.lua</a>
+Docs: <a href="https://github.com/LazyVim/lazyvim.github.io/blob/main/docs/extras/lang/markdown.md">https://github.com/LazyVim/lazyvim.github.io/blob/main/docs/extras/lang/markdown.md</a></p>
+<p>As of 2026, the extra installs/configures:</p>
+<ul>
+<li><strong>marksman</strong> via nvim-lspconfig (<code>servers = { marksman = {} }</code>) — markdown
+LSP with <code>[[wikilink]]</code> completion, go-to-definition, references
+(backlinks), and dead-link diagnostics. Big deal: most of what
+<code>pypeaday.daily.find_backlinks()</code> does via telescope live_grep, marksman
+gives via <code>grr</code>/<code>vim.lsp.buf.references</code>.</li>
+<li><strong>markdownlint-cli2</strong> via nvim-lint (and none-ls if installed), plus
+conform.nvim formatters <code>prettier</code>, <code>markdownlint-cli2</code>, and <code>markdown-toc</code>
+(the last only runs when the buffer contains <code>&lt;!-- toc --&gt;</code>). Mason
+auto-installs <code>markdownlint-cli2</code> + <code>markdown-toc</code>. LazyVim switched from
+markdownlint-cli to cli2 in 2024:
+<a href="https://github.com/LazyVim/LazyVim/pull/3843">https://github.com/LazyVim/LazyVim/pull/3843</a></li>
+<li><strong>markdown-preview.nvim</strong> (<code>iamcco/markdown-preview.nvim</code>) — browser
+preview on <code>&lt;leader&gt;cp</code> (markdown buffers only).</li>
+<li><strong>render-markdown.nvim</strong> (<code>MeanderingProgrammer/render-markdown.nvim</code>) —
+in-buffer rendering. LazyVim replaced <code>headlines.nvim</code> with this plugin
+back in 2024:
+<a href="https://github.com/LazyVim/LazyVim/pull/4139">https://github.com/LazyVim/LazyVim/pull/4139</a>. LazyVim's config disables
+heading icons and checkbox rendering, and maps a
+<code>&lt;leader&gt;um</code> toggle via <code>Snacks.toggle</code>.</li>
+</ul>
+<p>There is <strong>no prose/spell/grammar extra</strong> in LazyVim — the full extras list
+contains nothing like a <code>lang.text</code> or <code>extras.spelling</code>. Prose tooling has
+to be added by hand.</p>
+<p>The import already exists in <code>~/.config/nvim/lua/config/lazy.lua</code> (line 53)
+alongside ~15 other extras — verified 2026-10-04. If plugins look missing,
+<code>:Lazy sync</code> will reconcile; <code>:LazyExtras</code> shows what's active.</p>
+<p>Built-in LazyVim defaults that matter for prose (no plugin needed):</p>
+<ul>
+<li>FileType autocmd already sets <code>wrap</code> and <code>spell</code> for markdown:
+<code>lazyvim/config/autocmds.lua</code> (<code>wrap_spell</code> augroup, patterns include
+<code>markdown</code>). So spell+wrap are already on.</li>
+<li>Toggles already mapped: <code>&lt;leader&gt;us</code> spell, <code>&lt;leader&gt;uw</code> wrap,
+<code>&lt;leader&gt;um</code> render-markdown (with the extra), <code>&lt;leader&gt;uz</code> Snacks zen
+mode, <code>&lt;leader&gt;uD</code> Snacks dim — see <code>lazyvim/config/keymaps.lua</code>.</li>
+</ul>
+<h2 id="2-render-markdownnvim--capabilities-and-the-admonition-gap">2. render-markdown.nvim — capabilities and the admonition gap <a class="header-anchor" href="#2-render-markdownnvim--capabilities-and-the-admonition-gap"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Repo: <a href="https://github.com/MeanderingProgrammer/render-markdown.nvim">https://github.com/MeanderingProgrammer/render-markdown.nvim</a></p>
+<ul>
+<li>Renders headings, code blocks, inline code, horizontal rules, list
+bullets, <strong>checkboxes (with user-defined states)</strong>, block quotes,
+<strong>callouts</strong>, tables, links, LaTeX, per the README feature list.</li>
+<li>Callouts: supports GitHub (<code>[!NOTE]</code>, <code>[!TIP]</code>, <code>[!IMPORTANT]</code>,
+<code>[!WARNING]</code>, <code>[!CAUTION]</code>) and the full Obsidian set (<code>[!QUOTE]</code>,
+<code>[!TODO]</code>, etc.). Custom callouts are fully supported — each entry is
+<code>name = { raw = '[!SCRIPTURE]', rendered = ' Scripture', highlight = '...' }</code>.
+Wiki reference:
+<a href="https://github.com/MeanderingProgrammer/render-markdown.nvim/wiki/Callouts">https://github.com/MeanderingProgrammer/render-markdown.nvim/wiki/Callouts</a></li>
+<li>Custom callout titles (<code>&gt; [!quote] Psalm 119</code>) are supported:
+<a href="https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/109">https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/109</a></li>
+<li>Checkboxes: <code>- [ ]</code> / <code>- [x]</code> render as icons, and arbitrary custom states
+(<code>- [/]</code>, <code>- [&gt;]</code>, etc.) are configurable (<code>checkbox.custom</code>).</li>
+<li><strong>mkdocs <code>!!!</code>/<code>???</code> admonitions are NOT supported.</strong> The plugin is
+treesitter-driven over the standard markdown parser; admonition blocks
+are just indented text to it. Callout support was added for the
+<code>&gt; [!x]</code> blockquote syntax only
+(<a href="https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/20">https://github.com/MeanderingProgrammer/render-markdown.nvim/issues/20</a>).</li>
+<li>The main alternative, <code>OXY2DEV/markview.nvim</code>, also only renders
+<code>&gt; [!x]</code> callouts for markdown — its &quot;admonitions&quot; support is for
+<strong>Asciidoc</strong>, not mkdocs:
+<a href="https://github.com/OXY2DEV/markview.nvim/wiki/Markdown">https://github.com/OXY2DEV/markview.nvim/wiki/Markdown</a></li>
+<li>Even <code>markdown-preview.nvim</code> can't preview mkdocs admonitions — open
+feature request: <a href="https://github.com/iamcco/markdown-preview.nvim/issues/618">https://github.com/iamcco/markdown-preview.nvim/issues/618</a>.
+The faithful preview for <code>!!! scripture</code> is the markata/mkdocs build
+itself, not an editor plugin.</li>
+<li>Conceal/anti-conceal: <code>anti_conceal</code> hides the plugin's virtual text on
+the cursor line so you can edit raw source; <code>win_options.conceallevel</code>
+is managed per rendered/raw view. Known upstream limitation: concealed
+text + <code>wrap</code> keeps stale line breaks (neovim issue #14409), documented
+in <a href="https://github.com/MeanderingProgrammer/render-markdown.nvim/blob/HEAD/doc/limitations.md">https://github.com/MeanderingProgrammer/render-markdown.nvim/blob/HEAD/doc/limitations.md</a>.
+Practical tradeoff: rendered mode is great for reading/journaling review;
+expect to live with <code>&lt;leader&gt;um</code> toggling or anti-conceal while editing.</li>
+</ul>
+<h2 id="3-obsidiannvim--fit-for-a-non-obsidian-vault">3. obsidian.nvim — fit for a non-Obsidian vault <a class="header-anchor" href="#3-obsidiannvim--fit-for-a-non-obsidian-vault"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Repo (community fork, actively maintained; <code>epwalsh/obsidian.nvim</code> is the
+legacy upstream): <a href="https://github.com/obsidian-nvim/obsidian.nvim">https://github.com/obsidian-nvim/obsidian.nvim</a></p>
+<ul>
+<li>A &quot;workspace&quot; is just a directory of markdown — no <code>.obsidian/</code> config
+required. <code>workspaces = { { name = &quot;pype.dev&quot;, path = &quot;~/projects/personal/pype.dev&quot; } }</code>
+is a valid setup.</li>
+<li>Provides <code>:Obsidian today [OFFSET]</code> / <code>dailies</code>, <code>new_from_template</code>,
+<code>template</code> (substitutions, date/time formats), <code>backlinks</code>,
+<code>follow_link</code>, <code>search</code>, <code>link</code>, <code>links</code>. See command list in README.</li>
+<li>Completion of <code>[[</code> wiki links and <code>#</code> tags via blink.cmp or nvim-cmp;
+newer versions do this through an in-process LSP so it works with any
+completion engine.</li>
+<li>Caveats:
+<ul>
+<li>Search/backlinks require <code>ripgrep</code>.</li>
+<li>Only activates inside workspace paths; the whole pype.dev repo would be
+one workspace, so <code>:Obsidian search</code> scans posts+pages together
+(probably fine).</li>
+<li>Default wikilink style is <code>[[id|alias]]</code>-ish (<code>wiki_link_id_prefix</code>);
+the <code>[[ slug ]]</code>-with-spaces convention used by markata is configured
+via <code>wiki_link_func</code>. Also <code>disable_frontmatter</code>/custom
+<code>note_frontmatter_func</code> matters since it would otherwise write
+Obsidian-style frontmatter (<code>id</code>, <code>aliases</code>, <code>tags</code>) that markata
+doesn't want.</li>
+<li>Its built-in checkbox/conceal UI is deprecated in favor of
+render-markdown.nvim — set <code>ui.enable = false</code> and let
+render-markdown handle visuals.</li>
+</ul>
+</li>
+<li>Verdict: overlaps ~80% with the existing <code>pypeaday.daily</code> module (daily
+notes, templates, backlinks). The genuinely new capability is <code>[[</code>
+completion and structured wikilink following — but <strong>marksman (already
+in lang.markdown) gives wikilink completion, <code>gd</code> link following, and
+<code>grr</code> backlinks for free</strong>, so obsidian.nvim is optional rather than
+foundational. If adopted, keep <code>pypeaday.daily</code> for copier template
+creation and use obsidian.nvim only for links/completion.</li>
+</ul>
+<h2 id="4-alternatives--brief-survey">4. Alternatives — brief survey <a class="header-anchor" href="#4-alternatives--brief-survey"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<ul>
+<li><strong>telekasten.nvim</strong> (<a href="https://github.com/nvim-telekasten/telekasten.nvim">https://github.com/nvim-telekasten/telekasten.nvim</a>):
+telescope-based zettelkasten + journal; daily/weekly notes, templates,
+backlinks, calendar. Works, but low recent activity and it duplicates
+the existing copier+telescope workflow. Not recommended here.</li>
+<li><strong>zk-nvim</strong> (<a href="https://github.com/zk-org/zk-nvim">https://github.com/zk-org/zk-nvim</a>): Neovim frontend for
+the <code>zk</code> CLI (a real LSP + note DB). Solid and maintained, but it wants
+the <code>zk</code> binary and a <code>zk</code>-style notebook — another parallel system, not
+a fit for markata frontmatter/slugs.</li>
+<li><strong>neorg</strong> (<a href="https://github.com/nvim-neorg/neorg">https://github.com/nvim-neorg/neorg</a>): still releasing (9.x),
+but it's its own <code>.norg</code> file format — incompatible with a markdown
+blog. Maintainer activity is low (focus shifted to the <code>lux</code> Lua package
+manager): <a href="https://github.com/nvim-neorg/neorg/discussions/1673">https://github.com/nvim-neorg/neorg/discussions/1673</a>. Skip.</li>
+<li><strong>Preview</strong>: <code>markdown-preview.nvim</code> (browser, in the extra, <code>&lt;leader&gt;cp</code>)
+is the maintained option. <code>glow.nvim</code> is abandoned — its own README
+points at render-markdown.nvim:
+<a href="https://github.com/ellisonleao/glow.nvim/">https://github.com/ellisonleao/glow.nvim/</a> (fork <code>shcode/nvim-glow</code>
+exists but is a terminal renderer, no help for admonitions). For this
+site, <code>markata</code>'s own build/serve is the only faithful preview.</li>
+<li><strong>Focus</strong>: don't install zen-mode/twilight. LazyVim already maps
+<code>Snacks.zen()</code> to <code>&lt;leader&gt;uz</code> and <code>Snacks.toggle.dim()</code> to <code>&lt;leader&gt;uD</code>
+(folke's snacks.nvim replaced his standalone plugins:
+<a href="https://github.com/folke/snacks.nvim/blob/main/docs/zen.md">https://github.com/folke/snacks.nvim/blob/main/docs/zen.md</a>).</li>
+<li><strong>Tables</strong>: <code>tabular</code> is already installed (<code>:Tabularize /|</code>), and
+prettier (via conform <code>&lt;leader&gt;cf</code>) aligns markdown tables automatically.
+If auto-growing tables are wanted, <code>Kicamon/markdown-table-mode.nvim</code> or
+<code>dhruvasagar/vim-table-mode</code> are the options — probably unnecessary.</li>
+<li><strong>List/checkbox ergonomics</strong>: <code>bullets.vim</code>
+(<a href="https://github.com/bullets-vim/bullets.vim">https://github.com/bullets-vim/bullets.vim</a>) auto-continues lists on
+<code>&lt;CR&gt;</code>/<code>o</code>, renumbers with <code>gN</code>, indents with <code>&gt;&gt;</code>/<code>&lt;&lt;</code>, and toggles
+checkboxes with <code>&lt;leader&gt;x</code> — including partial-completion parent
+checkboxes. Perfect fit for prayer-request checklists.</li>
+<li><strong>Link editing nicety</strong>: <code>antonk52/markdowny.nvim</code> adds vim-style
+surround ops for <code>[text](url)</code> links. Optional quality-of-life.</li>
+</ul>
+<h2 id="5-spell--wrap--prose-ergonomics">5. Spell / wrap / prose ergonomics <a class="header-anchor" href="#5-spell--wrap--prose-ergonomics"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<ul>
+<li>Already handled by LazyVim core: <code>spell</code> + <code>wrap</code> FileType autocmd for
+markdown; <code>&lt;leader&gt;us</code> / <code>&lt;leader&gt;uw</code> toggles; <code>spelllang = &quot;en&quot;</code>.</li>
+<li>Worth adding in an ftplugin/autocmd: <code>linebreak</code> (wrap at words, not
+mid-word), <code>breakindent</code> (wrapped lines keep list indent), <code>wrapmargin</code>/
+<code>colorcolumn</code> hygiene, and <code>conceallevel=2</code> + <code>concealcursor=nc</code> if you
+want rendered-markdown to look clean while keeping cursor-line raw.
+Note <code>smoothscroll</code> is globally disabled in this config
+(<code>vim.opt.smoothscroll = false</code>) — re-enable it locally for markdown if
+long wrapped paragraphs feel jumpy.</li>
+<li>Prose LSPs:
+<ul>
+<li><strong>harper-ls</strong> (<a href="https://github.com/Automattic/harper">https://github.com/Automattic/harper</a>,
+<a href="https://writewithharper.com">https://writewithharper.com</a>): Rust grammar/spelling LSP aimed at
+developers; markdown-aware, fast, no Java. Installable via mason
+(<code>harper_ls</code> in lspconfig), every linter toggleable
+(<code>linters.sentence_capitalization</code>, <code>long_sentences</code>, etc.). Best
+current default for prose grammar. Caution: it flags in every buffer
+it attaches to — scope it to <code>markdown</code> filetype only.</li>
+<li><strong>ltex-ls is dead</strong> — <code>valentjn/ltex-ls</code> is archived
+(<a href="https://github.com/valentjn/ltex-ls">https://github.com/valentjn/ltex-ls</a>). Maintained fork:
+<strong>ltex-plus/ltex-ls-plus</strong> (<a href="https://github.com/ltex-plus/ltex-ls-plus">https://github.com/ltex-plus/ltex-ls-plus</a>),
+still LanguageTool-based (heavy JVM, but deeper grammar rules).</li>
+<li><strong>vale</strong> (<a href="https://vale.sh">https://vale.sh</a>): CLI style-guide linter; usable through
+nvim-lint's <code>vale</code> linter. Best if you want house-style rules
+(write-good/proselint packs), more setup than value for journaling.</li>
+</ul>
+</li>
+<li>Soft punctuation niceties: <code>pensieve</code>/<code>cmp-dictionary</code> are mostly dead
+ends; the spell dictionary via <code>zg</code> + blink <code>buffer</code>/<code>spell</code> source
+covers the practical case.</li>
+</ul>
+<h2 id="recommended-additions-for-this-setup">Recommended additions for this setup <a class="header-anchor" href="#recommended-additions-for-this-setup"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>Ordered by value ÷ effort.</p>
+<h3>1. lang.markdown extra is already enabled (zero new code)</h3>
+<p><code>~/.config/nvim/lua/config/lazy.lua</code> line 53 already imports it. Verify
+marksman attaches with <code>:LspInfo</code> in a note buffer. Then:</p>
+<ul>
+<li><code>gd</code> on <code>[[ 2025-09-13-notes ]]</code> jumps to the note</li>
+<li><code>grr</code> (LSP references) is a richer backlinks view than the live_grep
+pattern in <code>find_daily_files</code>/<code>find_backlinks</code> — keep the telescope one,
+it searches the spaced <code>[[ slug ]]</code> convention regardless of whether
+marksman resolves it.</li>
+<li>Caveat: marksman treats the git root (<code>pype.dev</code>) as the workspace, which
+is what we want. Verify it resolves the spaced <code>[[ slug ]]</code> form; if not,
+completion still works for <code>[[slug]]</code> and markata tolerates both.</li>
+</ul>
+<h3>2. Markdown writing-mode ftplugin (tiny, high value)</h3>
+<p><code>~/.config/nvim/after/ftplugin/markdown.lua</code> (LazyVim loads <code>after/ftplugin</code>
+automatically — no spec needed):</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">linebreak</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">      </span><span class="c1">-- wrap at word boundaries</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">breakindent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">    </span><span class="c1">-- keep list indentation on wrapped lines</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">smoothscroll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">   </span><span class="c1">-- undo the global `false` for prose</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">conceallevel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w">      </span><span class="c1">-- conceal markup for rendered view</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">concealcursor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nc&quot;</span><span class="w">  </span><span class="c1">-- show raw text on the cursor line in insert</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">opt_local</span><span class="p">.</span><span class="py">spell</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w">          </span><span class="c1">-- redundant w/ LazyVim autocmd, explicit is fine</span>
+<span class="c1">-- map j/k to gj/gk for wrapped-line navigation (markdown buffers only)</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">keymap</span><span class="p">.</span><span class="nf">set</span><span class="p">({</span><span class="w"> </span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;x&quot;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">&quot;j&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gj&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nv">remap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">})</span>
+<span class="nv">vim</span><span class="p">.</span><span class="py">keymap</span><span class="p">.</span><span class="nf">set</span><span class="p">({</span><span class="w"> </span><span class="s2">&quot;n&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;x&quot;</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="s2">&quot;k&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;gk&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="nv">remap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">})</span>
+</pre></div>
+
+</pre>
+
+<h3>3. render-markdown tweaks + a <code>scripture</code> callout + checkbox states</h3>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="c1">-- lua/plugins/markdown.lua</span>
+<span class="kr">return</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;MeanderingProgrammer/render-markdown.nvim&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nv">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">-- re-enable what LazyVim&#39;s extra disables</span>
+<span class="w">      </span><span class="nv">checkbox</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">        </span><span class="nv">unchecked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;󰄱 &quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nv">checked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">icon</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;󰱒 &quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nv">custom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nv">praying</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;[/]&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;󱑂 &quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">highlight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;RenderMarkdownWarn&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nv">callout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">-- !!! scripture has no renderer; if you ever write</span>
+<span class="w">        </span><span class="c1">-- &gt; [!scripture] in blog posts this makes it pretty.</span>
+<span class="w">        </span><span class="nv">scripture</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="nv">raw</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;[!SCRIPTURE]&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nv">rendered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;󰗶 Scripture&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nv">highlight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;RenderMarkdownHint&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nv">anti_conceal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">},</span><span class="w"> </span><span class="c1">-- cursor line shows raw markdown</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+
+</pre>
+
+<p>Reality check: <strong>nothing renders <code>!!! scripture</code> blocks in the editor</strong> —
+they'll show as plain indented text (which is honest: markata is the only
+real renderer). If visual distinction matters, <code>util.mini-hipatterns</code> is
+already enabled — add a pattern:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="c1">-- inside the existing mini.hipatterns spec</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">hipatterns</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="p">(</span><span class="s2">&quot;mini.hipatterns&quot;</span><span class="p">)</span>
+<span class="nv">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">highlighters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">admonition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">pattern</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;^!?%?+ +%w+.*&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;Special&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+
+</pre>
+
+<h3>4. bullets.vim for prayer-request checklists (one line, high value)</h3>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;bullets-vim/bullets.vim&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">ft</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;markdown&quot;</span><span class="w"> </span><span class="p">},</span>
+</pre></div>
+
+</pre>
+
+<p><code>&lt;leader&gt;x</code> toggles <code>- [ ]</code>/<code>- [x]</code>, <code>&lt;CR&gt;</code>/<code>o</code> continue list items,
+<code>&gt;&gt;</code>/<code>&lt;&lt;</code> adjust nesting. Docs:
+<a href="https://github.com/bullets-vim/bullets.vim">https://github.com/bullets-vim/bullets.vim</a></p>
+<h3>5. Optional, heavier lifts (only if felt needed)</h3>
+<ul>
+<li>
+<p><strong>harper-ls</strong> grammar checking, scoped to markdown:</p>
+<pre class='wrapper'>
+
+<div class='copy-wrapper'>
+
+<button class='copy' title='copy code to clipboard' onclick="navigator.clipboard.writeText(this.parentElement.parentElement.querySelector('pre').textContent)"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 115.77 122.88" style="enable-background:new 0 0 115.77 122.88" xml:space="preserve"><style type="text/css">.st0{fill-rule:evenodd;clip-rule:evenodd;}</style><g><path class="st0" d="M89.62,13.96v7.73h12.19h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02v0.02 v73.27v0.01h-0.02c-0.01,3.84-1.57,7.33-4.1,9.86c-2.51,2.5-5.98,4.06-9.82,4.07v0.02h-0.02h-61.7H40.1v-0.02 c-3.84-0.01-7.34-1.57-9.86-4.1c-2.5-2.51-4.06-5.98-4.07-9.82h-0.02v-0.02V92.51H13.96h-0.01v-0.02c-3.84-0.01-7.34-1.57-9.86-4.1 c-2.5-2.51-4.06-5.98-4.07-9.82H0v-0.02V13.96v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07V0h0.02h61.7 h0.01v0.02c3.85,0.01,7.34,1.57,9.86,4.1c2.5,2.51,4.06,5.98,4.07,9.82h0.02V13.96L89.62,13.96z M79.04,21.69v-7.73v-0.02h0.02 c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v64.59v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h12.19V35.65 v-0.01h0.02c0.01-3.85,1.58-7.34,4.1-9.86c2.51-2.5,5.98-4.06,9.82-4.07v-0.02h0.02H79.04L79.04,21.69z M105.18,108.92V35.65v-0.02 h0.02c0-0.91-0.39-1.75-1.01-2.37c-0.61-0.61-1.46-1-2.37-1v0.02h-0.01h-61.7h-0.02v-0.02c-0.91,0-1.75,0.39-2.37,1.01 c-0.61,0.61-1,1.46-1,2.37h0.02v0.01v73.27v0.02h-0.02c0,0.91,0.39,1.75,1.01,2.37c0.61,0.61,1.46,1,2.37,1v-0.02h0.01h61.7h0.02 v0.02c0.91,0,1.75-0.39,2.37-1.01c0.61-0.61,1-1.46,1-2.37h-0.02V108.92L105.18,108.92z"/></g></svg></button>
+</div>
+        
+<div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="s2">&quot;neovim/nvim-lspconfig&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nv">opts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nv">servers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nv">harper_ls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nv">filetypes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s2">&quot;markdown&quot;</span><span class="w"> </span><span class="p">},</span>
+<span class="w">        </span><span class="nv">settings</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">          </span><span class="p">[</span><span class="s2">&quot;harper-ls&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nv">linters</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nv">sentence_capitalization</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="nv">long_sentences</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">},</span>
+<span class="w">          </span><span class="p">},</span>
+<span class="w">        </span><span class="p">},</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">    </span><span class="p">},</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+
+</pre>
+
+</li>
+<li>
+<p><strong>obsidian.nvim</strong> for <code>[[</code> completion + <code>:Obsidian backlinks</code> — only if
+marksman's LSP completion of wikilinks proves insufficient. Keep
+<code>ui.enable = false</code> and continue using <code>pypeaday.daily</code> + copier for note
+creation. Expect to write a <code>wiki_link_func</code> to emit <code>[[ slug ]]</code> and a
+<code>note_frontmatter_func</code> matching markata's frontmatter.</p>
+</li>
+</ul>
+<h2 id="bottom-line">Bottom line <a class="header-anchor" href="#bottom-line"><svg class="heading-permalink" aria-hidden="true" fill="currentColor" focusable="false" height="1em" viewBox="0 0 24 24" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9.199 13.599a5.99 5.99 0 0 0 3.949 2.345 5.987 5.987 0 0 0 5.105-1.702l2.995-2.994a5.992 5.992 0 0 0 1.695-4.285 5.976 5.976 0 0 0-1.831-4.211 5.99 5.99 0 0 0-6.431-1.242 6.003 6.003 0 0 0-1.905 1.24l-1.731 1.721a.999.999 0 1 0 1.41 1.418l1.709-1.699a3.985 3.985 0 0 1 2.761-1.123 3.975 3.975 0 0 1 2.799 1.122 3.997 3.997 0 0 1 .111 5.644l-3.005 3.006a3.982 3.982 0 0 1-3.395 1.126 3.987 3.987 0 0 1-2.632-1.563A1 1 0 0 0 9.201 13.6zm5.602-3.198a5.99 5.99 0 0 0-3.949-2.345 5.987 5.987 0 0 0-5.105 1.702l-2.995 2.994a5.992 5.992 0 0 0-1.695 4.285 5.976 5.976 0 0 0 1.831 4.211 5.99 5.99 0 0 0 6.431 1.242 6.003 6.003 0 0 0 1.905-1.24l1.723-1.723a.999.999 0 1 0-1.414-1.414L9.836 19.81a3.985 3.985 0 0 1-2.761 1.123 3.975 3.975 0 0 1-2.799-1.122 3.997 3.997 0 0 1-.111-5.644l3.005-3.006a3.982 3.982 0 0 1 3.395-1.126 3.987 3.987 0 0 1 2.632 1.563 1 1 0 0 0 1.602-1.198z"></path></svg></a></h2>
+<p>The copier+telescope daily-notes system is already doing the job of an
+entire plugin category (telekasten/zk/obsidian daily notes). The real gaps
+are: marksman wikilink navigation (free, already enabled via lang.markdown),
+rendered checkboxes/callouts (render-markdown, in the extra), checkbox
+toggling (bullets.vim), wrapped-line ergonomics (a 6-line ftplugin), and
+optional grammar checking (harper-ls). <code>!!!</code> admonitions are a markata-side
+concern — no editor plugin renders them; at most, highlight the marker line.</p>
+
+        </section>
+    </article>
+</section>
