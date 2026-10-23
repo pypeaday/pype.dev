@@ -1,0 +1,11 @@
+# Posts tagged: k8s
+
+All posts with the tag "k8s"
+
+- [💭 postmarketOS // v24.06: The One With Over 250 Devices](/thoughts-736/) - 2025-07-06
+- [💭 Self-Hosting A Cluster On Old Phones | Hackaday](/thoughts-735/) - 2025-07-06
+- [💭 matduggan.com/what-would-a-kubernetes-2-0-look-like/](/thoughts-710/) - 2025-06-20
+- [Deployments are not StatefulSets](/deployments-are-not-statefulsets/) - 2025-01-15
+- [💭 Do you really need Kubernetes?](/thoughts-480/) - 2024-12-30
+- [💭 Do you need Kubernetes?](/thoughts-476/) - 2024-12-29
+- [Customize K9s](/customize-k9s/) - 2024-05-06

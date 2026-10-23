@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/atom.xsl" type="text/xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:fh="http://purl.org/syndication/history/1.0">
+  <title>Posts tagged: forgejo Archive</title>
+  <id>https://pype.dev/tags/forgejo/archive/atom.xml</id>
+  <updated>2025-12-30T06:11:49Z</updated>
+  <subtitle>All posts with the tag &#34;forgejo&#34;</subtitle>
+  <link href="https://pype.dev/tags/forgejo/" rel="alternate" type="text/html"></link>
+  <link href="https://pype.dev/tags/forgejo/archive/atom.xml" rel="self" type="application/atom+xml"></link>
+  <link href="https://pype.dev/tags/forgejo/atom.xml" rel="current" type="application/atom+xml"></link>
+  <author>
+    <name>Nic Payne</name>
+  </author>
+  <generator uri="https://github.com/WaylonWalker/markata-go">markata-go</generator>
+  <fh:complete></fh:complete>
+  <entry>
+    <title>Increase inotify limit in your CI workers</title>
+    <id>https://pype.dev/increase-inotify-limit-in-your-ci-workers/</id>
+    <updated>2025-12-30T06:11:49Z</updated>
+    <published>2025-12-30T06:11:49Z</published>
+    <link href="https://pype.dev/increase-inotify-limit-in-your-ci-workers/" rel="alternate" type="text/html"></link>
+    <summary type="text">Today I tripped over a CI failure that I had to think about for a while.</summary>
+    <content type="html">&lt;p&gt;Today I tripped over a CI failure that I had to think about for a while.&lt;/p&gt;&#xA;&lt;p&gt;I build &lt;a href=&#34;https://github.com/zensical/zensical&#34;&gt;zensical&lt;/a&gt; static sites in CI on&#xA;my &lt;a href=&#34;/forgejo/&#34; class=&#34;glossary-term&#34; title=&#34;self-hosted code forge - codeberg - fork of gittea&#34; data-hover-title=&#34;forgejo&#34;&gt;Forgejo&lt;/a&gt; instance. These builds had been working fine, then suddenly started&#xA;failing with no code changes. Naturally, I assumed something upstream broke —&#xA;maybe a new &lt;a href=&#34;/uv/&#34; class=&#34;glossary-term&#34; title=&#34;uv by Astral.sh is one of the dopest python toolchain tools to ever exist&#34; data-hover-title=&#34;UV&#34;&gt;uv&lt;/a&gt; release, maybe &lt;a href=&#34;/zensical/&#34; class=&#34;glossary-term&#34; title=&#34;Zensical is a static site gnerator from the Material for Mk Docs team. Looks beautiful by default, great for doc sites&#34; data-hover-title=&#34;Zensical&#34;&gt;zensical&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;I pinned versions.&lt;/li&gt;&#xA;&lt;li&gt;I tested older versions.&lt;/li&gt;&#xA;&lt;li&gt;Same failure every time.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;That ruled out regressions and pushed me toward the environment.&lt;/p&gt;&#xA;&lt;p&gt;I pulled the runner and worker images locally and built the sites just fine&amp;hellip;&#xA;But that doesn&amp;rsquo;t perfectly emulate the CI setup - my forgejo runner relies on&#xA;&lt;a href=&#34;/docker/&#34; class=&#34;glossary-term&#34; title=&#34;docker - container runtime&#34; data-hover-title=&#34;docker&#34;&gt;docker&lt;/a&gt;-in-docker and so we aren&amp;rsquo;t &lt;strong&gt;just&lt;/strong&gt; running a container on a host, we have&#xA;this middle layer to consider&amp;hellip; I wasn&amp;rsquo;t sure how to really test this out&#xA;locally so I succomed to AI and here&amp;rsquo;s where Jipity got me in about 5&#xA;minutes&amp;hellip;&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-failure&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The failure&lt;/span&gt; &lt;a href=&#34;#the-failure&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;The builds blew up with:&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;thread &#39;zrx/monitor&#39; panicked at .../zensical-watch/src/agent/monitor.rs:154:49:&#xA;called `Result::unwrap()` on an `Err` value:&#xA;Error { kind: Io(Os { code: 24, message: &amp;quot;Too many open files&amp;quot; }) }&#xA;&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;At first glance it means nothing to me but Jipity says this screams ulimit.&lt;/p&gt;&#xA;&lt;p&gt;So following the AI overlords I checked:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;ulimit -n&lt;/code&gt; was already very high&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;/proc/sys/fs/inotify/max_user_watches&lt;/code&gt; was also very high&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;PID limits&lt;/code&gt; were not constrained&lt;/p&gt;&#xA;&lt;p&gt;Everything looked fine according to Jipity.&lt;/p&gt;&#xA;&lt;p&gt;Yet the panic persisted.&lt;/p&gt;&#xA;&lt;h2 id=&#34;the-real-culprit&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The real culprit&lt;/span&gt; &lt;a href=&#34;#the-real-culprit&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;The actual limit being hit was:&lt;/p&gt;&#xA;&lt;p&gt;&lt;code&gt;/proc/sys/fs/inotify/max_user_instances&lt;/code&gt;&lt;/p&gt;&#xA;&lt;p&gt;In my Forgejo runner container, it was set to 128.&lt;/p&gt;&#xA;&lt;p&gt;That turns out to be far too low for zensical.&lt;/p&gt;&#xA;&lt;p&gt;Here&amp;rsquo;s what ChatGPT said:&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Even during a normal zensical build, the tool spins up its watch subsystem,&#xA;which creates many inotify instances. Once it crosses the kernel limit,&#xA;inotify_init() fails with EMFILE, and the process panics because the error is&#xA;unwrapped.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h2 id=&#34;the-fix&#34;&gt;&lt;span class=&#34;heading-wear-glyph&#34;&gt;The fix&lt;/span&gt; &lt;a href=&#34;#the-fix&#34; class=&#34;heading-anchor&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;p&gt;Raising the inotify instance limit fixed it immediately:&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;echo 1024 &amp;gt; /proc/sys/fs/inotify/max_user_instances&#xA;RUST_BACKTRACE=full uvx zensical build --clean&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;After that, the build succeeded consistently.&lt;/p&gt;&#xA;</content>
+    <author>
+      <name>Nic Payne</name>
+      <uri>https://pype.dev</uri>
+    </author>
+  </entry>
+</feed>
