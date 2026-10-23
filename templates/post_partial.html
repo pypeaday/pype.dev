@@ -1,0 +1,28 @@
+{% set is_faith = 'faith' in (post.tags or []) or 'reflection' in (post.tags or []) %}
+{% set is_til = post.templateKey == 'til' %}
+{% set is_thoughts = post.templateKey in ['dailyNote', 'thoughts'] %}
+<section class="post-terminal {{ 'post-terminal--faith' if is_faith else '' }} {{ 'post-terminal--til' if is_til else '' }} {{ 'post-terminal--thoughts' if is_thoughts else '' }}">
+    {% if post.cover %}
+    {% set _cover_url = post.cover %}
+    {% if not _cover_url.startswith('http') %}
+        {% set _path_prefix = markata.config.get('path_prefix', '') %}
+        {% if _path_prefix %}
+            {% set _cover_url = '/' + _path_prefix.strip('/') + '/' + _cover_url.lstrip('/') %}
+        {% else %}
+            {% set _cover_url = '/' + _cover_url.lstrip('/') %}
+        {% endif %}
+    {% endif %}
+    <figure class="post-terminal__media">
+        <div class="post-terminal__media-frame">
+            <img src="{{ _cover_url }}" alt="{{ post.title }} cover image">
+        </div>
+    </figure>
+    {% endif %}
+
+    <article class="post-terminal__article">
+        {% include "title.html" %}
+        <section class="post-terminal__body prose dark:prose-invert">
+            {{ post.article_html | safe }}
+        </section>
+    </article>
+</section>

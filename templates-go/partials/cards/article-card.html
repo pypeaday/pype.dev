@@ -1,0 +1,36 @@
+{# Article Card — pype.dev override: cover (or terminal placeholder), #}
+{# kicker, title, short excerpt, meta, tags. #}
+{% with post.image|default:post.cover as cover_val %}
+{% with cover_val|media_url:post.video as media_src %}
+<article class="card card-article h-entry has-cover{% if post.tags %} card--{{ post.tags.0 | slugify }}{% endif %}">
+{% if media_src %}
+<a href="{{ post.href }}" class="card-cover u-url">
+{% if media_src|is_video %}{% set poster_candidate = post | poster_url:media_src %}<video class="card-cover-img u-video" autoplay muted loop playsinline width="220" height="160"{% if poster_candidate %} poster="{{ poster_candidate | with_size:"600" }}"{% endif %}>
+<source src="{{ media_src|with_size:"600" }}"{% with media_src|video_mime as mime %}{% if mime %} type="{{ mime }}"{% endif %}{% endwith %}>
+</video>
+{% else %}<img src="{{ media_src|with_size:"600" }}" alt="{{ post.title | default:post.slug }}" class="card-cover-img u-photo" width="220" height="160" loading="lazy">
+{% endif %}
+</a>
+{% else %}
+<a href="{{ post.href }}" class="card-cover card-cover--empty u-url" aria-hidden="true" tabindex="-1"><span class="card-cover__cmd"><b>❯</b> cat {{ post.slug }}.md</span><pre class="card-cover__out">{{ post.content | truncatechars:700 }}</pre></a>
+{% endif %}
+<div class="card-content">
+<header class="card-header">
+<span class="card-kicker"><span class="card-kicker__dot"></span>{{ post.template }}</span>
+<h2 class="card-title p-name"><a class="u-url" href="{{ post.href }}">{{ post.title | default:post.slug }}</a></h2>
+</header>
+<div class="card-body">
+    {# post.description can auto-derive to raw syntax (e.g. `!!! quote "…"`), #}
+    {# so always summarize rendered html — clean text, fixed length. #}
+    <div class="card-excerpt p-summary">{{ post.article_html|summary:180 }}</div>
+</div>
+<footer class="card-meta">
+{% if post.date %}<time class="dt-published" datetime="{{ post.date | atom_date }}">{{ post.date | human_date }}</time>{% endif %}
+{% if post.reading_time %}<span class="reading-time">{{ post.reading_time }} min read</span>{% endif %}
+{% include "partials/webmention-counts.html" %}
+{% if post.tags %}<div class="card-tags">{% for tag in post.tags %}<a href="/tags/{{ tag | slugify }}/" class="tag p-category">{{ tag }}</a>{% endfor %}</div>{% endif %}
+</footer>
+</div>
+</article>
+{% endwith %}
+{% endwith %}
