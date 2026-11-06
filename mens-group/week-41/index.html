@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2a2620">
+<title>Week 41 · History Dashboard · pype.dev</title>
+<style>
+:root {
+  --paper: #f7f4ee; --paper-raised: #fffdf9; --ink: #221e18;
+  --ink-soft: #5c5546; --ink-faint: #8a8172; --line: #e3ddd0;
+  --accent: #8a6d1f; --accent-soft: #f0e6c8;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+  --c-city: #6b7a8a; --c-journey: #4a6b5a; --c-church: #8a6d1f; --c-letter: #7a3b2e;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--sans); background: var(--paper); color: var(--ink); }
+h1, h2, h3 { font-family: var(--serif); }
+
+.topbar {
+  display: flex; align-items: center; gap: .6rem; padding: 0 .9rem;
+  min-height: 3rem; background: var(--paper-raised); border-bottom: 1px solid var(--line);
+}
+.topbar a.home { font-family: var(--serif); font-weight: 600; font-size: 1.05rem; color: var(--ink); text-decoration: none; }
+.topbar a.navlink { border: 1px solid var(--line); border-radius: 4px; padding: .35rem .6rem; font-size: .85rem; color: var(--ink-soft); text-decoration: none; }
+.topbar a.navlink:hover { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.topbar .spacer { margin-left: auto; }
+
+.wrap { max-width: 64rem; margin: 0 auto; padding: 0 1rem; }
+.intro { margin: 1.2rem 0 .4rem; }
+.intro h1 { font-size: 1.6rem; margin: 0 0 .3rem; }
+.intro p { color: var(--ink-soft); font-size: .95rem; margin: .2rem 0; max-width: 48rem; }
+
+.stats { display: flex; flex-wrap: wrap; gap: .5rem; margin: .8rem 0 1rem; }
+.stat {
+  background: var(--paper-raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .45rem .8rem; font-size: .78rem; color: var(--ink-soft);
+}
+.stat b { display: block; font-family: var(--serif); font-size: 1.15rem; color: var(--ink); }
+
+.panel { background: var(--paper-raised); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.panel h2 { font-size: 1.2rem; margin: 0 0 .2rem; }
+.panel .sub { color: var(--ink-faint); font-size: .8rem; margin-bottom: .6rem; }
+#map { width: 100%; height: auto; display: block; }
+#map .land { fill: #ece5d3; stroke: var(--line); stroke-width: 1; }
+#map .sea-label { fill: #b5ab90; font: italic 13px var(--serif); }
+#map .route { fill: none; stroke-width: 1.6; stroke-dasharray: 5 4; opacity: .55; }
+#map .rnum { font: bold 10px var(--mono); fill: var(--ink-soft); }
+#map .city { cursor: pointer; }
+#map .city circle { fill: var(--paper-raised); stroke: var(--ink-soft); stroke-width: 1.6; }
+#map .city text { font: 11px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--paper-raised); stroke-width: 3px; }
+#map .city:hover circle, #map .city.lit circle { fill: var(--accent); stroke: var(--accent); }
+#map .city.lit text { font-weight: 700; }
+#city-info { font-size: .86rem; line-height: 1.5; margin-top: .6rem; padding-top: .6rem; border-top: 1px dashed var(--line); display: none; }
+#city-info.show { display: block; }
+#city-info b { font-family: var(--serif); }
+
+.legend { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; font-size: .78rem; color: var(--ink-soft); }
+.legend i { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; margin-right: .35rem; vertical-align: -1px; }
+
+.readings { display: grid; grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr)); gap: .6rem; margin: .6rem 0; }
+.daycard {
+  background: var(--paper-raised); border: 1px solid var(--line); border-radius: 6px;
+  padding: .65rem .85rem; cursor: pointer; transition: box-shadow .15s;
+}
+.daycard:hover { box-shadow: 0 2px 8px rgba(34,30,24,.12); }
+.daycard h3 { margin: 0 0 .15rem; font-size: .95rem; }
+.daycard .dnum { font-family: var(--mono); font-size: .66rem; letter-spacing: .08em; color: var(--accent); text-transform: uppercase; }
+.daycard p { font-size: .82rem; color: var(--ink-soft); line-height: 1.45; margin: .35rem 0 0; }
+
+.track-wrap { overflow-x: auto; padding: .4rem 0 .6rem; scrollbar-color: var(--line) transparent; }
+.track { display: flex; gap: 0; min-width: max-content; padding: 0 1.5rem; position: relative; }
+.track::before { content: ""; position: absolute; left: 0; right: 0; top: 3.15rem; border-top: 2px solid var(--line); }
+.event { flex: 0 0 15.5rem; padding: 0 .8rem; position: relative; cursor: pointer; }
+.event .date { font-family: var(--mono); font-size: .72rem; color: var(--ink-faint); display: block; text-align: center; margin-bottom: .35rem; }
+.event .node { width: .9rem; height: .9rem; margin: 0 auto .6rem; border-radius: 50%; border: 3px solid var(--paper-raised); outline: 2px solid var(--cat); background: var(--cat); transition: transform .15s; }
+.event:hover .node, .event.active .node { transform: scale(1.3); }
+.event .card { background: var(--paper); border: 1px solid var(--line); border-top: 3px solid var(--cat); border-radius: 6px; padding: .55rem .7rem; font-size: .85rem; line-height: 1.35; }
+.event .card b { font-family: var(--serif); display: block; font-size: .9rem; }
+.event .card .cat-tag { font-size: .66rem; letter-spacing: .06em; text-transform: uppercase; color: var(--cat); }
+.event.active .card { border-color: var(--cat); box-shadow: 0 2px 8px rgba(34,30,24,.14); background: var(--paper-raised); }
+.event .arch { display: inline-block; font-size: .62rem; color: var(--c-journey); border: 1px solid var(--c-journey); border-radius: 3px; padding: 0 .25rem; margin-top: .3rem; }
+.event.dim { opacity: .35; }
+
+.detail { display: none; margin: .6rem 0 1rem; }
+.detail.open { display: block; }
+.detail .box { background: var(--paper); border: 1px solid var(--line); border-left: 4px solid var(--cat, var(--accent)); border-radius: 6px; padding: 1rem 1.2rem; }
+.detail h2 { font-size: 1.2rem; margin: 0 0 .15rem; }
+.detail .when { font-family: var(--mono); font-size: .75rem; color: var(--ink-faint); }
+.detail .body { font-size: .95rem; line-height: 1.55; margin: .7rem 0; }
+.detail .body p { margin: .45rem 0; }
+.refs { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+.ref { font-family: var(--mono); font-size: .75rem; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: .2rem .65rem; background: transparent; }
+.ref:hover { background: var(--accent-soft); }
+
+.verse-pop { position: fixed; z-index: 10; max-width: 26rem; width: min(26rem, calc(100vw - 2rem)); background: var(--paper-raised); border: 1px solid var(--accent); border-radius: 8px; box-shadow: 0 8px 30px rgba(34,30,24,.25); padding: .9rem 1rem; font-size: .9rem; line-height: 1.5; }
+.verse-pop h3 { margin: 0 0 .4rem; font-size: 1rem; }
+.verse-pop .v { margin: .3rem 0; }
+.verse-pop .vn { font-family: var(--mono); font-size: .68rem; color: var(--accent); vertical-align: super; margin-right: .15rem; }
+.verse-pop .cr { font-size: .62rem; color: var(--ink-faint); margin-top: .6rem; font-style: italic; }
+.verse-pop .close { position: absolute; top: .35rem; right: .55rem; border: none; background: none; font-size: 1rem; cursor: pointer; color: var(--ink-faint); }
+
+.people .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .6rem; margin: .6rem 0 2rem; }
+.person { background: var(--paper); border: 1px solid var(--line); border-radius: 6px; padding: .6rem .8rem; font-size: .84rem; line-height: 1.45; }
+.person b { font-family: var(--serif); }
+
+footer { text-align: center; color: var(--ink-faint); font-size: .72rem; padding: 2rem 1rem; }
+@media (max-width: 640px) {
+  .event { flex-basis: 12rem; }
+  .intro h1 { font-size: 1.3rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="home" href="/">pype.dev</a>
+  <span class="spacer"></span>
+  <a class="navlink" href="/olivet-mens-group-2026-week-41/">Week 41 journal →</a>
+  <a class="navlink" href="/mens-group/week-42/">Week 42</a>
+  <a class="navlink" href="/">Home</a>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>The History Behind the Readings — Week 41</h1>
+    <p>One connected story: Paul's Aegean ministry, ~AD 49–57. Thessalonica → Corinth → Ephesus. Click a city on the map to filter the timeline; click a day card to jump to its moment; click scripture chips to read them (BSB).</p>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="panel">
+    <h2>The world</h2>
+    <div class="sub">Schematic — relative positions, not cartography. Click a city.</div>
+    <svg id="map" viewBox="0 0 1000 560" role="img" aria-label="Map of Paul's Aegean ministry"></svg>
+    <div id="city-info"></div>
+  </div>
+
+  <div class="panel">
+    <h2>This week's readings</h2>
+    <div class="sub">Each day's passage and where it lands in the story.</div>
+    <div class="readings" id="readings"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Timeline</h2>
+    <div class="sub legend">
+      <span><i style="background:var(--c-city)"></i>The city</span>
+      <span><i style="background:var(--c-journey)"></i>Paul's travels</span>
+      <span><i style="background:var(--c-church)"></i>The church</span>
+      <span><i style="background:var(--c-letter)"></i>The letters</span>
+    </div>
+    <div class="track-wrap"><div class="track" id="track"></div></div>
+    <div class="detail" id="detail"><div class="box" id="detail-box"></div></div>
+  </div>
+
+  <div class="panel people">
+    <h2>The cast</h2>
+    <div class="grid" id="people"></div>
+  </div>
+</div>
+
+<footer>Men's Group Week 41 · pype.dev · Scripture is BSB (public domain)</footer>
+<div class="verse-pop" id="verse-pop" hidden></div>
+
+<script src="verses.js"></script>
+<script>
+const CATS = { city: '--c-city', journey: '--c-journey', church: '--c-church', letter: '--c-letter' };
+const CATNAMES = { city: 'the city', journey: 'travels', church: 'the church', letter: 'the letters' };
+
+const EVENTS = [
+  { id: 'destroy', date: '146 BC', cat: 'city', cities: ['corinth'], title: 'Rome destroys Corinth',
+    body: `The Roman consul Mummius sacks Corinth during the Achaean War. The men are killed, the women and children sold into slavery, and the city — one of the richest in Greece — lies mostly desolate for a century.`,
+    refs: [] },
+  { id: 'colony', date: '44 BC', cat: 'city', cities: ['corinth'], title: 'Caesar refounds it as a Roman colony',
+    body: `Julius Caesar rebuilds Corinth as <i>Colonia Laus Iulia Corinthiensis</i>, settling it with freedmen, veterans, and traders. It becomes the capital of the province of Achaia.`,
+    extra: `The colony matters: the "new" Corinth is a Roman boomtown — commercial, mobile, no old aristocracy. Status is up for grabs, and people grab for it. That scramble for honor is the air the church will breathe.`,
+    refs: [] },
+  { id: 'boomtown', date: '1st c. AD', cat: 'city', cities: ['corinth'], title: 'Boomtown on the isthmus',
+    body: `Corinth controls the land bridge between northern and southern Greece — ports on both seas, the diolkos ship-trackway across the isthmus, and the Isthmian Games (second only to the Olympics).`,
+    extra: `Its reputation: "to live like a Corinthian" is slang for debauchery. Its culture: patronage, public honor, celebrity rhetoricians. Keep that in mind for 1 Cor 1–4.`,
+    refs: [] },
+  { id: 'thessalonica', date: '~AD 50', cat: 'church', cities: ['thessalonica'], title: 'Church planted in Thessalonica (context)',
+    body: `Before Corinth: Paul, Silas and Timothy plant a church in Thessalonica on this same journey (Acts 17:1–9 — week 40's reading). A riot drives them out after a few weeks, through Berea to Athens. Paul will worry about that infant church for months.`,
+    refs: [{ v: 'Acts 17:1-9' }] },
+  { id: 'arrive', date: '~AD 50', cat: 'journey', cities: ['athens', 'corinth'], title: 'Paul reaches Corinth via Athens',
+    body: `Alone from Athens — where he'd been politely heard and mostly dismissed — Paul arrives in Corinth and meets Aquila and Priscilla, Jewish tentmakers recently expelled from Rome under Claudius' edict (~AD 49). He shares their trade and reasons in the synagogue each Sabbath.`,
+    refs: [{ v: 'Acts 18:1-3' }] },
+  { id: 'planted', date: '~AD 50', cat: 'church', cities: ['corinth'], title: 'Church planted; 18-month ministry',
+    body: `When the synagogue turns hostile, Paul moves next door — literally — into Titius Justus' house. Crispus, the synagogue ruler, believes with his household. Night vision: "I have many in this city." Paul settles in for a year and a half.`,
+    extra: `The church that forms is mostly lower-status — laborers, freedmen, slaves: "not many of you were wise, powerful, or noble."`,
+    refs: [{ v: 'Acts 18:4-11' }, { v: '1 Cor 1:26-28' }] },
+  { id: 'thess1', date: '~AD 50–51', cat: 'letter', cities: ['corinth', 'thessalonica'], title: 'Timothy returns; Paul writes 1 Thessalonians', days: [1],
+    body: `Paul — anxious about the Thessalonian church he'd been driven from — sent Timothy back to check on them (1 Thess 3:1–6). Timothy returns with good news, and Paul fires off this letter from Corinth (or Athens): comfort about believers who have died, holy living, watchfulness for the day of the Lord.`,
+    extra: `<b>Day 1's reading (1 Thess 3–5)</b> is likely the earliest book of the New Testament we possess.`,
+    refs: [{ v: '1 Thess 3:1-6' }, { v: '1 Thess 4:13-18' }] },
+  { id: 'thess2', date: '~AD 51', cat: 'letter', cities: ['corinth', 'thessalonica'], title: '2 Thessalonians', days: [2],
+    body: `Weeks or months later, still from Corinth: someone has told the church "the day of the Lord has come" (2:2) and they're panicking — some have quit working altogether to wait. Paul's corrective: the rebellion and the man of lawlessness come first; stand firm; and "if anyone is not willing to work, let him not eat."`,
+    refs: [{ v: '2 Thess 2:1-12' }, { v: '2 Thess 3:6-12' }] },
+  { id: 'gallio', date: '~AD 51', cat: 'journey', cities: ['corinth'], title: `Gallio dismisses the Jews' case`, arch: true, days: [3],
+    body: `The Jews haul Paul before Gallio, proconsul of Achaia (Seneca's brother). He throws it out: "questions about words and names and your own law — see to it yourselves." The crowd beats Sosthenes, the synagogue ruler, and Gallio shrugs.`,
+    extra: `<b>Why it matters:</b> the Delphi inscription dates Gallio's proconsulship to AD 51–52 — the anchor for all Pauline chronology. Every other date here hangs off it.`,
+    refs: [{ v: 'Acts 18:12-17' }] },
+  { id: 'sails', date: '~AD 52', cat: 'journey', cities: ['cenchreae', 'corinth', 'ephesus', 'jerusalem', 'antioch'], title: 'Paul sails for Syria', days: [3],
+    body: `<b>Day 3 opens here.</b> Paul cuts his hair at Cenchreae (Corinth's east port) to keep a vow, sails with Priscilla and Aquila, leaves them at Ephesus after a short synagogue visit, greets the church at Jerusalem, and returns to Antioch — his home base.`,
+    refs: [{ v: 'Acts 18:18-22' }] },
+  { id: 'apollos', date: '~AD 52–53', cat: 'church', cities: ['ephesus', 'corinth'], title: 'Apollos: Ephesus → Corinth', days: [3],
+    body: `Apollos — an Alexandrian Jew, "eloquent" and "well versed in the Scriptures" — arrives at Ephesus knowing only John's baptism. Priscilla and Aquila "explained to him the way of God more accurately," and he crosses to Achaia with a letter of welcome, "powerfully refuting the Jews in public debate."`,
+    extra: `Watch the set-up: a brilliant rhetorician lands in a city that adores rhetoric. The "I follow Apollos" faction writes itself.`,
+    refs: [{ v: 'Acts 18:24-28' }] },
+  { id: 'ephesus', date: 'AD 53–55', cat: 'journey', cities: ['antioch', 'ephesus'], title: 'Paul back out, settles at Ephesus', days: [3, 4, 5],
+    body: `From Antioch, Paul travels "from place to place throughout the region of Galatia and Phrygia" (18:23) and arrives at Ephesus — over two years of ministry: the twelve disciples baptized, daily lectures in the hall of Tyrannus, the magic-book bonfire, and the riot of Demetrius the silversmith.`,
+    extra: `This is where he'll write 1 Corinthians: "I will stay in Ephesus until Pentecost" (16:8).`,
+    refs: [{ v: 'Acts 19:8-10' }, { v: 'Acts 19:23-27' }, { v: '1 Cor 16:8-9' }] },
+  { id: 'lostletter', date: '~AD 53–54', cat: 'letter', cities: ['ephesus', 'corinth'], title: 'The earlier letter (lost)', days: [4, 5],
+    body: `Before our 1 Corinthians, Paul had already written this church once: "I wrote to you in my letter not to associate with sexually immoral people" (5:9). That letter is lost — 1 Corinthians is at least his second.`,
+    refs: [{ v: '1 Cor 5:9-11' }] },
+  { id: 'report', date: '~AD 54', cat: 'letter', cities: ['corinth', 'ephesus'], title: 'Bad news and questions reach Paul', days: [4, 5],
+    body: `Three channels converge on Paul in Ephesus: <b>(1)</b> "Chloe's people" report factional splits (1:11); <b>(2)</b> scandal — a man with his father's wife (ch 5), lawsuits between believers (ch 6); <b>(3)</b> a letter from the church with questions (7:1), probably carried by Stephanas, Fortunatus, and Achaicus (16:17).`,
+    refs: [{ v: '1 Cor 1:10-12' }, { v: '1 Cor 7:1' }, { v: '1 Cor 16:17-18' }] },
+  { id: 'writes1cor', date: '~AD 55', cat: 'letter', cities: ['ephesus'], title: 'Paul writes 1 Corinthians', days: [4, 5],
+    body: `<b>Days 4–5's reading (1 Cor 1–4).</b> He answers the factions first: the cross is God's wisdom versus Corinthian status games — a crucified Messiah was scandal to Jews and nonsense to Greeks, and crucifixion was a slave's death. Paul deliberately came "in weakness and fear and much trembling," the anti-sophist — and the leaders aren't celebrities but servants, "stewards of the mysteries of God."`,
+    extra: `Chapters 1–4 land because the church is re-importing the city's patronage-and-celebrity culture — attaching to baptizers and orators as patrons. His answer: God picked the weak things so no one boasts; wisdom comes by the Spirit.`,
+    refs: [{ v: '1 Cor 1:18-25' }, { v: '1 Cor 2:1-5' }, { v: '1 Cor 3:5-9' }, { v: '1 Cor 4:9-13' }] },
+  { id: 'worse', date: 'AD 55–56', cat: 'letter', cities: ['ephesus', 'corinth'], title: 'It gets worse before better',
+    body: `Timothy's visit doesn't settle it. Paul makes a "painful visit" (2 Cor 2:1), then writes a severe, "tearful" letter — also lost — via Titus (2 Cor 2:3–4). Titus finally meets Paul in Macedonia with good news, and 2 Corinthians goes out ~AD 56.`,
+    refs: [{ v: '2 Cor 2:3-4' }, { v: '2 Cor 7:8-9' }] },
+  { id: 'romans', date: 'AD 56–57', cat: 'letter', cities: ['corinth'], title: 'Winter in Corinth; Romans written', arch: true,
+    body: `Paul spends three months in Achaia (Acts 20:2–3) and writes Romans from Corinth — Phoebe of Cenchreae carries it, Gaius hosts, and "Erastus, the city treasurer" sends greetings.`,
+    extra: `<b>The Erastus inscription:</b> found in Corinth in 1929 — "Erastus, in return for his aedileship, laid this at his own expense." Possibly the same man: a Christian holding civic office.`,
+    refs: [{ v: 'Rom 16:23' }, { v: 'Acts 20:2-3' }] },
+];
+
+const DAYS = [
+  { n: 1, passage: '1 Thessalonians 3–5', ev: ['thess1'],
+    note: `Paul's anxious check-in on the church he'd been driven from. Timothy's good report → comfort about the dead in Christ, holy living, stay awake for the day of the Lord.` },
+  { n: 2, passage: '2 Thessalonians 1–3', ev: ['thess2'],
+    note: `Weeks later: an alarming claim that "the day of the Lord has come" has panicked them — and some have stopped working. Reassurance + "keep away from idlers."` },
+  { n: 3, passage: 'Acts 18:18–28; 19', ev: ['sails', 'apollos', 'ephesus'],
+    note: `Paul leaves Corinth (vow at Cenchreae) → Ephesus → Jerusalem → Antioch → back through Galatia to Ephesus. Meanwhile Apollos is corrected and sent on to Corinth. Two years in Ephesus end in Demetrius's riot.` },
+  { n: 4, passage: '1 Corinthians 1–2', ev: ['writes1cor', 'report'],
+    note: `From Ephesus ~AD 55. Factions named after Paul/Apollos/Cephas — the city importing its celebrity culture. His answer: the foolish cross, and wisdom the Spirit reveals.` },
+  { n: 5, passage: '1 Corinthians 3–4', ev: ['writes1cor'],
+    note: `The argument continues: Paul and Apollos are just servants — "God's field, God's building," "stewards of the mysteries," and apostles as "a spectacle to the world."` },
+];
+
+const CITIES = {
+  rome:        { x: 55,  y: 185, name: 'Rome',      info: 'Aquila and Priscilla were expelled from here under Claudius\' edict (~AD 49) and washed up in Corinth.' },
+  thessalonica:{ x: 395, y: 125, name: 'Thessalonica', info: 'Port city of Macedonia. Church planted weeks before Corinth (Acts 17) — the Thessalonian letters are written TO here FROM Corinth.' },
+  philippi:    { x: 465, y: 110, name: 'Philippi',  info: 'Roman colony in Macedonia — Lydia, the jailer, the earthquake (Acts 16).' },
+  berea:       { x: 375, y: 155, name: 'Berea',     info: '"More noble" Jews who searched the Scriptures — Paul was sent on to Athens from here.' },
+  athens:      { x: 405, y: 295, name: 'Athens',    info: 'Areopagus speech; polite dismissal. Paul arrives in Corinth alone and discouraged — which is why he emphasizes coming "in weakness."' },
+  corinth:     { x: 378, y: 250, name: 'Corinth',   info: 'The boomtown capital of Achaia. 18 months of ministry, Gallio\'s tribunal, the Thessalonian letters sent out, and the problem church 1 Corinthians addresses.' },
+  cenchreae:   { x: 418, y: 262, name: 'Cenchreae', info: 'Corinth\'s eastern port — Paul\'s vow haircut (Acts 18:18), and later Phoebe\'s church (Rom 16:1).' },
+  troas:       { x: 545, y: 185, name: 'Troas',     info: 'Aegean port where Paul saw the Macedonian vision (Acts 16) and later raised Eutychus (Acts 20).' },
+  ephesus:     { x: 575, y: 255, name: 'Ephesus',   info: 'Paul\'s base for 2+ years — hall of Tyrannus, magic bonfire, Demetrius\' riot. 1 Corinthians is written FROM here.' },
+  galatia:     { x: 665, y: 225, name: 'Galatia & Phrygia', info: 'Inland region Paul criss-crossed between journeys, "strengthening all the disciples" (Acts 18:23).' },
+  antioch:     { x: 800, y: 285, name: 'Antioch',   info: 'Paul\'s sending church and home base — every journey loops back here.' },
+  caesarea:    { x: 805, y: 395, name: 'Caesarea',  info: 'Judean port where Paul landed and "went up and greeted the church" (Acts 18:22).' },
+  jerusalem:   { x: 815, y: 430, name: 'Jerusalem', info: 'The mother church — Paul greets it briefly before returning to Antioch.' },
+};
+
+const ROUTES = [
+  { d: 'M395,125 Q380,190 385,155 M385,155 Q400,230 405,295 M405,295 Q390,275 378,250', c: 'var(--c-journey)', label: '1', lx: 370, ly: 230 },
+  { d: 'M378,250 Q400,265 418,262 M418,262 Q500,270 575,255', c: 'var(--c-journey)', label: '2', lx: 490, ly: 262 },
+  { d: 'M575,255 Q700,330 805,395 M805,395 Q810,410 815,430 M815,430 Q800,360 800,285', c: 'var(--c-journey)', label: '3', lx: 700, ly: 350 },
+  { d: 'M800,285 Q730,250 665,225 M665,225 Q620,240 575,255', c: 'var(--c-journey)', label: '4', lx: 720, ly: 248 },
+  { d: 'M575,255 Q480,265 418,262', c: 'var(--c-church)', label: '5', lx: 495, ly: 278 },
+  { d: 'M378,250 Q475,255 575,255', c: 'var(--c-letter)', label: '6', lx: 470, ly: 240 },
+];
+
+const STATS = [
+  ['~AD 49–57', 'the whole arc'],
+  ['18 mo', 'Paul in Corinth'],
+  ['2+ yrs', 'Paul in Ephesus'],
+  ['5', 'readings this week'],
+  ['≥2', 'letters lost to us'],
+  ['1', 'date that anchors it all (Gallio)'],
+];
+
+const PEOPLE = [
+  ['Paul', 'Apostle; Thessalonica → Athens → Corinth → Ephesus → Antioch and back. Writes 1–2 Thess from Corinth, 1 Cor from Ephesus.'],
+  ['Aquila & Priscilla', 'Tentmakers expelled from Rome (~AD 49); Paul\'s hosts in Corinth, left at Ephesus, Apollos\'s correctors.'],
+  ['Timothy', 'Sent back alone to check on infant Thessalonica — his good report triggers 1 Thessalonians. Later sent to Corinth.'],
+  ['Apollos', 'Eloquent Alexandrian; corrected in Ephesus, celebrated in Corinth — unwitting seed of the "I follow Apollos" faction.'],
+  ['Cephas (Peter)', 'Named by a faction though he may never have visited; his name carried mother-church weight.'],
+  ['Chloe', 'Corinthian whose people told Paul about the factions (1:11).'],
+  ['Gallio', 'Proconsul of Achaia AD 51–52, Seneca\'s brother; his dismissal of the case anchors Pauline chronology.'],
+  ['Stephanas, Fortunatus, Achaicus', 'The delegation that likely carried the church\'s question-letter to Ephesus (16:17).'],
+  ['Erastus', 'Corinth\'s city treasurer (Rom 16:23) — possibly the Erastus of the excavated pavement inscription.'],
+  ['Demetrius', 'Ephesian silversmith whose Artemis-shrine trade Paul\'s preaching threatened — started the riot that ended the Ephesus years.'],
+];
+
+document.getElementById('stats').innerHTML =
+  STATS.map(([n, l]) => `<div class="stat"><b>${n}</b>${l}</div>`).join('');
+
+const svg = document.getElementById('map');
+svg.innerHTML = `
+  <path class="land" d="M30,80 Q90,50 150,90 L160,150 Q120,200 80,220 L60,260 Q40,220 30,180 Z"/>
+  <path class="land" d="M300,60 Q420,40 500,80 L520,160 Q480,220 440,240 L430,300 Q400,340 360,330 Q340,290 330,250 Q310,180 300,120 Z"/>
+  <path class="land" d="M540,120 Q640,90 740,120 L760,220 Q720,300 640,310 Q580,300 540,260 Z"/>
+  <path class="land" d="M760,240 Q840,230 880,280 L890,420 Q860,480 800,490 L780,420 Q770,330 760,240 Z"/>
+  <text class="sea-label" x="465" y="310">A E G E A N</text>
+  <text class="sea-label" x="640" y="380">Mediterranean</text>
+  ${ROUTES.map(r => `<path class="route" d="${r.d}" style="stroke:${r.c}"/><text class="rnum" x="${r.lx}" y="${r.ly}">${r.label}</text>`).join('')}
+  ${Object.entries(CITIES).map(([k, c]) =>
+    `<g class="city" data-city="${k}"><circle cx="${c.x}" cy="${c.y}" r="6"/><text x="${c.x + 10}" y="${c.y + 4}">${c.name}</text></g>`).join('')}
+`;
+
+const cityInfo = document.getElementById('city-info');
+svg.addEventListener('click', e => {
+  const g = e.target.closest('.city');
+  if (!g) return;
+  const k = g.dataset.city;
+  document.querySelectorAll('#map .city').forEach(x => x.classList.toggle('lit', x === g));
+  cityInfo.innerHTML = `<b>${CITIES[k].name}</b> — ${CITIES[k].info}`;
+  cityInfo.classList.add('show');
+  const hits = new Set(EVENTS.filter(e => e.cities.includes(k)).map(e => e.id));
+  document.querySelectorAll('.event').forEach(el =>
+    el.classList.toggle('dim', hits.size && !hits.has(el.dataset.id)));
+});
+
+const track = document.getElementById('track');
+const detail = document.getElementById('detail');
+const box = document.getElementById('detail-box');
+let activeEl = null;
+
+EVENTS.forEach(ev => {
+  const el = document.createElement('div');
+  el.className = 'event'; el.dataset.id = ev.id;
+  el.style.setProperty('--cat', `var(${CATS[ev.cat]})`);
+  el.innerHTML = `
+    <span class="date">${ev.date}</span>
+    <div class="node"></div>
+    <div class="card">
+      <span class="cat-tag">${CATNAMES[ev.cat]}</span>
+      <b>${ev.title}</b>
+      ${ev.days?.length ? `<span class="arch" style="color:var(--accent);border-color:var(--accent)">day ${ev.days.join('·')}</span>` : ''}
+      ${ev.arch ? '<span class="arch">archaeology</span>' : ''}
+    </div>`;
+  el.addEventListener('click', () => openEvent(ev.id));
+  track.appendChild(el);
+});
+
+function openEvent(id) {
+  const ev = EVENTS.find(e => e.id === id);
+  const el = track.querySelector(`[data-id="${id}"]`);
+  if (activeEl === el) { detail.classList.remove('open'); el.classList.remove('active'); activeEl = null; return; }
+  document.querySelectorAll('.event.active').forEach(e => e.classList.remove('active'));
+  el.classList.add('active'); activeEl = el;
+  box.style.setProperty('--cat', `var(${CATS[ev.cat]})`);
+  box.innerHTML = `
+    <span class="when">${ev.date}</span>
+    <h2>${ev.title}</h2>
+    <div class="body"><p>${ev.body}</p>${ev.extra ? `<p>${ev.extra}</p>` : ''}</div>
+    ${ev.refs.length ? `<div class="refs">${ev.refs.map((r, j) =>
+      `<button class="ref" data-id="${id}" data-j="${j}">${r.v}</button>`).join('')}</div>` : ''}`;
+  detail.classList.add('open');
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('readings').innerHTML = DAYS.map(d => `
+  <div class="daycard" data-ids="${d.ev.join(',')}">
+    <span class="dnum">Day ${d.n}</span>
+    <h3>${d.passage}</h3>
+    <p>${d.note}</p>
+  </div>`).join('');
+document.getElementById('readings').addEventListener('click', e => {
+  const card = e.target.closest('.daycard');
+  if (card) openEvent(card.dataset.ids.split(',')[0]);
+});
+
+const pop = document.getElementById('verse-pop');
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.ref');
+  if (!btn) { if (!e.target.closest('.verse-pop')) pop.hidden = true; return; }
+  const r = EVENTS.find(x => x.id === btn.dataset.id).refs[btn.dataset.j];
+  const verses = VERSES[r.v] || [];
+  pop.innerHTML = `<button class="close">✕</button><h3>${r.v} <span style="color:var(--ink-faint);font-size:.7rem">BSB</span></h3>` +
+    verses.map(([n, t]) => `<div class="v"><span class="vn">${n}</span>${t}</div>`).join('');
+  const b = btn.getBoundingClientRect();
+  pop.hidden = false;
+  pop.style.top = Math.min(b.bottom + 8, innerHeight - pop.offsetHeight - 12) + 'px';
+  pop.style.left = Math.max(8, Math.min(b.left, innerWidth - pop.offsetWidth - 16)) + 'px';
+});
+pop.addEventListener('click', e => { if (e.target.closest('.close')) pop.hidden = true; });
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const idx = EVENTS.findIndex(x => x.id === (activeEl?.dataset.id || ''));
+  const next = e.key === 'ArrowRight' ? idx + 1 : idx - 1;
+  if (next >= 0 && next < EVENTS.length) openEvent(EVENTS[next].id);
+});
+
+document.getElementById('people').innerHTML =
+  PEOPLE.map(([n, d]) => `<div class="person"><b>${n}</b> — ${d}</div>`).join('');
+
+openEvent('thess1');
+</script>
+</body>
+</html>

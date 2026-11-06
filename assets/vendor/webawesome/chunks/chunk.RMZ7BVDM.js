@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */function parseSpaceDelimitedTokens(e){return e.split(" ").map(e=>e.trim()).filter(e=>e!=="")}export{parseSpaceDelimitedTokens}

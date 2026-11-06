@@ -1,0 +1,31 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */import{split_panel_styles_default}from"./chunk.UF4WDITO.js";import{drag}from"./chunk.WYNTFJHW.js";import{WaRepositionEvent}from"./chunk.ZWQCGLB5.js";import{clamp}from"./chunk.O6IZ4I7T.js";import{o as o2}from"./chunk.3MSWQ3RG.js";import{LocalizeController}from"./chunk.G3ZVQTTB.js";import{watch}from"./chunk.PZAN6FPN.js";import{WebAwesomeElement,e,n,t}from"./chunk.K4C5PQDP.js";import{o}from"./chunk.7OBLIRXR.js";import{x}from"./chunk.BKE5EYM3.js";import{__decorateClass}from"./chunk.JHZRD2LV.js";var WaSplitPanel=class extends WebAwesomeElement{constructor(){super(...arguments),this.isCollapsed=!1,this.localize=new LocalizeController(this),this.positionBeforeCollapsing=0,this.position=50,this.orientation="horizontal",this.disabled=!1,this.snapThreshold=12}connectedCallback(){super.connectedCallback(),o||(this.resizeObserver=new ResizeObserver(e=>this.handleResize(e)),this.updateComplete.then(()=>this.resizeObserver.observe(this)),this.detectSize(),this.cachedPositionInPixels=this.percentageToPixels(this.position))}disconnectedCallback(){super.disconnectedCallback(),this.resizeObserver?.unobserve(this)}detectSize(){const{width:e,height:t}=this.getBoundingClientRect();this.size=this.orientation==="vertical"?t:e}percentageToPixels(e){return this.size*(e/100)}pixelsToPercentage(e){return e/this.size*100}handleDrag(e){const t=this.hasUpdated?this.localize.dir()==="rtl":this.dir==="rtl";if(this.disabled)return;e.cancelable&&e.preventDefault(),drag(this,{onMove:(e,n)=>{let s=this.orientation==="vertical"?n:e;if(this.primary==="end"&&(s=this.size-s),this.snap){const e=this.snap.split(" ");e.forEach(e=>{let n;e.endsWith("%")?n=this.size*(parseFloat(e)/100):n=parseFloat(e),t&&this.orientation==="horizontal"&&(n=this.size-n),s>=n-this.snapThreshold&&s<=n+this.snapThreshold&&(s=n)})}this.position=clamp(this.pixelsToPercentage(s),0,100)},initialEvent:e})}handleKeyDown(e){if(this.disabled)return;if(["ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Home","End","Enter"].includes(e.key)){let t=this.position;const n=(e.shiftKey?10:1)*(this.primary==="end"?-1:1);if(e.preventDefault(),(e.key==="ArrowLeft"&&this.orientation==="horizontal"||e.key==="ArrowUp"&&this.orientation==="vertical")&&(t-=n),(e.key==="ArrowRight"&&this.orientation==="horizontal"||e.key==="ArrowDown"&&this.orientation==="vertical")&&(t+=n),e.key==="Home"&&(t=this.primary==="end"?100:0),e.key==="End"&&(t=this.primary==="end"?0:100),e.key==="Enter")if(this.isCollapsed)t=this.positionBeforeCollapsing,this.isCollapsed=!1;else{const e=this.position;t=0,requestAnimationFrame(()=>{this.isCollapsed=!0,this.positionBeforeCollapsing=e})}this.position=clamp(t,0,100)}}handleResize(e){const{width:t,height:n}=e[0].contentRect;if(this.size=this.orientation==="vertical"?n:t,(isNaN(this.cachedPositionInPixels)||this.position===1/0)&&(this.cachedPositionInPixels=Number(this.getAttribute("position-in-pixels")),this.positionInPixels=Number(this.getAttribute("position-in-pixels")),this.position=this.pixelsToPercentage(this.positionInPixels)),this.primary){const e=this.pixelsToPercentage(this.cachedPositionInPixels);this.position!==e&&(this.position=e)}}handlePositionChange(){this.cachedPositionInPixels=this.percentageToPixels(this.position);const e=this.percentageToPixels(this.position);this.positionInPixels!==e&&(this.positionInPixels=e),this.isCollapsed=!1,this.positionBeforeCollapsing=0,this.dispatchEvent(new WaRepositionEvent)}handlePositionInPixelsChange(){const e=this.pixelsToPercentage(this.positionInPixels);this.position!==e&&(this.position=e)}handleVerticalChange(){this.detectSize()}render(){const e=this.orientation==="vertical"?"gridTemplateRows":"gridTemplateColumns",o=this.orientation==="vertical"?"gridTemplateColumns":"gridTemplateRows",s=this.hasUpdated?this.localize.dir()==="rtl":this.dir==="rtl",t=`
+      clamp(
+        0%,
+        clamp(
+          var(--min),
+          ${this.position}% - var(--divider-width) / 2,
+          var(--max)
+        ),
+        calc(100% - var(--divider-width))
+      )
+    `,n="auto";return this.style||(this.style={}),this.primary==="end"?s&&this.orientation==="horizontal"?this.style[e]=`${t} var(--divider-width) ${n}`:this.style[e]=`${n} var(--divider-width) ${t}`:s&&this.orientation==="horizontal"?this.style[e]=`${n} var(--divider-width) ${t}`:this.style[e]=`${t} var(--divider-width) ${n}`,this.style[o]="",x`
+      <slot name="start" part="panel start" class="start"></slot>
+
+      <div
+        part="divider"
+        class="divider"
+        tabindex=${o2(this.disabled?0[0]:"0")}
+        role="separator"
+        aria-valuenow=${this.position}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label=${this.localize.term("resize")}
+        @keydown=${this.handleKeyDown}
+        @mousedown=${this.handleDrag}
+        @touchstart=${this.handleDrag}
+      >
+        <slot name="divider"></slot>
+      </div>
+
+      <slot name="end" part="panel end" class="end"></slot>
+    `}};WaSplitPanel.css=split_panel_styles_default,__decorateClass([e(".divider")],WaSplitPanel.prototype,"divider",2),__decorateClass([n({type:Number,reflect:!0})],WaSplitPanel.prototype,"position",2),__decorateClass([n({attribute:"position-in-pixels",type:Number})],WaSplitPanel.prototype,"positionInPixels",2),__decorateClass([n({reflect:!0})],WaSplitPanel.prototype,"orientation",2),__decorateClass([n({type:Boolean,reflect:!0})],WaSplitPanel.prototype,"disabled",2),__decorateClass([n()],WaSplitPanel.prototype,"primary",2),__decorateClass([n()],WaSplitPanel.prototype,"snap",2),__decorateClass([n({type:Number,attribute:"snap-threshold"})],WaSplitPanel.prototype,"snapThreshold",2),__decorateClass([watch("position")],WaSplitPanel.prototype,"handlePositionChange",1),__decorateClass([watch("positionInPixels")],WaSplitPanel.prototype,"handlePositionInPixelsChange",1),__decorateClass([watch("vertical")],WaSplitPanel.prototype,"handleVerticalChange",1),WaSplitPanel=__decorateClass([t("wa-split-panel")],WaSplitPanel);export{WaSplitPanel}

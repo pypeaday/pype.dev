@@ -1,0 +1,7 @@
+# Posts tagged: marriage
+
+All posts with the tag "marriage"
+
+- [Premarital Session 3 April 2026](/premarital-session-3-april-2026/) - 2026-02-26
+- [Premarital Session 2 - March 2026](/premarital-session-2-march-2026/) - 2026-02-26
+- [Premarital Session 1 - Feb 2026](/premarital-session-1-feb-2026/) - 2026-02-26

@@ -1,0 +1,7 @@
+# Posts tagged: politics
+
+All posts with the tag "politics"
+
+- [Facism and Heresy - Words Matter](/facism-and-heresy-words-matter/) - 2025-11-01
+- [Reflection - They Can Come For Anyone](/reflection-they-can-come-for-anyone/) - 2025-09-11
+- [💭 Notes – 06:11 Sun 22 Jun 2025 – David Bushell – Web Dev (UK)](/thoughts-719/) - 2025-06-25
