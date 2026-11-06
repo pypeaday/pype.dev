@@ -1,0 +1,545 @@
+// Berean Standard Bible (public domain) — vendored verses for the week-41 history dashboard
+const VERSES = {
+ "Acts 17:1-9": [
+  [
+   1,
+   "When they had passed through Amphipolis and Apollonia, they came to Thessalonica, where there was a Jewish synagogue."
+  ],
+  [
+   2,
+   "As was his custom, Paul went into the synagogue, and on three Sabbaths he reasoned with them from the Scriptures,"
+  ],
+  [
+   3,
+   "explaining and proving that the Christ had to suffer and rise from the dead. “This Jesus I am proclaiming to you is the Christ,” he declared."
+  ],
+  [
+   4,
+   "Some of the Jews were persuaded and joined Paul and Silas, along with a large number of God-fearing Greeks and quite a few leading women."
+  ],
+  [
+   5,
+   "The Jews, however, became jealous. So they brought in some troublemakers from the marketplace, formed a mob, and sent the city into an uproar. They raided Jason’s house in search of Paul and Silas, hoping to bring them out to the people."
+  ],
+  [
+   6,
+   "But when they could not find them, they dragged Jason and some other brothers before the city officials, shouting, “These men who have turned the world upside down have now come here,"
+  ],
+  [
+   7,
+   "and Jason has welcomed them into his home. They are all defying Caesar’s decrees, saying that there is another king, named Jesus!”"
+  ],
+  [
+   8,
+   "On hearing this, the crowd and city officials were greatly disturbed."
+  ],
+  [
+   9,
+   "And they collected bond from Jason and the others and then released them."
+  ]
+ ],
+ "Acts 18:1-3": [
+  [
+   1,
+   "After this, Paul left Athens and went to Corinth."
+  ],
+  [
+   2,
+   "There he found a Jew named Aquila, a native of Pontus, who had recently come from Italy with his wife Priscilla because Claudius had ordered all the Jews to leave Rome. Paul went to visit them,"
+  ],
+  [
+   3,
+   "and he stayed and worked with them because they were tentmakers by trade, just as he was."
+  ]
+ ],
+ "Acts 18:4-11": [
+  [
+   4,
+   "Every Sabbath he reasoned in the synagogue, trying to persuade Jews and Greeks alike."
+  ],
+  [
+   5,
+   "And when Silas and Timothy came down from Macedonia, Paul devoted himself fully to the word, testifying to the Jews that Jesus is the Christ."
+  ],
+  [
+   6,
+   "But when they opposed and insulted him, he shook out his garments and told them, “Your blood be on your own heads! I am innocent of it. From now on I will go to the Gentiles.”"
+  ],
+  [
+   7,
+   "So Paul left the synagogue and went next door to the house of Titus Justus, a worshiper of God."
+  ],
+  [
+   8,
+   "Crispus, the synagogue leader, and his whole household believed in the Lord. And many of the Corinthians who heard the message believed and were baptized."
+  ],
+  [
+   9,
+   "One night the Lord spoke to Paul in a vision: “Do not be afraid; keep on speaking; do not be silent."
+  ],
+  [
+   10,
+   "For I am with you and no one will lay a hand on you, because I have many people in this city.”"
+  ],
+  [
+   11,
+   "So Paul stayed for a year and a half, teaching the word of God among the Corinthians."
+  ]
+ ],
+ "Acts 18:12-17": [
+  [
+   12,
+   "While Gallio was proconsul of Achaia, the Jews coordinated an attack on Paul and brought him before the judgment seat."
+  ],
+  [
+   13,
+   "“This man is persuading the people to worship God in ways contrary to the law,” they said."
+  ],
+  [
+   14,
+   "But just as Paul was about to speak, Gallio told the Jews, “If this matter involved a wrongdoing or vicious crime, O Jews, it would be reasonable for me to hear your complaint."
+  ],
+  [
+   15,
+   "But since it is a dispute about words and names and your own law, settle it yourselves. I refuse to be a judge of such things.”"
+  ],
+  [
+   16,
+   "And he drove them away from the judgment seat."
+  ],
+  [
+   17,
+   "At this, the crowd seized Sosthenes the synagogue leader and beat him in front of the judgment seat. But none of this was of concern to Gallio."
+  ]
+ ],
+ "Acts 18:18-22": [
+  [
+   18,
+   "Paul remained in Corinth for quite some time before saying goodbye to the brothers. He had his head shaved in Cenchrea to keep a vow he had made, and then he sailed for Syria, accompanied by Priscilla and Aquila."
+  ],
+  [
+   19,
+   "When they reached Ephesus, Paul left Priscilla and Aquila. He himself went into the synagogue there and reasoned with the Jews."
+  ],
+  [
+   20,
+   "When they asked him to stay for a while longer, he declined."
+  ],
+  [
+   21,
+   "But as he left, he said, “I will come back to you if God is willing.” And he set sail from Ephesus."
+  ],
+  [
+   22,
+   "When Paul had landed at Caesarea, he went up and greeted the church at Jerusalem. Then he went down to Antioch."
+  ]
+ ],
+ "Acts 18:24-28": [
+  [
+   24,
+   "Meanwhile a Jew named Apollos, a native of Alexandria, came to Ephesus. He was an eloquent man, well versed in the Scriptures."
+  ],
+  [
+   25,
+   "He had been instructed in the way of the Lord and was fervent in spirit. He spoke and taught accurately about Jesus, though he knew only the baptism of John."
+  ],
+  [
+   26,
+   "And he began to speak boldly in the synagogue. When Priscilla and Aquila heard him, they took him aside and explained to him the way of God more accurately."
+  ],
+  [
+   27,
+   "When Apollos resolved to cross over to Achaia, the brothers encouraged him and wrote to the disciples there to welcome him. On his arrival, he was a great help to those who by grace had believed."
+  ],
+  [
+   28,
+   "For he powerfully refuted the Jews in public debate, proving from the Scriptures that Jesus is the Christ."
+  ]
+ ],
+ "Acts 19:8-10": [
+  [
+   8,
+   "Then Paul went into the synagogue and spoke boldly there for three months, arguing persuasively about the kingdom of God."
+  ],
+  [
+   9,
+   "But when some of them stubbornly refused to believe and publicly maligned the Way, Paul took his disciples and left the synagogue to conduct daily discussions in the lecture hall of Tyrannus."
+  ],
+  [
+   10,
+   "This continued for two years, so that everyone who lived in the province of Asia, Jews and Greeks alike, heard the word of the Lord."
+  ]
+ ],
+ "Acts 19:23-27": [
+  [
+   23,
+   "About that time there arose a great disturbance about the Way."
+  ],
+  [
+   24,
+   "It began with a silversmith named Demetrius who made silver shrines of Artemis, bringing much business to the craftsmen."
+  ],
+  [
+   25,
+   "Demetrius assembled the craftsmen, along with the workmen in related trades. “Men,” he said, “you know that this business is our source of prosperity."
+  ],
+  [
+   26,
+   "And you can see and hear that not only in Ephesus, but in nearly the whole province of Asia, this Paul has persuaded a great number of people to turn away. He says that man-made gods are no gods at all."
+  ],
+  [
+   27,
+   "There is danger not only that our business will fall into disrepute, but also that the temple of the great goddess Artemis will be discredited and her majesty deposed—she who is worshiped by all the province of Asia and the whole world.”"
+  ]
+ ],
+ "Acts 20:2-3": [
+  [
+   2,
+   "After traveling through that area and speaking many words of encouragement, he arrived in Greece,"
+  ],
+  [
+   3,
+   "where he stayed three months. And when the Jews formed a plot against him as he was about to sail for Syria, he decided to go back through Macedonia."
+  ]
+ ],
+ "1 Cor 1:10-12": [
+  [
+   10,
+   "I appeal to you, brothers, in the name of our Lord Jesus Christ, that all of you agree together, so that there may be no divisions among you and that you may be united in mind and conviction."
+  ],
+  [
+   11,
+   "My brothers, some from Chloe’s household have informed me that there are quarrels among you."
+  ],
+  [
+   12,
+   "What I mean is this: Individuals among you are saying, “I follow Paul,” “I follow Apollos,” “I follow Cephas,” or “I follow Christ.”"
+  ]
+ ],
+ "1 Cor 1:18-25": [
+  [
+   18,
+   "For the message of the cross is foolishness to those who are perishing, but to us who are being saved it is the power of God."
+  ],
+  [
+   19,
+   "For it is written: “I will destroy the wisdom of the wise; the intelligence of the intelligent I will frustrate.”"
+  ],
+  [
+   20,
+   "Where is the wise man? Where is the scribe? Where is the philosopher of this age? Has not God made foolish the wisdom of the world?"
+  ],
+  [
+   21,
+   "For since in the wisdom of God the world through its wisdom did not know Him, God was pleased through the foolishness of what was preached to save those who believe."
+  ],
+  [
+   22,
+   "Jews demand signs and Greeks search for wisdom,"
+  ],
+  [
+   23,
+   "but we preach Christ crucified, a stumbling block to Jews and foolishness to Gentiles,"
+  ],
+  [
+   24,
+   "but to those who are called, both Jews and Greeks, Christ the power of God and the wisdom of God."
+  ],
+  [
+   25,
+   "For the foolishness of God is wiser than man’s wisdom, and the weakness of God is stronger than man’s strength."
+  ]
+ ],
+ "1 Cor 1:26-28": [
+  [
+   26,
+   "Brothers, consider the time of your calling: Not many of you were wise by human standards; not many were powerful; not many were of noble birth."
+  ],
+  [
+   27,
+   "But God chose the foolish things of the world to shame the wise; God chose the weak things of the world to shame the strong."
+  ],
+  [
+   28,
+   "He chose the lowly and despised things of the world, and the things that are not, to nullify the things that are,"
+  ]
+ ],
+ "1 Cor 2:1-5": [
+  [
+   1,
+   "When I came to you, brothers, I did not come with eloquence or wisdom as I proclaimed to you the testimony about God."
+  ],
+  [
+   2,
+   "For I resolved to know nothing while I was with you except Jesus Christ and Him crucified."
+  ],
+  [
+   3,
+   "I came to you in weakness and fear, and with much trembling."
+  ],
+  [
+   4,
+   "My message and my preaching were not with persuasive words of wisdom, but with a demonstration of the Spirit’s power,"
+  ],
+  [
+   5,
+   "so that your faith would not rest on men’s wisdom, but on God’s power."
+  ]
+ ],
+ "1 Cor 2:14-16": [
+  [
+   14,
+   "The natural man does not accept the things that come from the Spirit of God. For they are foolishness to him, and he cannot understand them, because they are spiritually discerned."
+  ],
+  [
+   15,
+   "The spiritual man judges all things, but he himself is not subject to anyone’s judgment."
+  ],
+  [
+   16,
+   "“For who has known the mind of the Lord, so as to instruct Him?” But we have the mind of Christ."
+  ]
+ ],
+ "1 Cor 3:5-9": [
+  [
+   5,
+   "What then is Apollos? And what is Paul? They are servants through whom you believed, as the Lord has assigned to each his role."
+  ],
+  [
+   6,
+   "I planted the seed and Apollos watered it, but God made it grow."
+  ],
+  [
+   7,
+   "So neither he who plants nor he who waters is anything, but only God, who makes things grow."
+  ],
+  [
+   8,
+   "He who plants and he who waters are one in purpose, and each will be rewarded according to his own labor."
+  ],
+  [
+   9,
+   "For we are God’s fellow workers; you are God’s field, God’s building."
+  ]
+ ],
+ "1 Cor 4:9-13": [
+  [
+   9,
+   "For it seems to me that God has displayed us apostles at the end of the procession, like prisoners appointed for death. We have become a spectacle to the whole world, to angels as well as to men."
+  ],
+  [
+   10,
+   "We are fools for Christ, but you are wise in Christ. We are weak, but you are strong. You are honored, but we are dishonored."
+  ],
+  [
+   11,
+   "To this very hour we are hungry and thirsty, we are poorly clothed, we are brutally treated, we are homeless."
+  ],
+  [
+   12,
+   "We work hard with our own hands. When we are vilified, we bless; when we are persecuted, we endure it;"
+  ],
+  [
+   13,
+   "when we are slandered, we answer gently. Up to this moment we have become the scum of the earth, the refuse of the world."
+  ]
+ ],
+ "1 Cor 5:9-11": [
+  [
+   9,
+   "I wrote you in my letter not to associate with sexually immoral people."
+  ],
+  [
+   10,
+   "I was not including the sexually immoral of this world, or the greedy and swindlers, or idolaters. In that case you would have to leave this world."
+  ],
+  [
+   11,
+   "But now I am writing you not to associate with anyone who claims to be a brother but is sexually immoral or greedy, an idolater or a verbal abuser, a drunkard or a swindler. With such a man do not even eat."
+  ]
+ ],
+ "1 Cor 7:1": [
+  [
+   1,
+   "Now for the matters you wrote about: It is good to abstain from sexual relations."
+  ]
+ ],
+ "1 Cor 16:8-9": [
+  [
+   8,
+   "But I will stay in Ephesus until Pentecost,"
+  ],
+  [
+   9,
+   "because a great door for effective work has opened to me, even though many oppose me."
+  ]
+ ],
+ "1 Cor 16:17-18": [
+  [
+   17,
+   "I am glad that Stephanas, Fortunatus, and Achaicus have arrived, because they have supplied what was lacking from you."
+  ],
+  [
+   18,
+   "For they refreshed my spirit and yours as well. Show your appreciation, therefore, to such men."
+  ]
+ ],
+ "1 Thess 3:1-6": [
+  [
+   1,
+   "So when we could bear it no longer, we were willing to be left on our own in Athens."
+  ],
+  [
+   2,
+   "We sent Timothy, our brother and fellow worker for God in the gospel of Christ, to strengthen and encourage you in your faith,"
+  ],
+  [
+   3,
+   "so that none of you would be shaken by these trials. For you know that we are destined for this."
+  ],
+  [
+   4,
+   "Indeed, when we were with you, we kept warning you that we would suffer persecution; and as you know, it has come to pass."
+  ],
+  [
+   5,
+   "For this reason, when I could bear it no longer, I sent to find out about your faith, for fear that the tempter had somehow tempted you and that our labor might have been in vain."
+  ],
+  [
+   6,
+   "But just now, Timothy has returned from his visit with the good news about your faith, your love, and the fond memories you have preserved, longing to see us just as we long to see you."
+  ]
+ ],
+ "1 Thess 4:13-18": [
+  [
+   13,
+   "Brothers, we do not want you to be uninformed about those who sleep in death, so that you will not grieve like the rest, who are without hope."
+  ],
+  [
+   14,
+   "For since we believe that Jesus died and rose again, we also believe that God will bring with Jesus those who have fallen asleep in Him."
+  ],
+  [
+   15,
+   "By the word of the Lord, we declare to you that we who are alive and remain until the coming of the Lord will by no means precede those who have fallen asleep."
+  ],
+  [
+   16,
+   "For the Lord Himself will descend from heaven with a loud command, with the voice of an archangel, and with the trumpet of God, and the dead in Christ will be the first to rise."
+  ],
+  [
+   17,
+   "After that, we who are alive and remain will be caught up together with them in the clouds to meet the Lord in the air. And so we will always be with the Lord."
+  ],
+  [
+   18,
+   "Therefore encourage one another with these words."
+  ]
+ ],
+ "2 Thess 2:1-12": [
+  [
+   1,
+   "Now concerning the coming of our Lord Jesus Christ and our being gathered together to Him, we ask you, brothers,"
+  ],
+  [
+   2,
+   "not to be easily disconcerted or alarmed by any spirit or message or letter seeming to be from us, alleging that the Day of the Lord has already come."
+  ],
+  [
+   3,
+   "Let no one deceive you in any way, for it will not come until the rebellion occurs and the man of lawlessness—the son of destruction—is revealed."
+  ],
+  [
+   4,
+   "He will oppose and exalt himself above every so-called god or object of worship. So he will seat himself in the temple of God, proclaiming himself to be God."
+  ],
+  [
+   5,
+   "Do you not remember that I told you these things while I was still with you?"
+  ],
+  [
+   6,
+   "And you know what is now restraining him, so that he may be revealed at the proper time."
+  ],
+  [
+   7,
+   "For the mystery of lawlessness is already at work, but the one who now restrains it will continue until he is taken out of the way."
+  ],
+  [
+   8,
+   "And then the lawless one will be revealed, whom the Lord Jesus will slay with the breath of His mouth and annihilate by the majesty of His arrival."
+  ],
+  [
+   9,
+   "The coming of the lawless one will be accompanied by the working of Satan, with every kind of power, sign, and false wonder,"
+  ],
+  [
+   10,
+   "and with every wicked deception directed against those who are perishing, because they refused the love of the truth that would have saved them."
+  ],
+  [
+   11,
+   "For this reason God will send them a powerful delusion so that they believe the lie,"
+  ],
+  [
+   12,
+   "in order that judgment may come upon all who have disbelieved the truth and delighted in wickedness."
+  ]
+ ],
+ "2 Thess 3:6-12": [
+  [
+   6,
+   "Now we command you, brothers, in the name of our Lord Jesus Christ, to keep away from any brother who leads an undisciplined life that is not in keeping with the tradition you received from us."
+  ],
+  [
+   7,
+   "For you yourselves know how you ought to imitate us, because we were not undisciplined among you,"
+  ],
+  [
+   8,
+   "nor did we eat anyone’s food without paying for it. Instead, in labor and toil, we worked night and day so that we would not be a burden to any of you."
+  ],
+  [
+   9,
+   "Not that we lack this right, but we wanted to offer ourselves as an example for you to imitate."
+  ],
+  [
+   10,
+   "For even while we were with you, we gave you this command: “If anyone is unwilling to work, he shall not eat.”"
+  ],
+  [
+   11,
+   "For we hear that some of you are leading undisciplined lives, accomplishing nothing, but being busybodies."
+  ],
+  [
+   12,
+   "We command and urge such people by our Lord Jesus Christ to begin working quietly to earn their own living."
+  ]
+ ],
+ "2 Cor 2:3-4": [
+  [
+   3,
+   "I wrote as I did so that on my arrival I would not be grieved by those who ought to make me rejoice. I had confidence in all of you, that you would share my joy."
+  ],
+  [
+   4,
+   "For through many tears I wrote you out of great distress and anguish of heart, not to grieve you but to let you know how much I love you."
+  ]
+ ],
+ "2 Cor 7:8-9": [
+  [
+   8,
+   "Even if I caused you sorrow by my letter, I do not regret it. Although I did regret it—for I see that my letter caused you sorrow, but only for a short time—"
+  ],
+  [
+   9,
+   "yet now I rejoice, not because you were made sorrowful, but because your sorrow led you to repentance. For you felt the sorrow that God had intended, and so were not harmed in any way by us."
+  ]
+ ],
+ "Rom 16:23": [
+  [
+   23,
+   "Gaius, who has hosted me and all the church, sends you greetings. Erastus, the city treasurer, sends you greetings, as does our brother Quartus."
+  ]
+ ]
+};

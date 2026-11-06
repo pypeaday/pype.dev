@@ -1,0 +1,126 @@
+---
+name: markata-go-site
+description: Help agents work effectively in markata-go site repositories. Use this whenever the user is working on a markata-go site or asks about site config, frontmatter or content authoring, templates or layouts, themes or palettes, Web Awesome component setup, analytics or stats pages, chartjs or contribution graphs, build or deploy debugging, performance tuning, or deciding whether a change belongs in config, content, templates, CSS, feeds, or plugins. Use it proactively for tasks like creating an `analytics.md` page, exposing reading time or word count in templates, wiring Web Awesome components into content and templates, or helping an author turn site metrics into a publishable story.
+---
+
+This skill helps an agent work inside a markata-go site repository without needing the markata-go source tree.
+
+It is written to be useful in a standalone site repo where only the generated project files, templates, and config are available.
+
+## Start Here
+
+Before making changes:
+- locate the active config file, usually `markata-go.toml`
+- inspect the site's content directories such as `posts/`, `pages/`, `docs/`, and `static/`
+- inspect `templates/` and `palettes/` before inventing new structure
+- inspect existing `wa-*` usage, `webawesome` config, and template asset guards before adding component code or new includes
+- inspect existing analytics pages, metrics partials, and chart code blocks before inventing a new data story pattern
+- prefer current command output and files over older examples or assumptions
+- when the site is minimal or brand new, use the topic files in this skill as the default markata-go playbook
+
+## Core Workflow
+
+1. Inspect the site config with `markata-go config show` and `markata-go config get <key>`.
+2. Inspect content with `markata-go list posts`, `markata-go list feeds`, and `markata-go list tags`.
+3. Search for content by keyword with `markata-go search <query>`.
+4. Use `markata-go explain content` for the agent content workflow, or `markata-go explain <topic>` for other built-in CLI context.
+5. For Markdown wikilink IDE features, run `markata-go lsp doctor` (it can load editor startup/plugin code); use `--no-verify-editor` to skip that check. Use `markata-go lsp setup` to print snippets for installed editors, then inspect existing editor configuration before changing it.
+6. Use `markata-go build --fast` or `markata-go serve --fast` while iterating; use `markata-go serve --incremental` when you need production-style output processing.
+7. Only reach for Go plugin work after checking whether the change belongs in config, frontmatter, templates, CSS, or feeds.
+
+## Local Problems and safe fixes
+
+When debugging content in a running local site, use `markata-go serve` and open
+the local Control Center at `/_markata/`. Review each proposed source edit
+before applying it. `SAFE` plans are deterministic and support grouped review;
+`REVIEW` plans need closer inspection; diagnostics without a plan need manual
+editing. Markata checks a source digest when applying a preview and skips files
+that changed afterward. Ambiguous dates and duplicate frontmatter keys require
+manual decisions. Production Builder Admin does not provide local source-edit
+capabilities.
+
+## Topic Files
+
+Read only the topic files relevant to the task:
+- `topics/configuration.md`
+- `topics/writing-frontmatter.md`
+- `topics/cli-usage.md`
+- `topics/build-deployment.md`
+- `topics/faster-builds.md`
+- `topics/theme-creation.md`
+- `topics/template-management.md`
+- `topics/analytics-storytelling.md`
+- `topics/plugin-creation.md`
+
+## Reference Files
+
+Use these when you need exact shapes instead of narrative guidance:
+
+- `reference/template-context.md`
+- `reference/feed-patterns.md`
+- `reference/palette-reference.md`
+- `reference/webawesome.md`
+
+## Example Files
+
+Use these as starter material for first sites or when a repo has no local examples yet:
+
+- `examples/fast.toml`
+- `examples/markata-go.local.toml`
+- `examples/palettes/my-brand.toml`
+- `examples/templates/base.html`
+- `examples/templates/post.html`
+- `examples/templates/feed.html`
+
+## Eval Files
+
+Use these only when reviewing or improving the bundled skill itself:
+
+- `evals/evals.json`
+
+## First-Site Defaults
+
+If the repository is a very small or first-time site and does not yet have clear patterns:
+
+- use `markata-go.toml` as the main config file
+- assume `templates/` is the project override directory
+- assume `static/` is the static asset directory
+- assume individual content items are Markdown files with YAML frontmatter
+- use `post.html` for single-post templates and `feed.html` for listing pages
+- prefer palette and CSS overrides before deeper template rewrites
+- prefer `markata-go new` for creating new content so starter frontmatter matches current CLI behavior
+
+## Recommended Reading Order
+
+- Template work: `topics/template-management.md`
+- Theme or styling work: `topics/theme-creation.md`
+- Content creation: `topics/writing-frontmatter.md`
+- Analytics pages or metrics storytelling: `topics/analytics-storytelling.md`
+- Config debugging: `topics/configuration.md`
+- Build and CI work: `topics/build-deployment.md`
+- Performance work: `topics/faster-builds.md`
+- Extension work: `topics/plugin-creation.md`
+
+## Working Rules
+
+- Prefer the smallest correct change.
+- Preserve the site's existing layout, content model, and template style unless the task explicitly changes them.
+- When something is ambiguous, inspect the actual repo files before changing behavior.
+- Prefer CLI inspection over hand-parsing when `markata-go` already exposes the needed data.
+- When working outside the site repository, select it with `markata-go --site-dir <path> ...`; list and search then return absolute Markdown paths that can be edited directly.
+- If the task is performance-related, compare warm builds before claiming a regression or improvement.
+- For analytics storytelling work, separate computed facts from human narrative: agents should gather metrics, scaffold charts, and suggest story angles, while leaving first-person timeline details for the author unless the user asks for full prose.
+- If the site has no existing conventions yet, use the patterns documented in this skill rather than making up a new structure.
+
+## Common Repo Areas
+
+- `markata-go.toml`: main site configuration
+- `posts/`, `pages/`, `docs/`: markdown content
+- `templates/`: site template overrides
+- `palettes/`: site-local palettes
+- `static/`: copied static assets
+- `.markata-cache/`: build cache and timing context
+
+## Escalation Rule
+
+If the task cannot be done with frontmatter, config, templates, CSS, feeds, or existing commands, then read `topics/plugin-creation.md` and decide whether the work belongs in a custom plugin or in `markata-go` itself.

@@ -1,0 +1,14 @@
+---
+date: 2022-05-19 06:43:32
+templateKey: til
+title: See git history about one file
+published: False
+tags:
+  - cli
+  - vim
+  - git
+  - til
+cover: "https://raw.githubusercontent.com/pypeaday/images.pype.dev/main/blog-media/20261011090719_7a7b313d.png"
+---
+
+In vim `G clog %` does a `git clog {current file}`. You get every commit that the target file is apart of (so there might be info in those commits unrelated)
