@@ -1,0 +1,253 @@
+[markata-go]
+url = "https://pype.dev"
+title = "My mental data-lake"
+description = "My thoughts and streams of consciousness organized into barely coherent posts about things"
+rss_description = "Nic's blog"
+author = "Nic Payne"
+author_email = "nic@pype.dev"
+lang = "en"
+icon = "favicon.ico"
+output_dir = "markout-go"
+assets_dir = "static"
+# isolated from ./templates (python-markata-era jinja that fails under pongo2)
+templates_dir = "templates-go"
+theme_color = "#322D39"
+background_color = "#B73CF6"
+start_url = "/"
+display = "minimal-ui"
+short_name = "np"
+repo_url = "https://github.com/pypeaday/pype.dev"
+repo_branch = "main"
+twitter_card = "summary_large_image"
+twitter_handle = "@pypeaday"
+twitter_site = "@pypeaday"
+site_version = 13
+license = false
+
+# og:image fallback after social_image > image > cover (cover support: fork v0.13.0-pype.4)
+[markata-go.seo]
+twitter_handle = "pypeaday"
+default_image = "https://raw.githubusercontent.com/pypeaday/pype.dev/main/pages/media/og-02.png"
+
+[markata-go.theme]
+palette = "pype"
+fontpack = "plain"
+custom_css = "pype.css"
+
+# one skin, no visitor palette picker (a stale choice renders the site as a
+# different palette — this is how the "olive tint" happened)
+[markata-go.theme.switcher]
+enabled = false
+
+[markata-go.authors]
+
+[markata-go.authors.authors.nic]
+name = "Nic Payne"
+role = "author"
+url = "https://pype.dev"
+active = true
+default = true
+
+[markata-go.authors.authors.devin]
+name = "Devin (SWE-2 Max)"
+role = "pair programmer"
+url = "https://devin.ai"
+active = true
+
+[markata-go.glob]
+patterns = ["pages/**/*.md"]
+use_gitignore = true
+
+# `markata-go new -t daily "2026-10-06 Notes"` → pages/daily/2026-10-06-notes.md
+[content_templates.placement]
+daily = "pages/daily"
+
+[[content_templates.templates]]
+name = "daily"
+directory = "pages/daily"
+body = "yesterday:\n\n## Focus\n\n- [ ]\n\n## Notes\n\n-\n\n## Wins\n"
+
+[content_templates.templates.frontmatter]
+templateKey = "dailyNote"
+published = true
+tags = ["daily-note"]
+
+# relax the default 14-char policy to match the existing site's password
+[markata-go.encryption]
+enforce_strength = false
+min_password_length = 4
+
+# posts tagged or templated as protected-post encrypt with the default key
+# (MARKATA_GO_ENCRYPTION_DEFAULT_KEY env var at build time)
+[markata-go.encryption.private_tags]
+protected-post = "default"
+
+# uniform feed cards: every template type gets the article treatment
+# (cover, title, short excerpt, meta, tags) instead of content dumps
+[markata-go.components.card_router.mappings]
+note = "article"
+dailyNote = "article"
+thoughts = "article"
+til = "article"
+glossary = "article"
+project = "article"
+slashPage = "article"
+jira = "article"
+protected-post = "article"
+
+[[markata-go.nav]]
+label = "Home"
+url = "/"
+
+[[markata-go.nav]]
+label = "Start Here"
+url = "/slash"
+
+[[markata-go.nav]]
+label = "My Thoughts"
+url = "/my-thoughts"
+
+[[markata-go.nav]]
+label = "GitHub"
+url = "https://github.com/pypeaday/pype.dev"
+
+[[markata-go.nav]]
+label = "DigitalHarbor"
+url = "https://mydigitalharbor.com/pypeaday"
+
+[[markata-go.feeds]]
+slug = "drafts"
+title = "drafts"
+filter = "published == False"
+sort = "date"
+reverse = true
+page_size = 10
+# archive/feed.json embeds every draft (~29MB) — over Pages' 25MiB file limit
+archive_disabled = true
+
+[[markata-go.feeds]]
+slug = "stable-diffusion"
+title = "Stable Diffusion"
+filter = "'stable-diffusion' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "journal"
+title = "Daily notes"
+filter = "'daily-note' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "all"
+title = "An aggregated feed of all of my posts"
+filter = "published == True"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "slash"
+title = "Slash pages"
+filter = "'slash' in tags and published == True"
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "my-thoughts"
+title = "Thoughts"
+filter = "'thoughts' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "tech"
+title = "Thoughts on tech"
+filter = "'tech' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "linux"
+title = "My thoughts on the pang-wang"
+filter = "'linux' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "reflections"
+title = "My reflections"
+filter = "'reflection' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "faith"
+title = "Things related to faith"
+filter = "'faith' in tags and published == True"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "bible-project"
+title = "Notes from The Bible Project"
+filter = "'bible-project' in tags"
+sort = "date"
+reverse = true
+page_size = 10
+
+[[markata-go.feeds]]
+slug = "til"
+title = "Quick tips and learnings"
+filter = "'til' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "cooking"
+title = "Bonus cooking thoughts"
+filter = "'cooking' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "homelab"
+title = "Series of posts about my homelab"
+filter = "'homelab' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "advent"
+title = "Series of posts for the Advent season"
+filter = "'advent' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "series-homelab"
+title = "A series about how I got into homelabbing and what my current setup is"
+filter = "'series-homelab' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "series-if-you-want-it-make-it-so"
+title = "A series about how the phrase 'in math if you want it you assume it' affects other parts of my life"
+filter = "'series-if-you-want-it-make-it-so' in tags"
+sort = "date"
+reverse = true
+
+[[markata-go.feeds]]
+slug = "os-runescape"
+title = "A series about diving back into Old School Runescape"
+filter = "'runescape' in tags"
+sort = "date"
+reverse = true

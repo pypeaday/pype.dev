@@ -1,0 +1,627 @@
+// Berean Standard Bible (public domain) — vendored verses for the week-43 history dashboard
+const VERSES = {
+ "1 Cor 15:3-8": [
+  [
+   3,
+   "For what I received I passed on to you as of first importance: that Christ died for our sins according to the Scriptures,"
+  ],
+  [
+   4,
+   "that He was buried, that He was raised on the third day according to the Scriptures,"
+  ],
+  [
+   5,
+   "and that He appeared to Cephas and then to the Twelve."
+  ],
+  [
+   6,
+   "After that, He appeared to more than five hundred brothers at once, most of whom are still living, though some have fallen asleep."
+  ],
+  [
+   7,
+   "Then He appeared to James, then to all the apostles."
+  ],
+  [
+   8,
+   "And last of all He appeared to me also, as to one of untimely birth."
+  ]
+ ],
+ "1 Cor 15:20-22": [
+  [
+   20,
+   "But Christ has indeed been raised from the dead, the firstfruits of those who have fallen asleep."
+  ],
+  [
+   21,
+   "For since death came through a man, the resurrection of the dead comes also through a man."
+  ],
+  [
+   22,
+   "For as in Adam all die, so in Christ all will be made alive."
+  ]
+ ],
+ "1 Cor 15:29": [
+  [
+   29,
+   "If these things are not so, what will those do who are baptized for the dead? If the dead are not raised at all, why are people baptized for them?"
+  ]
+ ],
+ "1 Cor 15:42-44": [
+  [
+   42,
+   "So will it be with the resurrection of the dead: What is sown is perishable; it is raised imperishable."
+  ],
+  [
+   43,
+   "It is sown in dishonor; it is raised in glory. It is sown in weakness; it is raised in power."
+  ],
+  [
+   44,
+   "It is sown a natural body; it is raised a spiritual body. If there is a natural body, there is also a spiritual body."
+  ]
+ ],
+ "1 Cor 15:51-57": [
+  [
+   51,
+   "Listen, I tell you a mystery: We will not all sleep, but we will all be changed—"
+  ],
+  [
+   52,
+   "in an instant, in the twinkling of an eye, at the last trumpet. For the trumpet will sound, the dead will be raised imperishable, and we will be changed."
+  ],
+  [
+   53,
+   "For the perishable must be clothed with the imperishable, and the mortal with immortality."
+  ],
+  [
+   54,
+   "When the perishable has been clothed with the imperishable and the mortal with immortality, then the saying that is written will come to pass: “Death has been swallowed up in victory.”"
+  ],
+  [
+   55,
+   "“Where, O Death, is your victory? Where, O Death, is your sting?”"
+  ],
+  [
+   56,
+   "The sting of death is sin, and the power of sin is the law."
+  ],
+  [
+   57,
+   "But thanks be to God, who gives us the victory through our Lord Jesus Christ!"
+  ]
+ ],
+ "1 Cor 16:1-4": [
+  [
+   1,
+   "Now about the collection for the saints, you are to do as I directed the churches of Galatia:"
+  ],
+  [
+   2,
+   "On the first day of every week, each of you should set aside a portion of his income, saving it up, so that when I come no collections will be needed."
+  ],
+  [
+   3,
+   "Then, on my arrival, I will send letters with those you recommend to carry your gift to Jerusalem."
+  ],
+  [
+   4,
+   "And if it is advisable for me to go also, they can travel with me."
+  ]
+ ],
+ "1 Cor 16:19": [
+  [
+   19,
+   "The churches in the province of Asia send you greetings. Aquila and Prisca greet you warmly in the Lord, and so does the church that meets at their house."
+  ]
+ ],
+ "2 Cor 1:8-10": [
+  [
+   8,
+   "We do not want you to be unaware, brothers, of the hardships we encountered in the province of Asia. We were under a burden far beyond our ability to endure, so that we despaired even of life."
+  ],
+  [
+   9,
+   "Indeed, we felt we were under the sentence of death, in order that we would not trust in ourselves, but in God, who raises the dead."
+  ],
+  [
+   10,
+   "He has delivered us from such a deadly peril, and He will deliver us. In Him we have placed our hope that He will yet again deliver us,"
+  ]
+ ],
+ "2 Cor 1:15-17": [
+  [
+   15,
+   "Confident of this, I planned to visit you first, so that you might receive a double blessing."
+  ],
+  [
+   16,
+   "I wanted to visit you on my way to Macedonia, and to return to you from Macedonia, and then to have you help me on my way to Judea."
+  ],
+  [
+   17,
+   "When I planned this, did I do it carelessly? Or do I make my plans by human standards, so as to say “Yes, yes” and also “No, no”?"
+  ]
+ ],
+ "2 Cor 1:23-24": [
+  [
+   23,
+   "I call God as my witness that it was in order to spare you that I did not return to Corinth."
+  ],
+  [
+   24,
+   "Not that we lord it over your faith, but we are fellow workers with you for your joy, because it is by faith that you stand firm."
+  ]
+ ],
+ "2 Cor 2:1-4": [
+  [
+   1,
+   "So I made up my mind not to make another painful visit to you."
+  ],
+  [
+   2,
+   "For if I grieve you, who is left to cheer me but those whom I have grieved?"
+  ],
+  [
+   3,
+   "I wrote as I did so that on my arrival I would not be grieved by those who ought to make me rejoice. I had confidence in all of you, that you would share my joy."
+  ],
+  [
+   4,
+   "For through many tears I wrote you out of great distress and anguish of heart, not to grieve you but to let you know how much I love you."
+  ]
+ ],
+ "2 Cor 2:5-8": [
+  [
+   5,
+   "Now if anyone has caused grief, he has not grieved me but all of you—to some degree, not to overstate it."
+  ],
+  [
+   6,
+   "The punishment imposed on him by the majority is sufficient for him."
+  ],
+  [
+   7,
+   "So instead, you ought to forgive and comfort him, so that he will not be overwhelmed by excessive sorrow."
+  ],
+  [
+   8,
+   "Therefore I urge you to reaffirm your love for him."
+  ]
+ ],
+ "2 Cor 2:9-11": [
+  [
+   9,
+   "My purpose in writing you was to see if you would stand the test and be obedient in everything."
+  ],
+  [
+   10,
+   "If you forgive anyone, I also forgive him. And if I have forgiven anything, I have forgiven it in the presence of Christ for your sake,"
+  ],
+  [
+   11,
+   "in order that Satan should not outwit us. For we are not unaware of his schemes."
+  ]
+ ],
+ "2 Cor 2:12-13": [
+  [
+   12,
+   "Now when I went to Troas to preach the gospel of Christ and a door stood open for me in the Lord,"
+  ],
+  [
+   13,
+   "I had no peace in my spirit, because I did not find my brother Titus there. So I said goodbye to them and went on to Macedonia."
+  ]
+ ],
+ "2 Cor 2:14-17": [
+  [
+   14,
+   "But thanks be to God, who always leads us triumphantly as captives in Christ and through us spreads everywhere the fragrance of the knowledge of Him."
+  ],
+  [
+   15,
+   "For we are to God the sweet aroma of Christ among those who are being saved and those who are perishing."
+  ],
+  [
+   16,
+   "To the one we are an odor that brings death, to the other a fragrance that brings life. And who is qualified for such a task?"
+  ],
+  [
+   17,
+   "For we are not like so many others, who peddle the word of God for profit. On the contrary, in Christ we speak before God with sincerity, as men sent from God."
+  ]
+ ],
+ "2 Cor 3:1-3": [
+  [
+   1,
+   "Are we beginning to commend ourselves again? Or do we need, like some people, letters of recommendation to you or from you?"
+  ],
+  [
+   2,
+   "You yourselves are our letter, inscribed on our hearts, known and read by everyone."
+  ],
+  [
+   3,
+   "It is clear that you are a letter from Christ, the result of our ministry, written not with ink but with the Spirit of the living God, not on tablets of stone but on tablets of human hearts."
+  ]
+ ],
+ "2 Cor 3:6-8": [
+  [
+   6,
+   "And He has qualified us as ministers of a new covenant, not of the letter but of the Spirit; for the letter kills, but the Spirit gives life."
+  ],
+  [
+   7,
+   "Now if the ministry of death, which was engraved in letters on stone, came with such glory that the Israelites could not gaze at the face of Moses because of its fleeting glory,"
+  ],
+  [
+   8,
+   "will not the ministry of the Spirit be even more glorious?"
+  ]
+ ],
+ "2 Cor 3:12-18": [
+  [
+   12,
+   "Therefore, since we have such a hope, we are very bold."
+  ],
+  [
+   13,
+   "We are not like Moses, who would put a veil over his face to keep the Israelites from gazing at the end of what was fading away."
+  ],
+  [
+   14,
+   "But their minds were closed. For to this day the same veil remains at the reading of the old covenant. It has not been lifted, because only in Christ can it be removed."
+  ],
+  [
+   15,
+   "And even to this day when Moses is read, a veil covers their hearts."
+  ],
+  [
+   16,
+   "But whenever anyone turns to the Lord, the veil is taken away."
+  ],
+  [
+   17,
+   "Now the Lord is the Spirit, and where the Spirit of the Lord is, there is freedom."
+  ],
+  [
+   18,
+   "And we, who with unveiled faces all reflect the glory of the Lord, are being transformed into His image with intensifying glory, which comes from the Lord, who is the Spirit."
+  ]
+ ],
+ "Ex 34:29-35": [
+  [
+   29,
+   "And when Moses came down from Mount Sinai with the two tablets of the Testimony in his hands, he was unaware that his face had become radiant from speaking with the LORD."
+  ],
+  [
+   30,
+   "Aaron and all the Israelites looked at Moses, and behold, his face was radiant. And they were afraid to approach him."
+  ],
+  [
+   31,
+   "But Moses called out to them; so Aaron and all the leaders of the congregation returned to him, and Moses spoke to them."
+  ],
+  [
+   32,
+   "And after this all the Israelites came near, and Moses commanded them to do everything that the LORD had told him on Mount Sinai."
+  ],
+  [
+   33,
+   "When Moses had finished speaking with them, he put a veil over his face."
+  ],
+  [
+   34,
+   "But whenever Moses went in before the LORD to speak with Him, he would remove the veil until he came out. And when he came out, he would tell the Israelites what he had been commanded,"
+  ],
+  [
+   35,
+   "and the Israelites would see that the face of Moses was radiant. So Moses would put the veil back over his face until he went in to speak with the LORD."
+  ]
+ ],
+ "Jer 31:31-34": [
+  [
+   31,
+   "Behold, the days are coming, declares the LORD, when I will make a new covenant with the house of Israel and with the house of Judah."
+  ],
+  [
+   32,
+   "It will not be like the covenant I made with their fathers when I took them by the hand to lead them out of the land of Egypt— a covenant they broke, though I was a husband to them, ”declares the LORD."
+  ],
+  [
+   33,
+   "“But this is the covenant I will make with the house of Israel after those days, declares the LORD. I will put My law in their minds and inscribe it on their hearts. And I will be their God, and they will be My people."
+  ],
+  [
+   34,
+   "No longer will each man teach his neighbor or his brother, saying, ‘Know the LORD,’ because they will all know Me, from the least of them to the greatest, declares the LORD. For I will forgive their iniquities and will remember their sins no more.”"
+  ]
+ ],
+ "2 Cor 4:5-7": [
+  [
+   5,
+   "For we do not proclaim ourselves, but Jesus Christ as Lord, and ourselves as your servants for Jesus’ sake."
+  ],
+  [
+   6,
+   "For God, who said, “Let light shine out of darkness,” made His light shine in our hearts to give us the light of the knowledge of the glory of God in the face of Jesus Christ."
+  ],
+  [
+   7,
+   "Now we have this treasure in jars of clay to show that this surpassingly great power is from God and not from us."
+  ]
+ ],
+ "2 Cor 4:8-12": [
+  [
+   8,
+   "We are hard pressed on all sides, but not crushed; perplexed, but not in despair;"
+  ],
+  [
+   9,
+   "persecuted, but not forsaken; struck down, but not destroyed."
+  ],
+  [
+   10,
+   "We always carry around in our body the death of Jesus, so that the life of Jesus may also be revealed in our body."
+  ],
+  [
+   11,
+   "For we who are alive are always consigned to death for Jesus’ sake, so that the life of Jesus may also be revealed in our mortal body."
+  ],
+  [
+   12,
+   "So then, death is at work in us, but life is at work in you."
+  ]
+ ],
+ "2 Cor 4:16-18": [
+  [
+   16,
+   "Therefore we do not lose heart. Though our outer self is wasting away, yet our inner self is being renewed day by day."
+  ],
+  [
+   17,
+   "For our light and momentary affliction is producing for us an eternal weight of glory that is far beyond comparison."
+  ],
+  [
+   18,
+   "So we fix our eyes not on what is seen, but on what is unseen. For what is seen is temporary, but what is unseen is eternal."
+  ]
+ ],
+ "2 Cor 5:1-5": [
+  [
+   1,
+   "For we know that if the earthly tent we live in is dismantled, we have a building from God, an eternal house in heaven, not built by human hands."
+  ],
+  [
+   2,
+   "For in this tent we groan, longing to be clothed with our heavenly dwelling,"
+  ],
+  [
+   3,
+   "because when we are clothed, we will not be found naked."
+  ],
+  [
+   4,
+   "For while we are in this tent, we groan under our burdens, because we do not wish to be unclothed but clothed, so that our mortality may be swallowed up by life."
+  ],
+  [
+   5,
+   "And it is God who has prepared us for this very purpose and has given us the Spirit as a pledge of what is to come."
+  ]
+ ],
+ "2 Cor 5:9-10": [
+  [
+   9,
+   "So we aspire to please Him, whether we are at home in this body or away from it."
+  ],
+  [
+   10,
+   "For we must all appear before the judgment seat of Christ, that each one may receive his due for the things done in the body, whether good or bad."
+  ]
+ ],
+ "2 Cor 5:17-21": [
+  [
+   17,
+   "Therefore if anyone is in Christ, he is a new creation. The old has passed away. Behold, the new has come!"
+  ],
+  [
+   18,
+   "All this is from God, who reconciled us to Himself through Christ and gave us the ministry of reconciliation:"
+  ],
+  [
+   19,
+   "that God was reconciling the world to Himself in Christ, not counting men’s trespasses against them. And He has committed to us the message of reconciliation."
+  ],
+  [
+   20,
+   "Therefore we are ambassadors for Christ, as though God were making His appeal through us. We implore you on behalf of Christ: Be reconciled to God."
+  ],
+  [
+   21,
+   "God made Him who knew no sin to be sin on our behalf, so that in Him we might become the righteousness of God."
+  ]
+ ],
+ "2 Cor 6:1-2": [
+  [
+   1,
+   "As God’s fellow workers, then, we urge you not to receive God’s grace in vain."
+  ],
+  [
+   2,
+   "For He says: “In the time of favor I heard you, and in the day of salvation I helped you.” Behold, now is the time of favor; now is the day of salvation!"
+  ]
+ ],
+ "2 Cor 6:14-18": [
+  [
+   14,
+   "Do not be unequally yoked with unbelievers. For what partnership can righteousness have with wickedness? Or what fellowship does light have with darkness?"
+  ],
+  [
+   15,
+   "What harmony is there between Christ and Belial? Or what does a believer have in common with an unbeliever?"
+  ],
+  [
+   16,
+   "What agreement can exist between the temple of God and idols? For we are the temple of the living God. As God has said: “I will dwell with them and walk among them, and I will be their God, and they will be My people.”"
+  ],
+  [
+   17,
+   "“Therefore come out from among them and be separate, says the Lord. Touch no unclean thing, and I will receive you.”"
+  ],
+  [
+   18,
+   "And: “I will be a Father to you, and you will be My sons and daughters, says the Lord Almighty.”"
+  ]
+ ],
+ "Deut 22:10": [
+  [
+   10,
+   "Do not plow with an ox and a donkey yoked together."
+  ]
+ ],
+ "2 Cor 7:5-7": [
+  [
+   5,
+   "For when we arrived in Macedonia, our bodies had no rest, but we were pressed from every direction—conflicts on the outside, fears within."
+  ],
+  [
+   6,
+   "But God, who comforts the downcast, comforted us by the arrival of Titus,"
+  ],
+  [
+   7,
+   "and not only by his arrival, but also by the comfort he had received from you. He told us about your longing, your mourning, and your zeal for me, so that I rejoiced all the more."
+  ]
+ ],
+ "2 Cor 7:8-13": [
+  [
+   8,
+   "Even if I caused you sorrow by my letter, I do not regret it. Although I did regret it—for I see that my letter caused you sorrow, but only for a short time—"
+  ],
+  [
+   9,
+   "yet now I rejoice, not because you were made sorrowful, but because your sorrow led you to repentance. For you felt the sorrow that God had intended, and so were not harmed in any way by us."
+  ],
+  [
+   10,
+   "Godly sorrow brings repentance that leads to salvation without regret, but worldly sorrow brings death."
+  ],
+  [
+   11,
+   "Consider what this godly sorrow has produced in you: what earnestness, what eagerness to clear yourselves, what indignation, what alarm, what longing, what zeal, what vindication! In every way you have proved yourselves to be innocent in this matter."
+  ],
+  [
+   12,
+   "So even though I wrote to you, it was not on account of the one who did wrong or the one who was harmed, but rather that your earnestness on our behalf would be made clear to you in the sight of God."
+  ],
+  [
+   13,
+   "On account of this, we are encouraged. In addition to our own encouragement, we were even more delighted by the joy of Titus. For his spirit has been refreshed by all of you."
+  ]
+ ],
+ "2 Cor 8:1-5": [
+  [
+   1,
+   "Now, brothers, we want you to know about the grace that God has given the churches of Macedonia."
+  ],
+  [
+   2,
+   "In the terrible ordeal they suffered, their abundant joy and deep poverty overflowed into rich generosity."
+  ],
+  [
+   3,
+   "For I testify that they gave according to their ability and even beyond it. Of their own accord,"
+  ],
+  [
+   4,
+   "they earnestly pleaded with us for the privilege of sharing in this service to the saints."
+  ],
+  [
+   5,
+   "And not only did they do as we expected, but they gave themselves first to the Lord and then to us, through the will of God."
+  ]
+ ],
+ "2 Cor 8:9": [
+  [
+   9,
+   "For you know the grace of our Lord Jesus Christ, that though He was rich, yet for your sake He became poor, so that you through His poverty might become rich."
+  ]
+ ],
+ "2 Cor 8:10-12": [
+  [
+   10,
+   "And this is my opinion about what is helpful for you in this matter: Last year you were the first not only to give, but even to have such a desire."
+  ],
+  [
+   11,
+   "Now finish the work, so that you may complete it with the same eager desire, according to your means."
+  ],
+  [
+   12,
+   "For if the eagerness is there, the gift is acceptable according to what one has, not according to what he does not have."
+  ]
+ ],
+ "2 Cor 8:13-15": [
+  [
+   13,
+   "It is not our intention that others may be relieved while you are burdened, but that there may be equality."
+  ],
+  [
+   14,
+   "At the present time, your surplus will meet their need, so that in turn their surplus will meet your need. This way there will be equality."
+  ],
+  [
+   15,
+   "As it is written: “He who gathered much had no excess, and he who gathered little had no shortfall.”"
+  ]
+ ],
+ "2 Cor 8:16-21": [
+  [
+   16,
+   "But thanks be to God, who put into the heart of Titus the same devotion I have for you."
+  ],
+  [
+   17,
+   "For not only did he welcome our appeal, but he is eagerly coming to you of his own volition."
+  ],
+  [
+   18,
+   "Along with Titus we are sending the brother who is praised by all the churches for his work in the gospel."
+  ],
+  [
+   19,
+   "More than that, this brother was chosen by the churches to accompany us with the gracious offering we administer to honor the Lord Himself and to show our eagerness to help."
+  ],
+  [
+   20,
+   "We want to avoid any criticism of the way we administer this generous gift."
+  ],
+  [
+   21,
+   "For we are taking great care to do what is right, not only in the eyes of the Lord, but also in the eyes of men."
+  ]
+ ],
+ "Ex 16:18": [
+  [
+   18,
+   "When they measured it by the omer, he who gathered much had no excess, and he who gathered little had no shortfall. Each one gathered as much as he needed to eat."
+  ]
+ ],
+ "Acts 20:1-4": [
+  [
+   1,
+   "When the uproar had ended, Paul sent for the disciples. And after encouraging them, he said goodbye to them and left for Macedonia."
+  ],
+  [
+   2,
+   "After traveling through that area and speaking many words of encouragement, he arrived in Greece,"
+  ],
+  [
+   3,
+   "where he stayed three months. And when the Jews formed a plot against him as he was about to sail for Syria, he decided to go back through Macedonia."
+  ],
+  [
+   4,
+   "Paul was accompanied by Sopater son of Pyrrhus from Berea, Aristarchus and Secundus from Thessalonica, Gaius from Derbe, Timothy, and Tychicus and Trophimus from the province of Asia."
+  ]
+ ]
+};
