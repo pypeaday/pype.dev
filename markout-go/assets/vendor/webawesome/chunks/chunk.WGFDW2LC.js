@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */var includeFiles=new Map;function requestInclude(e,t="cors"){const n=includeFiles.get(e);if(n!==0[0])return Promise.resolve(n);const s=fetch(e,{mode:t}).then(async t=>{const n={ok:t.ok,status:t.status,html:await t.text()};return includeFiles.set(e,n),n});return includeFiles.set(e,s),s}export{requestInclude}

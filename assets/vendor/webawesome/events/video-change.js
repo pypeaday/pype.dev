@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */import"../chunks/chunk.JHZRD2LV.js";var WaVideoChangeEvent=class extends Event{constructor(e){super("wa-video-change",{bubbles:!0,cancelable:!1,composed:!0}),this.detail=e}};export{WaVideoChangeEvent}

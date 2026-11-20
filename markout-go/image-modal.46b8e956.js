@@ -1,0 +1,6 @@
+document.addEventListener("DOMContentLoaded",function(){const e=document.createElement("div");e.className="image-modal fade-in",e.innerHTML=`
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <img class="modal-image" src="" alt="Full size image">
+    </div>
+  `,document.body.appendChild(e);const n=e.querySelector(".modal-image"),s=e.querySelector(".close-modal");document.querySelectorAll(".article-content img, .post-terminal__body img").forEach(t=>{const s=t.src.toLowerCase(),o=[".mp3",".wav",".ogg",".m4a",".mp4",".avi",".webm"],i=o.some(e=>s.endsWith(e));if(i)return;t.classList.add("clickable-image"),t.addEventListener("click",function(){e.style.display="flex",n.src=this.src,n.alt=this.alt,document.body.style.overflow="hidden",setTimeout(()=>{e.classList.add("show")},10)})}),s.addEventListener("click",t),e.addEventListener("click",function(n){n.target===e&&t()}),document.addEventListener("keydown",function(n){n.key==="Escape"&&e.style.display==="flex"&&t()});function t(){e.classList.remove("show"),setTimeout(()=>{e.style.display="none",document.body.style.overflow=""},300)}})

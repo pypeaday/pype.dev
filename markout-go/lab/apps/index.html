@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>the lab · service shelf · pype.dev</title>
+<meta name="description" content="Every service running in Nic's homelab - what it's for and how it runs." />
+<style>
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("/assets/fonts/jetbrains-mono-full.woff2") format("woff2");
+    font-display: swap;
+  }
+  :root {
+    --bg: #04070d; --bg-alt: #070c16; --surface: #090f1b; --surface-alt: #0d1526;
+    --line: #1d2a3d; --text: #f8fafc; --muted: #a1acc4; --dim: #7d8cab;
+    --cyan: #3dd5ff; --mint: #62ffa9; --purple: #bd93f9; --pink: #ff79c6;
+    --orange: #ffb86c; --yellow: #f1fa8c; --ice: #8be9fd; --green: #50fa7b;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 15px; line-height: 1.6; padding: 2rem 1.25rem 4rem;
+    -webkit-tap-highlight-color: transparent;
+  }
+  :focus-visible { outline: 2px solid var(--mint); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .crumbs { color: var(--dim); font-size: .85rem; margin-bottom: 2rem; }
+  .crumbs a { color: var(--dim); }
+
+  h1 { font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 700; }
+  h1 .ps1 { color: var(--mint); }
+  .lede { color: var(--muted); max-width: 60ch; margin: .75rem 0 0; }
+
+  .count { color: var(--dim); font-size: .85rem; margin-top: 1.5rem; }
+  .count b { color: var(--mint); font-weight: 600; }
+
+  .controls {
+    display: flex; flex-wrap: wrap; gap: .5rem; align-items: center;
+    margin: 1.5rem 0 2rem; position: sticky; top: 0; z-index: 10;
+    background: rgba(4,7,13,.88); backdrop-filter: blur(10px);
+    padding: .7rem 0;
+  }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+    font: inherit; font-size: .8rem; padding: .55rem .9rem; border-radius: 999px; cursor: pointer;
+    touch-action: manipulation;
+  }
+  .chip:hover { border-color: var(--mint); color: var(--text); }
+  .chip:active { transform: scale(.96); }
+  .chip.on { border-color: var(--mint); background: var(--surface-alt); color: var(--mint); }
+  .search {
+    margin-left: auto; border: 1px solid var(--line); background: var(--surface); color: var(--text);
+    font: inherit; font-size: .85rem; padding: .5rem .8rem; border-radius: 8px; width: 200px;
+  }
+  .search:focus { outline: none; border-color: var(--cyan); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .9rem; }
+  .card {
+    display: block; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 1rem 1.1rem; color: var(--text);
+    transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-color: var(--mint); transform: translateY(-2px); text-decoration: none; }
+  .card:active { transform: translateY(0) scale(.99); border-color: var(--cyan); }
+  .card .icon {
+    width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center;
+    font-size: 1.05rem; font-weight: 700; margin-bottom: .6rem;
+    background: var(--surface-alt); border: 1px solid var(--line);
+  }
+  .card h2 { font-size: .98rem; font-weight: 600; margin-bottom: .25rem; }
+  .card p { color: var(--muted); font-size: .8rem; line-height: 1.5; min-height: 3.6em; }
+  .meta { display: flex; gap: .4rem; margin-top: .7rem; flex-wrap: wrap; }
+  .tag {
+    font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+    padding: .1rem .5rem; border-radius: 999px; border: 1px solid var(--line); color: var(--dim);
+  }
+  .tag.cat { color: var(--purple); border-color: var(--purple); }
+  .tag.host { color: var(--ice); }
+  .tag.mine { color: var(--orange); border-color: var(--orange); }
+  .empty { color: var(--dim); padding: 3rem 0; display: none; }
+
+  .overlay {
+    position: fixed; inset: 0; background: rgba(2,4,8,.72);
+    display: grid; place-items: center; z-index: 50; padding: 1rem;
+    animation: fadeIn .15s ease-out;
+  }
+  .overlay[hidden] { display: none; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.97); } to { opacity: 1; transform: none; } }
+  .modal {
+    background: var(--surface-alt); border: 1px solid var(--mint);
+    border-radius: 12px; padding: 1.75rem 1.9rem; max-width: 460px; width: 100%;
+    position: relative; animation: modalIn .18s ease-out;
+    box-shadow: 0 18px 50px rgba(0,0,0,.5);
+  }
+  .modal .x {
+    position: absolute; top: .6rem; right: .8rem; background: none; border: none;
+    color: var(--dim); font: inherit; font-size: 1.3rem; cursor: pointer;
+  }
+  .modal .x:hover { color: var(--text); }
+  .modal .m-icon {
+    width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center;
+    font-size: 1.4rem; background: var(--surface); border: 1px solid var(--line);
+    margin-bottom: .8rem;
+  }
+  .modal h2 { font-size: 1.25rem; margin-bottom: .35rem; }
+  .modal > p { color: var(--muted); font-size: .88rem; margin-bottom: 1.1rem; }
+  .modal .m-specs-label { color: var(--dim); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: .4rem; }
+  .modal ul { list-style: none; padding: 0; }
+  .modal li {
+    color: var(--muted); font-size: .82rem; padding: .35rem .6rem;
+    border-left: 2px solid var(--line); margin-bottom: .3rem; background: var(--surface);
+    border-radius: 0 6px 6px 0;
+  }
+  .modal li::before { content: "· "; color: var(--mint); }
+  .modal .m-link { display: inline-block; margin-top: 1rem; color: var(--mint); font-size: .85rem; }
+
+  footer { margin-top: 3.5rem; color: var(--dim); font-size: .8rem; border-top: 1px solid var(--line); padding-top: 1.5rem; }
+
+  @media (max-width: 640px) {
+    body { padding: 1.25rem .9rem 3rem; }
+    .search { width: 100%; margin-left: 0; }
+    .card p { min-height: 0; }
+    .controls { padding: .5rem 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="crumbs"><a href="/">~</a> / <a href="/lab">lab</a> / apps</div>
+
+  <h1><span class="ps1">&rangle;</span> the service shelf</h1>
+  <p class="lede">
+    Everything running in the lab, one card each - what it's for, where it runs.
+    Most of it lives behind the tailnet; the links work where there are links.
+  </p>
+  <p class="count"><b id="n">0</b> services on the shelf</p>
+
+  <div class="controls" id="filters">
+    <button class="chip on" data-cat="all">all</button>
+    <button class="chip" data-cat="media">media</button>
+    <button class="chip" data-cat="arrs">arrs</button>
+    <button class="chip" data-cat="docs">docs</button>
+    <button class="chip" data-cat="home">home</button>
+    <button class="chip" data-cat="ai">ai</button>
+    <button class="chip" data-cat="platform">platform</button>
+    <button class="chip" data-cat="mine">built-by-me</button>
+    <input class="search" id="q" type="search" placeholder="⌕ filter..." aria-label="filter services" />
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">nothing on this shelf matches</p>
+
+  <div class="overlay" id="ov" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-name">
+      <button class="x" id="m-close" aria-label="close">&times;</button>
+      <div class="m-icon" id="m-icon"></div>
+      <h2 id="m-name"></h2>
+      <p id="m-desc"></p>
+      <div class="m-specs-label">how it runs</div>
+      <ul id="m-specs"></ul>
+      <a id="m-link" class="m-link" href="#" target="_blank" rel="noopener">visit &rarr;</a>
+    </div>
+  </div>
+
+  <footer>
+    self-hosted since 2019 &middot; <a href="/lab">&larr; back to the lab</a>
+  </footer>
+</div>
+
+<script>
+const APPS = [
+  // media
+  {n:"Jellyfin", i:"▶", c:"media", h:"ghost", d:"Movies and TV, hardware-transcoded on ghost's iGPU",s:["linuxserver image","on ghost","jellyfin.* · open LAN","hw transcode on 5700G iGPU"]},
+  {n:"Audiobookshelf", i:"◉", c:"media", h:"ghost", d:"Audiobooks and podcasts, with its own apps",s:["latest","on ghost","audiobookshelf.* · open LAN"]},
+  {n:"Immich", i:"▦", c:"media", h:"ghost", d:"Photo backup - two instances, because memes are not family photos",s:["release + ml/redis/pgvecto-rs sidecars","on ghost","immich.* · whitelist","memes run a second instance"]},
+  {n:"Pinchflat", i:"⇓", c:"media", h:"ghost", d:"Archives YouTube channels into the media library",s:["latest","on ghost","pinchflat.* · open LAN"]},
+  {n:"Ubooquity", i:"▤", c:"media", h:"ghost", d:"Comics and ebooks server",s:["linuxserver","on ghost","ubooquity.* · open LAN"]},
+  {n:"Frigate", i:"◉", c:"media", h:"ghost", d:"NVR with object detection, on its own dedicated drive",s:["stable","on ghost","frigate.* · whitelist","dedicated 4TB clip disk"]},
+  {n:"tdarr", i:"⇄", c:"media", h:"ghost+aurora", d:"Distributed transcoding across the fleet",s:["latest","nodes on ghost + aurora","tdarr.* · whitelist"]},
+  {n:"Jellystat", i:"◔", c:"media", h:"ghost", d:"Jellyfin watch statistics",s:["pinned release","on ghost","jellystat.* · whitelist"]},
+  {n:"reels", i:"▷", c:"media", h:"ghost", d:"Video gallery for generated reels",s:["copyparty gallery","on ghost","reels.* · open LAN"]},
+  // arrs
+  {n:"Sonarr", i:"s", c:"arrs", h:"ghost", d:"TV series management",s:["linuxserver","on ghost","whitelist"]},
+  {n:"Radarr", i:"r", c:"arrs", h:"ghost", d:"Movie management",s:["linuxserver","on ghost","whitelist"]},
+  {n:"Lidarr", i:"♪", c:"arrs", h:"ghost", d:"Music management",s:["linuxserver","on ghost","whitelist"]},
+  {n:"Readarr ×2", i:"Aa", c:"arrs", h:"ghost", d:"Books and audiobooks, one instance each",s:["develop channel","two instances: books + audio","whitelist"]},
+  {n:"Bazarr", i:"b", c:"arrs", h:"ghost", d:"Subtitles",s:["linuxserver","on ghost","whitelist"]},
+  {n:"Prowlarr", i:"⌕", c:"arrs", h:"ghost", d:"Indexer management for the whole suite",s:["develop channel","on ghost","whitelist"]},
+  {n:"Jellyseerr", i:"◈", c:"arrs", h:"ghost", d:"Request portal for the family",s:["latest","on ghost","jellyseerr.* · open LAN"]},
+  {n:"Transmission", i:"⇅", c:"arrs", h:"ghost", d:"Downloads, tucked behind a Gluetun VPN container",s:["linuxserver","on ghost","whitelist","egress via gluetun VPN"]},
+  // docs & knowledge
+  {n:"Paperless-ngx", i:"▦", c:"docs", h:"ghost", d:"The filing cabinet I never kept - OCR'd and searchable",s:["latest + postgres/redis/paperless-gpt","on ghost","paperless.* · open LAN","ingests from a filesystem drop folder"]},
+  {n:"Karakeep", i:"◈", c:"docs", h:"ghost", d:"Bookmark hoarding with full-text search",s:["release + chrome + meilisearch","on ghost","karakeep.* · open LAN"]},
+  {n:"Linkding", i:"▣", c:"docs", h:"ghost", d:"More bookmarks. Yes, both. It's a long story",s:["latest","on ghost","whitelist"]},
+  {n:"FreshRSS", i:"≡", c:"docs", h:"ghost", d:"RSS is not dead",s:["latest","on ghost","freshrss.* · open LAN"]},
+  {n:"ArchiveBox", i:"◎", c:"docs", h:"ghost", d:"Saves pages before they 404",s:["+ scheduler/sonic sidecars","on ghost","archivebox.* · open LAN"]},
+  {n:"AFFiNE", i:"◱", c:"docs", h:"ghost", d:"Notes and docs workspace",s:["stable + postgres/redis","on ghost","affine.* · open LAN"]},
+  // home
+  {n:"Actual", i:"$", c:"home", h:"ghost", d:"Household budget, self-hosted",s:["latest","on ghost","actual.* · open LAN"]},
+  {n:"Nextcloud", i:"◍", c:"home", h:"ghost", d:"Files, shares, and a sermon-audio drop for church",s:["latest + mysql/redis/cron","on ghost","nextcloud.* · open LAN","data on ZFS"]},
+  {n:"Homebox", i:"▣", c:"home", h:"ghost", d:"Home inventory - what's in which box",s:["latest","on ghost","whitelist"]},
+  {n:"Kanboard", i:"▥", c:"home", h:"ghost", d:"Personal kanban - where the lab's todo list lives",s:["latest","on ghost","kanboard.* · open LAN"]},
+  {n:"SearXNG", i:"⌕", c:"home", h:"ghost", d:"Metasearch, no tracking",s:["latest + redis","on ghost","whitelist"]},
+  {n:"Stirling PDF", i:"◧", c:"home", h:"ghost", d:"PDF tools in the browser",s:["latest","on ghost","whitelist"]},
+  {n:"Gotify", i:"»", c:"home", h:"ghost", d:"Push notifications for all the things",s:["latest","on ghost","gotify.* · open LAN"]},
+  {n:"webtop", i:"▣", c:"home", h:"ghost", d:"A browser desktop for Dad - thinkorswim preinstalled",s:["ubuntu-xfce image","on ghost","dad.* · app auth","thinkorswim preinstalled"]},
+  // ai
+  {n:"Ollama", i:"◍", c:"ai", h:"aurora", d:"Local LLMs on the 3090",s:["latest","on aurora (3090)","tailnet/LAN only"]},
+  {n:"Open WebUI", i:"◐", c:"ai", h:"aurora", d:"Chat frontend for the local models",s:["cuda image","on aurora","tailnet/LAN only"]},
+  {n:"Whisper + Speakr", i:"◡", c:"ai", h:"aurora", d:"Transcription - brain dumps to text",s:["gpu + latest images","on aurora","tailnet/LAN only"]},
+  {n:"Khoj", i:"⌘", c:"ai", h:"aurora", d:"AI search over my notes",s:["latest + pgvector/search/sandbox","on aurora","tailnet/LAN only"]},
+  {n:"meme-search", i:"◕", c:"ai", h:"ghost", d:"pgvector similarity search over the meme library",s:["latest + pgvector","on ghost","meme-search.* · open LAN"]},
+  {n:"Stable Diffusion", i:"◑", c:"ai", h:"aurora", d:"Generating things I definitely needed",s:["webui-docker stack","on aurora · 3090","tailnet/LAN only"]},
+  // platform
+  {n:"Forgejo", i:"⑃", c:"platform", h:"ghost", d:"Self-hosted git + Actions - the lab's GitHub", u:"https://git.paynepride.com",s:["rootless image + dind + actions runner","on ghost · web + git ssh","git.* · public, crawl-limited"]},
+  {n:"Registry", i:"▩", c:"platform", h:"ghost", d:"Private container registry",s:["distribution registry","on ghost","whitelist"]},
+  {n:"code-server", i:"⌨", c:"platform", h:"ghost+aurora", d:"VS Code in a browser tab",s:["pypeaday/code-server","ghost + aurora","whitelist"]},
+  {n:"Temporal", i:"◴", c:"platform", h:"ghost", d:"Workflow orchestration for the apps I build",s:["server + ui + opensearch + postgres","on ghost","whitelist"]},
+  {n:"MinIO", i:"▨", c:"platform", h:"ghost", d:"S3-compatible object storage - also hosts terraform state",s:["pinned","api + console on ghost","s3.* open, console whitelisted","tofu state backend"]},
+  {n:"Komodo", i:"◆", c:"platform", h:"fleet", d:"Stack management across every host",s:["core + mongo + periphery agents","komodo.* UI / core on tailnet","whitelist","manages ~46 stacks"]},
+  {n:"Traefik", i:"⇉", c:"platform", h:"ghost", d:"Reverse proxy for ~80 routes",s:["network_mode: host","file provider + docker labels","whitelist + git-crawl limiter"]},
+  {n:"SigNoz", i:"◬", c:"platform", h:"ghost", d:"Metrics, logs, traces, alerts - the lab's eyes",s:["+ clickhouse + otel collectors","on ghost","whitelist","metrics + logs + traces + alerts for the fleet"]},
+  {n:"Netdata", i:"◴", c:"platform", h:"fleet", d:"Per-host metrics",s:["on ghost + aurora","whitelist"]},
+  {n:"Glances", i:"◭", c:"platform", h:"fleet", d:"More per-host metrics",s:["on ghost + aurora","whitelist"]},
+  {n:"Beszel", i:"◮", c:"platform", h:"fleet", d:"Agents on the fleet; the hub is a someday project",s:["agents on the fleet","hub not deployed (yet)"]},
+  {n:"installer", i:"⇣", c:"platform", h:"ghost", d:"curl | bash, but mine - serves my install scripts",s:["pypeaday/installer","on ghost","i.* · open LAN"]},
+  // built by me
+  {n:"Notifiq", i:"◆", c:"mine", h:"ghost", d:"Notification and reminder service", u:"https://app.notifiq.net",s:["hand-built image","Komodo stack on ghost","public: app.notifiq.net","FastAPI + Temporal worker"]},
+  {n:"sermon-prep", i:"†", c:"mine", h:"ghost", d:"Markdown sermon notes with verse autocomplete",s:["node + flat-md","on ghost","sermons.* · app password"]},
+  {n:"pype.dev", i:"⟩", c:"mine", h:"ghost", d:"This site - built by my own SSG", u:"https://pype.dev",s:["markata-go build","forgejo → gh-pages","public · you're on it"]},
+  {n:"olivet-snow", i:"◔", c:"mine", h:"ghost", d:"Snow-crew scheduler for church - weather-aware, volunteer signups",s:["FastAPI + SQLite","on ghost","snow.* · app password","Open-Meteo driven"]},
+  {n:"halloween-timeline", i:"◉", c:"mine", h:"ghost", d:"Interactive Halloween history",s:["static site on nginx","on ghost","halloween.* · open LAN"]},
+  {n:"dad-can-i-wear-this", i:"?", c:"mine", h:"ghost", d:"Answers exactly what it says",s:["latest","on ghost","open LAN"]},
+  {n:"whose-turn-is-it", i:"⇄", c:"mine", h:"ghost", d:"Settles household debates",s:["latest","on ghost","whitelist"]},
+  {n:"santa-tracker", i:"◕", c:"mine", h:"ghost", d:"Seasonal, obviously",s:["latest","on ghost","santa-tracker.* · open LAN"]},
+  {n:"clocks", i:"◴", c:"mine", h:"ghost", d:"Big display clocks",s:["latest","on ghost","clocks.* · open LAN"]},
+  {n:"blantons-watch", i:"◉", c:"mine", h:"ghost", d:"Monitors bourbon letter-set prices",s:["latest","on ghost","blantons.* · open LAN"]},
+  {n:"names-api", i:"Aa", c:"mine", h:"ghost", d:"Name meanings and origins REST API",s:["FastAPI + Postgres","on ghost","names.* · open LAN"]},
+];
+
+const grid = document.getElementById("grid");
+const empty = document.getElementById("empty");
+const q = document.getElementById("q");
+let cat = "all";
+
+document.getElementById("n").textContent = APPS.length;
+
+function render() {
+  const term = q.value.trim().toLowerCase();
+  const shown = APPS.filter(a =>
+    (cat === "all" || a.c === cat) &&
+    (!term || (a.n + " " + a.d).toLowerCase().includes(term))
+  );
+  grid.innerHTML = shown.map(a => `
+    <a class="card" href="#${encodeURIComponent(a.n)}">
+      <div class="icon">${a.i}</div>
+      <h2>${a.n}</h2>
+      <p>${a.d}</p>
+      <div class="meta">
+        <span class="tag cat">${a.c === "mine" ? "built-by-me" : a.c}</span>
+        <span class="tag host">${a.h}</span>
+      </div>
+    </a>`).join("");
+  empty.style.display = shown.length ? "none" : "block";
+}
+
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest(".chip"); if (!b) return;
+  cat = b.dataset.cat;
+  document.querySelectorAll(".chip").forEach(x => x.classList.toggle("on", x === b));
+  render();
+});
+q.addEventListener("input", render);
+
+// detail modal
+const ov = document.getElementById("ov");
+function openApp(i) {
+  const a = APPS[i];
+  document.getElementById("m-icon").textContent = a.i;
+  document.getElementById("m-name").textContent = a.n;
+  document.getElementById("m-desc").textContent = a.d;
+  document.getElementById("m-specs").innerHTML = (a.s || []).map(x => `<li>${x}</li>`).join("");
+  const link = document.getElementById("m-link");
+  if (a.u) { link.href = a.u; link.style.display = ""; }
+  else link.style.display = "none";
+  ov.hidden = false;
+  document.body.style.overflow = "hidden";
+}
+function closeApp() {
+  ov.hidden = true;
+  document.body.style.overflow = "";
+  if (location.hash) location.hash = ""; // fires hashchange -> closeApp no-op
+}
+document.getElementById("m-close").addEventListener("click", closeApp);
+ov.addEventListener("click", e => { if (e.target === ov) closeApp(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeApp(); });
+
+// cards are #name links; the hash is the single source of modal state -
+// click, deep link, and back/forward all converge here
+window.addEventListener("hashchange", () => {
+  const h = decodeURIComponent(location.hash.slice(1));
+  const i = APPS.findIndex(a => a.n.toLowerCase() === h.toLowerCase());
+  if (i >= 0) openApp(i); else if (!ov.hidden) closeApp();
+});
+{ // initial deep link
+  const h = decodeURIComponent(location.hash.slice(1));
+  const i = APPS.findIndex(a => a.n.toLowerCase() === h.toLowerCase());
+  if (i >= 0) openApp(i);
+}
+
+render();
+</script>
+</body>
+</html>

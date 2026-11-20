@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */function serialize(e){const n=new FormData(e),t={};return n.forEach((e,n)=>{if(Reflect.has(t,n)){const s=t[n];Array.isArray(s)?s.push(e):t[n]=[t[n],e]}else t[n]=e}),t}export{serialize}

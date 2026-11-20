@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */import{startLoader}from"./chunk.RSUSAXIB.js";startLoader(),Promise.race([new Promise(e=>document.addEventListener("wa-discovery-complete",e)),new Promise(e=>setTimeout(e,2e3))]).then(()=>{document.querySelectorAll(".wa-cloak").forEach(e=>e.classList.remove("wa-cloak"))})

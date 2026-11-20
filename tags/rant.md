@@ -1,0 +1,5 @@
+# Posts tagged: rant
+
+All posts with the tag "rant"
+
+- [I Hate Corporate America](/i-hate-corporate-america/) - 2025-05-27

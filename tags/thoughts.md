@@ -1,0 +1,87 @@
+# Posts tagged: thoughts
+
+All posts with the tag "thoughts"
+
+- [💭 COLUMNS env var](/thoughts-878/) - 2025-12-03
+- [💭 Docker | Atuin Docs](/thoughts-871/) - 2025-11-22
+- [💭 You already have a git server: (Maurycy’s blog)](/thoughts-856/) - 2025-10-28
+- [💭 uv script management](/thoughts-831/) - 2025-09-08
+- [💭 Engineering excellence starts on edge](/thoughts-830/) - 2025-09-06
+- [💭 Docker Swarm Still Rocks](/thoughts-812/) - 2025-08-26
+- [💭 Codeberg Pages | Codeberg Documentation](/thoughts-804/) - 2025-08-19
+- [💭 Use Traefik 2 with Nginx, Apache, or CaddyServer to Serve Stat…](/thoughts-803/) - 2025-08-19
+- [💭 Setting up a Self-Hosted Forgejo Actions Runner with Docker Co…](/thoughts-797/) - 2025-08-14
+- [💭 Static egress IPs for machines - Fresh Produce - Fly.io](/thoughts-781/) - 2025-08-05
+- [💭 caronc/apprise-api: A lightweight REST framework that wraps th…](/thoughts-778/) - 2025-08-04
+- [💭 The Remarkable Incompetence At The Heart Of Tech](/thoughts-777/) - 2025-08-03
+- [💭 Kinopio](/thoughts-770/) - 2025-07-31
+- [💭 My Ultimate Self-hosting Setup](/thoughts-764/) - 2025-07-25
+- [💭 It’s rude to show AI output to people | Alex Martsinovich](/thoughts-758/) - 2025-07-21
+- [💭 Anthropic Is Bleeding Out](/thoughts-757/) - 2025-07-19
+- [💭 Thread by @windsurf_ai on Thread Reader App – Thread Reader App](/thoughts-753/) - 2025-07-18
+- [💭 AI INTERVIEWS ARE HERE!! SO I TROLLED ONE TO SHOW YOU… - You…](/thoughts-752/) - 2025-07-17
+- [💭 Agile Was Never Your Problem Pt 1/2 | The Cynical Developer](/thoughts-749/) - 2025-07-13
+- [💭 OpenAI’s Windsurf deal is off — and Windsurf’s CEO is going to…](/thoughts-748/) - 2025-07-12
+- [💭 Docker Brings Compose to the AI Agent Era | Docker](/thoughts-746/) - 2025-07-11
+- [💭 Tyblog | systemd has been a complete, utter, unmitigated success](/thoughts-745/) - 2025-07-11
+- [💭 restic · Backups done right!](/thoughts-740/) - 2025-07-08
+- [💭 Add confirmation for hard reset by stefanhaller · Pull Request…](/thoughts-739/) - 2025-07-08
+- [💭 HomeBox](/thoughts-737/) - 2025-07-07
+- [💭 postmarketOS // v24.06: The One With Over 250 Devices](/thoughts-736/) - 2025-07-06
+- [💭 Self-Hosting A Cluster On Old Phones | Hackaday](/thoughts-735/) - 2025-07-06
+- [💭 Build backend | uv](/thoughts-732/) - 2025-07-04
+- [💭 TimoStahl/kanboard_plugin_bigboard: A Kanboard that can displa…](/thoughts-730/) - 2025-07-02
+- [💭 { TechDufus } | Blog](/thoughts-729/) - 2025-07-02
+- [💭 { TechDufus } | Building a Talos Kubernetes Homelab with Terra…](/thoughts-728/) - 2025-07-02
+- [💭 Also done with second braining](/thoughts-727/) - 2025-07-02
+- [💭 Switching pip to uv in a Dockerized Flask / Django App — Nick …](/thoughts-722/) - 2025-06-27
+- [💭 Containers are available in public beta for simple, global, an…](/thoughts-721/) - 2025-06-26
+- [💭 Genesis 1 and Its ANE Polemic, Part 2 - Dr. Michael Heiser](/thoughts-720/) - 2025-06-25
+- [💭 Notes – 06:11 Sun 22 Jun 2025 – David Bushell – Web Dev (UK)](/thoughts-719/) - 2025-06-25
+- [💭 Copilot Instructions](/thoughts-713/) - 2025-06-23
+- [💭 You asked, we built it: Firefox tab groups are here](/thoughts-712/) - 2025-06-22
+- [💭 Control Your n8n Instance Remotely with Telegram Bot Commands …](/thoughts-711/) - 2025-06-22
+- [💭 matduggan.com/what-would-a-kubernetes-2-0-look-like/](/thoughts-710/) - 2025-06-20
+- [💭 pypeaday/whose-turn-is-it: Simple uv webapp to determine order…](/thoughts-709/) - 2025-06-20
+- [💭 Microsoft planning thousands of job cuts aimed at salespeople,…](/thoughts-707/) - 2025-06-19
+- [💭 microsandbox/microsandbox: Self-Hosted Plaform for Secure Exec…](/thoughts-706/) - 2025-06-19
+- [💭 neverjust](/thoughts-705/) - 2025-06-18
+- [💭 A Brief History & Ethos of the Digital Garden](/thoughts-701/) - 2025-06-17
+- [💭 Cross Account AWS Security Group ID Reference](/thoughts-700/) - 2025-06-16
+- [💭 Failed to load state: unsupported checkable object kind var - …](/thoughts-699/) - 2025-06-16
+- [💭 Snowflake Status - Certificate Authority Update for AWS Regions](/thoughts-698/) - 2025-06-16
+- [💭 Visualizing My Blog’s Internal Links - Jim Nielsen’s Blog](/thoughts-697/) - 2025-06-16
+- [💭 Stable Diffusion QR Code 101](/thoughts-696/) - 2025-06-16
+- [💭 Normal boyhood is ADHD](/thoughts-691/) - 2025-06-13
+- [💭 “We would be less confidential than Google” – Proton threatens…](/thoughts-690/) - 2025-06-13
+- [💭 Exploiting Copilot AI for SharePoint | Pen Test Partners](/thoughts-689/) - 2025-06-13
+- [💭 slash pages](/thoughts-688/) - 2025-06-12
+- [💭 The Meaning of “Mammon” in the Bible | Matthew 6:24](/thoughts-687/) - 2025-06-12
+- [💭 N.T. Wright on The Unseen Realm & Heiser - YouTube](/thoughts-686/) - 2025-06-12
+- [💭 qwen3](/thoughts-685/) - 2025-06-11
+- [💭 daily challenge leaderboard | typ.ing](/thoughts-682/) - 2025-06-09
+- [💭 News - Apps - App Store - Nextcloud](/thoughts-680/) - 2025-06-09
+- [💭 ELEMENT.FM - unlimited podcast hosting](/thoughts-679/) - 2025-06-09
+- [Thoughts](/thoughts/) - 2025-06-09
+- [💭 Keynote Speaker - Cory Doctorow - YouTube](/thoughts-678/) - 2025-06-08
+- [💭 Linux Explained: What is The Linux Kernel? - YouTube](/thoughts-670/) - 2025-06-07
+- [💭 What are these 100.x.y.z addresses? · Tailscale Docs](/thoughts-669/) - 2025-06-07
+- [💭 SearXNG | Open WebUI](/thoughts-643/) - 2025-05-25
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-607/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-606/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-605/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-604/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-603/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-602/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-601/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-600/) - 2025-04-28
+- [💭 Installing Tailscale on JetKVM | Medium](/thoughts-599/) - 2025-04-28
+- [💭 Self-Hosting selfh.st/icons With Git-Sync](/thoughts-528/) - 2025-01-12
+- [💭 Mastering Argo CD image updater with Helm: a complete configur…](/thoughts-504/) - 2025-01-04
+- [💭 Craig](/thoughts-498/) - 2025-01-03
+- [💭 memory - Check which processes are eating swap on Linux? - Sup…](/thoughts-491/) - 2025-01-01
+- [💭 🏡 Home | Open WebUI](/thoughts-490/) - 2025-01-01
+- [💭 Do you really need Kubernetes?](/thoughts-480/) - 2024-12-30
+- [💭 audiobookshelf](/thoughts-479/) - 2024-12-29
+- [💭 Assistants API overview - OpenAI API](/thoughts-477/) - 2024-12-29
+- [💭 Do you need Kubernetes?](/thoughts-476/) - 2024-12-29

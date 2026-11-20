@@ -1,0 +1,1 @@
+/*! Copyright 2026 Fonticons, Inc. - https://webawesome.com/license */function watch(e,t){const n={waitUntilFirstUpdate:!1,...t};return(t,s)=>{const{update:o}=t,i=Array.isArray(e)?e:[e];t.update=function(e){i.forEach(t=>{const o=t;if(e.has(o)){const t=e.get(o),i=this[o];t!==i&&(!n.waitUntilFirstUpdate||this.hasUpdated)&&this[s](t,i)}}),o.call(this,e)}}}export{watch}
